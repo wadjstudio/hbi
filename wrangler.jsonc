@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hbi-handball-intelligence",
+  "main": "vinext/server/fetch-handler",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "routes": [
+    { "pattern": "hbi.wadj.online", "custom_domain": true },
+  ],
+  "vars": {
+    "NEXT_PUBLIC_APP_URL": "https://hbi.wadj.online",
+    "NEXT_PUBLIC_APP_NAME": "HBI",
+    "HBI_AI_ENABLED": "false",
+  },
+  "assets": {
+    "directory": "dist/client",
+    "not_found_handling": "none",
+    "binding": "ASSETS",
+  },
+}

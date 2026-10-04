@@ -1,0 +1,87 @@
+# HBI — Zero-Cost V1 Blueprint, revision 0.2.0
+
+## Purpose and acceptance
+
+A coach/analyst manages matches, records possessions and player actions against local video, studies the last 3/5/10 opponent matches, inspects evidence, builds tactics and prepares a meeting/report. Every displayed metric exposes its sample and source observations. Manual professional tagging is the source of truth; automatic CV and mandatory AI are excluded.
+
+## Stack and layout
+
+Next.js 16, React 19, strict TypeScript, Tailwind 4; vinext/Vite on Cloudflare Workers; Supabase Auth/PostgreSQL/Data API/RLS; Dexie/IndexedDB; native HTML video and SVG tactical/shot surfaces; Zod; AWS S3 presigning for optional R2; Vitest/Testing Library/Playwright. Exact resolved versions live in pnpm-lock.yaml, not prose guesses. Native browser printing provides Arabic-compatible PDF; CSV is escaped UTF-8.
+
+Application routes: overview, matches and match workspace, opponents, team, players and player detail, video-lab, tactics and board detail, playlists and playlist detail, meetings and presentation detail, reports and report detail, settings. Arabic is default; English and RTL/LTR are supported.
+
+Domain modules reside in features; reusable workflows in components/workspace; infrastructure and pure calculations in lib. PostgreSQL owns shared truth, Dexie owns unsynced drafts/outbox, and component state owns ephemeral playback/editing. Secrets remain on server routes.
+
+## Database contract
+
+SQL under supabase/migrations is the authoritative executable schema. Generated database types follow the migrated catalog; run the official Supabase generator after local application. Preserve the first ten migrations; apply 0011–0016 forward.
+
+| Group | Relations and intent |
+|---|---|
+| Identity | profiles, organizations, organization_members; owner/technical_director/head_coach/assistant_coach/analyst/viewer |
+| Competition | teams, seasons, competitions, players, team_players, matches, match_roster |
+| Video | videos, analysis_sessions, video_clock_segments; video identity and independent period-clock mapping |
+| Analysis | possessions, events, event_participants, tags/event_tags; numerical and phase context |
+| Tactics | tactical_terms, possession_tactics; standard global vocabulary and organization extensions |
+| Shooting/GK | shot_attempts and legacy_shot_reviews; one attempt, attribution, result, court/goal placement, distance, shot type, rebound, fast-break origin |
+| Lineups | starting roster, on_court_intervals and substitutions; actual position, verified duration and atomic exchange |
+| Board | tactic_documents, tactic_frames, tactic_objects, tactic_frame_objects, tactic_animations |
+| Telestration | video_annotations; timed normalized objects and pause-on-entry |
+| Evidence | clips/clip_events, insights, evidence_links with real FKs |
+| Delivery | playlists/playlist_items, reports, presentations/presentation_items |
+| Contracts | metric_definitions, tagging_templates, revision columns and sync_receipts |
+
+Core lookup indexes cover organization, match/session, video ranges, player attribution, interval overlap, frame ordering and both directions of evidence links. Composite FKs, checks, exclusions and context triggers enforce consistency beyond RLS.
+
+## Taxonomy
+
+Separate phase, formation, attacking action, defensive system, defensive behavior, numerical context and shot type. Seeded concepts cover positional/fast/second-wave attack and return defense; 6v6/7v6/two pivots; cross/double cross/screens/pivot cooperation/wing entry/position exchange/isolation/breakthrough/overload; 6:0/5:1/3:2:1/4:2/3:3/man/mixed; stepping out/cover/switch/help/retreat/press; jump/standing/breakthrough/wing/pivot/7m/lob shots.
+
+Codes and IDs stay stable across languages. Staff add organization terms; used terms are archived. Legacy attack_system/defense_system fields are retained for compatibility and do not automatically acquire richer meaning.
+
+## Canonical calculations
+
+- Shot efficiency: goals / reviewed known-result attempts. A shot and its outcome never count twice.
+- GK save percentage: saves / (saves + goals faced), excluding misses, blocks, empty goals and unresolved attribution.
+- Position splits: recorded on-court position/shot position; unknown assignment is visible, not inferred from a player's permanent profile.
+- Assists, turnovers, zone-specific efficiency and verified minutes use documented observations. A zero denominator or open/unverified playing interval is unknown.
+- Default aggregate analytics use one primary analysis per match. Other sessions remain editable and can be explicitly made primary.
+- Tendencies are deterministic observed frequencies with evidence and sample counts; they are not causal or AI predictions.
+
+## Professional analysis workflow
+
+Setup → link source → roster → clock segments → possession → tactical action → player action → outcome → score/numerical context → review → filter → evidence clip → tactic/insight → playlist/meeting/report.
+
+Quick tagging uses configurable buttons and pre/post roll, keyboard play/pause/seek/tag/undo/redo, and durable local saves. Shot and goalkeeper details remain correctable. Clock calibration accounts for period resets, stopped clocks and missing footage. Substitutions preserve half-open intervals and roster membership. Clips reference source timestamps; no rendering/transcoding is required.
+
+## Drawing and presentation
+
+Tactical object identities persist across frames, allowing interpolation of player/ball positions and paths. Geometry uses normalized coordinates. Video annotations occupy explicit source-time windows and can pause on entry. Meetings mix clips, boards, insights and text in a stable order; speaker notes stay out of presentation mode. Missing local media requests relinking; shared R2 media is fetched via an authenticated signed read URL.
+
+Reports filter the primary analysis by match/team/player, show reviewed and pending sample counts, retain saved coach notes after asynchronous loading/reopening, and expose source-event evidence. CSV preserves observation IDs, video time, period and independent match-clock time; missing values remain blank. Arabic browser printing hides editing/navigation controls. Spreadsheet formula prefixes are escaped in text exports.
+
+## Security and sync
+
+All organization data is protected by explicit grants and operation-specific RLS. Every member sees their organization's teams; viewer is read-only. Team management: owner/TD/head coach; seasons/competitions: owner/TD; analysis and coaching documents: staff; deleting matches: owner/TD/head coach. Onboarding is one RPC. No ordinary user operation bypasses RLS.
+
+Local caches and outbox operations are keyed by user and organization. Local save + queued mutation are atomic. Stable operation UUIDs, expected revisions and server receipts make retries idempotent. Conflicts preserve both versions and require an explicit resolution. Backups can only be restored into the matching account/org; signing out removes visible access.
+
+Only an already prepared workspace supports continued offline recording/playback. New routes, initial login and setup require connectivity; there is no full-app service worker guarantee.
+
+## Zero-cost boundaries and deployment
+
+R2 is opt-in. Video uploads directly from browser to a private bucket; a server route signs short-lived URLs after RLS authorization and reserves organization quota. Finalization checks uploaded size. Configure CORS for the exact application origin (PUT/GET/HEAD, Content-Type, range reads) and server-only R2 credentials. Default organization allocation is 1 GiB; administrators must also budget the sum of organizations and control the R2 account. Free allocations are finite; storage/operations exceeding them may incur charges at the provider.
+
+No paid video platform, microservice, ORM, Redis, Kafka, cloud transcoding, mandatory LLM, full-match CV, medical/GPS/ERP or recruitment marketplace. No account deployment is performed by this deliverable.
+
+## Validation and deliverables
+
+See VALIDATION.md for actual commands/results, including the distinction between a PostgreSQL/WASM Auth shim and real Supabase. Tests cover metrics, time, local atomicity/isolation, new/upgrade schema, permissions, context consistency, overlap constraints, substitutions and CAS/retries. Browser checks exercise implemented workflows; external cloud checks require configured accounts.
+
+Deliver source-only ZIP, matching standalone Blueprint, SHA256, CHANGELOG and validation record. Exclude dependencies, secrets and build output. See PHASES.md for gates and FIRST_CODEX_PROMPT.md for continuation.
+
+## Additional foundation details
+
+Migrations 0011–0016 add coaching models, integrity/RLS, revision synchronization, atomic ordering, optional sharing reservations and canonical tactical analytics. Supabase clients use catalog-generated types, including function inputs/results and relationships. Position metrics use the center/wing/back/pivot/GK position recorded for each match observation, and display unknown rates when the denominator is missing. Board edits autosave to the durable outbox; media URLs can be reused through a signed-in workspace session and must be relinked after reopening the application. Timed annotation ranges remain editable, and meetings open insight evidence directly.
+
+See ZERO_COST_LIMITS.md for finite free-plan quotas and VALIDATION.md for measured verification. This delivery contains source and instructions; it does not provision or deploy accounts.

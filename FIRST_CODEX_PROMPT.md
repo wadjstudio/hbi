@@ -1,0 +1,15 @@
+# HBI continuation prompt
+
+Read CODEX.md, ARCHITECTURE.md, BLUEPRINT.md, CHANGELOG.md and VALIDATION.md; inspect the actual files before editing. The original scaffold has been upgraded: do not restart it or replace implemented modules with placeholders.
+
+1. Use Node 24, pnpm 10.30.3 and the lockfile. Install with frozen lockfile. Configure public Supabase values without committing secrets.
+2. Apply all migrations in a disposable local Supabase project; verify upgrades separately from clean resets. Never reset a hosted database for an upgrade.
+3. Regenerate official Supabase database types; compare with catalog-generated types included in the archive. Run RLS/integrity/analytics tests and repair errors before UI changes.
+4. Run the complete application. Create own/opponent teams, players, a match and roster, attach a local video, calibrate the clock and record possessions/shots/substitutions.
+5. Verify interrupted-network recording, backup/restore, account isolation, revision conflicts, relinking, evidence, tactical animations, annotation timing, playlists and meetings.
+6. Verify Arabic/English and RTL/LTR, keyboard access and metric sample counts. Include saved report notes after direct entry/reload, primary-session/player CSV filtering, independent clocks and Arabic PDF printing. Never display fabricated sports statistics.
+7. Run typecheck/lint/unit/database/browser checks and normal Next plus vinext builds. Do not blindly overwrite deployment config with an initializer. Use its output only if a verified incompatibility requires reconciling it.
+8. Configure optional R2 CORS/secrets/account budget only when sharing is requested; test a small explicit upload, read URL expiry and size finalization. No automatic upload, paid service or cloud transcoding.
+9. Report what passed, what changed and external setup still required. Update validation, change log, archive and checksum if delivering another package.
+
+Implementation and verification must be assessed separately. Read VALIDATION.md and ZERO_COST_LIMITS.md; preserve migrations 0001–0010 and the generated database contracts. Use features/workspace for queries/sync and components/workspace for UI composition.

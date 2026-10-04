@@ -1,0 +1,16 @@
+create index idx_org_members_user on public.organization_members(user_id, organization_id);
+create index idx_teams_org on public.teams(organization_id);
+create index idx_players_org on public.players(organization_id);
+create index idx_matches_org_date on public.matches(organization_id, starts_at desc);
+create index idx_matches_home_team on public.matches(home_team_id, starts_at desc);
+create index idx_matches_away_team on public.matches(away_team_id, starts_at desc);
+create index idx_videos_match on public.videos(match_id);
+create index idx_possessions_match_team on public.possessions(match_id, team_id, start_ms);
+create index idx_possessions_analysis on public.possessions(analysis_session_id, sequence_no);
+create index idx_events_match_time on public.events(match_id, timestamp_ms);
+create index idx_events_team_type on public.events(team_id, event_type);
+create index idx_events_player_type on public.events(actor_player_id, event_type);
+create index idx_events_possession on public.events(possession_id);
+create index idx_events_systems on public.events(defense_system, attack_system);
+create index idx_event_metadata_gin on public.events using gin(metadata);
+create index idx_clips_video_time on public.clips(video_id, start_ms, end_ms);

@@ -1,0 +1,2 @@
+-- Intentionally minimal. Use scripts/seed-demo.ts or Supabase Studio after a real auth user exists.
+-- We avoid fake auth UUIDs here because organization membership is security-sensitive.

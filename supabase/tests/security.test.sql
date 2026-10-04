@@ -1,0 +1,14 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+set search_path=public,extensions;
+select plan(8);
+select has_table('public','shot_attempts','Canonical shot model exists');
+select has_table('public','evidence_links','Evidence uses relations');
+select has_table('public','on_court_intervals','Playing time is represented');
+select has_table('public','presentation_items','Meetings are ordered');
+select ok((select bool_and(c.relrowsecurity) from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relkind='r'),'Every exposed base table enables RLS');
+select ok(not has_table_privilege('anon','public.shot_attempts','INSERT'),'Anonymous cannot insert shots');
+select ok(not has_function_privilege('anon','public.apply_workspace_change(text,jsonb,bigint,uuid,boolean)','EXECUTE'),'Public cannot execute sync RPC');
+select ok((select count(*)=1 from pg_indexes where schemaname='public' and indexname='analysis_primary_match'),'Primary session uniqueness exists');
+select * from finish();
+rollback;
