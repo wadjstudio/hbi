@@ -69,6 +69,10 @@ Subsequent read-only inspection in the user's Chrome profile established the act
 
 ## Reproduce commands
 
+### Repository connection verified — 2026-10-06
+
+The hosted Integrations page showed `wadjstudio/hbi` connected to `hbi Project`, working directory `.`. Deploy to production was enabled when the page became accessible; it was turned off and saved, and the off state persisted after reloading. Automatic branching was also off and unavailable on Free. This supersedes the earlier unverified connection status. The current hosted schema/migration state was not established: Table Editor required session renewal and browser control failed during that read-only check. Do not assume the database is empty or fully migrated; inspect migration history before applying SQL. No SQL Run, paid branching or Cloudflare/DNS change was performed by this continuation.
+
 Follow README.md with Node 24 and pnpm 10.30.3. Configure Supabase public values, apply forward migrations to an existing project (never reset it to upgrade), regenerate official types, then run types/lint/unit/database/browser checks and the two builds sequentially. Read ZERO_COST_LIMITS.md before deploying or enabling optional sharing.
 
 Verify a release with `python scripts/verify-package.py <archive.zip> --blueprint <external-blueprint.md> --original <original-starter.zip>`. The adjacent `.sha256` is checked automatically. Archive verification inspects and extracts the package into a temporary directory; it does not deploy anything.

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Supabase repository connection verified — 2026-10-06
+
+- Confirmed the hosted connection between `hbi Project` and `wadjstudio/hbi`, with working directory `.`.
+- Found production deployment enabled on the existing connection; disabled it, saved, and verified it remained off after reload. Automatic branching remains off on Free.
+- Current hosted schema/migration state remains unverified because session renewal/browser control interrupted the read-only Table Editor check. Inspect actual migration history before running any fresh-install or forward SQL; connection alone does not establish schema readiness.
+
 ## GitHub publication preparation — 2026-10-05
 
 - Published the source tree to the user-selected repository `https://github.com/wadjstudio/hbi`, branch `main`, after explicit account authorization. The first GitHub CI run passed all supplied validation/build steps on Node 24. Supabase repository integration remains in progress; no automatic hosted deployment is enabled in CI.
