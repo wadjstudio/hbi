@@ -120,6 +120,7 @@ hbi-starter/
   lib/video/local-sources.ts
   lib/video/time.ts
   scripts/.gitkeep
+  scripts/build-pages.mjs
   scripts/catalog-types.mjs
   scripts/mock-supabase.mjs
   scripts/verify-db.mjs
