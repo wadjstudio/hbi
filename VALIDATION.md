@@ -59,6 +59,14 @@ Subsequent read-only inspection in the user's Chrome profile established the act
 - Pages compatibility experiment was local only. Passing a custom config path was rejected by Wrangler Pages. The module-directory attempt compiled its modules but failed resolving SSR `../index.js`. A single-module esbuild candidate compiled and reached a local Pages server; `/login` did not respond within the 15-second HTTP check. Chrome page navigation also timed out. Pages deployment, request handling and live authentication remain unverified; experimental files are outside the delivered source.
 - No Cloudflare deployment, custom-domain registration, DNS/nameserver change, mail change or optional storage activation was performed.
 
+## GitHub publication — 2026-10-05
+
+- Published 156 source files to `https://github.com/wadjstudio/hbi`, branch `main`, initial commit `3499421441c3bf3890d02cb2ff54bceae3cafd5a`.
+- Staging audit passed: all 16 migrations included; original migrations 0001–0010 byte-preserved; environment files except the empty example, local registry configuration and build/dependency output excluded; no known credential signatures present.
+- GitHub CI run `37237639855` passed on Node 24: frozen installation, `db:verify`, typecheck, lint, unit tests, all five Chromium browser journeys, Next build and Cloudflare build. See https://github.com/wadjstudio/hbi/actions/runs/37237639855.
+- CI uses read-only repository contents permission and placeholder public fixture values. It does not access or migrate the hosted database or publish a Cloudflare application.
+- With explicit approval, GitHub's Supabase App installation selected only `wadjstudio/hbi`, with read code/metadata and read/write actions/checks/pull requests/workflows. Installation redirected to the Supabase authorization callback. Completion of the repository/project connection remains unverified: browser control stopped responding after the authorization page. No production-deploy or automatic-branching switch was enabled, and the hosted SQL Run remains unexecuted.
+
 ## Reproduce commands
 
 Follow README.md with Node 24 and pnpm 10.30.3. Configure Supabase public values, apply forward migrations to an existing project (never reset it to upgrade), regenerate official types, then run types/lint/unit/database/browser checks and the two builds sequentially. Read ZERO_COST_LIMITS.md before deploying or enabling optional sharing.

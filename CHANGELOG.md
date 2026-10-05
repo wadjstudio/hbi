@@ -2,9 +2,10 @@
 
 ## GitHub publication preparation — 2026-10-05
 
-- Prepared the source tree for the user-selected repository `https://github.com/wadjstudio/hbi`. Publication and Supabase repository integration are pending account authorization; no automatic hosted deployment is enabled in CI.
+- Published the source tree to the user-selected repository `https://github.com/wadjstudio/hbi`, branch `main`, after explicit account authorization. The first GitHub CI run passed all supplied validation/build steps on Node 24. Supabase repository integration remains in progress; no automatic hosted deployment is enabled in CI.
 - Expanded Git exclusions for environment files, local registry configuration, caches and build output. The example environment file remains available without credentials.
 - Limited the CI workflow token to read-only repository contents. The workflow validates the application and migrations locally without applying them to the hosted Supabase project.
+- Installed and authorized the Supabase GitHub App with the user's explicit approval and only HBI selected. Browser control became unavailable during callback completion; the project/repository connection remains unverified. No automatic deployment, hosted migration or paid branch was enabled.
 
 ## Hosted setup preparation — 2026-10-05
 

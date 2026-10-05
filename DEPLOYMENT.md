@@ -2,7 +2,10 @@
 
 العنوان المستهدف: `https://hbi.wadj.online`. الإعداد موجود في `wrangler.jsonc` كـWorker Custom Domain، دون تغيير بنية التطبيق أو رفع فيديوهات المستخدم. هذه النسخة تجهّز النشر؛ لا تعني أن الموقع أصبح منشورًا.
 
-## الحالة الحالية — 2026-10-04
+## الحالة الحالية — 2026-10-05
+
+- المشروع مرفوع على `https://github.com/wadjstudio/hbi`، فرع `main`. اجتاز أول تشغيل لـGitHub CI تثبيت الحزم المقفل، وفحص قاعدة البيانات والأنواع وlint والاختبارات والرحلات الخمس وبناء Next وCloudflare. CI لا يطبّق المهاجرات على القاعدة المستضافة ولا ينشر التطبيق.
+- وافق المستخدم على تفويض GitHub CLI وعلى تثبيت تطبيق Supabase لحساب `wadjstudio` مع حصر المستودعات المحددة في `wadjstudio/hbi`. وصلت واجهة التثبيت إلى callback الخاص بـSupabase، لكن اكتمال ربط الريبو بالمشروع لم يُتحقق منه: انقطع التحكم في Chrome أثناء صفحة إتمام التفويض. استأنف من Project Settings → Integrations؛ اترك Automatic branching وDeploy to production معطّلين، واستخدم مجلد العمل `.` عند إكمال الربط. تطبيق المهاجرات المستضافة ما زال ينتظر موافقة منفصلة.
 
 - تأكدت من تبويبي Chrome الفعليين: موقع وادج هو Cloudflare Pages باسم `wadj-studio` وعنوانه `wadj-studio.pages.dev`، وليس Worker. الدومين `www.wadj.online` حالته Active وSSL enabled في صفحة Custom domains.
 - لوحة Spaceship تؤكد بقاء `launch1.spaceship.net` و`launch2.spaceship.net`. سجل `www` هو CNAME إلى `wadj-studio.pages.dev`؛ سجلا `@` و`*` ضمن مجموعة URL Redirect هما A إلى `15.197.162.184`. هذا يفسّر نتيجة فحص `hbi` عبر wildcard الحالي، ولا يوجد سجل مستقل له في القائمة المقروءة.
