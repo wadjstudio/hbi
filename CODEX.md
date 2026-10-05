@@ -16,5 +16,6 @@ Build on the foundation; never substitute demo numbers for real observations.
 - Report drafts retain the revision at the start of editing. Load saved notes asynchronously, preserve other content, and export primary-session observations with separate video/period clocks and spreadsheet-safe CSV cells.
 - Run types, lint, meaningful unit/local-storage tests, database tests, browser checks and both builds. Record actual limitations in VALIDATION.md; do not label skipped checks as passed.
 - Keep archive clean: no secrets, node_modules, caches or build output. Blueprint copies and checksum must match.
+- Keep authoritative DNS at Spaceship for this deployment. Use `build:pages`/`preview:pages`; do not publish the optional Worker Custom Domain route or reset hosted Supabase. Pages access and live DNS changes are separate consequential steps.
 
 Implementation and verification must be assessed separately. Read VALIDATION.md and ZERO_COST_LIMITS.md; preserve migrations 0001–0010 and the generated database contracts. Use features/workspace for queries/sync and components/workspace for UI composition.

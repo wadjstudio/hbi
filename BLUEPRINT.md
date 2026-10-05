@@ -6,7 +6,9 @@ A coach/analyst manages matches, records possessions and player actions against 
 
 ## Stack and layout
 
-Next.js 16, React 19, strict TypeScript, Tailwind 4; vinext/Vite on Cloudflare Workers; Supabase Auth/PostgreSQL/Data API/RLS; Dexie/IndexedDB; native HTML video and SVG tactical/shot surfaces; Zod; AWS S3 presigning for optional R2; Vitest/Testing Library/Playwright. Exact resolved versions live in pnpm-lock.yaml, not prose guesses. Native browser printing provides Arabic-compatible PDF; CSV is escaped UTF-8.
+Next.js 16, React 19, strict TypeScript, Tailwind 4; vinext/Vite on Cloudflare's Worker runtime, packaged as Pages advanced mode for external DNS; Supabase Auth/PostgreSQL/Data API/RLS; Dexie/IndexedDB; native HTML video and SVG tactical/shot surfaces; Zod; AWS S3 presigning for optional R2; Vitest/Testing Library/Playwright. Exact resolved versions live in pnpm-lock.yaml, not prose guesses. Native browser printing provides Arabic-compatible PDF; CSV is escaped UTF-8.
+
+Deployment target hbi.wadj.online retains authoritative DNS at Spaceship. `build:pages` bundles one `_worker.js` server and client assets with static-route exclusions; no extra service is added. Publishing, external CNAME and live HTTPS/CPU validation remain separate from local builds. See DEPLOYMENT.md. No automatic hosted migrations or nameserver transfer is required.
 
 Application routes: overview, matches and match workspace, opponents, team, players and player detail, video-lab, tactics and board detail, playlists and playlist detail, meetings and presentation detail, reports and report detail, settings. Arabic is default; English and RTL/LTR are supported.
 

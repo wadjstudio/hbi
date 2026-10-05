@@ -1,5 +1,13 @@
 # HBI 0.2.0 validation — 2026-10-04
 
+## Pages continuation — 2026-10-06
+
+Focused ESLint on `scripts/build-pages.mjs` and `vite.config.ts` passed with exit 0. The first attempt timed out after 180 seconds; the longer standalone retry completed. Strict TypeScript passed earlier on the final Vite configuration; this continuation adds only a JavaScript packaging script and documentation. No database or coaching UI logic changed in this deployment continuation.
+
+The single-module Pages candidate passed local checks on port 8791: `/overview`, CSS and JavaScript returned HTTP 200 with correct MIME types. Chrome hydrated the interface and loaded the existing HBI organization from the real Supabase account without observed console errors/warnings. Launching with the correct explicit output directory resolved earlier asset 404s. This does not verify deployed TLS, CPU quotas, hosted multi-user isolation or a full real-match synchronization journey.
+
+Final source commands verified: `pnpm build:pages` passed with exit 0; `pnpm preview:pages --port 8792` started successfully after isolating its generated Wrangler redirect from the parent Worker redirect. HTTP checks passed for SSR and all eight actual asset references from its HTML, including correct CSS/JavaScript MIME types. Chrome loaded HBI and navigated to Settings with the hosted tactical vocabulary. An earlier hard-coded asset check requested an obsolete JavaScript hash and received 404; the actual current references all passed. Screenshot: `HBI_PAGES_LOCAL_VERIFIED.jpg`. DNS remains in Spaceship; no live publishing occurred.
+
 This supersedes the original starter's dependency/DNS limitation report. Dependencies were installed and executable validation was performed on Windows with Node 26.8.1, pnpm 10.30.3 and an installed Microsoft Edge. Node 24 is the documented project/CI runtime; the exact dependency resolution is in pnpm-lock.yaml.
 
 ## Executed checks
@@ -84,3 +92,11 @@ Verify a release with `python scripts/verify-package.py <archive.zip> --blueprin
 - The user completed first application Auth-account creation directly in Supabase; its Email-provider row was observed in Authentication → Users. No password was retrieved or stored by the agent.
 - Started the local Next Webpack server with the excluded real public Supabase configuration. The user signed in directly in Chrome, and the application reached `/overview` with organization onboarding. After explicit approval for the owner grant, the application created the first organization through `create_organization` and loaded its real empty workspace. Its selection and workspace were restored after a page reload. Successful onboarding does not establish multi-user role isolation, populated-match synchronization or token-expiry behavior.
 - GitHub CI run `37376125552` passed on the latest published source: https://github.com/wadjstudio/hbi/actions/runs/37376125552. Wrangler reports no authenticated account, and no Cloudflare publishing or DNS/mail change was performed.
+
+### Worker configuration and external DNS decision — 2026-10-06
+
+- After explicit approval, Wrangler authenticated with account/user/zone read, Workers scripts/routes write and background access only. `whoami` verified the intended account and encrypted credential storage with its key in Windows Credential Manager. No credentials were read or included in source/delivery. Its warning lists unused missing default scopes; they were not granted.
+- `vite.config.ts` now whitelists the two public Supabase environment values into generated Worker runtime vars. Cloudflare build and Wrangler dry-run passed, with both public bindings visible in the generated deployment. Strict typecheck passed after correcting the config's inferred optional-value type. Focused ESLint passed on retry after the initial invocation timed out during the concurrent build.
+- Local Cloudflare preview served `/login` and `/overview` in Chrome and loaded the real HBI organization using the existing authorized account session. This is a local runtime check, not hosted performance or token-expiry verification.
+- Read-only DNS comparison confirmed Cloudflare remains pending, lacks Spaceship's `www` CNAME, and has different apex A records. The user chose to keep authoritative DNS at Spaceship and confirmed SpaceMail is purchased but not configured. Do not change nameservers; the Worker Custom Domain route is not the chosen external-DNS delivery path.
+- Rebuilt the separate local Pages compatibility candidate. Its local test is pending: the direct installed `wrangler.cmd` invocation was blocked by lean-ctx's command allowlist, and approval to allow that specific command was requested. No shell protection was disabled, hosting published or DNS/mail changed.

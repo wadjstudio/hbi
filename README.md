@@ -53,9 +53,9 @@ Read `ARCHITECTURE.md`, `CODEX.md`, `BLUEPRINT.md`, `PHASES.md` and `FIRST_CODEX
 
 ## Cloudflare and limits
 
-The requested production hostname is `https://hbi.wadj.online`; its Worker Custom Domain route is prepared in `wrangler.jsonc`. Follow [DEPLOYMENT.md](DEPLOYMENT.md) to activate the DNS zone, create/configure Supabase, supply matching build/runtime public values and verify the live application. This preparation has not published a site or changed DNS.
+The requested production hostname is `https://hbi.wadj.online`. The selected deployment is Pages advanced mode with DNS remaining at Spaceship: run `pnpm build:pages`, then `pnpm preview:pages`. Follow [DEPLOYMENT.md](DEPLOYMENT.md) for separate publishing and external CNAME setup. Local Pages authentication and assets have been verified; no live HBI deployment or DNS change has occurred.
 
-`pnpm build:cf` uses the checked-in legacy Wrangler configuration with vinext's built-in fetch handler; `pnpm deploy:cf` is the separate publishing action. Public environment variables must be set at build time and server-only secrets configured on the deployment. The starter does not publish itself. `pnpm vinext:init` preserves this adapter choice rather than introducing optional cache services.
+`pnpm build:cf` uses vinext's built-in fetch handler. Pages packaging bundles that server into `dist/pages/_worker.js`, preserves client assets and excludes their routes from SSR. Public environment variables must be set before building; server-only secrets belong in deployment bindings. The optional `deploy:cf` Worker path requires an active Cloudflare DNS zone and is not selected for this domain. The starter does not publish itself.
 
 Browser checks can use an installed Edge on Windows with `HBI_BROWSER_CHANNEL=msedge`, or install the project's Chromium browser with `pnpm exec playwright install chromium`. The browser tests use a localhost Auth/Data fixture; PostgreSQL policy tests are independent. Read ZERO_COST_LIMITS.md before enabling sharing. A full match video often exceeds a free cloud storage allowance; keeping its bytes local is the V1 default.
 

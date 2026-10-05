@@ -10,3 +10,5 @@ All four stages have implementation in this starter update. Completion of operat
 Future, optional: richer position-specific indicators after extending event collection, measured performance optimization and AI phrasing of already calculated data. Core workflows always work with AI disabled. Full offline app navigation, automatic computer vision, cloud transcoding, broadcast, GPS/medical/ERP and recruitment marketplace remain outside V1.
 
 Implementation and verification must be assessed separately. Read VALIDATION.md and ZERO_COST_LIMITS.md; preserve migrations 0001–0010 and the generated database contracts. Use features/workspace for queries/sync and components/workspace for UI composition.
+
+Deployment gate: Pages build, local SSR/assets and real organization loading; then separately approve Pages access, verify live HTTPS, add its custom domain and only the external `hbi` CNAME. DNS remains at Spaceship. Live CPU/quotas, multi-user isolation, token expiry and R2 require their own verification.

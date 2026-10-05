@@ -1,54 +1,23 @@
 # نشر HBI على hbi.wadj.online
 
-العنوان المستهدف: `https://hbi.wadj.online`. الإعداد موجود في `wrangler.jsonc` كـWorker Custom Domain، دون تغيير بنية التطبيق أو رفع فيديوهات المستخدم. هذه النسخة تجهّز النشر؛ لا تعني أن الموقع أصبح منشورًا.
+## المسار المختار — 2026-10-06
 
-## الحالة الحالية — 2026-10-05
+Cloudflare Pages advanced mode مع بقاء DNS وشراء الدومين في Spaceship. لا تغيّر nameservers. موقع وادج الحالي مستقل على `wadj-studio.pages.dev` وله `www.wadj.online` فعال؛ حافظ على سجلاته والبريد.
 
-تحديث مؤكد — 2026-10-06: صفحة Project Settings → Integrations تعرض اتصال `hbi Project` بالريبو `wadjstudio/hbi`، ومجلد العمل `.`. وُجد Deploy to production مفعّلًا عند استعادة الصفحة؛ أُوقف وحُفظ، ثم تأكدت قيمته Off بعد إعادة تحميل الصفحة. Automatic branching متوقف وغير متاح على Free. هذا يؤكد ربط المستودع فقط؛ حالة تطبيق المهاجرات الحالية غير مؤكدة، لأن فحص Table Editor طلب تجديد تسجيل الدخول ثم تعطل التحكم بالمتصفح. لا تفترض أن القاعدة فارغة أو أن المهاجرات طُبّقت؛ راجع سجلها قبل أي تنفيذ لاحق.
+المنطقة في Cloudflare Pending وسجلاتها لا تطابق Spaceship. إعداد Worker Custom Domain القديم في `wrangler.jsonc` اختياري لمناطق Cloudflare الفعالة؛ لا تنشره على الدومين الحالي. `wadj-studio.workers.dev` عنوان حساب Workers، وليس تطبيق وادج.
 
-- المشروع مرفوع على `https://github.com/wadjstudio/hbi`، فرع `main`. اجتاز أول تشغيل لـGitHub CI تثبيت الحزم المقفل، وفحص قاعدة البيانات والأنواع وlint والاختبارات والرحلات الخمس وبناء Next وCloudflare. CI لا يطبّق المهاجرات على القاعدة المستضافة ولا ينشر التطبيق.
-- وافق المستخدم على تفويض GitHub CLI وعلى تثبيت تطبيق Supabase لحساب `wadjstudio` مع حصر المستودعات المحددة في `wadjstudio/hbi`. وصلت واجهة التثبيت إلى callback الخاص بـSupabase، لكن اكتمال ربط الريبو بالمشروع لم يُتحقق منه: انقطع التحكم في Chrome أثناء صفحة إتمام التفويض. استأنف من Project Settings → Integrations؛ اترك Automatic branching وDeploy to production معطّلين، واستخدم مجلد العمل `.` عند إكمال الربط. تطبيق المهاجرات المستضافة ما زال ينتظر موافقة منفصلة.
+## الحالة المتحققة
 
-- تأكدت من تبويبي Chrome الفعليين: موقع وادج هو Cloudflare Pages باسم `wadj-studio` وعنوانه `wadj-studio.pages.dev`، وليس Worker. الدومين `www.wadj.online` حالته Active وSSL enabled في صفحة Custom domains.
-- لوحة Spaceship تؤكد بقاء `launch1.spaceship.net` و`launch2.spaceship.net`. سجل `www` هو CNAME إلى `wadj-studio.pages.dev`؛ سجلا `@` و`*` ضمن مجموعة URL Redirect هما A إلى `15.197.162.184`. هذا يفسّر نتيجة فحص `hbi` عبر wildcard الحالي، ولا يوجد سجل مستقل له في القائمة المقروءة.
-- `wadj-studio.workers.dev` عنوان حساب Workers، وليس رابط تطبيق وادج نفسه. قائمة Workers فارغة مع وجود مشروع Pages المذكور.
-- ظهر لاحقًا مشروع Supabase جديد باسم `hbi Project` في بروفايل Chrome الآخر، بمرجع `tsgecvtldcypsrinthwx` وعلى الخطة المجانية. إعداد الاتصال العام موجود في `.env.local` المحلي فقط؛ لا توجد مفاتيح سرية في الحزمة.
-- حزمة التثبيت الجديدة تجمع المهاجرات الـ16 في transaction واحدة وتكتب سجل `supabase_migrations.schema_migrations` بالنص الأصلي لكل مهاجرة. اختُبرت محليًا: 42 جدولًا، تطابق كامل للمهاجرات والسجل، ورفض إعادة تشغيلها على قاعدة غير فارغة دون فقد بيانات. حزمة SQL جاهزة في محرر المشروع؛ لم تُنفذ لأن المراجعة التلقائية طلبت موافقة صريحة على تعديل القاعدة المستضافة.
-- لم تُعدَّل سجلات DNS أو حسابات الاستضافة، ولم يُنشر التطبيق.
+- المصدر على `https://github.com/wadjstudio/hbi`، فرع `main`، وCI للتحقق فقط.
+- مشروع Supabase الحالي يحتوي سجل المهاجرات `0001`–`0016` والجداول. لا تشغّل fresh-install عليه. تطابق نص SQL المستضاف بالكامل لم يُختبر.
+- ربط Supabase بالريبو متحقق، مجلد العمل `.`، Deploy to production وAutomatic branching متوقفان.
+- نجح دخول أول حساب مدرب وإنشاء مؤسسة HBI، بدور owner وافق عليه المستخدم، واستعادة المؤسسة بعد تحميل الصفحة.
+- نجح اختبار Pages المحلي لوحدة خادم واحدة: HTTP 200 لصفحة `/overview` وCSS/JavaScript، وتحميل مؤسسة HBI الحقيقية في Chrome دون أخطاء console. لا يثبت ذلك CPU/quotas أو تشغيل الدومين المنشور.
+- لم يُنشأ مشروع Pages لـHBI ولم تتغير DNS. تفويض Wrangler الحالي لا يتضمن `pages:write`؛ يتطلب النشر توسيعًا صريحًا للصلاحيات.
 
-## 1. اختيار ربط HBI مع الحفاظ على إعداد وادج
+## البناء والتجربة
 
-ربط وادج الحالي يعمل على Pages باستخدام CNAME خارجي؛ لا يتطلب تغيير nameservers لهذا السب دومين. إعداد HBI الحالي مختلف: vinext/Cloudflare Workers مع مسارات وخدمات خادم، وليس حزمة Pages جاهزة. لا ترفع dist/client وحده إلى Pages وتعتبر التطبيق كاملًا، ولا تربط CNAME مباشرةً بـworkers.dev باعتباره بديلًا لإعداد Worker Custom Domain.
-
-إذا كان إبقاء nameservers لدى Spaceship شرطًا، يلزم أولًا تنفيذ والتحقق من مسار استضافة متوافق مع DNS الخارجي قبل إعداد سجل hbi. إذا اختير مسار Worker Custom Domain الحالي، تتطلب الخطوات التالية تفعيل منطقة Cloudflare بعد مراجعة كل سجلات الموقع والبريد. لم يُختر أو يُنفّذ انتقال DNS بعد. يمكن أن تظل ملكية الدومين وخدمة SpaceMail لدى Spaceship مع إدارة DNS عند Cloudflare؛ سجلات البريد الفعلية يجب أن تُحفظ وفق دليل Spaceship.
-
-جُرّب Pages advanced mode محليًا كمسار للإبقاء على DNS الخارجي. نقل وحدات vinext إلى مجلد `_worker.js` واجه خطأ في مرجع الخادم `../index.js`. تجميعها في وحدة واحدة نجح، لكن اختبار طلب `/login` انتهى بمهلة دون استجابة؛ لذلك لم يُعتمد هذا المسار ولم يُنشر. نجاح تجميع Pages وحده لا يثبت عمل المصادقة أو تشغيل التطبيق. يتطلب ربط subdomain خارجي إضافة الدومين أولًا إلى مشروع Pages العامل ثم CNAME إلى عنوانه الفعلي، وفق دليل Cloudflare؛ لا تخمّن اسم مشروع أو عنوان نشر.
-
-افتح منطقة `wadj.online` في Cloudflare وتحقق من حالتها وnameservers المعينة لها. إن كانت Pending، راجع أولًا أن سجلات الموقع والبريد الحالية (A/AAAA/CNAME/MX/TXT) منسوخة بشكل صحيح. بعد ذلك يستبدل مالك الدومين الـnameservers لدى المسجل بالقيم التي يعرضها Cloudflare لهذه المنطقة تحديدًا؛ لا تخمّن أسماءها. اتبع خطوات DNSSEC التي تناسب الحالة الفعلية كما يوضح الدليل الرسمي.
-
-انتظر حالة Active وتحقق من تفويض DNS. لا يلزم نقل تسجيل الدومين من شركة الشراء. لاحقًا ينشئ ربط Worker Custom Domain سجل DNS وشهادة TLS؛ لا تضف CNAME يدويًا إلى workers.dev. عالج فقط تعارض السجل الخاص بـ`hbi` إن وُجد بعد تحديد استخدامه، وحافظ على سجلات الدومين الأصلي والبريد.
-
-## 2. إنشاء قاعدة Supabase
-
-أنشئ مشروعًا باسم HBI في حسابك، واختر Free دون تفعيل سعة مدفوعة. أدخل كلمة مرور قاعدة البيانات بنفسك واحتفظ بها في مدير كلمات المرور. انسخ Project URL وPublishable key من إعدادات المشروع؛ هاتان قيمتا الاتصال العامتان اللتان يحتاجهما التطبيق. لا تستخدم service_role أو Secret key في متغير NEXT_PUBLIC.
-
-للمشروع الحالي أُنجز الإنشاء بواسطة المستخدم. التطبيق الفعلي للمهاجرات، وإعداد Auth وإنشاء أول حساب مدرب، ما زالت خطوات مطلوبة. ملف `HBI_FRESH_INSTALL.sql` المرفق خارج ZIP مخصص لقاعدة جديدة فارغة فقط؛ يبدأ بحارس يرفض وجود جداول عامة أو سجل مهاجرات سابق. لا تستخدمه لترقية قاعدة موجودة. للمشروعات الموجودة استخدم `db push` للأمام كما يلي، بعد مراجعة بيانات الترقية.
-
-من مجلد المشروع، سجّل الدخول واربط مرجع المشروع الصحيح ثم طبّق المهاجرات:
-
-```powershell
-pnpm exec supabase login
-pnpm exec supabase link --project-ref YOUR_PROJECT_REF
-pnpm exec supabase db push
-```
-
-طبّق كل المهاجرات المضمنة، ثم تحقق من RLS وإنشاء المؤسسة بحساب مستخدم عادي. لا تستخدم `db reset` على مشروع مستضاف. لإنشاء أول حساب مدرب استخدم Supabase Auth؛ واجهة HBI الحالية تسجل الدخول بالبريد وكلمة المرور، ولا تتضمن واجهة إنشاء حساب أو استعادة كلمة المرور.
-
-في Auth → URL Configuration، اضبط Site URL على `https://hbi.wadj.online` وأضف `https://hbi.wadj.online/login` إلى Redirect URLs عند استخدام رابط تأكيد. لا توجد حاليًا صفحة `/auth/callback` أو استعادة كلمة مرور؛ لا تضف مسارات وهمية.
-
-## 3. إعداد الاتصال أثناء البناء والتشغيل
-
-انسخ `.env.example` إلى `.env.local`، وضع القيم الحقيقية:
+استخدم Node 24 وpnpm 10.30.3. انسخ `.env.example` إلى `.env.local` واضبط القيم العامة:
 
 ```dotenv
 NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT_REF.supabase.co
@@ -58,50 +27,50 @@ NEXT_PUBLIC_APP_NAME=HBI
 HBI_AI_ENABLED=false
 ```
 
-أضف نفس قيمتي Supabase إلى قسم `vars` في نسخة `wrangler.jsonc` المحلية قبل البناء. المثال التالي للقيم العامة فقط:
-
-```json
-"NEXT_PUBLIC_SUPABASE_URL": "https://YOUR_PROJECT_REF.supabase.co",
-"NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY": "YOUR_PUBLISHABLE_KEY"
-```
-
-لا تنشر placeholders. متغيرات NEXT_PUBLIC تدخل حزمة المتصفح أثناء البناء؛ تغييرها يستلزم إعادة البناء. إعداد Worker يحتاج القيم نفسها لتحديث جلسة المصادقة على الخادم. `nodejs_compat` مع compatibility date الحالي يتيح متغيرات Worker عبر `process.env`. إعدادات vars في الملف هي مرجع النشر؛ لا تعتمد على بقاء تعديلات Dashboard عند نشر لاحق.
-
-اترك مفاتيح R2 وAI وservice_role فارغة للنسخة الأساسية. أي أسرار اختيارية تُضاف لاحقًا عبر Cloudflare secrets، ولا توضع في vars أو الملفات المسلّمة. الفيديو يظل محليًا؛ المقاطع مراجع زمنية.
-
-## 4. البناء ثم النشر
+لا تستخدم secret/service_role في متغير عام. Vite يمرّر فقط قيمتي Supabase العامتين إلى إعداد خادم Worker. بناء Pages يستخدم قائمة محددة من المتغيرات العامة ويترك AI معطلًا؛ لا ينسخ أسرار R2.
 
 ```powershell
 pnpm install --frozen-lockfile
 pnpm typecheck
 pnpm lint
 pnpm test
-pnpm build:cf
-pnpm exec wrangler deploy --dry-run
+pnpm db:verify
+pnpm build
+pnpm build:pages
+pnpm preview:pages
 ```
 
-بعد اكتمال Supabase وتفعيل منطقة DNS، تحقق من حساب Wrangler الصحيح ثم انشر:
+`build:pages` يبني vinext ثم يجمع الخادم إلى `dist/pages/_worker.js` باستخدام esbuild الموجود مع Wrangler، وينسخ ملفات العميل. `_routes.json` يستثني الملفات الثابتة من SSR. `dist/pages/wrangler.json` إعداد مولد، يُستبعد من Git وZIP. البناء لا يرفع شيئًا.
+
+بعد معاينة `/login` سجّل الدخول بالحساب الموجود وتحقق من المؤسسة والتنقل. لا تنشئ مؤسسة أخرى للاختبار. لا يُضمّن أي فيديو محلي في النشر.
+
+## النشر بعد تفويض Pages
+
+راجع تفويض `pages:write` قبل اعتماده؛ قد يشمل مشروعات Pages الأخرى في الحساب. أنشئ مشروع HBI مستقلًا ثم ارفع `dist/pages`؛ لا ترفع `dist/client` وحده ولا تنشر إعداد Worker Custom Domain.
+
+بعد اعتماد اسم المشروع والحساب الصحيح، من مجلد المصدر:
 
 ```powershell
-pnpm exec wrangler login
-pnpm exec wrangler whoami
-pnpm deploy:cf
+pnpm exec wrangler pages project create hbi-handball-intelligence --production-branch main
+pnpm exec wrangler pages deploy --cwd dist/pages --project-name hbi-handball-intelligence --branch main
 ```
 
-Cloudflare Vite plugin يولّد إعداد النشر في dist ويعيد توجيه Wrangler إليه. عدّل ملف المصدر ثم أعد البناء؛ لا تعدّل dist يدويًا. النشر خطوة فعلية مستقلة عن dry-run. راجع `ZERO_COST_LIMITS.md` والتزام الحساب بالخطة المجانية؛ نجاح البناء لا يثبت أداء المباريات الكاملة أو حصص التشغيل.
+استخدم عنوان `pages.dev` الفعلي الذي يرجعه النشر. اختبر الدخول والمؤسسة وSSR وCSS/JS والتنقل على HTTPS قبل تغيير DNS. لا يفترض الدليل أن الاسم متاح أو أن المشروع أُنشئ. لا تفعّل نشر Supabase الآلي أو تطبيق المهاجرات أثناء ذلك.
 
-## 5. التحقق من النسخة المنشورة
+## ربط السب دومين فقط
 
-افتح HTTPS، وسجّل الدخول بحساب المدرب. أنشئ مؤسسة وفريقًا ومباراة، ثم سجّل تصويبة وأعد تحميل الصفحة للتحقق من الحفظ في Supabase. اختبر viewer للقراءة فقط وعزل مؤسستين، وانقطاع الاتصال ثم عودة المزامنة. جرّب إعادة ربط فيديو محلي وقائمة مقاطع واجتماعًا، وسجّل الخروج وتأكد من منع الوصول للحساب السابق. افحص تجديد الجلسة والسجلات دون طباعة كلمات مرور أو tokens.
+أضف `hbi.wadj.online` أولًا في Pages → Custom domains للمشروع العامل. ثم أضف في Spaceship سجل CNAME مستقلًا باسم `hbi` إلى اسم `pages.dev` الفعلي، دون البروتوكول. راجع السجل قبل الحفظ. لا تستخدم `workers.dev` ولا تعدّل `@` أو `www` أو wildcard أو البريد. انتظر Active والشهادة وتحقق من HTTPS والدخول على العنوان النهائي.
 
-نجاح dry-run محلي لا يغني عن هذه الاختبارات على الدومين الفعلي. إذا نُقل الاستخدام من localhost إلى الدومين، فمسودات IndexedDB المحلية لا تنتقل بين origins تلقائيًا؛ صدّر النسخة الاحتياطية من المصدر ثم استوردها بنفس المستخدم والمؤسسة.
+في Supabase Auth → URL Configuration اضبط Site URL على `https://hbi.wadj.online` وأضف `/login` عند الحاجة لروابط التأكيد. لا توجد `/auth/callback` أو صفحة استعادة كلمة مرور. المستخدم يدخل أي كلمة مرور بنفسه.
 
-## المصادر
+## قاعدة جديدة والترقية
 
-- [Cloudflare Worker Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/)
-- [Cloudflare full DNS setup](https://developers.cloudflare.com/dns/zone-setups/full-setup/setup/)
-- [Worker environment variables](https://developers.cloudflare.com/workers/configuration/environment-variables/)
-- [Supabase Auth redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls)
-- [Cloudflare Pages custom subdomains with external DNS](https://developers.cloudflare.com/pages/configuration/custom-domains/)
-- [Cloudflare Pages advanced mode](https://developers.cloudflare.com/pages/functions/advanced-mode/)
-- [SpaceMail with Cloudflare DNS](https://www.spaceship.com/knowledgebase/set-up-spacemail-dns-records-cloudflare/)
+لأي مشروع جديد فارغ، طبّق المهاجرات بالترتيب عبر Supabase CLI. للقاعدة الموجودة طبّق الناقص فقط بعد مراجعة السجل والبيانات؛ لا تستخدم hosted `db reset`. SQL/RLS المرجع النهائي، والتحقق المحلي لا يغني عن عزل حسابين حقيقيين وترقية staging.
+
+## الحدود والمشاركة الاختيارية
+
+Zero-Cost ضمن حصص الخطط المجانية. راجع `ZERO_COST_LIMITS.md` وحصص الحساب. وظائف Pages تستخدم حصص Workers؛ قياس CPU وحجم التطبيق مطلوب بعد النشر. لا تُفعّل موارد مدفوعة تلقائيًا.
+
+R2 اختياري. عند استخدامه جهّز bucket/CORS وأسراره في bindings الخادم، دون Git أو ملفات العميل، واختبر الرفع المباشر والحدود والروابط المؤقتة. اختبار R2 الفعلي لم يُنفّذ.
+
+مراجع: [Pages advanced mode](https://developers.cloudflare.com/pages/functions/advanced-mode/)، [DNS خارجي](https://developers.cloudflare.com/pages/configuration/custom-domains/)، [حدود Pages](https://developers.cloudflare.com/pages/platform/limits/).

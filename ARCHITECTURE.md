@@ -2,6 +2,8 @@
 
 ## Runtime and boundaries
 
+For external authoritative DNS, `build:pages` packages the existing vinext server as one Pages advanced-mode `_worker.js` alongside client assets. `_routes.json` bypasses SSR for static files. This is the same application and database. Public Supabase configuration comes from the build environment; secrets are excluded from generated public variables. Worker Custom Domains are optional for active Cloudflare zones.
+
 Browser: React UI, native video, normalized SVG drawing, Dexie drafts/outbox, explicit direct R2 upload. Next/vinext on Cloudflare: authentication boundary and routes requiring R2 secrets. Supabase: Auth, PostgreSQL, Data API, RLS and analytical RPCs. One application; no Prisma, Drizzle, microservices, Redis, Kafka or transcoding.
 
 `features/` owns domain behavior; `components/workspace/` composes interactive workflows; `lib/analytics` owns pure metric functions; `lib/video` owns media/time utilities; `lib/local` owns durable browser storage; `lib/permissions` mirrors allowed UI actions. `stores/` is reserved for transient state, not business truth. UI code receives data through the workspace provider and does not use a service role.

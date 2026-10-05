@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## Pages with external DNS — 2026-10-06
+
+- Added reproducible `build:pages` and `preview:pages` commands using installed Wrangler/esbuild dependencies: one server module, client assets, static-route exclusions and whitelisted public runtime configuration.
+- Verified local Pages candidate: SSR/CSS/JavaScript HTTP 200; Chrome loaded the existing real HBI organization without console errors. Earlier Pages failures are superseded; live deployment remains separate.
+- Rewrote deployment instructions to retain Spaceship DNS. No nameserver change, duplicate organization, hosted fresh install or automatic deployment is required.
+- Pages publishing requires additional `pages:write` permission. No HBI Pages project or DNS record has been created yet.
+
+## First hosted account and Worker configuration — 2026-10-06
+
+- Confirmed hosted migration-history versions `0001`–`0016` and rejected anonymous reads on four core tables. Do not reapply the fresh-install SQL bundle on this project.
+- Verified real first-account sign-in and organization creation through the application, with the owner grant explicitly approved and the workspace restored after reload.
+- Populate generated Worker runtime variables from the same two public Supabase environment values used at build time. The configuration uses an explicit whitelist; optional secrets are not copied into `vars`.
+- Authorized Wrangler with only account/user/zone read, Workers scripts/routes write and background access. Credentials are encrypted with a key in Windows Credential Manager; no credentials enter the repository or release.
+- Rechecked DNS: the Cloudflare zone remains pending and its records differ from authoritative Spaceship records. No nameserver, DNS, mail or hosting deployment change was performed.
+
 ## Supabase repository connection verified — 2026-10-06
 
 - Confirmed the hosted connection between `hbi Project` and `wadjstudio/hbi`, with working directory `.`.

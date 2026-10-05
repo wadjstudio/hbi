@@ -12,4 +12,6 @@ Read CODEX.md, ARCHITECTURE.md, BLUEPRINT.md, CHANGELOG.md and VALIDATION.md; in
 8. Configure optional R2 CORS/secrets/account budget only when sharing is requested; test a small explicit upload, read URL expiry and size finalization. No automatic upload, paid service or cloud transcoding.
 9. Report what passed, what changed and external setup still required. Update validation, change log, archive and checksum if delivering another package.
 
+For the requested hbi.wadj.online deployment, read DEPLOYMENT.md. Keep DNS in Spaceship and use the Pages advanced-mode bundle. The existing hosted schema and first HBI organization are present; do not run fresh-install SQL or create duplicate onboarding data. Verify live HTTPS separately after Pages authorization, then add only the `hbi` external CNAME.
+
 Implementation and verification must be assessed separately. Read VALIDATION.md and ZERO_COST_LIMITS.md; preserve migrations 0001–0010 and the generated database contracts. Use features/workspace for queries/sync and components/workspace for UI composition.

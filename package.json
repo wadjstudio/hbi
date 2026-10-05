@@ -8,6 +8,8 @@
     "dev:cf": "vite dev",
     "build": "next build",
     "build:cf": "vite build",
+    "build:pages": "pnpm build:cf && node scripts/build-pages.mjs",
+    "preview:pages": "wrangler pages dev --cwd dist/pages",
     "preview:cf": "vite preview",
     "deploy:cf": "wrangler deploy",
     "vinext:init": "vinext init --platform=cloudflare --legacy-wrangler-cloudflare-init",
