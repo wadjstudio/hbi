@@ -2,10 +2,22 @@
 
 ## Pages with external DNS — 2026-10-06
 
+- Final-domain coach sign-in passed on `hbi.wadj.online`, loading the existing HBI organization without observed console errors. No live match data, optional video uploads or new paid resources were introduced for this verification.
+
+- Custom domain activation completed: `hbi.wadj.online` is Active with SSL enabled. Final-hostname SSR/current client assets passed over HTTPS; earlier propagation/TLS pending notes are superseded.
+
+- Saved only the independent `hbi` CNAME at Spaceship to the verified Pages hostname; retained existing Wadj records and nameservers. Public DNS resolves the correct target.
+
+- Verified real coach sign-in on both the Pages origin and final custom domain, with password entry performed directly by the user and organization restoration after reload.
+
+- Following explicit Pages permission approval, created a separate HBI Pages project and deployed the verified bundle. HTTPS SSR/current assets passed at `hbi-handball-intelligence.pages.dev`. CI passed on `d03aaa6`. Existing Wadj deployment was not modified.
+
 - Added reproducible `build:pages` and `preview:pages` commands using installed Wrangler/esbuild dependencies: one server module, client assets, static-route exclusions and whitelisted public runtime configuration.
-- Verified local Pages candidate: SSR/CSS/JavaScript HTTP 200; Chrome loaded the existing real HBI organization without console errors. Earlier Pages failures are superseded; live deployment remains separate.
+- Verified local Pages candidate: SSR/CSS/JavaScript HTTP 200; Chrome loaded the existing real HBI organization without console errors. Earlier Pages failures are superseded.
 - Rewrote deployment instructions to retain Spaceship DNS. No nameserver change, duplicate organization, hosted fresh install or automatic deployment is required.
-- Pages publishing requires additional `pages:write` permission. No HBI Pages project or DNS record has been created yet.
+- Pages publishing used the explicitly approved additional `pages:write` permission and encrypted Windows credential storage.
+
+The entries below record earlier preparation states; this section describes the current verified deployment.
 
 ## First hosted account and Worker configuration — 2026-10-06
 

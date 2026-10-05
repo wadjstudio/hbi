@@ -53,7 +53,7 @@ Read `ARCHITECTURE.md`, `CODEX.md`, `BLUEPRINT.md`, `PHASES.md` and `FIRST_CODEX
 
 ## Cloudflare and limits
 
-The requested production hostname is `https://hbi.wadj.online`. The selected deployment is Pages advanced mode with DNS remaining at Spaceship: run `pnpm build:pages`, then `pnpm preview:pages`. Follow [DEPLOYMENT.md](DEPLOYMENT.md) for separate publishing and external CNAME setup. Local Pages authentication and assets have been verified; no live HBI deployment or DNS change has occurred.
+The production hostname `https://hbi.wadj.online` is active with SSL on Pages advanced mode; HTTPS SSR, current client assets and real coach sign-in to the HBI organization are verified. DNS remains at Spaceship with an independent HBI CNAME. Run `pnpm build:pages`, then `pnpm preview:pages` locally. See [DEPLOYMENT.md](DEPLOYMENT.md) and [VALIDATION.md](VALIDATION.md) for deployment details and remaining integration checks.
 
 `pnpm build:cf` uses vinext's built-in fetch handler. Pages packaging bundles that server into `dist/pages/_worker.js`, preserves client assets and excludes their routes from SSR. Public environment variables must be set before building; server-only secrets belong in deployment bindings. The optional `deploy:cf` Worker path requires an active Cloudflare DNS zone and is not selected for this domain. The starter does not publish itself.
 

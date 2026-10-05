@@ -13,7 +13,8 @@ Cloudflare Pages advanced mode مع بقاء DNS وشراء الدومين في 
 - ربط Supabase بالريبو متحقق، مجلد العمل `.`، Deploy to production وAutomatic branching متوقفان.
 - نجح دخول أول حساب مدرب وإنشاء مؤسسة HBI، بدور owner وافق عليه المستخدم، واستعادة المؤسسة بعد تحميل الصفحة.
 - نجح اختبار Pages المحلي لوحدة خادم واحدة: HTTP 200 لصفحة `/overview` وCSS/JavaScript، وتحميل مؤسسة HBI الحقيقية في Chrome دون أخطاء console. لا يثبت ذلك CPU/quotas أو تشغيل الدومين المنشور.
-- لم يُنشأ مشروع Pages لـHBI ولم تتغير DNS. تفويض Wrangler الحالي لا يتضمن `pages:write`؛ يتطلب النشر توسيعًا صريحًا للصلاحيات.
+- بعد موافقة صريحة على `pages:write` وحفظ التفويض المشفّر، أُنشئ مشروع Pages مستقل ونُشر بنجاح: `https://hbi-handball-intelligence.pages.dev`، deployment `237b15bf-2391-4110-8a95-dbaa90eabc72`. فحص HTTPS اجتاز SSR وملفات البناء الثمانية. أدخل المستخدم كلمة المرور بنفسه؛ ظهر حسابه ومؤسسة HBI في Chrome واستمر الدخول بعد إعادة التحميل.
+- اختير Custom domains → My DNS provider، وحُفظ `CNAME hbi → hbi-handball-intelligence.pages.dev` في Spaceship بمهلة TTL 30 دقيقة. السجلات السابقة وnameservers بقيت كما هي. بعد Check DNS records أصبح الدومين Active وSSL enabled؛ فحص `https://hbi.wadj.online` اجتاز SSR وملفات العميل الثمانية، ودخل المدرب إلى مؤسسة HBI على الدومين النهائي دون أخطاء console ملحوظة.
 
 ## البناء والتجربة
 
@@ -46,7 +47,7 @@ pnpm preview:pages
 
 ## النشر بعد تفويض Pages
 
-راجع تفويض `pages:write` قبل اعتماده؛ قد يشمل مشروعات Pages الأخرى في الحساب. أنشئ مشروع HBI مستقلًا ثم ارفع `dist/pages`؛ لا ترفع `dist/client` وحده ولا تنشر إعداد Worker Custom Domain.
+تفويض `pages:write` اعتُمد صراحةً، وقد يشمل مشروعات Pages الأخرى في الحساب. المشروع المستقل موجود؛ لا تعِد إنشاءه. لإعادة نشر نسخة جديدة ارفع `dist/pages`؛ لا ترفع `dist/client` وحده ولا تنشر إعداد Worker Custom Domain.
 
 بعد اعتماد اسم المشروع والحساب الصحيح، من مجلد المصدر:
 
