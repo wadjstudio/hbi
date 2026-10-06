@@ -36,6 +36,7 @@ hbi-starter/
   app/globals.css
   app/layout.tsx
   app/page.tsx
+  app/workbench.css
   app/(auth)/login/login-form.tsx
   app/(auth)/login/page.tsx
   app/(platform)/layout.tsx
@@ -68,28 +69,41 @@ hbi-starter/
   components/shell/app-sidebar.tsx
   components/ui/.gitkeep
   components/video/.gitkeep
+  components/workspace/analysis-timeline.tsx
   components/workspace/analytics.tsx
   components/workspace/charts.tsx
   components/workspace/controls.tsx
   components/workspace/drawing.tsx
   components/workspace/entities.tsx
   components/workspace/event-participants.tsx
+  components/workspace/evidence-drawer.tsx
   components/workspace/evidence-links.tsx
+  components/workspace/match-context.tsx
+  components/workspace/match-hub.tsx
   components/workspace/meetings.tsx
   components/workspace/provider.tsx
+  components/workspace/quick-tag-dock.tsx
+  components/workspace/reference-match.tsx
   components/workspace/reports.tsx
+  components/workspace/session-analysis-rail.tsx
   components/workspace/settings.tsx
   components/workspace/shell.tsx
   components/workspace/tactics.tsx
   components/workspace/tag-template.tsx
   components/workspace/team.tsx
+  components/workspace/video-transport.tsx
   components/workspace/video-workspace.tsx
+  docs/ui-redesign/RESEARCH.md
+  docs/ui-redesign/match-template.csv
+  docs/ui-redesign/roster-template.csv
   features/analysis/.gitkeep
   features/analysis/contracts.ts
+  features/analysis/workbench.ts
   features/analytics/.gitkeep
   features/auth/.gitkeep
   features/insights/.gitkeep
   features/matches/.gitkeep
+  features/matches/reference-match.ts
   features/opponents/.gitkeep
   features/organizations/.gitkeep
   features/players/.gitkeep
@@ -159,6 +173,7 @@ hbi-starter/
   tests/unit/reports.test.ts
   tests/unit/smoke.test.ts
   tests/unit/video-source.test.ts
+  tests/unit/workbench.test.ts
   types/.gitkeep
   types/workspace.ts
 ```

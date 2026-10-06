@@ -2,6 +2,8 @@
 
 ## Match workbench and verified broadcast — 2026-10-06
 
+Source `741d9fc` is published on the existing `hbi.wadj.online` Pages project. The reference match is present in the original HBI organization and synchronized. No DNS, schema or privilege changes were needed.
+
 - Replaced the Overview entry with a match hub and introduced a compact icon navigation shell, match context, custom video transport, three-lane zoomable timeline, quick tagging dock and session intelligence beside video.
 - Added a verified Al Ahly–Zamalek final reference (23 May 2025, 31–28), official ON Sport viewing embed and permission-checked retry-safe metadata importer. No invented roster, timestamp, shot locations or insights.
 - Added shared canonical outcome filters and possession-deduplicated tactical evidence. A native evidence dialog reviews/edits moments, creates timestamp clips and appends them to meetings without repeated clip items.
@@ -78,29 +80,34 @@ The entries below record earlier preparation states; this section describes the 
 ## 0.2.0 — 2026-10-03
 
 ### Foundation
+
 - Preserved original migrations 0001–0010; added forward schema, integrity/permission, synchronization/analytics, ordered-operation and optional-sharing migrations.
 - Hardened legacy child relations with explicit organization scope, composite FKs and immutable context. Split RLS operations and restricted match deletion.
 - Added catalog-generated database types, browser/backup/drawing validation, meaningful metric/time/local-storage tests and PostgreSQL clean/upgrade verification.
 
 ### Handball domain
+
 - Added expandable bilingual tactical taxonomy and ordered possession descriptors.
 - Added canonical shot attempts and GK attribution/placement/rebound/fast-break details; ambiguous legacy events require review.
 - Separated video time from period clock, added primary-analysis selection, roster/on-court positions and atomic substitutions.
 - Added metric definitions, normalized tactical documents/frames/objects/animations, timed telestration, typed evidence links and ordered presentations.
 
 ### Application
+
 - Replaced placeholder sports statistics with actual observations, samples and evidence links.
 - Added bilingual management, video tagging/calibration/lineups, analytics/shot maps, tactical board, playlists/meetings, reports and settings workflows.
 - Added durable account-scoped drafts/outbox, backups, revision conflicts and relinking. Added optional authorized direct R2 sharing and signed reads.
 - Added browser PDF printing/CSV export and reference-inspired dark RTL/LTR workspace.
 
 ### Compatibility
+
 - Legacy events and attack/defense enum columns remain. Unique primary-session repair is deterministic; all sessions remain stored.
 - Canonical metrics exclude legacy ambiguity until analyst review. Existing incorrect cross-context rows must be repaired before constraints can apply; do not delete them silently.
 - Cloud sharing requires explicit bucket/account setup. Full offline navigation and automatic video understanding are outside V1.
 - See VALIDATION.md for tested results and unverified external-account behavior.
 
 ### Final workflow refinements
+
 - Typed Supabase clients and generated RPC arguments/results/FK relationships; precise operation schemas.
 - Match-position metric cards, GK denominators, defensive taxonomy attribution and invoker-only tactical analytics.
 - Tactical-board autosave, editing snapshots and conflict-aware undo/redo; explicit annotation visibility intervals.
