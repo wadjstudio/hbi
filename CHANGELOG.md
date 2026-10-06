@@ -6,6 +6,7 @@
 - Compact match selector/context and expandable source options; intelligence cards respond to their panel width. Added five summaries for canonical attempts, shooters, resolved closed possessions, turnover phases and recorded results, with missing-data labels and evidence actions.
 - Added pure dashboard formula tests and browser checks for resizing, keyboard tabs, focus, RTL and narrow-screen overflow. Production data remains untouched by synthetic fixtures.
 - Prepared two guarded hosted upgrade scripts with exact migration history, verified against PostgreSQL/WASM. User authorized 0017–0019 and publication; browser transport currently blocks Supabase execution. No hosted migration or new deployment is claimed.
+- Validated with 31 unit tests, seven complete browser journeys on GitHub CI, database isolation/upgrade tests and both production builds. Windows dev timeout attempts remain in VALIDATION.md; successful CI does not imply hosted publication.
 
 ## Online analysis and coaching rail — 2026-10-06
 
