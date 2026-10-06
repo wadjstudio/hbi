@@ -1,5 +1,15 @@
 # HBI 0.2.0 validation — 2026-10-04
 
+## Match workbench — 2026-10-06
+
+- `pnpm typecheck`, `pnpm lint`, `pnpm test`: passed (24 unit tests). The first lint attempts included generated Wrangler/test output; those directories are now explicitly ignored. New render-state/DOM control issues were repaired without disabling React rules.
+- `pnpm build`: passed; `pnpm build:pages` (including Cloudflare/vinext build): passed. No new dependency or schema changes.
+- Browser fixture checks: conflict/backup/sign-out, Arabic report/CSV/PDF, login and offline CRUD/tactics passed in the isolated 3101/54339 run. The video journey passed on its targeted rerun after updating the explicit result selector and tagging disclosure: local file, calibration, offline attempts, undo/redo, sync, opponent insight/evidence and meeting playback. Earlier failed attempts remain failures, not skipped successes.
+- New unit checks verify canonical outcome evidence, possession/session sample deduplication, bounded timeline windows, role checks before reference writes, stable retry IDs and organization-specific imports.
+- Real-account local production build: existing HBI organization loaded; official match import created two teams and one match, reached its workbench and synchronized to zero pending operations. It added verified public metadata only, with no inferred roster/events/clock anchors.
+- Verified official broadcast: ON Sport recording `q-_grNLweEE`, 23 May 2025. Playback footage was inspected in Chrome; the 9,340.541-second recording includes studio coverage. Preview at 5,604 seconds shows actual play and is not a clock anchor. Al Ahly's published report verifies 31–28.
+- A full match has not been tagged. Real multi-analyst/long-video performance, optional R2 and online-frame-accurate analysis remain unverified. The online embed does not provide local/offline tagging.
+
 ## Pages continuation — 2026-10-06
 
 Final domain activation: Cloudflare shows `hbi.wadj.online` Active with SSL enabled. HTTPS SSR and all eight current client assets passed with HTTP 200/correct MIME types. The user entered the password directly; Chrome loaded `/overview` with the existing HBI organization and no observed console errors/warnings. The earlier TLS-handshake failure was temporary and is superseded. Screenshots `HBI_CUSTOM_DOMAIN_ACTIVE.jpg` and `HBI_FINAL_DOMAIN_AUTHENTICATED.jpg`.

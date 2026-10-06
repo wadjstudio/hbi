@@ -65,6 +65,17 @@ test("local video to offline shot, opponent evidence and meeting", async ({
     page.getByText("Match clock not calibrated", { exact: true }),
   ).toHaveCount(0);
   await page
+    .getByText("Tagging details · team, participants & context", {
+      exact: true,
+    })
+    .click();
+  await page
+    .getByRole("combobox", { name: "Result", exact: true })
+    .selectOption("goal");
+  await page
+    .getByText("Drawing, clips & source sharing", { exact: true })
+    .click();
+  await page
     .getByLabel("Team", { exact: true })
     .selectOption("30000000-0000-4000-8000-000000000002");
   await page

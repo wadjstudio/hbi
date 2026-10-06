@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
+const mockURL = `http://127.0.0.1:${process.env.HBI_MOCK_PORT || 54329}`;
 
 test("concurrent changes preserve both versions until explicit resolution; sign-out hides drafts", async ({
   page,
@@ -21,19 +22,19 @@ test("concurrent changes preserve both versions until explicit resolution; sign-
   page.on("request", (request) => {
     if (
       request.method() === "GET" &&
-      request.url().startsWith("http://127.0.0.1:54329/rest/v1/")
+      request.url().startsWith(`${mockURL}/rest/v1/`)
     )
       collectionReads.push(request.url());
   });
   const rows = await (
-    await page.request.get("http://127.0.0.1:54329/rest/v1/players")
+    await page.request.get(`${mockURL}/rest/v1/players`)
   ).json();
   const original = rows.find(
     (row: { id: string }) => row.id === "40000000-0000-4000-8000-000000000001",
   );
   // Simulate the other analyst using the same revision-aware server contract.
   const remote = await page.request.post(
-    "http://127.0.0.1:54329/rest/v1/rpc/apply_workspace_change",
+    `${mockURL}/rest/v1/rpc/apply_workspace_change`,
     {
       data: {
         p_table: "players",
@@ -64,7 +65,7 @@ test("concurrent changes preserve both versions until explicit resolution; sign-
     page.getByText("Online · 0 pending", { exact: true }),
   ).toBeVisible();
   const resolved = await (
-    await page.request.get("http://127.0.0.1:54329/rest/v1/players")
+    await page.request.get(`${mockURL}/rest/v1/players`)
   ).json();
   expect(
     resolved.find((row: { id: string }) => row.id === original.id).first_name,

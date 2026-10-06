@@ -125,7 +125,10 @@ db.tactical_terms = [
   },
 ];
 const server = http.createServer(async (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:3000");
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    process.env.HBI_E2E_ORIGIN || "http://127.0.0.1:3000",
+  );
   res.setHeader(
     "Access-Control-Allow-Headers",
     req.headers["access-control-request-headers"] ??
@@ -197,6 +200,6 @@ const server = http.createServer(async (req, res) => {
   }
   send({ ok: true });
 });
-server.listen(54329, "127.0.0.1", () =>
-  console.log("Test Auth/Data fixture ready on 54329"),
+server.listen(Number(process.env.HBI_MOCK_PORT || 54329), "127.0.0.1", () =>
+  console.log("Test Auth/Data fixture ready"),
 );

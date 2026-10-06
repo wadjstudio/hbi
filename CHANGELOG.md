@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## Match workbench and verified broadcast — 2026-10-06
+
+- Replaced the Overview entry with a match hub and introduced a compact icon navigation shell, match context, custom video transport, three-lane zoomable timeline, quick tagging dock and session intelligence beside video.
+- Added a verified Al Ahly–Zamalek final reference (23 May 2025, 31–28), official ON Sport viewing embed and permission-checked retry-safe metadata importer. No invented roster, timestamp, shot locations or insights.
+- Added shared canonical outcome filters and possession-deduplicated tactical evidence. A native evidence dialog reviews/edits moments, creates timestamp clips and appends them to meetings without repeated clip items.
+- Shot outcomes now start unresolved; quick tagging is disabled while an existing event is edited. Fixed stale local-source display on workspace changes and preserved explicit playback error handling.
+- Split workbench views into reusable components over the existing Supabase/Dexie/RLS provider. No new migration, ORM, service or mandatory paid dependency; previous schema and local drafts remain compatible.
+- Added domain tests for filtering, tactical samples, timeline bounds and reference import authorization/idempotency; configurable isolated browser fixture ports and generated-output lint exclusions.
+- Official embed requires internet and is for viewing. Native local video is still required for precise/offline tagging. The match has not been fully tagged; platform feature parity, automatic video analysis, real multi-user sessions and optional R2 remain separate acceptance work.
+
 ## Pages with external DNS — 2026-10-06
 
 - Final-domain coach sign-in passed on `hbi.wadj.online`, loading the existing HBI organization without observed console errors. No live match data, optional video uploads or new paid resources were introduced for this verification.

@@ -2,6 +2,8 @@
 
 Read CODEX.md, ARCHITECTURE.md, BLUEPRINT.md, CHANGELOG.md and VALIDATION.md; inspect the actual files before editing. The original scaffold has been upgraded: do not restart it or replace implemented modules with placeholders.
 
+Continue from the October 6 match workbench, including `docs/ui-redesign/RESEARCH.md`. Use the official Al Ahly–Zamalek reference card to prepare metadata once. A native local file is still required for accurate tagging/offline operation; do not download or fabricate analysis as a substitute. Test the evidence drawer and direct clip-to-meeting path. Browser fixture ports can be isolated with `HBI_E2E_PORT` and `HBI_MOCK_PORT`; never run fixture writes against the hosted database.
+
 1. Use Node 24, pnpm 10.30.3 and the lockfile. Install with frozen lockfile. Configure public Supabase values without committing secrets.
 2. Apply all migrations in a disposable local Supabase project; verify upgrades separately from clean resets. Never reset a hosted database for an upgrade.
 3. Regenerate official Supabase database types; compare with catalog-generated types included in the archive. Run RLS/integrity/analytics tests and repair errors before UI changes.

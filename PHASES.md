@@ -1,5 +1,7 @@
 # HBI V1 phases and acceptance gates
 
+October 6 iteration: production components now include the match hub, verified real-match reference, match context, video transport, zoomable timeline lanes, compact tagging controls, session intelligence and an evidence-to-meeting dialog. This is a usable workbench iteration, not evidence that feature parity with established analysis platforms is complete. Further gates include a fully tagged real match, real multi-analyst use, annotation/board refinement and measured long-video performance. Keep detailed acceptance outcomes in VALIDATION.md.
+
 1. Foundation: dependency lock, deployment adapter, typed domain, permissions, forward migrations. Gate: clean/upgrade SQL, isolation, relational constraints and both builds.
 2. Match workflow: setup, roster, local video, clock calibration, possessions, tagging, canonical shots, on-court intervals/substitutions, outbox and backups. Gate: interrupted recording survives; retries do not duplicate; concurrent edits conflict visibly.
 3. Coaching tools: goalkeeper/player/opponent analytics, sample sizes, evidence links, tactical documents/frames/objects/animations and video telestration. Gate: metrics reproduce source observations; coordinates survive resizing; every insight has inspectable evidence.

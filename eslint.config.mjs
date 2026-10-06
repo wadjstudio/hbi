@@ -5,5 +5,13 @@ import nextTs from "eslint-config-next/typescript";
 export default defineConfig([
   ...nextVitals,
   ...nextTs,
-  globalIgnores([".next/**", ".vinext/**", ".cloudflare/**", "dist/**"]),
+  globalIgnores([
+    ".next/**",
+    ".vinext/**",
+    ".cloudflare/**",
+    ".wrangler/**",
+    "dist/**",
+    "test-results/**",
+    "playwright-report/**",
+  ]),
 ]);

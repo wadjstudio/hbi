@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import Papa from "papaparse";
 import { test, expect } from "@playwright/test";
+const mockURL = `http://127.0.0.1:${process.env.HBI_MOCK_PORT || 54329}`;
 
 test("saved Arabic report notes, primary sample, CSV and browser PDF", async ({
   page,
@@ -17,12 +18,9 @@ test("saved Arabic report notes, primary sample, CSV and browser PDF", async ({
     secondary = randomUUID(),
     report = randomUUID();
   async function seed(table: string, row: Record<string, unknown>) {
-    const response = await request.post(
-      `http://127.0.0.1:54329/rest/v1/${table}`,
-      {
-        data: { organization_id: org, ...row },
-      },
-    );
+    const response = await request.post(`${mockURL}/rest/v1/${table}`, {
+      data: { organization_id: org, ...row },
+    });
     expect(response.ok()).toBe(true);
   }
   await seed("matches", {
@@ -128,9 +126,7 @@ test("saved Arabic report notes, primary sample, CSV and browser PDF", async ({
   await page.getByRole("button", { name: "Save report", exact: true }).click();
   await expect
     .poll(async () => {
-      const response = await request.get(
-        "http://127.0.0.1:54329/rest/v1/reports",
-      );
+      const response = await request.get(`${mockURL}/rest/v1/reports`);
       const reports = await response.json();
       return reports.find((r: { id: string }) => r.id === report)?.content;
     })
@@ -140,10 +136,10 @@ test("saved Arabic report notes, primary sample, CSV and browser PDF", async ({
   const finalNotes = amended + "\nالنسخة المختارة بعد المراجعة";
   await notes.fill(finalNotes);
   const stored = (
-    await (await request.get("http://127.0.0.1:54329/rest/v1/reports")).json()
+    await (await request.get(`${mockURL}/rest/v1/reports`)).json()
   ).find((row: { id: string }) => row.id === report);
   const remote = await request.post(
-    "http://127.0.0.1:54329/rest/v1/rpc/apply_workspace_change",
+    `${mockURL}/rest/v1/rpc/apply_workspace_change`,
     {
       data: {
         p_table: "reports",

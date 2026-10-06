@@ -2,6 +2,8 @@
 
 ## Purpose and acceptance
 
+The October 6 workbench iteration makes matches the entry point and puts video, zoomable event/possession/clip lanes and evidence-linked intelligence on one screen. A verified Al Ahly–Zamalek final (23 May 2025, 31–28) provides an official broadcast reference and retry-safe metadata import. Its event analysis remains empty until manually tagged. Public online viewing and precise local/offline analysis are distinct sources; no automatic event extraction or broadcast-to-clock calibration is implied. Follow `docs/ui-redesign/RESEARCH.md` for component research and the remaining interface gates.
+
 A coach/analyst manages matches, records possessions and player actions against local video, studies the last 3/5/10 opponent matches, inspects evidence, builds tactics and prepares a meeting/report. Every displayed metric exposes its sample and source observations. Manual professional tagging is the source of truth; automatic CV and mandatory AI are excluded.
 
 ## Stack and layout

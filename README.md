@@ -18,6 +18,10 @@ Local Supabase requires Docker. Alternatively configure a free hosted Supabase p
 
 ## First coaching workflow
 
+Overview now opens a match hub. The verified ON Sport recording of Al Ahly–Zamalek, African Cup Winners' Cup final on 23 May 2025 (31–28), can be prepared from its reference card. Import creates only source metadata and missing teams through normal scoped saves; it never invents a roster, kick-off timestamp, events or analysis. The official online embed is a viewing reference; precise tagging, clock calibration and offline playback use a local video file.
+
+The match workspace places transport and a zoomable three-lane timeline beside session-scoped intelligence. Result chips use canonical attempts; tactical samples deduplicate possessions. Open evidence to review a moment, edit its record, make a clip or append it to a meeting. Expand tagging details to choose participants/context; unresolved shot results start as `unknown`. See `docs/ui-redesign/RESEARCH.md` for the component/data research and remaining design roadmap.
+
 1. Create an organization. In Settings add own/opponent teams, seasons and competitions; add players, then a match.
 2. Open that match; select a local video. Its bytes remain on the computer. Add match-roster players for both teams.
 3. Calibrate each period and any clock stoppage with non-overlapping video-to-clock segments.

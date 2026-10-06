@@ -42,6 +42,8 @@ R2 credentials exist only on the server. Upload/read/finalization routes authent
 
 ## Implementation entry points
 
+`features/matches/reference-match.ts` contains verified public match provenance and a permission-checked importer with organization-scoped deterministic UUIDs for safe retries. It uses the existing provider/outbox/RLS path. `features/analysis/workbench.ts` owns result filters, duration-clamped timeline windows and possession-deduplicated tactical groups. The match hub, context header, transport, three-lane timeline, tagging dock, session analysis rail and evidence dialog are separate workspace components. The reference broadcast is a user-loaded privacy-enhanced YouTube embed; it does not impersonate a local source or create clock mappings. No schema, dependency or media service was added for this iteration.
+
 `features/workspace/provider.tsx` owns loading, scoping, local transactions and synchronization. `features/analysis/contracts.ts` validates operations against generated database types; `features/players/position-metrics.ts` computes match-position metrics with source event IDs. The component provider is a compatibility re-export. Local media URLs are scoped to the authenticated workspace and released at sign-out/workspace changes; binaries never enter drafts/backups.
 
 `get_tactical_distribution` and `v_tactical_observations` are the canonical taxonomy analytics. Defensive terms attribute an attacking possession to the opposite/defending match team; labels and custom terms retain their stable IDs. The old enum-based defense RPC remains a legacy compatibility interface. Multiple behavioral descriptors can overlap; their shares need not sum to one.

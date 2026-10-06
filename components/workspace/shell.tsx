@@ -4,6 +4,19 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useWorkspace } from "./provider";
 import { Panel, Notice, useAction, rowLabel } from "./controls";
+import {
+  LayoutDashboard,
+  CalendarDays,
+  Target,
+  Users,
+  CircleUser,
+  Film,
+  Crosshair,
+  ListVideo,
+  Presentation,
+  BarChart3,
+  Settings,
+} from "lucide-react";
 const navigation = [
   ["نظرة عامة", "Overview", "/overview"],
   ["المباريات", "Matches", "/matches"],
@@ -17,6 +30,19 @@ const navigation = [
   ["التقارير", "Reports", "/reports"],
   ["الإعدادات", "Settings", "/settings"],
 ] as const;
+const navigationIcons = [
+  LayoutDashboard,
+  CalendarDays,
+  Target,
+  Users,
+  CircleUser,
+  Film,
+  Crosshair,
+  ListVideo,
+  Presentation,
+  BarChart3,
+  Settings,
+];
 export function WorkspaceShell({ children }: { children: React.ReactNode }) {
   const w = useWorkspace(),
     path = usePathname(),
@@ -25,7 +51,7 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
     [name, setName] = useState(""),
     [slug, setSlug] = useState("");
   return (
-    <div className="workspace-shell">
+    <div className="workspace-shell hbi-shell">
       <aside className="sidebar">
         <Link href="/overview" className="brand">
           <strong>HBI</strong>
@@ -36,15 +62,19 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
           </span>
         </Link>
         <nav>
-          {navigation.map(([ar, en, href]) => (
-            <Link
-              className={path.startsWith(href) ? "active" : ""}
-              key={href}
-              href={href}
-            >
-              {w.t(ar, en)}
-            </Link>
-          ))}
+          {navigation.map(([ar, en, href], index) => {
+            const Icon = navigationIcons[index] ?? LayoutDashboard;
+            return (
+              <Link
+                className={path.startsWith(href) ? "active" : ""}
+                key={href}
+                href={href}
+              >
+                <Icon size={19} />
+                <span>{w.t(ar, en)}</span>
+              </Link>
+            );
+          })}
         </nav>
         <p className="motto">
           {w.t("حلّل · افهم · استعد", "ANALYZE · UNDERSTAND · PREPARE")}
@@ -54,6 +84,9 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
       </aside>
       <div className="workspace-body">
         <header className="topbar">
+          <span className="workspace-breadcrumb">
+            {w.t("مساحة المحلل", "Analyst workspace")}
+          </span>
           <select
             aria-label="Organization"
             value={w.org}
