@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { videoInput } from "@/features/video/source";
 import {
   shotInput,
   clockInput,
@@ -82,6 +83,7 @@ export function validateRow(table: Table, input: Row): Row {
   if (table === "video_annotations")
     z.array(drawingSchema).max(500).parse(row.objects);
   if (table === "shot_attempts") shotInput.parse(row);
+  if (table === "videos") videoInput.parse(row);
   if (table === "video_clock_segments") clockInput.parse(row);
   if (table === "on_court_intervals") intervalInput.parse(row);
   return row;

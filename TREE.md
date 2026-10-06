@@ -60,6 +60,7 @@ hbi-starter/
   app/api/r2/complete/route.ts
   app/api/r2/sign-read/route.ts
   app/api/r2/sign-upload/route.ts
+  app/privacy/page.tsx
   components/analysis/.gitkeep
   components/charts/.gitkeep
   components/opponent/.gitkeep
@@ -91,13 +92,17 @@ hbi-starter/
   components/workspace/tactics.tsx
   components/workspace/tag-template.tsx
   components/workspace/team.tsx
+  components/workspace/threat-profile.tsx
   components/workspace/video-transport.tsx
   components/workspace/video-workspace.tsx
+  components/workspace/youtube-player.tsx
   docs/ui-redesign/RESEARCH.md
   docs/ui-redesign/match-template.csv
   docs/ui-redesign/roster-template.csv
   features/analysis/.gitkeep
   features/analysis/contracts.ts
+  features/analysis/labels.ts
+  features/analysis/shot-profile.ts
   features/analysis/workbench.ts
   features/analytics/.gitkeep
   features/auth/.gitkeep
@@ -113,6 +118,7 @@ hbi-starter/
   features/reports/export.ts
   features/seasons/.gitkeep
   features/teams/.gitkeep
+  features/video/source.ts
   features/videos/.gitkeep
   features/workspace/backup.ts
   features/workspace/provider.tsx
@@ -133,6 +139,7 @@ hbi-starter/
   lib/video/fingerprint.ts
   lib/video/local-sources.ts
   lib/video/time.ts
+  lib/video/youtube.ts
   scripts/.gitkeep
   scripts/build-pages.mjs
   scripts/catalog-types.mjs
@@ -140,6 +147,7 @@ hbi-starter/
   scripts/verify-db.mjs
   scripts/verify-package.py
   stores/.gitkeep
+  stores/media-consent.ts
   supabase/config.toml
   supabase/seed.sql
   supabase/migrations/0001_extensions.sql
@@ -158,9 +166,14 @@ hbi-starter/
   supabase/migrations/0014_workspace_operations.sql
   supabase/migrations/0015_optional_sharing.sql
   supabase/migrations/0016_tactical_analytics.sql
+  supabase/migrations/0017_online_video_mode.sql
+  supabase/migrations/0018_online_video_identity.sql
+  supabase/migrations/0019_video_time_and_evidence.sql
   supabase/tests/security.test.sql
   tests/setup.ts
   tests/e2e/conflict.spec.ts
+  tests/e2e/fixture.ts
+  tests/e2e/online-video.spec.ts
   tests/e2e/reports.spec.ts
   tests/e2e/smoke.spec.ts
   tests/e2e/video.spec.ts
@@ -169,8 +182,10 @@ hbi-starter/
   tests/unit/backup.test.ts
   tests/unit/domain.test.ts
   tests/unit/local.test.ts
+  tests/unit/online-source.test.ts
   tests/unit/positions.test.ts
   tests/unit/reports.test.ts
+  tests/unit/shot-profile.test.ts
   tests/unit/smoke.test.ts
   tests/unit/video-source.test.ts
   tests/unit/workbench.test.ts

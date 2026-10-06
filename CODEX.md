@@ -2,7 +2,7 @@
 
 Build on the foundation; never substitute demo numbers for real observations.
 
-Continue the actual match workbench components, not only the standalone design prototype. Reference imports may contain verified scores/source metadata only, use stable organization-scoped IDs, and run through the normal provider and permissions. Online embeds are viewing references; local video remains the accurate/offline tagging source. Unknown shot outcomes must require review. Timeline and side-rail filters share canonical attempt results and expose sample/evidence; quick tagging must not silently overwrite an event being edited.
+Continue the actual match workbench. Verified source imports use scoped IDs/provider/permissions. 0017–0019 enable official IFrame API online tagging in a distinct source/session. Never fake a local fingerprint, download YouTube content, obscure player controls/ads or transfer timestamps to another edit. Local files support precise/offline/telestration work. Read controller time when recording; pending outcomes and missing/legacy origins stay visible. Filters share canonical samples and evidence; never silently overwrite an event being edited.
 
 - Keep the modular monolith and documented stack. No microservices, Prisma/Drizzle, Redis/Kafka or mandatory AI.
 - Ordinary CRUD uses Supabase Data API and RLS. Secret operations use server routes; no service-role bypass for user data.

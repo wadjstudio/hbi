@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { fingerprint } from "../../lib/video/fingerprint";
+import { acceptMediaConsent, mediaConsent } from "../../stores/media-consent";
 import {
   getLocalSource,
   registerLocalSource,
@@ -11,6 +12,14 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 describe("local video identity and access", () => {
+  it("does not carry an online-player choice across account/org boundaries or sign-out", () => {
+    acceptMediaConsent("user-a:org-a");
+    expect(mediaConsent("user-a:org-a")).toBe(true);
+    expect(mediaConsent("user-b:org-a")).toBe(false);
+    expect(mediaConsent("user-a:org-b")).toBe(false);
+    releaseLocalSources("user-a:org-a");
+    expect(mediaConsent("user-a:org-a")).toBe(false);
+  });
   it("matches a reselected file independently of its name and rejects changed bytes", async () => {
     const original = new File(["handball video bytes"], "match.mp4");
     const renamed = new File(["handball video bytes"], "renamed.mp4");

@@ -28,6 +28,10 @@ import { AnalysisTimeline } from "./analysis-timeline";
 import { QuickTagDock } from "./quick-tag-dock";
 import { SessionAnalysisRail } from "./session-analysis-rail";
 import { EvidenceDrawer } from "./evidence-drawer";
+import { YouTubePlayerView } from "./youtube-player";
+import { attachYouTubeSource } from "@/features/video/source";
+import type { OnlineController } from "@/lib/video/youtube";
+import { analysisLabel } from "@/features/analysis/labels";
 type History = {
   event: Row;
   shot?: Row;
@@ -60,6 +64,12 @@ export function VideoWorkspace({
     [playbackError, setPlaybackError] = useState("");
   const player = useRef<HTMLVideoElement>(null),
     source = useRef("");
+  const onlinePlayer = useRef<OnlineController | null>(null),
+    surface = useRef<HTMLDivElement>(null);
+  const [onlineReady, setOnlineReady] = useState(false),
+    [onlineDuration, setOnlineDuration] = useState(0),
+    [onlineRates, setOnlineRates] = useState<number[]>([1]),
+    [sourceUrl, setSourceUrl] = useState("");
   const undo = useRef<History[]>([]),
     redo = useRef<History[]>([]);
   const [historyCounts, setHistoryCounts] = useState({ undo: 0, redo: 0 });
@@ -78,7 +88,7 @@ export function VideoWorkspace({
     [keeper, setKeeper] = useState(""),
     [eventType, setEventType] = useState("shot"),
     [result, setResult] = useState("unknown"),
-    [zone, setZone] = useState("center"),
+    [zone, setZone] = useState("unknown"),
     [empty, setEmpty] = useState(false),
     [note, setNote] = useState(""),
     [editId, setEdit] = useState(""),
@@ -86,7 +96,7 @@ export function VideoWorkspace({
       event: Row;
       shot: Row | undefined;
     } | null>(null),
-    [phase, setPhase] = useState("positional_attack"),
+    [phase, setPhase] = useState("other"),
     [terms, setTerms] = useState<string[]>([]);
   const [scoreFor, setScoreFor] = useState(""),
     [scoreAgainst, setScoreAgainst] = useState(""),
@@ -120,6 +130,12 @@ export function VideoWorkspace({
     video = w
       .list("videos")
       .find((r) => r.id === (videoId || session?.video_id));
+  const isOnlineSource = video?.storage_mode === "youtube";
+  const duration =
+    n(video?.duration_ms) || (isOnlineSource ? onlineDuration : 0);
+  const available = isOnlineSource
+    ? Boolean(onlineReady && w.online && duration > 0 && !playbackError)
+    : Boolean(url && !playbackError);
   const events = w
       .list("events")
       .filter((r) => r.analysis_session_id === sid)
@@ -198,8 +214,57 @@ export function VideoWorkspace({
     setHistoryCounts({ undo: 0, redo: 0 });
   }
   function seek(ms: number) {
-    setTime(ms);
-    if (player.current) player.current.currentTime = ms / 1000;
+    const target = Math.max(0, Math.min(duration || ms, ms));
+    setTime(target);
+    if (isOnlineSource) onlinePlayer.current?.seek(target);
+    else if (player.current) player.current.currentTime = target / 1000;
+  }
+  function pause() {
+    if (isOnlineSource) onlinePlayer.current?.pause();
+    else player.current?.pause();
+  }
+  async function togglePlayback() {
+    if (!available) return;
+    if (isOnlineSource) {
+      if (playing) onlinePlayer.current?.pause();
+      else onlinePlayer.current?.play();
+    } else if (player.current?.paused) await player.current.play();
+    else player.current?.pause();
+  }
+  function captureTime() {
+    if (!available)
+      throw new Error(
+        w.t("شغّل مصدر الفيديو أولًا", "Load the video source first"),
+      );
+    const ms = isOnlineSource
+      ? onlinePlayer.current?.time()
+      : (player.current?.currentTime ?? NaN) * 1000;
+    if (ms == null || !Number.isFinite(ms) || ms < 0 || ms > duration)
+      throw new Error("Video time is unavailable or outside the source");
+    return Math.round(ms);
+  }
+  async function attachOnline(url: string) {
+    if (!match || !w.online) throw new Error("Select a match while online");
+    const attached = await attachYouTubeSource({
+      org: w.org,
+      role: w.role,
+      match,
+      url,
+      videos: w.list("videos"),
+      sessions,
+      save: w.save,
+    });
+    if (attached.video.id === video?.id && attached.session.id === sid) return;
+    clearEditing();
+    setSession(attached.session.id);
+    setVideo(attached.video.id);
+    setSourceFile(null);
+    setTime(0);
+    setPlaying(false);
+    setOnlineDuration(0);
+    setOnlineReady(false);
+    setPlaybackError("");
+    setTeam(s(match.home_team_id));
   }
   function base(): Partial<Row> {
     if (!sid) throw new Error(w.t("اربط فيديو أولًا", "Attach video first"));
@@ -223,7 +288,7 @@ export function VideoWorkspace({
         w.t("الملف مختلف عن المصدر المسجل", "File differs from saved source"),
       );
     }
-    let v = video;
+    let v = isOnlineSource ? undefined : video;
     if (!v)
       v = await w.save("videos", {
         match_id: matchId,
@@ -237,7 +302,7 @@ export function VideoWorkspace({
         height: meta.height,
         local_fingerprint: meta.fingerprint,
       });
-    if (!session) {
+    if (!session || isOnlineSource) {
       const created = await w.save("analysis_sessions", {
         match_id: matchId,
         video_id: v.id,
@@ -246,6 +311,9 @@ export function VideoWorkspace({
       });
       setSession(created.id);
     }
+    clearEditing();
+    setPlaybackError("");
+    setTime(0);
     setVideo(v.id);
     setSegEnd(meta.duration / 1000);
     registerLocalSource(`${w.user}:${w.org}`, v.id, meta.url);
@@ -264,11 +332,14 @@ export function VideoWorkspace({
       editSnapshot?.event.id === editId
         ? editSnapshot.shot
         : shots.find((r) => r.event_id === editId);
+    const timestamp = existing ? n(existing.timestamp_ms) : captureTime();
+    const capturedClock = matchClock(segments, timestamp);
     const e = await w.save("events", {
       ...existing,
       ...base(),
-      timestamp_ms: existing?.timestamp_ms ?? Math.round(time),
-      match_clock_ms: clock?.clockMs ?? null,
+      timestamp_ms: timestamp,
+      period: capturedClock?.period ?? period,
+      match_clock_ms: capturedClock?.clockMs ?? null,
       event_type: selectedType,
       outcome:
         selectedType === "shot"
@@ -282,8 +353,13 @@ export function VideoWorkspace({
       score_against: scoreAgainst === "" ? null : Number(scoreAgainst),
       actor_player_id: actor || null,
       actor_position:
-        actor && clock
-          ? positionAt(intervals, actor, clock.period, clock.clockMs)
+        actor && capturedClock
+          ? positionAt(
+              intervals,
+              actor,
+              capturedClock.period,
+              capturedClock.clockMs,
+            )
           : null,
       possession_id: existing?.possession_id ?? open?.id ?? null,
       phase,
@@ -371,8 +447,7 @@ export function VideoWorkspace({
         return;
       if (e.code === "Space") {
         e.preventDefault();
-        if (player.current?.paused) void a.run(() => player.current!.play());
-        else player.current?.pause();
+        void a.run(togglePlayback);
       }
       if (e.key === "ArrowLeft") seek(Math.max(0, time - 5000));
       if (e.key === "ArrowRight")
@@ -405,7 +480,7 @@ export function VideoWorkspace({
   });
   async function clip(e?: Row) {
     if (!video) throw new Error("Video missing");
-    const ms = e ? n(e.timestamp_ms) : time;
+    const ms = e ? n(e.timestamp_ms) : captureTime();
     const start = Math.max(0, Math.round(ms - pre * 1000));
     const end = Math.min(n(video.duration_ms), Math.round(ms + post * 1000));
     if (end <= start)
@@ -505,10 +580,12 @@ export function VideoWorkspace({
   }, [time, sid, w.rows]);
   async function startPossession() {
     if (open) throw new Error("Close current possession");
+    const timestamp = captureTime();
     const p = await w.save("possessions", {
       ...base(),
       sequence_no: Math.max(0, ...possessions.map((p) => n(p.sequence_no))) + 1,
-      start_ms: Math.round(time),
+      start_ms: timestamp,
+      period: matchClock(segments, timestamp)?.period ?? period,
       phase,
       score_for: scoreFor === "" ? null : Number(scoreFor),
       score_against: scoreAgainst === "" ? null : Number(scoreAgainst),
@@ -522,7 +599,7 @@ export function VideoWorkspace({
     if (!open) return;
     await w.save("possessions", {
       ...open,
-      end_ms: Math.round(time),
+      end_ms: captureTime(),
       review_status: "reviewed",
     });
   }
@@ -658,7 +735,47 @@ export function VideoWorkspace({
               </label>
             }
           >
+            <div className="online-source-picker">
+              {isReferenceMatch(match) && (
+                <button
+                  disabled={!w.online || a.busy || !canWrite(w.role, "videos")}
+                  onClick={() =>
+                    void a.run(() =>
+                      attachOnline(
+                        "https://www.youtube.com/watch?v=q-_grNLweEE",
+                      ),
+                    )
+                  }
+                >
+                  {w.t(
+                    "تحليل التسجيل الرسمي · YouTube",
+                    "Analyze official recording · YouTube",
+                  )}
+                </button>
+              )}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  void a.run(() => attachOnline(sourceUrl));
+                }}
+              >
+                <input
+                  type="url"
+                  required
+                  aria-label={w.t("رابط فيديو YouTube", "YouTube video URL")}
+                  placeholder="https://www.youtube.com/watch?v=…"
+                  value={sourceUrl}
+                  onChange={(e) => setSourceUrl(e.target.value)}
+                />
+                <button
+                  disabled={!w.online || a.busy || !canWrite(w.role, "videos")}
+                >
+                  {w.t("ربط المصدر", "Attach source")}
+                </button>
+              </form>
+            </div>
             <div
+              ref={surface}
               className="video-surface"
               style={{
                 aspectRatio:
@@ -667,7 +784,47 @@ export function VideoWorkspace({
                     : "16/9",
               }}
             >
-              {url ? (
+              {isOnlineSource ? (
+                <YouTubePlayerView
+                  key={`${sid}:${video.id}`}
+                  videoId={s(video.youtube_video_id)}
+                  onController={(controller) => {
+                    onlinePlayer.current = controller;
+                    setOnlineReady(Boolean(controller));
+                  }}
+                  onTime={(ms, active) => {
+                    setTime(ms);
+                    setPlaying(active);
+                  }}
+                  onMetadata={(ms, rates) => {
+                    setOnlineRates(rates.length ? rates : [1]);
+                    if (
+                      video.duration_ms != null &&
+                      Math.abs(n(video.duration_ms) - ms) > 1000
+                    ) {
+                      setPlaybackError(
+                        w.t(
+                          "مدة المصدر تغيرت؛ راجع النسخة قبل تسجيل أحداث جديدة.",
+                          "Source duration changed; review this version before recording new events.",
+                        ),
+                      );
+                      return;
+                    }
+                    setPlaybackError("");
+                    setOnlineDuration(ms);
+                    setSegEnd(ms / 1000);
+                    if (video.duration_ms == null && canWrite(w.role, "videos"))
+                      void a.run(() =>
+                        w.save("videos", {
+                          ...video,
+                          duration_ms: ms,
+                          status: "ready",
+                        }),
+                      );
+                  }}
+                  onPlaybackError={setPlaybackError}
+                />
+              ) : url ? (
                 <video
                   ref={player}
                   src={url}
@@ -700,16 +857,17 @@ export function VideoWorkspace({
                   </p>
                 </div>
               )}
-              {annotations.map((layer) => (
-                <DrawingEditor
-                  key={layer.id}
-                  objects={layer.objects as unknown as Drawing[]}
-                  onChange={() => {}}
-                  overlay
-                  editable={false}
-                />
-              ))}
-              {annotate && (
+              {!isOnlineSource &&
+                annotations.map((layer) => (
+                  <DrawingEditor
+                    key={layer.id}
+                    objects={layer.objects as unknown as Drawing[]}
+                    onChange={() => {}}
+                    overlay
+                    editable={false}
+                  />
+                ))}
+              {!isOnlineSource && annotate && (
                 <DrawingEditor
                   objects={annotation}
                   onChange={setAnnotation}
@@ -718,20 +876,28 @@ export function VideoWorkspace({
               )}
             </div>
             <VideoTransport
-              player={player}
+              onToggle={togglePlayback}
+              onFullscreen={async () => {
+                if (document.fullscreenElement) await document.exitFullscreen();
+                else await surface.current?.requestFullscreen();
+              }}
+              rates={isOnlineSource ? onlineRates : undefined}
               playing={playing}
-              available={Boolean(url)}
+              available={available}
               timeMs={time}
-              durationMs={n(video?.duration_ms)}
+              durationMs={duration}
               onSeek={seek}
               onMute={(muted) => {
-                if (player.current) player.current.muted = muted;
+                if (isOnlineSource) onlinePlayer.current?.muted(muted);
+                else if (player.current) player.current.muted = muted;
               }}
               onVolume={(volume) => {
-                if (player.current) player.current.volume = volume;
+                if (isOnlineSource) onlinePlayer.current?.volume(volume);
+                else if (player.current) player.current.volume = volume;
               }}
               onRate={(rate) => {
-                if (player.current) player.current.playbackRate = rate;
+                if (isOnlineSource) onlinePlayer.current?.rate(rate);
+                else if (player.current) player.current.playbackRate = rate;
               }}
             />
             <details className="video-advanced-tools">
@@ -807,8 +973,9 @@ export function VideoWorkspace({
                       )}
                 </span>
                 <button
+                  disabled={isOnlineSource || !available}
                   onClick={() => {
-                    player.current?.pause();
+                    pause();
                     setAnnotate(!annotate);
                     setAnnotationSnapshot(null);
                     setAnnotationId("");
@@ -911,7 +1078,7 @@ export function VideoWorkspace({
               clips={w
                 .list("clips")
                 .filter((clip) => clip.video_id === video?.id)}
-              durationMs={n(video?.duration_ms)}
+              durationMs={duration}
               timeMs={time}
               selectedId={selectedId}
               onEvent={(event) =>
@@ -1011,7 +1178,36 @@ export function VideoWorkspace({
                   />
                   {w.t("الساعة تعمل", "Clock running")}
                 </label>
-                <button>{w.t("إضافة مقطع معايرة", "Add clock segment")}</button>
+                <div className="toolbar">
+                  <button
+                    type="button"
+                    disabled={!available}
+                    onClick={() =>
+                      void a.run(async () => {
+                        setSegStart(captureTime() / 1000);
+                      })
+                    }
+                  >
+                    {w.t(
+                      "البداية عند اللقطة الحالية",
+                      "Start at current frame",
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={!available}
+                    onClick={() =>
+                      void a.run(async () => {
+                        setSegEnd(captureTime() / 1000);
+                      })
+                    }
+                  >
+                    {w.t("النهاية عند اللقطة الحالية", "End at current frame")}
+                  </button>
+                  <button>
+                    {w.t("إضافة مقطع معايرة", "Add clock segment")}
+                  </button>
+                </div>
               </form>
               {segments.map((r) => (
                 <div key={r.id}>
@@ -1028,9 +1224,48 @@ export function VideoWorkspace({
               ))}
             </details>
           </Panel>
+          <div className="quick-context">
+            <SelectRow
+              label={w.t("فريق التسجيل", "Recording team")}
+              rows={teams}
+              value={team}
+              onChange={(id) => {
+                setTeam(id);
+                setActor("");
+                setKeeper("");
+              }}
+            />
+            <SelectRow
+              label={w.t("المصوّب / المنفذ", "Shooter / actor")}
+              rows={players}
+              value={actor}
+              onChange={setActor}
+            />
+            <label>
+              {w.t("مرحلة التسجيل", "Recording phase")}
+              <select value={phase} onChange={(e) => setPhase(e.target.value)}>
+                {[
+                  "other",
+                  "positional_attack",
+                  "fast_break",
+                  "second_wave",
+                  "transition_defense",
+                  "set_defense",
+                  "seven_vs_six",
+                  "power_play",
+                  "short_handed",
+                  "empty_goal",
+                ].map((code) => (
+                  <option key={code} value={code}>
+                    {analysisLabel(code, w.lang)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
           <QuickTagDock
             available={Boolean(
-              sid && team && url && !editId && canWrite(w.role, "events"),
+              sid && team && available && !editId && canWrite(w.role, "events"),
             )}
             busy={a.busy}
             openPossession={Boolean(open)}
@@ -1162,7 +1397,9 @@ export function VideoWorkspace({
                       "defensive_foul",
                       "timeout",
                     ].map((v) => (
-                      <option key={v}>{v}</option>
+                      <option key={v} value={v}>
+                        {analysisLabel(v, w.lang)}
+                      </option>
                     ))}
                   </select>
                 </label>
@@ -1173,6 +1410,7 @@ export function VideoWorkspace({
                     onChange={(e) => setPhase(e.target.value)}
                   >
                     {[
+                      "other",
                       "positional_attack",
                       "fast_break",
                       "second_wave",
@@ -1183,7 +1421,9 @@ export function VideoWorkspace({
                       "power_play",
                       "short_handed",
                     ].map((v) => (
-                      <option key={v}>{v}</option>
+                      <option key={v} value={v}>
+                        {analysisLabel(v, w.lang)}
+                      </option>
                     ))}
                   </select>
                 </label>
@@ -1197,7 +1437,9 @@ export function VideoWorkspace({
                       >
                         {["goal", "save", "miss", "blocked", "unknown"].map(
                           (v) => (
-                            <option key={v}>{v}</option>
+                            <option key={v} value={v}>
+                              {analysisLabel(v, w.lang)}
+                            </option>
                           ),
                         )}
                       </select>
@@ -1250,7 +1492,9 @@ export function VideoWorkspace({
                           "defending_team",
                           "out",
                         ].map((v) => (
-                          <option key={v}>{v}</option>
+                          <option key={v} value={v}>
+                            {analysisLabel(v, w.lang)}
+                          </option>
                         ))}
                       </select>
                     </label>
@@ -1269,6 +1513,7 @@ export function VideoWorkspace({
                         onChange={(e) => setZone(e.target.value)}
                       >
                         {[
+                          "unknown",
                           "lw",
                           "left_half",
                           "center",
@@ -1282,7 +1527,9 @@ export function VideoWorkspace({
                           "nine_meter_center",
                           "nine_meter_right",
                         ].map((v) => (
-                          <option key={v}>{v}</option>
+                          <option key={v} value={v}>
+                            {analysisLabel(v, w.lang)}
+                          </option>
                         ))}
                       </select>
                     </label>
@@ -1296,7 +1543,9 @@ export function VideoWorkspace({
                       onChange={(e) => setOutcome(e.target.value)}
                     >
                       {["success", "failure", "neutral", "unknown"].map((v) => (
-                        <option key={v}>{v}</option>
+                        <option key={v} value={v}>
+                          {analysisLabel(v, w.lang)}
+                        </option>
                       ))}
                     </select>
                   </label>
@@ -1451,7 +1700,9 @@ export function VideoWorkspace({
                 "result:miss",
                 ...new Set(events.map((e) => s(e.event_type))),
               ].map((v) => (
-                <option key={v}>{v}</option>
+                <option key={v} value={v}>
+                  {analysisLabel(v, w.lang)}
+                </option>
               ))}
             </select>
             <SelectRow
@@ -1740,7 +1991,7 @@ export function VideoWorkspace({
         selection={evidence}
         onClose={() => setEvidence(null)}
         onReview={(event) => {
-          player.current?.pause();
+          pause();
           seek(n(event.timestamp_ms));
           setSelectedId(event.id);
         }}

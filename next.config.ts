@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  distDir: process.env.HBI_E2E_MODE === "1" ? ".next/e2e" : ".next",
   turbopack: { root: process.cwd() },
   allowedDevOrigins: ["127.0.0.1"],
   reactStrictMode: true,

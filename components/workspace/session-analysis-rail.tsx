@@ -2,11 +2,17 @@
 import Link from "next/link";
 import { Target, ArrowUpRight, Play, Users } from "lucide-react";
 import { tacticalGroups } from "@/features/analysis/workbench";
-import { shotSummary, percent, ratio } from "@/lib/analytics/metrics";
+import {
+  shotSummary,
+  keeperSummary,
+  percent,
+  ratio,
+} from "@/lib/analytics/metrics";
 import { s, type Row } from "@/types/workspace";
 import { useWorkspace } from "./provider";
 import { ShotMap } from "./charts";
 import { rowLabel } from "./controls";
+import { ThreatProfile } from "./threat-profile";
 
 export function SessionAnalysisRail({
   teams,
@@ -93,6 +99,13 @@ export function SessionAnalysisRail({
     sample.filter((event) =>
       selected.some((shot) => shot.event_id === event.id),
     );
+  const defendedIds = new Set(
+    events.filter((event) => event.team_id !== tid).map((event) => event.id),
+  );
+  const defended = shots.filter((shot) => defendedIds.has(s(shot.event_id)));
+  const goalkeeperIds = [
+    ...new Set(defended.map((shot) => s(shot.goalkeeper_id)).filter(Boolean)),
+  ];
   return (
     <aside
       className="session-rail"
@@ -142,7 +155,7 @@ export function SessionAnalysisRail({
           <small>{w.t("حدث · جلسة واحدة", "events · one session")}</small>
         </button>
       </div>
-      <section className="intelligence-section">
+      <section className="intelligence-section defense-section">
         <header>
           <h3>{w.t("أنظمة الدفاع", "Defensive systems")}</h3>
           <small>{w.t("الهجمات المقابلة", "Opposing possessions")}</small>
@@ -198,7 +211,13 @@ export function SessionAnalysisRail({
           </p>
         )}
       </section>
-      <section className="intelligence-section">
+      <ThreatProfile
+        shots={attempts}
+        onEvidence={(title, selected) =>
+          onEvidence(title, evidenceFor(selected))
+        }
+      />
+      <section className="intelligence-section shot-section">
         <header>
           <h3>{w.t("خريطة التصويب", "Shot map")}</h3>
           <button
@@ -310,6 +329,59 @@ export function SessionAnalysisRail({
             {w.t(
               "ابدأ هجمة وسجّل الإجراء التكتيكي؛ بعدها راجع أحداثها قبل اعتماد الاستنتاج.",
               "Start a possession and tag its procedure, then review its events before accepting an insight.",
+            )}
+          </p>
+        )}
+      </section>
+      <section className="intelligence-section keeper-section">
+        <header>
+          <h3>{w.t("حراس الفريق", "Team goalkeepers")}</h3>
+          <small>
+            {w.t("تصديات / تصديات + أهداف", "saves / saves + goals")}
+          </small>
+        </header>
+        {goalkeeperIds.length ? (
+          goalkeeperIds.map((id) => {
+            const keeper = w.list("players").find((player) => player.id === id),
+              summary = keeperSummary(defended, id);
+            const selected = defended.filter(
+              (shot) =>
+                shot.goalkeeper_id === id &&
+                !shot.empty_goal &&
+                !shot.review_required &&
+                ["goal", "save"].includes(s(shot.result)),
+            );
+            return (
+              <button
+                className="threat-row"
+                key={id}
+                onClick={() =>
+                  onEvidence(
+                    keeper ? rowLabel(keeper) : w.t("الحارس", "Goalkeeper"),
+                    events.filter((event) =>
+                      selected.some((shot) => shot.event_id === event.id),
+                    ),
+                  )
+                }
+              >
+                <span className="player-monogram">GK</span>
+                <span>
+                  <b>{keeper ? rowLabel(keeper) : "—"}</b>
+                  <small>
+                    {summary.saves}/{summary.sample} ·{" "}
+                    {w.t("إهدار وحجب مستبعدان", "misses & blocks excluded")}
+                  </small>
+                </span>
+                <strong>{percent(summary.percentage)}</strong>
+                <Play size={13} />
+              </button>
+            );
+          })
+        ) : (
+          <p className="intelligence-empty">
+            {w.t(
+              "حدّد الحارس أمام محاولات الخصم لعرض التصديات وأدلتها.",
+              "Identify the keeper facing opponent attempts to show saves and evidence.",
             )}
           </p>
         )}

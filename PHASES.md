@@ -1,5 +1,7 @@
 # HBI V1 phases and acceptance gates
 
+Online-analysis continuation: source/session identities, IFrame-API transport, direct controller timing, source-bound clips, offline guards, scoped player consent, a shot-origin profile and goalkeeper side cards are implemented locally. The published site remains on its preceding workbench until separately approved migrations 0017–0019 are applied and the new bundle deployed. Live official-player behavior, unavailable/changed broadcasts and a fully tagged real match remain operational gates; passing the mock API contract is not a claim of live verification.
+
 October 6 iteration: production components now include the match hub, verified real-match reference, match context, video transport, zoomable timeline lanes, compact tagging controls, session intelligence and an evidence-to-meeting dialog. This is a usable workbench iteration, not evidence that feature parity with established analysis platforms is complete. Further gates include a fully tagged real match, real multi-analyst use, annotation/board refinement and measured long-video performance. Keep detailed acceptance outcomes in VALIDATION.md.
 
 1. Foundation: dependency lock, deployment adapter, typed domain, permissions, forward migrations. Gate: clean/upgrade SQL, isolation, relational constraints and both builds.

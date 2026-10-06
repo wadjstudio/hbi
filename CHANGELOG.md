@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## Online analysis and coaching rail — 2026-10-06
+
+- Official YouTube IFrame API transport, direct source-time tagging, possessions, clips and meeting playback; no paid service, downloaded video or new dependency.
+- Forward migrations 0017–0019: committed enum extension, validated immutable online ID, source uniqueness, duration bounds for new/edited event/possession/clock spans and source-consistent event/shot evidence clips. Original 0001–0010 remain unchanged. Existing ambiguous links/times are preserved for review.
+- Attaching a local edit during online analysis creates a separate video/session. Duration changes and missing connectivity block online recording; drafts remain retained. Native files keep offline playback/telestration.
+- Scoped transient privacy/terms choice, logout clearing and a public bilingual privacy page. Original player controls, branding and ads remain visible.
+- Defensive/shot-origin/player/pattern/GK rail cards, missing-origin evidence, compact recording context, Arabic option labels and explicit clock markers. Default phase is unclassified; zone is unknown.
+- Browser fixture isolation is explicit before each journey, preserving pre-login seeded report data. Next browser-test output uses `.next/e2e` to avoid sharing the application build/cache. IFrame API contract tests use a clearly synthetic test-only player, never production observations.
+- Hosted migrations/deployment are pending separate approval. Live real-match tagging and long-video/real multi-analyst/R2 gates remain unverified; this is not a claim of parity with established platforms.
+
 ## Match workbench and verified broadcast — 2026-10-06
 
 Source `741d9fc` is published on the existing `hbi.wadj.online` Pages project. The reference match is present in the original HBI organization and synchronized. No DNS, schema or privilege changes were needed.

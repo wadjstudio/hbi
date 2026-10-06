@@ -124,6 +124,7 @@ db.tactical_terms = [
     archived: false,
   },
 ];
+const baseline = structuredClone(db);
 const server = http.createServer(async (req, res) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
@@ -149,7 +150,13 @@ const server = http.createServer(async (req, res) => {
   const input = body ? JSON.parse(body) : {};
   const url = new URL(req.url, "http://localhost");
   const send = (value) => res.end(JSON.stringify(value));
-  if (url.pathname === "/auth/v1/token")
+  if (url.pathname === "/test/reset" && req.method === "POST") {
+    for (const key of Object.keys(db)) delete db[key];
+    Object.assign(db, structuredClone(baseline));
+    receipts.clear();
+    return send({ reset: true });
+  }
+  if (url.pathname === "/auth/v1/token") {
     return send({
       access_token: token,
       refresh_token: "test-refresh",
@@ -157,6 +164,7 @@ const server = http.createServer(async (req, res) => {
       expires_in: 3600,
       user,
     });
+  }
   if (url.pathname === "/auth/v1/user") return send(user);
   if (url.pathname === "/auth/v1/logout") {
     res.writeHead(204);

@@ -9,6 +9,7 @@ import Link from "next/link";
 import { getLocalSource, registerLocalSource } from "@/lib/video/local-sources";
 import { inspectVideo } from "@/lib/video/fingerprint";
 import { s, n, type Row } from "@/types/workspace";
+import { YouTubePlayerView } from "./youtube-player";
 export function Meetings() {
   const w = useWorkspace();
   return (
@@ -33,7 +34,7 @@ export function ClipPlayer({
   useEffect(() => {
     const update = () => {
       const linked = getLocalSource(`${w.user}:${w.org}`, s(clip.video_id));
-      if (linked) setUrl(linked);
+      setUrl(linked || "");
     };
     queueMicrotask(update);
     window.addEventListener("hbi-local-source", update);
@@ -42,7 +43,15 @@ export function ClipPlayer({
   return (
     <div className="clip-player">
       {a.error && <Notice>{a.error}</Notice>}
-      {url ? (
+      {source?.storage_mode === "youtube" ? (
+        <YouTubePlayerView
+          key={clip.id}
+          videoId={s(source.youtube_video_id)}
+          startMs={n(clip.start_ms)}
+          endMs={n(clip.end_ms)}
+          autoplay={autoplay}
+        />
+      ) : url ? (
         <video
           ref={ref}
           controls
@@ -84,33 +93,35 @@ export function ClipPlayer({
           {w.t("تشغيل المصدر المشترك", "Play shared source")}
         </button>
       )}
-      <label className="file-button">
-        {w.t("ربط المصدر", "Relink source")}
-        <input
-          type="file"
-          accept="video/*"
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file)
-              void a.run(async () => {
-                const meta = await inspectVideo(file);
-                if (
-                  meta.fingerprint !== source?.local_fingerprint ||
-                  Math.abs(meta.duration - n(source?.duration_ms)) > 1000
-                ) {
-                  URL.revokeObjectURL(meta.url);
-                  throw new Error("Wrong source file");
-                }
-                registerLocalSource(
-                  `${w.user}:${w.org}`,
-                  s(clip.video_id),
-                  meta.url,
-                );
-                setUrl(meta.url);
-              });
-          }}
-        />
-      </label>
+      {source?.storage_mode !== "youtube" && (
+        <label className="file-button">
+          {w.t("ربط المصدر", "Relink source")}
+          <input
+            type="file"
+            accept="video/*"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file)
+                void a.run(async () => {
+                  const meta = await inspectVideo(file);
+                  if (
+                    meta.fingerprint !== source?.local_fingerprint ||
+                    Math.abs(meta.duration - n(source?.duration_ms)) > 1000
+                  ) {
+                    URL.revokeObjectURL(meta.url);
+                    throw new Error("Wrong source file");
+                  }
+                  registerLocalSource(
+                    `${w.user}:${w.org}`,
+                    s(clip.video_id),
+                    meta.url,
+                  );
+                  setUrl(meta.url);
+                });
+            }}
+          />
+        </label>
+      )}
     </div>
   );
 }

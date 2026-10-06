@@ -32,6 +32,7 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
       timeout: 600000,
       env: {
+        HBI_E2E_MODE: "1",
         NEXT_PUBLIC_SUPABASE_URL: `http://127.0.0.1:${mockPort}`,
         NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "test-publishable-key",
       },

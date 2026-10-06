@@ -2,7 +2,7 @@
 
 ## Purpose and acceptance
 
-The October 6 workbench iteration makes matches the entry point and puts video, zoomable event/possession/clip lanes and evidence-linked intelligence on one screen. A verified Al Ahly–Zamalek final (23 May 2025, 31–28) provides an official broadcast reference and retry-safe metadata import. Its event analysis remains empty until manually tagged. Public online viewing and precise local/offline analysis are distinct sources; no automatic event extraction or broadcast-to-clock calibration is implied. Follow `docs/ui-redesign/RESEARCH.md` for component research and the remaining interface gates.
+The October 6 workbench puts video, zoomable event/possession/clip lanes and evidence-linked intelligence on one screen. A verified Al Ahly–Zamalek final (23 May 2025, 31–28) provides official provenance and retry-safe metadata import; events remain empty until manually tagged. 0017–0019 enable online IFrame-API tagging, possessions and clips in a separate source/session. Local files support precise/offline/telestration work. No automatic extraction, roster inference or clock calibration is implied. Follow `docs/ui-redesign/RESEARCH.md` for interface gates.
 
 A coach/analyst manages matches, records possessions and player actions against local video, studies the last 3/5/10 opponent matches, inspects evidence, builds tactics and prepares a meeting/report. Every displayed metric exposes its sample and source observations. Manual professional tagging is the source of truth; automatic CV and mandatory AI are excluded.
 
@@ -18,22 +18,22 @@ Domain modules reside in features; reusable workflows in components/workspace; i
 
 ## Database contract
 
-SQL under supabase/migrations is the authoritative executable schema. Generated database types follow the migrated catalog; run the official Supabase generator after local application. Preserve the first ten migrations; apply 0011–0016 forward.
+SQL under supabase/migrations is the authoritative executable schema. Generated database types follow the migrated catalog; run the official Supabase generator after local application. Preserve the first ten migrations; apply 0011–0019 forward. 0017 must commit before 0018 uses the new enum value. Hosted migrations require separate approval; never reset production to upgrade.
 
-| Group | Relations and intent |
-|---|---|
-| Identity | profiles, organizations, organization_members; owner/technical_director/head_coach/assistant_coach/analyst/viewer |
-| Competition | teams, seasons, competitions, players, team_players, matches, match_roster |
-| Video | videos, analysis_sessions, video_clock_segments; video identity and independent period-clock mapping |
-| Analysis | possessions, events, event_participants, tags/event_tags; numerical and phase context |
-| Tactics | tactical_terms, possession_tactics; standard global vocabulary and organization extensions |
-| Shooting/GK | shot_attempts and legacy_shot_reviews; one attempt, attribution, result, court/goal placement, distance, shot type, rebound, fast-break origin |
-| Lineups | starting roster, on_court_intervals and substitutions; actual position, verified duration and atomic exchange |
-| Board | tactic_documents, tactic_frames, tactic_objects, tactic_frame_objects, tactic_animations |
-| Telestration | video_annotations; timed normalized objects and pause-on-entry |
-| Evidence | clips/clip_events, insights, evidence_links with real FKs |
-| Delivery | playlists/playlist_items, reports, presentations/presentation_items |
-| Contracts | metric_definitions, tagging_templates, revision columns and sync_receipts |
+| Group        | Relations and intent                                                                                                                           |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Identity     | profiles, organizations, organization_members; owner/technical_director/head_coach/assistant_coach/analyst/viewer                              |
+| Competition  | teams, seasons, competitions, players, team_players, matches, match_roster                                                                     |
+| Video        | videos, analysis_sessions, video_clock_segments; video identity and independent period-clock mapping                                           |
+| Analysis     | possessions, events, event_participants, tags/event_tags; numerical and phase context                                                          |
+| Tactics      | tactical_terms, possession_tactics; standard global vocabulary and organization extensions                                                     |
+| Shooting/GK  | shot_attempts and legacy_shot_reviews; one attempt, attribution, result, court/goal placement, distance, shot type, rebound, fast-break origin |
+| Lineups      | starting roster, on_court_intervals and substitutions; actual position, verified duration and atomic exchange                                  |
+| Board        | tactic_documents, tactic_frames, tactic_objects, tactic_frame_objects, tactic_animations                                                       |
+| Telestration | video_annotations; timed normalized objects and pause-on-entry                                                                                 |
+| Evidence     | clips/clip_events, insights, evidence_links with real FKs                                                                                      |
+| Delivery     | playlists/playlist_items, reports, presentations/presentation_items                                                                            |
+| Contracts    | metric_definitions, tagging_templates, revision columns and sync_receipts                                                                      |
 
 Core lookup indexes cover organization, match/session, video ranges, player attribution, interval overlap, frame ordering and both directions of evidence links. Composite FKs, checks, exclusions and context triggers enforce consistency beyond RLS.
 
@@ -53,6 +53,8 @@ Codes and IDs stay stable across languages. Staff add organization terms; used t
 - Tendencies are deterministic observed frequencies with evidence and sample counts; they are not causal or AI predictions.
 
 ## Professional analysis workflow
+
+Online sources store a validated immutable YouTube ID, not a fake fingerprint or unchecked URL. Loading the player requires the user's scoped privacy/terms choice, cleared on sign-out. The original player retains branding/controls/ads. Tagging reads its current source time directly; duration changes block new events for review. Seeks depend on keyframes and require internet. No download/proxy/frame extraction or telestration overlays on that player. Native and online versions have different sessions, anchors and clip references; never copy their timestamps implicitly. Clips play source-time intervals through the same player in meetings. `/privacy` explains account/draft/media handling and external services.
 
 Setup → link source → roster → clock segments → possession → tactical action → player action → outcome → score/numerical context → review → filter → evidence clip → tactic/insight → playlist/meeting/report.
 
@@ -86,6 +88,6 @@ Deliver source-only ZIP, matching standalone Blueprint, SHA256, CHANGELOG and va
 
 ## Additional foundation details
 
-Migrations 0011–0016 add coaching models, integrity/RLS, revision synchronization, atomic ordering, optional sharing reservations and canonical tactical analytics. Supabase clients use catalog-generated types, including function inputs/results and relationships. Position metrics use the center/wing/back/pivot/GK position recorded for each match observation, and display unknown rates when the denominator is missing. Board edits autosave to the durable outbox; media URLs can be reused through a signed-in workspace session and must be relinked after reopening the application. Timed annotation ranges remain editable, and meetings open insight evidence directly.
+Migrations 0011–0016 add coaching models, integrity/RLS, revision sync, ordering, optional sharing reservations and tactical analytics. 0017–0019 add online source identity and source-duration/evidence checks. Existing legacy rows are preserved for review. Supabase clients use catalog-generated types, function contracts and relationships. Position metrics use the position recorded at the observation. The rail adds reviewed shot-origin shares, missing-location counts and goalkeeper sample denominators; all open source observations. Board edits autosave to the outbox. Native media must be relinked after reopening; online media needs internet. Meetings open insight evidence directly.
 
 See ZERO_COST_LIMITS.md for finite free-plan quotas and VALIDATION.md for measured verification. This delivery contains source and instructions; it does not provision or deploy accounts.

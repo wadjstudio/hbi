@@ -368,6 +368,94 @@ await db.exec(
 console.log(
   "PASS: head-coach team/match permissions and director-only seasons",
 );
+const onlineVideo = crypto.randomUUID(),
+  onlineSession = crypto.randomUUID(),
+  onlineClip = crypto.randomUUID();
+const onlineRow = {
+  id: onlineVideo,
+  organization_id: ids.org,
+  match_id: ids.match,
+  storage_mode: "youtube",
+  youtube_video_id: "q-_grNLweEE",
+  status: "pending",
+};
+const onlineOp = crypto.randomUUID();
+const onlineArgs = ["videos", JSON.stringify(onlineRow), 0, onlineOp];
+const onlineResult = (
+  await db.query(
+    "select apply_workspace_change($1,$2::jsonb,$3,$4) result",
+    onlineArgs,
+  )
+).rows[0].result;
+assert.deepEqual(
+  (
+    await db.query(
+      "select apply_workspace_change($1,$2::jsonb,$3,$4) result",
+      onlineArgs,
+    )
+  ).rows[0].result,
+  onlineResult,
+);
+await db.exec(`update videos set duration_ms=10000,status='ready' where id='${onlineVideo}';
+insert into analysis_sessions(id,organization_id,match_id,video_id,analyst_id,is_primary)values('${onlineSession}','${ids.org}','${ids.match}','${onlineVideo}','${ids.user}',false);
+insert into clips(id,organization_id,video_id,match_id,title,start_ms,end_ms,created_by)values('${onlineClip}','${ids.org}','${onlineVideo}','${ids.match}','Online clip',0,5000,'${ids.user}')`);
+await denied(
+  db,
+  `update videos set youtube_video_id='aaaaaaaaaaa' where id='${onlineVideo}'`,
+);
+await denied(
+  db,
+  `update videos set storage_mode='local',local_fingerprint='wrong' where id='${onlineVideo}'`,
+);
+await denied(
+  db,
+  `insert into videos(organization_id,match_id,storage_mode,youtube_video_id)values('${ids.org}','${ids.match}','youtube','q-_grNLweEE')`,
+);
+await denied(
+  db,
+  `insert into videos(organization_id,storage_mode,youtube_video_id)values('${ids.org}','youtube','invalid')`,
+);
+await denied(
+  db,
+  `update videos set local_fingerprint='' where id='${onlineVideo}'`,
+);
+await denied(
+  db,
+  `insert into evidence_links(organization_id,event_id,clip_id)values('${ids.org}','${ids.event}','${onlineClip}')`,
+);
+await denied(
+  db,
+  `insert into events(organization_id,analysis_session_id,match_id,team_id,timestamp_ms,period,event_type,created_by)values('${ids.org}','${onlineSession}','${ids.match}','${ids.home}',10001,1,'turnover','${ids.user}')`,
+);
+const onlineEvent = crypto.randomUUID();
+await denied(db,`insert into video_clock_segments(organization_id,analysis_session_id,period,video_start_ms,video_end_ms,clock_start_ms,running)values('${ids.org}','${onlineSession}',1,0,10001,0,true)`);
+await denied(db,`insert into possessions(organization_id,analysis_session_id,match_id,team_id,sequence_no,period,start_ms,end_ms,phase)values('${ids.org}','${onlineSession}','${ids.match}','${ids.home}',1,1,0,10001,'other')`);
+await db.exec(`insert into events(id,organization_id,analysis_session_id,match_id,team_id,timestamp_ms,period,event_type,created_by)values('${onlineEvent}','${ids.org}','${onlineSession}','${ids.match}','${ids.home}',3000,1,'turnover','${ids.user}');
+insert into evidence_links(organization_id,event_id,clip_id)values('${ids.org}','${onlineEvent}','${onlineClip}')`);
+await denied(db,`update events set end_ms=10001 where id='${onlineEvent}'`);
+await asUser(db, ids.viewer);
+assert.equal(
+  (await db.query(`select id from videos where id='${onlineVideo}'`)).rows
+    .length,
+  1,
+);
+assert.equal(
+  (
+    await db.query(
+      `update videos set duration_ms=20000 where id='${onlineVideo}' returning id`,
+    )
+  ).rows.length,
+  0,
+);
+await asUser(db, ids.other);
+assert.equal(
+  (await db.query(`select id from videos where id='${onlineVideo}'`)).rows
+    .length,
+  0,
+);
+console.log(
+  "PASS: online source identity, retry, isolation, time range and evidence-source consistency",
+);
 await db.exec("reset role;");
 const fresh = await initialize();
 await migrate(fresh, migrations);

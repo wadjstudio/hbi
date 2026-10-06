@@ -1,3 +1,4 @@
+import { clearMediaConsent } from "@/stores/media-consent";
 // Session-only object URLs. Files never enter the database, outbox or backups.
 const sources = new Map<string, Map<string, string>>();
 export function getLocalSource(scope: string, videoId: string) {
@@ -19,4 +20,5 @@ export function releaseLocalSources(scope: string) {
   for (const url of sources.get(scope)?.values() ?? [])
     URL.revokeObjectURL(url);
   sources.delete(scope);
+  clearMediaConsent(scope);
 }

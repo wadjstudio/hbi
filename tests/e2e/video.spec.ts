@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixture";
 test("local video to offline shot, opponent evidence and meeting", async ({
   page,
   context,

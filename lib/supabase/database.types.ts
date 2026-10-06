@@ -1140,7 +1140,7 @@ export type Database = { public: { Tables: {
 "id": string;
 "organization_id": string;
 "match_id": string | null;
-"storage_mode": "local" | "r2";
+"storage_mode": "local" | "r2" | "youtube";
 "status": "pending" | "ready" | "missing_local_file" | "uploading" | "error";
 "original_filename": string | null;
 "mime_type": string | null;
@@ -1154,11 +1154,12 @@ export type Database = { public: { Tables: {
 "created_by": string;
 "created_at": string;
 "revision": number;
+"youtube_video_id": string | null;
 }; Insert: {
 "id"?: string;
 "organization_id": string;
 "match_id"?: string | null;
-"storage_mode": "local" | "r2";
+"storage_mode": "local" | "r2" | "youtube";
 "status"?: "pending" | "ready" | "missing_local_file" | "uploading" | "error";
 "original_filename"?: string | null;
 "mime_type"?: string | null;
@@ -1172,6 +1173,7 @@ export type Database = { public: { Tables: {
 "created_by": string;
 "created_at"?: string;
 "revision"?: number;
+"youtube_video_id"?: string | null;
 }; Update: Partial<Database["public"]["Tables"]["videos"]["Insert"]>; Relationships: [
 {foreignKeyName:"videos_created_by_fkey";columns:["created_by"];isOneToOne:false;referencedRelation:"users";referencedColumns:["id"];},
 {foreignKeyName:"videos_match_id_fkey";columns:["match_id"];isOneToOne:false;referencedRelation:"matches";referencedColumns:["id"];},
@@ -1210,5 +1212,5 @@ export type Database = { public: { Tables: {
 "player_position":"GK" | "LW" | "LB" | "CB" | "RB" | "RW" | "P";
 "report_type":"match" | "opponent" | "player" | "team";
 "video_status":"pending" | "ready" | "missing_local_file" | "uploading" | "error";
-"video_storage_mode":"local" | "r2";
+"video_storage_mode":"local" | "r2" | "youtube";
 };CompositeTypes:Record<string,never>;};};

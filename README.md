@@ -18,7 +18,11 @@ Local Supabase requires Docker. Alternatively configure a free hosted Supabase p
 
 ## First coaching workflow
 
-Overview now opens a match hub. The verified ON Sport recording of Al Ahly–Zamalek, African Cup Winners' Cup final on 23 May 2025 (31–28), can be prepared from its reference card. Import creates only source metadata and missing teams through normal scoped saves; it never invents a roster, kick-off timestamp, events or analysis. The official online embed is a viewing reference; precise tagging, clock calibration and offline playback use a local video file.
+Overview opens the match hub with the verified ON Sport Al Ahly–Zamalek final (23 May 2025, 31–28). Import creates public source metadata and missing teams through scoped saves; it invents no roster or events. After applying 0017–0019, choose **Analyze official recording · YouTube**, review privacy/terms, load the official player and select the recording team. Tag possessions/shots at the controller’s actual source time; custom HTTPS YouTube URLs are supported.
+
+Online analysis needs internet and seeks to YouTube keyframes. There is no download, proxy, frame extraction or overlay on that player. Local files support precise playback, telestration and prepared-workspace offline work. A local file attached during YouTube analysis creates a separate video/session; timestamps and clock anchors never transfer between edits. A changed source duration blocks new tagging for review. Online clips play intervals in playlists/meetings. Privacy choice is transient, scoped to account/organization and cleared on sign-out.
+
+The rail includes defense, reviewed shot-origin profile, shot map, shooters, patterns and goalkeeper denominators. Missing/legacy origins and pending results remain visible. Team/actor/phase controls are beside quick tagging; new zones start unknown and phases unclassified. Clock calibration offers current-position markers without inventing period anchors.
 
 The match workspace places transport and a zoomable three-lane timeline beside session-scoped intelligence. Result chips use canonical attempts; tactical samples deduplicate possessions. Open evidence to review a moment, edit its record, make a clip or append it to a meeting. Expand tagging details to choose participants/context; unresolved shot results start as `unknown`. See `docs/ui-redesign/RESEARCH.md` for the component/data research and remaining design roadmap.
 

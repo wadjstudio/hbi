@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import Papa from "papaparse";
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixture";
 const mockURL = `http://127.0.0.1:${process.env.HBI_MOCK_PORT || 54329}`;
 
 test("saved Arabic report notes, primary sample, CSV and browser PDF", async ({

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixture";
 test("coach can create a player, work offline, sync and draw a tactic", async ({
   page,
   context,

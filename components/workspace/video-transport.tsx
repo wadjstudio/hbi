@@ -1,5 +1,5 @@
 "use client";
-import { useState, type RefObject } from "react";
+import { useState } from "react";
 import {
   Play,
   Pause,
@@ -14,7 +14,9 @@ import { useWorkspace } from "./provider";
 import { Notice, useAction } from "./controls";
 
 export function VideoTransport({
-  player,
+  onToggle,
+  onFullscreen,
+  rates = [0.25, 0.5, 1, 1.5, 2],
   playing,
   available,
   timeMs,
@@ -24,7 +26,9 @@ export function VideoTransport({
   onVolume,
   onRate,
 }: {
-  player: RefObject<HTMLVideoElement | null>;
+  onToggle: () => void | Promise<void>;
+  onFullscreen: () => void | Promise<void>;
+  rates?: number[];
   playing: boolean;
   available: boolean;
   timeMs: number;
@@ -50,10 +54,7 @@ export function VideoTransport({
           )}
           onClick={() =>
             void a.run(async () => {
-              const video = player.current;
-              if (!video) return;
-              if (video.paused) await video.play();
-              else video.pause();
+              await onToggle();
             })
           }
         >
@@ -123,7 +124,7 @@ export function VideoTransport({
             onRate(Number(e.target.value));
           }}
         >
-          {[0.25, 0.5, 1, 1.5, 2].map((rate) => (
+          {rates.map((rate) => (
             <option key={rate} value={rate}>
               {rate}×
             </option>
@@ -134,8 +135,7 @@ export function VideoTransport({
           aria-label={w.t("ملء شاشة الفيديو", "Video fullscreen")}
           onClick={() =>
             void a.run(async () => {
-              if (document.fullscreenElement) await document.exitFullscreen();
-              else await player.current?.parentElement?.requestFullscreen();
+              await onFullscreen();
             })
           }
         >

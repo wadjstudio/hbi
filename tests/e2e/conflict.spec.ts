@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixture";
 import { readFile } from "node:fs/promises";
 const mockURL = `http://127.0.0.1:${process.env.HBI_MOCK_PORT || 54329}`;
 

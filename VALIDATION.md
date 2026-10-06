@@ -1,5 +1,20 @@
 # HBI 0.2.0 validation — 2026-10-04
 
+## Online analysis and coaching rail — 2026-10-06
+
+This section describes the current source. Earlier sections are historical records; their deployment and limitation statements describe those earlier revisions.
+
+- `pnpm db:verify`: passed fresh installation, legacy upgrade and the existing role/isolation/CAS checks with migrations 0017–0019. Added assertions cover stable YouTube identity, duplicate/foreign sources, forbidden source replacement, source-aligned evidence, and event/possession/clock intervals beyond the known duration. No hosted database was reset or changed.
+- Catalog types were regenerated from the migrated PostgreSQL catalog with `pnpm db:verify -- --types`. Official Supabase/Docker generation remains separately documented.
+- `pnpm typecheck`, `pnpm lint`, `pnpm test`: passed; 29 unit tests across ten files, including online URL/source contracts, scoped consent cleanup and reviewed shot-zone denominators.
+- All six Playwright journeys passed together in Chrome (5.3 minutes), with isolated fixture ports 3101/54339: local video/offline tagging, online source/transport/offline guard/clip playback, opponent evidence/meeting, conflict/backup/logout, tactical editing and Arabic CSV/PDF reports. The YouTube API is a synthetic contract fixture in this test, not a live-service assertion; the fixture reset endpoint exists only in `scripts/mock-supabase.mjs`.
+- `pnpm build`: passed final Next 16.3.8 production compilation, TypeScript and route generation, including `/privacy`. `pnpm build:pages` (Cloudflare/vinext plus Pages packaging): passed.
+- An earlier concurrent Next build/dev run damaged generated route metadata and failed type checking. Starting Next dev regenerated those files; the sequential build passed. A later suite startup found a leftover dev process. lean-ctx blocked deletion, copying and process termination commands; none was bypassed. Browser tests now use `.next/e2e` to isolate their build/cache from the application and passed on rerun. These failed attempts are retained as failures, not omitted successes.
+- Real-account local production preview loaded the existing HBI organization and the official 31–28 match with zero pending operations. The official ON Sport recording played actual footage in the reference viewer. No inferred roster, shot coordinates, tactics, clock anchors or events were created. `HBI_ONLINE_ANALYSIS_PREVIEW.jpg` records this preview; it does not establish live online tagging.
+- Chrome responsive checks: 1560-pixel viewport produced a two-column intelligence rail and document/content widths 1545/1545; 390-pixel viewport produced widths 375/375 with no document overflow. The viewport override was reset.
+- Source-only package verification checks SHA256/CRC, safe extraction, external Blueprint byte parity and original migrations 0001–0010 byte preservation. The verifier is included in the source.
+- Hosted Supabase is still at 0016; applying forward migrations 0017–0019 awaits separate user approval under the earlier deployment agreement. This source has not been deployed to Pages. The published workbench remains the previously verified revision. Live IFrame API tagging, hosted upgrade, real-account clip/presentation playback and a fully tagged real match remain acceptance gates. Optional R2 and long-match/multi-analyst performance are still unverified.
+
 ## Match workbench — 2026-10-06
 
 - `pnpm typecheck`, `pnpm lint`, `pnpm test`: passed (24 unit tests). The first lint attempts included generated Wrangler/test output; those directories are now explicitly ignored. New render-state/DOM control issues were repaired without disabling React rules.
