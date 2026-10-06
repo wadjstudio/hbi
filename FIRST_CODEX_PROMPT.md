@@ -1,5 +1,7 @@
 # HBI continuation prompt
 
+Preserve the October 7 coaching console: split/focus/reset without remounting video, keyboard tabs, RTL, responsive panels and real-sample dashboard cards. Hosted upgrades 0017–0019 and publication have user authorization in this session, but remain unapplied until the Supabase connection is restored and the scripts are executed. Never treat authorization or a locally tested SQL file as a completed deployment. The two reviewable upgrade files under outputs/deployment commit 0017 separately and retain exact migration history.
+
 Read CODEX.md, ARCHITECTURE.md, BLUEPRINT.md, CHANGELOG.md and VALIDATION.md; inspect the actual files before editing. The original scaffold has been upgraded: do not restart it or replace implemented modules with placeholders.
 
 Continue from the October 6 online-analysis workbench and `docs/ui-redesign/RESEARCH.md`. Apply 0017 in its own committed migration before 0018/0019 in an approved database. Local validation does not imply hosted application. Test IFrame API time, offline guards, duration changes, source isolation, clip boundaries and meetings. Respect the user’s privacy/terms choice and original player branding. Local files remain the precise/offline/telestration source. Never download or fabricate analysis. Browser fixtures use `HBI_E2E_PORT`/`HBI_MOCK_PORT`; their reset endpoint and mock API never touch hosted data.

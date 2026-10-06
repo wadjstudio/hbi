@@ -32,6 +32,9 @@ import { YouTubePlayerView } from "./youtube-player";
 import { attachYouTubeSource } from "@/features/video/source";
 import type { OnlineController } from "@/lib/video/youtube";
 import { analysisLabel } from "@/features/analysis/labels";
+import * as Tabs from "@radix-ui/react-tabs";
+import { AnalysisSplit } from "./analysis-split";
+import { MatchDashboard } from "./match-dashboard";
 type History = {
   event: Row;
   shot?: Row;
@@ -620,36 +623,40 @@ export function VideoWorkspace({
       </>
     );
   return (
-    <div className="video-workspace">
-      <div className="page-title">
-        <span className="hbi-kicker">VIDEO LAB / MATCH WORKSPACE</span>
-        <SelectRow
-          label={w.t("المباراة", "Match")}
-          rows={w
-            .list("matches")
-            .map((r) => ({ ...r, title: matchLabel(r, w.list("teams")) }))}
-          value={matchId}
-          onChange={(id) => {
-            clearEditing();
-            setFocusTeam("");
-            setEvidence(null);
-            setSelectedId("");
-            setPlaybackError("");
-            setMatch(id);
-            setSession("");
-            setVideo("");
-            setUrl("");
-            setSourceFile(null);
-            source.current = "";
-            setTime(0);
-          }}
-        />
-      </div>
+    <Tabs.Root
+      className="video-workspace"
+      value={tab}
+      onValueChange={setTab}
+      dir={w.lang === "ar" ? "rtl" : "ltr"}
+    >
       <MatchContext
         match={match}
         session={session}
         clock={clock}
         timeMs={time}
+        selector={
+          <SelectRow
+            label={w.t("المباراة", "Match")}
+            rows={w
+              .list("matches")
+              .map((r) => ({ ...r, title: matchLabel(r, w.list("teams")) }))}
+            value={matchId}
+            onChange={(id) => {
+              clearEditing();
+              setFocusTeam("");
+              setEvidence(null);
+              setSelectedId("");
+              setPlaybackError("");
+              setMatch(id);
+              setSession("");
+              setVideo("");
+              setUrl("");
+              setSourceFile(null);
+              source.current = "";
+              setTime(0);
+            }}
+          />
+        }
       />
       {a.error && <Notice>{a.error}</Notice>}
       {playbackError && <Notice>{playbackError}</Notice>}
@@ -715,597 +722,650 @@ export function VideoWorkspace({
           </button>
         </div>
       </details>
-      <div className="analysis-grid workbench-layout">
-        <div className="workbench-video-column">
-          <Panel
-            title={w.t("الفيديو والتحليل", "Video analysis")}
-            actions={
-              <label className="file-button">
-                {url
-                  ? w.t("إعادة ربط", "Relink")
-                  : w.t("اختيار فيديو محلي", "Select local video")}
-                <input
-                  type="file"
-                  accept="video/*"
-                  onChange={(e) => {
-                    const f = e.target.files?.[0];
-                    if (f) void a.run(() => attach(f));
-                  }}
-                />
-              </label>
-            }
-          >
-            <div className="online-source-picker">
-              {isReferenceMatch(match) && (
-                <button
-                  disabled={!w.online || a.busy || !canWrite(w.role, "videos")}
-                  onClick={() =>
-                    void a.run(() =>
-                      attachOnline(
-                        "https://www.youtube.com/watch?v=q-_grNLweEE",
-                      ),
-                    )
-                  }
-                >
+      <AnalysisSplit
+        video={
+          <div className="workbench-video-column">
+            <Panel
+              title={w.t("الفيديو والتحليل", "Video analysis")}
+              actions={
+                <label className="file-button">
+                  {url
+                    ? w.t("إعادة ربط", "Relink")
+                    : w.t("اختيار فيديو محلي", "Select local video")}
+                  <input
+                    type="file"
+                    accept="video/*"
+                    onChange={(e) => {
+                      const f = e.target.files?.[0];
+                      if (f) void a.run(() => attach(f));
+                    }}
+                  />
+                </label>
+              }
+            >
+              <details className="source-options" open={!video}>
+                <summary>
                   {w.t(
-                    "تحليل التسجيل الرسمي · YouTube",
-                    "Analyze official recording · YouTube",
+                    "مصادر الفيديو · محلي / YouTube",
+                    "Video sources · local / YouTube",
                   )}
-                </button>
-              )}
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  void a.run(() => attachOnline(sourceUrl));
+                </summary>
+                <div className="online-source-picker">
+                  {isReferenceMatch(match) && (
+                    <button
+                      disabled={
+                        !w.online || a.busy || !canWrite(w.role, "videos")
+                      }
+                      onClick={() =>
+                        void a.run(() =>
+                          attachOnline(
+                            "https://www.youtube.com/watch?v=q-_grNLweEE",
+                          ),
+                        )
+                      }
+                    >
+                      {w.t(
+                        "تحليل التسجيل الرسمي · YouTube",
+                        "Analyze official recording · YouTube",
+                      )}
+                    </button>
+                  )}
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      void a.run(() => attachOnline(sourceUrl));
+                    }}
+                  >
+                    <input
+                      type="url"
+                      required
+                      aria-label={w.t(
+                        "رابط فيديو YouTube",
+                        "YouTube video URL",
+                      )}
+                      placeholder="https://www.youtube.com/watch?v=…"
+                      value={sourceUrl}
+                      onChange={(e) => setSourceUrl(e.target.value)}
+                    />
+                    <button
+                      disabled={
+                        !w.online || a.busy || !canWrite(w.role, "videos")
+                      }
+                    >
+                      {w.t("ربط المصدر", "Attach source")}
+                    </button>
+                  </form>
+                </div>
+              </details>
+              <div
+                ref={surface}
+                className="video-surface"
+                style={{
+                  aspectRatio:
+                    video?.width && video?.height
+                      ? `${video.width}/${video.height}`
+                      : "16/9",
                 }}
               >
-                <input
-                  type="url"
-                  required
-                  aria-label={w.t("رابط فيديو YouTube", "YouTube video URL")}
-                  placeholder="https://www.youtube.com/watch?v=…"
-                  value={sourceUrl}
-                  onChange={(e) => setSourceUrl(e.target.value)}
-                />
-                <button
-                  disabled={!w.online || a.busy || !canWrite(w.role, "videos")}
-                >
-                  {w.t("ربط المصدر", "Attach source")}
-                </button>
-              </form>
-            </div>
-            <div
-              ref={surface}
-              className="video-surface"
-              style={{
-                aspectRatio:
-                  video?.width && video?.height
-                    ? `${video.width}/${video.height}`
-                    : "16/9",
-              }}
-            >
-              {isOnlineSource ? (
-                <YouTubePlayerView
-                  key={`${sid}:${video.id}`}
-                  videoId={s(video.youtube_video_id)}
-                  onController={(controller) => {
-                    onlinePlayer.current = controller;
-                    setOnlineReady(Boolean(controller));
-                  }}
-                  onTime={(ms, active) => {
-                    setTime(ms);
-                    setPlaying(active);
-                  }}
-                  onMetadata={(ms, rates) => {
-                    setOnlineRates(rates.length ? rates : [1]);
-                    if (
-                      video.duration_ms != null &&
-                      Math.abs(n(video.duration_ms) - ms) > 1000
-                    ) {
+                {isOnlineSource ? (
+                  <YouTubePlayerView
+                    key={`${sid}:${video.id}`}
+                    videoId={s(video.youtube_video_id)}
+                    onController={(controller) => {
+                      onlinePlayer.current = controller;
+                      setOnlineReady(Boolean(controller));
+                    }}
+                    onTime={(ms, active) => {
+                      setTime(ms);
+                      setPlaying(active);
+                    }}
+                    onMetadata={(ms, rates) => {
+                      setOnlineRates(rates.length ? rates : [1]);
+                      if (
+                        video.duration_ms != null &&
+                        Math.abs(n(video.duration_ms) - ms) > 1000
+                      ) {
+                        setPlaybackError(
+                          w.t(
+                            "مدة المصدر تغيرت؛ راجع النسخة قبل تسجيل أحداث جديدة.",
+                            "Source duration changed; review this version before recording new events.",
+                          ),
+                        );
+                        return;
+                      }
+                      setPlaybackError("");
+                      setOnlineDuration(ms);
+                      setSegEnd(ms / 1000);
+                      if (
+                        video.duration_ms == null &&
+                        canWrite(w.role, "videos")
+                      )
+                        void a.run(() =>
+                          w.save("videos", {
+                            ...video,
+                            duration_ms: ms,
+                            status: "ready",
+                          }),
+                        );
+                    }}
+                    onPlaybackError={setPlaybackError}
+                  />
+                ) : url ? (
+                  <video
+                    ref={player}
+                    src={url}
+                    playsInline
+                    onPlay={() => setPlaying(true)}
+                    onPause={() => setPlaying(false)}
+                    onLoadedMetadata={() => setPlaybackError("")}
+                    onError={() =>
                       setPlaybackError(
                         w.t(
-                          "مدة المصدر تغيرت؛ راجع النسخة قبل تسجيل أحداث جديدة.",
-                          "Source duration changed; review this version before recording new events.",
+                          "تعذر تشغيل الفيديو. تحقق من الملف والترميز أو أعد ربط المصدر.",
+                          "Cannot play video. Check the file/codec or relink the source.",
                         ),
-                      );
-                      return;
+                      )
                     }
-                    setPlaybackError("");
-                    setOnlineDuration(ms);
-                    setSegEnd(ms / 1000);
-                    if (video.duration_ms == null && canWrite(w.role, "videos"))
-                      void a.run(() =>
-                        w.save("videos", {
-                          ...video,
-                          duration_ms: ms,
-                          status: "ready",
-                        }),
-                      );
-                  }}
-                  onPlaybackError={setPlaybackError}
-                />
-              ) : url ? (
-                <video
-                  ref={player}
-                  src={url}
-                  playsInline
-                  onPlay={() => setPlaying(true)}
-                  onPause={() => setPlaying(false)}
-                  onLoadedMetadata={() => setPlaybackError("")}
-                  onError={() =>
-                    setPlaybackError(
-                      w.t(
-                        "تعذر تشغيل الفيديو. تحقق من الملف والترميز أو أعد ربط المصدر.",
-                        "Cannot play video. Check the file/codec or relink the source.",
-                      ),
-                    )
-                  }
-                  onTimeUpdate={(e) =>
-                    setTime(Math.round(e.currentTarget.currentTime * 1000))
-                  }
-                />
-              ) : isReferenceMatch(match) ? (
-                <ReferenceBroadcast />
-              ) : (
-                <div className="video-empty">
-                  <b>HBI</b>
-                  <p>
-                    {w.t(
-                      "الفيديو يبقى على جهازك. اختر المصدر أو أعد ربطه.",
-                      "Video stays on your device. Select or relink the source.",
-                    )}
-                  </p>
-                </div>
-              )}
-              {!isOnlineSource &&
-                annotations.map((layer) => (
-                  <DrawingEditor
-                    key={layer.id}
-                    objects={layer.objects as unknown as Drawing[]}
-                    onChange={() => {}}
-                    overlay
-                    editable={false}
+                    onTimeUpdate={(e) =>
+                      setTime(Math.round(e.currentTarget.currentTime * 1000))
+                    }
                   />
-                ))}
-              {!isOnlineSource && annotate && (
-                <DrawingEditor
-                  objects={annotation}
-                  onChange={setAnnotation}
-                  overlay
-                />
-              )}
-            </div>
-            <VideoTransport
-              onToggle={togglePlayback}
-              onFullscreen={async () => {
-                if (document.fullscreenElement) await document.exitFullscreen();
-                else await surface.current?.requestFullscreen();
-              }}
-              rates={isOnlineSource ? onlineRates : undefined}
-              playing={playing}
-              available={available}
-              timeMs={time}
-              durationMs={duration}
-              onSeek={seek}
-              onMute={(muted) => {
-                if (isOnlineSource) onlinePlayer.current?.muted(muted);
-                else if (player.current) player.current.muted = muted;
-              }}
-              onVolume={(volume) => {
-                if (isOnlineSource) onlinePlayer.current?.volume(volume);
-                else if (player.current) player.current.volume = volume;
-              }}
-              onRate={(rate) => {
-                if (isOnlineSource) onlinePlayer.current?.rate(rate);
-                else if (player.current) player.current.playbackRate = rate;
-              }}
-            />
-            <details className="video-advanced-tools">
-              <summary>
-                {w.t(
-                  "الرسم والمقاطع ومشاركة المصدر",
-                  "Drawing, clips & source sharing",
+                ) : isReferenceMatch(match) ? (
+                  <ReferenceBroadcast />
+                ) : (
+                  <div className="video-empty">
+                    <b>HBI</b>
+                    <p>
+                      {w.t(
+                        "الفيديو يبقى على جهازك. اختر المصدر أو أعد ربطه.",
+                        "Video stays on your device. Select or relink the source.",
+                      )}
+                    </p>
+                  </div>
                 )}
-              </summary>
-              <div className="toolbar">
-                {video?.r2_object_key && (
+                {!isOnlineSource &&
+                  annotations.map((layer) => (
+                    <DrawingEditor
+                      key={layer.id}
+                      objects={layer.objects as unknown as Drawing[]}
+                      onChange={() => {}}
+                      overlay
+                      editable={false}
+                    />
+                  ))}
+                {!isOnlineSource && annotate && (
+                  <DrawingEditor
+                    objects={annotation}
+                    onChange={setAnnotation}
+                    overlay
+                  />
+                )}
+              </div>
+              <VideoTransport
+                onToggle={togglePlayback}
+                onFullscreen={async () => {
+                  if (document.fullscreenElement)
+                    await document.exitFullscreen();
+                  else await surface.current?.requestFullscreen();
+                }}
+                rates={isOnlineSource ? onlineRates : undefined}
+                playing={playing}
+                available={available}
+                timeMs={time}
+                durationMs={duration}
+                onSeek={seek}
+                onMute={(muted) => {
+                  if (isOnlineSource) onlinePlayer.current?.muted(muted);
+                  else if (player.current) player.current.muted = muted;
+                }}
+                onVolume={(volume) => {
+                  if (isOnlineSource) onlinePlayer.current?.volume(volume);
+                  else if (player.current) player.current.volume = volume;
+                }}
+                onRate={(rate) => {
+                  if (isOnlineSource) onlinePlayer.current?.rate(rate);
+                  else if (player.current) player.current.playbackRate = rate;
+                }}
+              />
+              <details className="video-advanced-tools">
+                <summary>
+                  {w.t(
+                    "الرسم والمقاطع ومشاركة المصدر",
+                    "Drawing, clips & source sharing",
+                  )}
+                </summary>
+                <div className="toolbar">
+                  {video?.r2_object_key && (
+                    <button
+                      onClick={() =>
+                        void a.run(async () => {
+                          const response = await fetch("/api/r2/sign-read", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ video_id: video.id }),
+                          });
+                          const data = await response.json();
+                          if (!response.ok) throw new Error(data.error);
+                          setUrl(data.url);
+                        })
+                      }
+                    >
+                      {w.t("تشغيل المصدر المشترك", "Play shared source")}
+                    </button>
+                  )}
                   <button
+                    disabled={!sourceFile || !video || !w.online}
                     onClick={() =>
                       void a.run(async () => {
-                        const response = await fetch("/api/r2/sign-read", {
+                        if (!video || !sourceFile)
+                          throw new Error("Relink source");
+                        await w.flush();
+                        const response = await fetch("/api/r2/sign-upload", {
                           method: "POST",
                           headers: { "Content-Type": "application/json" },
                           body: JSON.stringify({ video_id: video.id }),
                         });
-                        const data = await response.json();
-                        if (!response.ok) throw new Error(data.error);
-                        setUrl(data.url);
+                        const signed = await response.json();
+                        if (!response.ok) throw new Error(signed.error);
+                        const uploaded = await fetch(signed.url, {
+                          method: "PUT",
+                          headers: {
+                            "Content-Type": sourceFile.type || "video/mp4",
+                          },
+                          body: sourceFile,
+                        });
+                        if (!uploaded.ok) throw new Error("Upload failed");
+                        const completed = await fetch("/api/r2/complete", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ video_id: video.id }),
+                        });
+                        if (!completed.ok)
+                          throw new Error((await completed.json()).error);
+                        await w.reload();
                       })
                     }
                   >
-                    {w.t("تشغيل المصدر المشترك", "Play shared source")}
+                    {w.t("مشاركة الفيديو عبر R2", "Share video through R2")}
                   </button>
-                )}
-                <button
-                  disabled={!sourceFile || !video || !w.online}
-                  onClick={() =>
-                    void a.run(async () => {
-                      if (!video || !sourceFile)
-                        throw new Error("Relink source");
-                      await w.flush();
-                      const response = await fetch("/api/r2/sign-upload", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ video_id: video.id }),
-                      });
-                      const signed = await response.json();
-                      if (!response.ok) throw new Error(signed.error);
-                      const uploaded = await fetch(signed.url, {
-                        method: "PUT",
-                        headers: {
-                          "Content-Type": sourceFile.type || "video/mp4",
-                        },
-                        body: sourceFile,
-                      });
-                      if (!uploaded.ok) throw new Error("Upload failed");
-                      const completed = await fetch("/api/r2/complete", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ video_id: video.id }),
-                      });
-                      if (!completed.ok)
-                        throw new Error((await completed.json()).error);
-                      await w.reload();
-                    })
-                  }
-                >
-                  {w.t("مشاركة الفيديو عبر R2", "Share video through R2")}
-                </button>
-                <b>
-                  {formatTime(time)} / {formatTime(n(video?.duration_ms))}
-                </b>
-                <span>
-                  {clock
-                    ? `${w.t("الشوط", "Period")} ${clock.period} · ${formatTime(clock.clockMs)}`
-                    : w.t(
-                        "ساعة المباراة غير معايرة",
-                        "Match clock not calibrated",
-                      )}
-                </span>
-                <button
-                  disabled={isOnlineSource || !available}
-                  onClick={() => {
-                    pause();
-                    setAnnotate(!annotate);
-                    setAnnotationSnapshot(null);
-                    setAnnotationId("");
-                    setAnnotationStart(time / 1000);
-                    setAnnotationEnd(
-                      Math.min(n(video?.duration_ms), time + 5000) / 1000,
+                  <b>
+                    {formatTime(time)} / {formatTime(n(video?.duration_ms))}
+                  </b>
+                  <span>
+                    {clock
+                      ? `${w.t("الشوط", "Period")} ${clock.period} · ${formatTime(clock.clockMs)}`
+                      : w.t(
+                          "ساعة المباراة غير معايرة",
+                          "Match clock not calibrated",
+                        )}
+                  </span>
+                  <button
+                    disabled={isOnlineSource || !available}
+                    onClick={() => {
+                      pause();
+                      setAnnotate(!annotate);
+                      setAnnotationSnapshot(null);
+                      setAnnotationId("");
+                      setAnnotationStart(time / 1000);
+                      setAnnotationEnd(
+                        Math.min(n(video?.duration_ms), time + 5000) / 1000,
+                      );
+                    }}
+                  >
+                    {w.t("رسم على الفيديو", "Telestration")}
+                  </button>
+                  {annotate && (
+                    <>
+                      <label>
+                        {w.t("يظهر من / ثانية", "Visible from / sec")}
+                        <input
+                          type="number"
+                          min="0"
+                          step=".1"
+                          value={annotationStart}
+                          onChange={(e) =>
+                            setAnnotationStart(Number(e.target.value))
+                          }
+                        />
+                      </label>
+                      <label>
+                        {w.t("يظهر حتى / ثانية", "Visible until / sec")}
+                        <input
+                          type="number"
+                          min="0"
+                          step=".1"
+                          max={n(video?.duration_ms) / 1000}
+                          value={annotationEnd}
+                          onChange={(e) =>
+                            setAnnotationEnd(Number(e.target.value))
+                          }
+                        />
+                      </label>
+                      <button
+                        onClick={() =>
+                          void a.run(async () => {
+                            if (!video || !sid)
+                              throw new Error("Attach source");
+                            await w.save("video_annotations", {
+                              ...annotationSnapshot,
+                              id: annotationId || undefined,
+                              video_id: video.id,
+                              analysis_session_id: sid,
+                              start_ms: Math.round(annotationStart * 1000),
+                              end_ms: Math.round(annotationEnd * 1000),
+                              pause_on_entry: true,
+                              objects: annotation,
+                            });
+                            setAnnotate(false);
+                            setAnnotationId("");
+                            setAnnotation([]);
+                          })
+                        }
+                      >
+                        {w.t("حفظ الرسم", "Save drawing")}
+                      </button>
+                    </>
+                  )}
+                </div>
+                <div className="toolbar">
+                  <button onClick={() => void a.run(() => history("undo"))}>
+                    {w.t("تراجع", "Undo")}
+                  </button>
+                  <button onClick={() => void a.run(() => history("redo"))}>
+                    {w.t("إعادة", "Redo")}
+                  </button>
+                  <button onClick={() => void a.run(() => clip())}>
+                    {w.t("إنشاء مقطع", "Create clip")}
+                  </button>
+                  <label>
+                    {w.t("قبل / ثانية", "Pre / seconds")}
+                    <input
+                      type="number"
+                      min="0"
+                      max="60"
+                      value={pre}
+                      onChange={(e) => setPre(Number(e.target.value))}
+                    />
+                  </label>
+                  <label>
+                    {w.t("بعد / ثانية", "Post / seconds")}
+                    <input
+                      type="number"
+                      min="1"
+                      max="60"
+                      value={post}
+                      onChange={(e) => setPost(Number(e.target.value))}
+                    />
+                  </label>
+                </div>
+              </details>
+              <AnalysisTimeline
+                events={filtered}
+                shots={shots}
+                possessions={possessions}
+                clips={w
+                  .list("clips")
+                  .filter((clip) => clip.video_id === video?.id)}
+                durationMs={duration}
+                timeMs={time}
+                selectedId={selectedId}
+                onEvent={(event) =>
+                  showEvidence(w.t("دليل الحدث", "Event evidence"), [event])
+                }
+                onSeek={seek}
+              />
+              <div
+                className="workbench-filters"
+                aria-label={w.t("فلاتر التحليل", "Analysis filters")}
+              >
+                {(
+                  [
+                    ["all", "الكل", "All"],
+                    ["result:goal", "أهداف", "Goals"],
+                    ["result:save", "تصديات", "Saves"],
+                    ["result:miss", "إهدار", "Misses"],
+                    ["turnover", "فقد الكرة", "Turnovers"],
+                  ] as const
+                ).map(([value, ar, en]) => (
+                  <button
+                    key={value}
+                    className={filter === value ? "active" : ""}
+                    aria-pressed={filter === value}
+                    onClick={() => setFilter(value)}
+                  >
+                    {w.t(ar, en)}
+                  </button>
+                ))}
+                <small>n={filtered.length}</small>
+              </div>
+              <details>
+                <summary>
+                  {w.t("معايرة ساعة المباراة", "Calibrate match clock")}
+                </summary>
+                <form
+                  className="editor form-grid"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    void a.run(() =>
+                      w.save("video_clock_segments", {
+                        analysis_session_id: sid,
+                        period,
+                        video_start_ms: Math.round(segStart * 1000),
+                        video_end_ms: Math.round(segEnd * 1000),
+                        clock_start_ms: Math.round(clockStart * 1000),
+                        running,
+                      }),
                     );
                   }}
                 >
-                  {w.t("رسم على الفيديو", "Telestration")}
-                </button>
-                {annotate && (
-                  <>
-                    <label>
-                      {w.t("يظهر من / ثانية", "Visible from / sec")}
-                      <input
-                        type="number"
-                        min="0"
-                        step=".1"
-                        value={annotationStart}
-                        onChange={(e) =>
-                          setAnnotationStart(Number(e.target.value))
-                        }
-                      />
-                    </label>
-                    <label>
-                      {w.t("يظهر حتى / ثانية", "Visible until / sec")}
-                      <input
-                        type="number"
-                        min="0"
-                        step=".1"
-                        max={n(video?.duration_ms) / 1000}
-                        value={annotationEnd}
-                        onChange={(e) =>
-                          setAnnotationEnd(Number(e.target.value))
-                        }
-                      />
-                    </label>
+                  <label>
+                    {w.t("الشوط", "Period")}
+                    <input
+                      type="number"
+                      min="1"
+                      max="4"
+                      value={period}
+                      onChange={(e) => setPeriod(Number(e.target.value))}
+                    />
+                  </label>
+                  <label>
+                    {w.t("بداية الفيديو / ثانية", "Video start / sec")}
+                    <input
+                      type="number"
+                      min="0"
+                      value={segStart}
+                      step={0.001}
+                      onChange={(e) => setSegStart(Number(e.target.value))}
+                    />
+                  </label>
+                  <label>
+                    {w.t("نهاية الفيديو / ثانية", "Video end / sec")}
+                    <input
+                      type="number"
+                      min="0"
+                      value={segEnd}
+                      step={0.001}
+                      onChange={(e) => setSegEnd(Number(e.target.value))}
+                    />
+                  </label>
+                  <label>
+                    {w.t("ساعة الشوط / ثانية", "Period clock / sec")}
+                    <input
+                      type="number"
+                      min="0"
+                      value={clockStart}
+                      step={0.001}
+                      onChange={(e) => setClockStart(Number(e.target.value))}
+                    />
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={running}
+                      onChange={(e) => setRunning(e.target.checked)}
+                    />
+                    {w.t("الساعة تعمل", "Clock running")}
+                  </label>
+                  <div className="toolbar">
                     <button
+                      type="button"
+                      disabled={!available}
                       onClick={() =>
                         void a.run(async () => {
-                          if (!video || !sid) throw new Error("Attach source");
-                          await w.save("video_annotations", {
-                            ...annotationSnapshot,
-                            id: annotationId || undefined,
-                            video_id: video.id,
-                            analysis_session_id: sid,
-                            start_ms: Math.round(annotationStart * 1000),
-                            end_ms: Math.round(annotationEnd * 1000),
-                            pause_on_entry: true,
-                            objects: annotation,
-                          });
-                          setAnnotate(false);
-                          setAnnotationId("");
-                          setAnnotation([]);
+                          setSegStart(captureTime() / 1000);
                         })
                       }
                     >
-                      {w.t("حفظ الرسم", "Save drawing")}
+                      {w.t(
+                        "البداية عند اللقطة الحالية",
+                        "Start at current frame",
+                      )}
                     </button>
-                  </>
-                )}
-              </div>
-              <div className="toolbar">
-                <button onClick={() => void a.run(() => history("undo"))}>
-                  {w.t("تراجع", "Undo")}
-                </button>
-                <button onClick={() => void a.run(() => history("redo"))}>
-                  {w.t("إعادة", "Redo")}
-                </button>
-                <button onClick={() => void a.run(() => clip())}>
-                  {w.t("إنشاء مقطع", "Create clip")}
-                </button>
-                <label>
-                  {w.t("قبل / ثانية", "Pre / seconds")}
-                  <input
-                    type="number"
-                    min="0"
-                    max="60"
-                    value={pre}
-                    onChange={(e) => setPre(Number(e.target.value))}
-                  />
-                </label>
-                <label>
-                  {w.t("بعد / ثانية", "Post / seconds")}
-                  <input
-                    type="number"
-                    min="1"
-                    max="60"
-                    value={post}
-                    onChange={(e) => setPost(Number(e.target.value))}
-                  />
-                </label>
-              </div>
-            </details>
-            <AnalysisTimeline
-              events={filtered}
-              shots={shots}
-              possessions={possessions}
-              clips={w
-                .list("clips")
-                .filter((clip) => clip.video_id === video?.id)}
-              durationMs={duration}
-              timeMs={time}
-              selectedId={selectedId}
-              onEvent={(event) =>
-                showEvidence(w.t("دليل الحدث", "Event evidence"), [event])
-              }
-              onSeek={seek}
-            />
-            <div
-              className="workbench-filters"
-              aria-label={w.t("فلاتر التحليل", "Analysis filters")}
-            >
-              {(
-                [
-                  ["all", "الكل", "All"],
-                  ["result:goal", "أهداف", "Goals"],
-                  ["result:save", "تصديات", "Saves"],
-                  ["result:miss", "إهدار", "Misses"],
-                  ["turnover", "فقد الكرة", "Turnovers"],
-                ] as const
-              ).map(([value, ar, en]) => (
-                <button
-                  key={value}
-                  className={filter === value ? "active" : ""}
-                  aria-pressed={filter === value}
-                  onClick={() => setFilter(value)}
-                >
-                  {w.t(ar, en)}
-                </button>
-              ))}
-              <small>n={filtered.length}</small>
-            </div>
-            <details>
-              <summary>
-                {w.t("معايرة ساعة المباراة", "Calibrate match clock")}
-              </summary>
-              <form
-                className="editor form-grid"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  void a.run(() =>
-                    w.save("video_clock_segments", {
-                      analysis_session_id: sid,
-                      period,
-                      video_start_ms: Math.round(segStart * 1000),
-                      video_end_ms: Math.round(segEnd * 1000),
-                      clock_start_ms: Math.round(clockStart * 1000),
-                      running,
-                    }),
-                  );
-                }}
-              >
-                <label>
-                  {w.t("الشوط", "Period")}
-                  <input
-                    type="number"
-                    min="1"
-                    max="4"
-                    value={period}
-                    onChange={(e) => setPeriod(Number(e.target.value))}
-                  />
-                </label>
-                <label>
-                  {w.t("بداية الفيديو / ثانية", "Video start / sec")}
-                  <input
-                    type="number"
-                    min="0"
-                    value={segStart}
-                    step={0.001}
-                    onChange={(e) => setSegStart(Number(e.target.value))}
-                  />
-                </label>
-                <label>
-                  {w.t("نهاية الفيديو / ثانية", "Video end / sec")}
-                  <input
-                    type="number"
-                    min="0"
-                    value={segEnd}
-                    step={0.001}
-                    onChange={(e) => setSegEnd(Number(e.target.value))}
-                  />
-                </label>
-                <label>
-                  {w.t("ساعة الشوط / ثانية", "Period clock / sec")}
-                  <input
-                    type="number"
-                    min="0"
-                    value={clockStart}
-                    step={0.001}
-                    onChange={(e) => setClockStart(Number(e.target.value))}
-                  />
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={running}
-                    onChange={(e) => setRunning(e.target.checked)}
-                  />
-                  {w.t("الساعة تعمل", "Clock running")}
-                </label>
-                <div className="toolbar">
-                  <button
-                    type="button"
-                    disabled={!available}
-                    onClick={() =>
-                      void a.run(async () => {
-                        setSegStart(captureTime() / 1000);
-                      })
-                    }
-                  >
-                    {w.t(
-                      "البداية عند اللقطة الحالية",
-                      "Start at current frame",
-                    )}
-                  </button>
-                  <button
-                    type="button"
-                    disabled={!available}
-                    onClick={() =>
-                      void a.run(async () => {
-                        setSegEnd(captureTime() / 1000);
-                      })
-                    }
-                  >
-                    {w.t("النهاية عند اللقطة الحالية", "End at current frame")}
-                  </button>
-                  <button>
-                    {w.t("إضافة مقطع معايرة", "Add clock segment")}
-                  </button>
-                </div>
-              </form>
-              {segments.map((r) => (
-                <div key={r.id}>
-                  {formatTime(n(r.video_start_ms))} →{" "}
-                  {formatTime(n(r.video_end_ms))} · {n(r.period)}{" "}
-                  <button
-                    onClick={() =>
-                      void a.run(() => w.save("video_clock_segments", r, true))
-                    }
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
-            </details>
-          </Panel>
-          <div className="quick-context">
-            <SelectRow
-              label={w.t("فريق التسجيل", "Recording team")}
-              rows={teams}
-              value={team}
-              onChange={(id) => {
-                setTeam(id);
-                setActor("");
-                setKeeper("");
-              }}
-            />
-            <SelectRow
-              label={w.t("المصوّب / المنفذ", "Shooter / actor")}
-              rows={players}
-              value={actor}
-              onChange={setActor}
-            />
-            <label>
-              {w.t("مرحلة التسجيل", "Recording phase")}
-              <select value={phase} onChange={(e) => setPhase(e.target.value)}>
-                {[
-                  "other",
-                  "positional_attack",
-                  "fast_break",
-                  "second_wave",
-                  "transition_defense",
-                  "set_defense",
-                  "seven_vs_six",
-                  "power_play",
-                  "short_handed",
-                  "empty_goal",
-                ].map((code) => (
-                  <option key={code} value={code}>
-                    {analysisLabel(code, w.lang)}
-                  </option>
+                    <button
+                      type="button"
+                      disabled={!available}
+                      onClick={() =>
+                        void a.run(async () => {
+                          setSegEnd(captureTime() / 1000);
+                        })
+                      }
+                    >
+                      {w.t(
+                        "النهاية عند اللقطة الحالية",
+                        "End at current frame",
+                      )}
+                    </button>
+                    <button>
+                      {w.t("إضافة مقطع معايرة", "Add clock segment")}
+                    </button>
+                  </div>
+                </form>
+                {segments.map((r) => (
+                  <div key={r.id}>
+                    {formatTime(n(r.video_start_ms))} →{" "}
+                    {formatTime(n(r.video_end_ms))} · {n(r.period)}{" "}
+                    <button
+                      onClick={() =>
+                        void a.run(() =>
+                          w.save("video_clock_segments", r, true),
+                        )
+                      }
+                    >
+                      ×
+                    </button>
+                  </div>
                 ))}
-              </select>
-            </label>
+              </details>
+            </Panel>
+            <div className="quick-context">
+              <SelectRow
+                label={w.t("فريق التسجيل", "Recording team")}
+                rows={teams}
+                value={team}
+                onChange={(id) => {
+                  setTeam(id);
+                  setActor("");
+                  setKeeper("");
+                }}
+              />
+              <SelectRow
+                label={w.t("المصوّب / المنفذ", "Shooter / actor")}
+                rows={players}
+                value={actor}
+                onChange={setActor}
+              />
+              <label>
+                {w.t("مرحلة التسجيل", "Recording phase")}
+                <select
+                  value={phase}
+                  onChange={(e) => setPhase(e.target.value)}
+                >
+                  {[
+                    "other",
+                    "positional_attack",
+                    "fast_break",
+                    "second_wave",
+                    "transition_defense",
+                    "set_defense",
+                    "seven_vs_six",
+                    "power_play",
+                    "short_handed",
+                    "empty_goal",
+                  ].map((code) => (
+                    <option key={code} value={code}>
+                      {analysisLabel(code, w.lang)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <QuickTagDock
+              available={Boolean(
+                sid &&
+                team &&
+                available &&
+                !editId &&
+                canWrite(w.role, "events"),
+              )}
+              busy={a.busy}
+              openPossession={Boolean(open)}
+              undoAvailable={historyCounts.undo > 0}
+              redoAvailable={historyCounts.redo > 0}
+              onPossession={() =>
+                void a.run(open ? endPossession : startPossession)
+              }
+              onShot={(next) => {
+                setResult(next);
+                setEventType("shot");
+                void a.run(() => record("shot", next));
+              }}
+              onTurnover={() => void a.run(() => record("turnover"))}
+              onEditor={() => setEditorOpen(!editorOpen)}
+              onUndo={() => void a.run(() => history("undo"))}
+              onRedo={() => void a.run(() => history("redo"))}
+            />
+            <small className="tag-context">
+              {w.t("فريق التسجيل", "Tagging team")}:{" "}
+              {teams.find((r) => r.id === team)
+                ? rowLabel(teams.find((r) => r.id === team)!)
+                : "—"}{" "}
+              · {w.t("اللاعب", "Player")}:{" "}
+              {players.find((r) => r.id === actor)
+                ? rowLabel(players.find((r) => r.id === actor)!)
+                : w.t("غير محدد", "Not selected")}
+            </small>
           </div>
-          <QuickTagDock
-            available={Boolean(
-              sid && team && available && !editId && canWrite(w.role, "events"),
-            )}
-            busy={a.busy}
-            openPossession={Boolean(open)}
-            undoAvailable={historyCounts.undo > 0}
-            redoAvailable={historyCounts.redo > 0}
-            onPossession={() =>
-              void a.run(open ? endPossession : startPossession)
-            }
-            onShot={(next) => {
-              setResult(next);
-              setEventType("shot");
-              void a.run(() => record("shot", next));
-            }}
-            onTurnover={() => void a.run(() => record("turnover"))}
-            onEditor={() => setEditorOpen(!editorOpen)}
-            onUndo={() => void a.run(() => history("undo"))}
-            onRedo={() => void a.run(() => history("redo"))}
+        }
+        intelligence={
+          <SessionAnalysisRail
+            teams={teams}
+            events={filtered}
+            shots={shots}
+            possessions={possessions}
+            filtered={filter !== "all" || Boolean(participantFilter)}
+            focusTeam={focusTeam}
+            onTeam={setFocusTeam}
+            onEvidence={showEvidence}
           />
-          <small className="tag-context">
-            {w.t("فريق التسجيل", "Tagging team")}:{" "}
-            {teams.find((r) => r.id === team)
-              ? rowLabel(teams.find((r) => r.id === team)!)
-              : "—"}{" "}
-            · {w.t("اللاعب", "Player")}:{" "}
-            {players.find((r) => r.id === actor)
-              ? rowLabel(players.find((r) => r.id === actor)!)
-              : w.t("غير محدد", "Not selected")}
-          </small>
-        </div>
-        <SessionAnalysisRail
-          teams={teams}
-          events={filtered}
-          shots={shots}
-          possessions={possessions}
-          filtered={filter !== "all" || Boolean(participantFilter)}
-          focusTeam={focusTeam}
-          onTeam={setFocusTeam}
-          onEvidence={showEvidence}
-        />
-      </div>
+        }
+      />
+      <MatchDashboard
+        teamId={
+          teams.some((t) => t.id === focusTeam)
+            ? focusTeam
+            : teams[1]?.id || teams[0]?.id || ""
+        }
+        events={filtered}
+        shots={shots}
+        possessions={
+          filter !== "all" || participantFilter
+            ? possessions.filter((p) =>
+                filtered.some((e) => e.possession_id === p.id),
+              )
+            : possessions
+        }
+        onEvidence={showEvidence}
+      />
       <details className="event-editor" open={editorOpen || Boolean(editId)}>
         <summary
           onClick={(e) => {
@@ -1667,13 +1727,16 @@ export function VideoWorkspace({
           )}
         </fieldset>
       </details>
-      <nav className="tabs">
+      <Tabs.List
+        className="tabs"
+        aria-label={w.t("تفاصيل تحليل المباراة", "Match analysis details")}
+      >
         {["events", "analytics", "lineups", "annotations", "review"].map(
           (v) => (
-            <button
+            <Tabs.Trigger
               className={tab === v ? "active" : ""}
               key={v}
-              onClick={() => setTab(v)}
+              value={v}
             >
               {w.t(
                 {
@@ -1685,305 +1748,312 @@ export function VideoWorkspace({
                 }[v] ?? v,
                 v,
               )}
-            </button>
+            </Tabs.Trigger>
           ),
         )}
-      </nav>
-      {tab === "events" && (
-        <Panel title={w.t("الأحداث والأدلة", "Events & evidence")}>
-          <div className="toolbar">
-            <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-              {[
-                "all",
-                "result:goal",
-                "result:save",
-                "result:miss",
-                ...new Set(events.map((e) => s(e.event_type))),
-              ].map((v) => (
-                <option key={v} value={v}>
-                  {analysisLabel(v, w.lang)}
-                </option>
-              ))}
-            </select>
-            <SelectRow
-              label={w.t("لاعب", "Player")}
-              rows={w.list("players")}
-              value={participantFilter}
-              onChange={setParticipantFilter}
-            />
-          </div>
-          <div className="entity-list">
-            {filtered.map((e) => (
-              <article key={e.id}>
-                <button onClick={() => edit(e)}>
-                  {formatTime(n(e.timestamp_ms))} · {s(e.event_type)} ·{" "}
-                  {rowLabel(
-                    w.list("players").find((p) => p.id === e.actor_player_id) ??
-                      e,
-                  )}
-                </button>
-                <span>{s(e.note)}</span>
-                <button onClick={() => void a.run(() => clip(e))}>
-                  {w.t("مقطع دليل", "Evidence clip")}
-                </button>
-              </article>
-            ))}
-          </div>
-          <EventParticipants events={events} matchId={matchId} />
-        </Panel>
-      )}
-      {tab === "analytics" && (
-        <Panel
-          title={`${w.t("كفاءة التصويب", "Shot efficiency")} ${percent(summary.efficiency)} · n=${summary.sample}`}
-        >
-          <ShotMap
-            shots={shots.filter((shot) =>
-              filtered.some((event) => event.id === shot.event_id),
-            )}
-            onSelect={(sh) => {
-              const e = events.find((e) => e.id === sh.event_id);
-              if (e) edit(e);
-            }}
-          />
-          <label>{w.t("موضع التصويب التالي", "Next shot location")}</label>
-          <div
-            className="goal-picker"
-            onClick={(e) => {
-              const r = e.currentTarget.getBoundingClientRect();
-              setGoalPoint({
-                x: (e.clientX - r.left) / r.width,
-                y: 1 - (e.clientY - r.top) / r.height,
-              });
-            }}
-          >
-            {w.t("اضغط موضع الكرة في المرمى", "Click shot placement in goal")}{" "}
-            {goalPoint
-              ? `${goalPoint.x.toFixed(2)}, ${goalPoint.y.toFixed(2)}`
-              : ""}
-          </div>
-          <div
-            className="location-picker"
-            onClick={(e) => {
-              const r = e.currentTarget.getBoundingClientRect();
-              setCourt({
-                x: (e.clientX - r.left) / r.width,
-                y: (e.clientY - r.top) / r.height,
-              });
-            }}
-          >
-            {court
-              ? `${court.x.toFixed(2)}, ${court.y.toFixed(2)}`
-              : w.t("اضغط لتحديد الإحداثيات", "Click to place coordinates")}
-          </div>
-          {keepers.map((k) => {
-            const stats = keeperSummary(shots, k.id);
-            return (
-              <button
-                key={k.id}
-                onClick={() => {
-                  setParticipantFilter("");
-                  setFilter("shot");
-                  setTab("events");
-                }}
-              >
-                {rowLabel(k)} · {percent(stats.percentage)} · n={stats.sample}
-              </button>
-            );
-          })}
-        </Panel>
-      )}
-      {tab === "lineups" && (
-        <Panel title={w.t("القائمة والتبديلات", "Roster & substitutions")}>
-          <label>
-            <input
-              type="checkbox"
-              checked={starting}
-              onChange={(e) => setStarting(e.target.checked)}
-            />
-            {w.t("تشكيلة البداية", "Starting lineup")}
-          </label>
-          <div className="entity-list">
-            {roster.map((r) => (
-              <article key={r.id}>
-                {rowLabel(
-                  w.list("players").find((p) => p.id === r.player_id) ?? r,
-                )}{" "}
-                · {r.starting ? w.t("أساسي", "Starting") : w.t("بديل", "Bench")}
-              </article>
-            ))}
-          </div>
-          <div className="form-grid">
-            <SelectRow
-              label={w.t("لاعب", "Player")}
-              rows={w.list("players")}
-              value={inPlayer}
-              onChange={setIn}
-            />
-            <SelectRow
-              label={w.t("خروج", "Out")}
-              rows={players}
-              value={outPlayer}
-              onChange={setOut}
-            />
-            <label>
-              {w.t("المركز", "Position")}
+      </Tabs.List>
+      <Tabs.Content value={tab} key={tab}>
+        {tab === "events" && (
+          <Panel title={w.t("الأحداث والأدلة", "Events & evidence")}>
+            <div className="toolbar">
               <select
-                value={position}
-                onChange={(e) => setPosition(e.target.value)}
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
               >
-                {positions.map((p) => (
-                  <option key={p}>{p}</option>
+                {[
+                  "all",
+                  "result:goal",
+                  "result:save",
+                  "result:miss",
+                  ...new Set(events.map((e) => s(e.event_type))),
+                ].map((v) => (
+                  <option key={v} value={v}>
+                    {analysisLabel(v, w.lang)}
+                  </option>
                 ))}
               </select>
+              <SelectRow
+                label={w.t("لاعب", "Player")}
+                rows={w.list("players")}
+                value={participantFilter}
+                onChange={setParticipantFilter}
+              />
+            </div>
+            <div className="entity-list">
+              {filtered.map((e) => (
+                <article key={e.id}>
+                  <button onClick={() => edit(e)}>
+                    {formatTime(n(e.timestamp_ms))} · {s(e.event_type)} ·{" "}
+                    {rowLabel(
+                      w
+                        .list("players")
+                        .find((p) => p.id === e.actor_player_id) ?? e,
+                    )}
+                  </button>
+                  <span>{s(e.note)}</span>
+                  <button onClick={() => void a.run(() => clip(e))}>
+                    {w.t("مقطع دليل", "Evidence clip")}
+                  </button>
+                </article>
+              ))}
+            </div>
+            <EventParticipants events={events} matchId={matchId} />
+          </Panel>
+        )}
+        {tab === "analytics" && (
+          <Panel
+            title={`${w.t("كفاءة التصويب", "Shot efficiency")} ${percent(summary.efficiency)} · n=${summary.sample}`}
+          >
+            <ShotMap
+              shots={shots.filter((shot) =>
+                filtered.some((event) => event.id === shot.event_id),
+              )}
+              onSelect={(sh) => {
+                const e = events.find((e) => e.id === sh.event_id);
+                if (e) edit(e);
+              }}
+            />
+            <label>{w.t("موضع التصويب التالي", "Next shot location")}</label>
+            <div
+              className="goal-picker"
+              onClick={(e) => {
+                const r = e.currentTarget.getBoundingClientRect();
+                setGoalPoint({
+                  x: (e.clientX - r.left) / r.width,
+                  y: 1 - (e.clientY - r.top) / r.height,
+                });
+              }}
+            >
+              {w.t("اضغط موضع الكرة في المرمى", "Click shot placement in goal")}{" "}
+              {goalPoint
+                ? `${goalPoint.x.toFixed(2)}, ${goalPoint.y.toFixed(2)}`
+                : ""}
+            </div>
+            <div
+              className="location-picker"
+              onClick={(e) => {
+                const r = e.currentTarget.getBoundingClientRect();
+                setCourt({
+                  x: (e.clientX - r.left) / r.width,
+                  y: (e.clientY - r.top) / r.height,
+                });
+              }}
+            >
+              {court
+                ? `${court.x.toFixed(2)}, ${court.y.toFixed(2)}`
+                : w.t("اضغط لتحديد الإحداثيات", "Click to place coordinates")}
+            </div>
+            {keepers.map((k) => {
+              const stats = keeperSummary(shots, k.id);
+              return (
+                <button
+                  key={k.id}
+                  onClick={() => {
+                    setParticipantFilter("");
+                    setFilter("shot");
+                    setTab("events");
+                  }}
+                >
+                  {rowLabel(k)} · {percent(stats.percentage)} · n={stats.sample}
+                </button>
+              );
+            })}
+          </Panel>
+        )}
+        {tab === "lineups" && (
+          <Panel title={w.t("القائمة والتبديلات", "Roster & substitutions")}>
+            <label>
+              <input
+                type="checkbox"
+                checked={starting}
+                onChange={(e) => setStarting(e.target.checked)}
+              />
+              {w.t("تشكيلة البداية", "Starting lineup")}
             </label>
-          </div>
-          <div className="toolbar">
-            <button
-              onClick={() =>
-                void a.run(() =>
-                  w.direct("match_roster", {
-                    match_id: matchId,
-                    player_id: inPlayer,
-                    team_id: team,
-                    side: team === match?.home_team_id ? "home" : "away",
-                    starting,
-                  }),
-                )
-              }
-            >
-              {w.t("إضافة للقائمة", "Add to roster")}
-            </button>
-            <button
-              disabled={!clock}
-              onClick={() =>
-                void a.run(() =>
-                  w.save("on_court_intervals", {
-                    ...base(),
-                    player_id: inPlayer,
-                    position,
-                    start_clock_ms: clock?.clockMs ?? 0,
-                    verified: true,
-                  }),
-                )
-              }
-            >
-              {w.t("فتح فترة لعب", "Open interval")}
-            </button>
-            <button
-              disabled={!clock}
-              onClick={() =>
-                void a.run(() =>
-                  w.substitute({
-                    id: crypto.randomUUID(),
-                    organization_id: w.org,
-                    ...base(),
-                    team_id: team,
-                    out_player_id: outPlayer || null,
-                    in_player_id: inPlayer || null,
-                    position,
-                    period: clock!.period,
-                    clock_ms: clock!.clockMs,
-                    video_ms: time,
-                  } as Row),
-                )
-              }
-            >
-              {w.t("تبديل", "Substitute")}
-            </button>
-          </div>
-          {intervals.map((r) => (
-            <div className="interval" key={r.id}>
-              {rowLabel(
-                w.list("players").find((p) => p.id === r.player_id) ?? r,
-              )}{" "}
-              · {s(r.position)} · {n(r.period)} ·{" "}
-              {formatTime(n(r.start_clock_ms))} →{" "}
-              {r.end_clock_ms == null ? "…" : formatTime(n(r.end_clock_ms))}
+            <div className="entity-list">
+              {roster.map((r) => (
+                <article key={r.id}>
+                  {rowLabel(
+                    w.list("players").find((p) => p.id === r.player_id) ?? r,
+                  )}{" "}
+                  ·{" "}
+                  {r.starting ? w.t("أساسي", "Starting") : w.t("بديل", "Bench")}
+                </article>
+              ))}
+            </div>
+            <div className="form-grid">
+              <SelectRow
+                label={w.t("لاعب", "Player")}
+                rows={w.list("players")}
+                value={inPlayer}
+                onChange={setIn}
+              />
+              <SelectRow
+                label={w.t("خروج", "Out")}
+                rows={players}
+                value={outPlayer}
+                onChange={setOut}
+              />
+              <label>
+                {w.t("المركز", "Position")}
+                <select
+                  value={position}
+                  onChange={(e) => setPosition(e.target.value)}
+                >
+                  {positions.map((p) => (
+                    <option key={p}>{p}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div className="toolbar">
+              <button
+                onClick={() =>
+                  void a.run(() =>
+                    w.direct("match_roster", {
+                      match_id: matchId,
+                      player_id: inPlayer,
+                      team_id: team,
+                      side: team === match?.home_team_id ? "home" : "away",
+                      starting,
+                    }),
+                  )
+                }
+              >
+                {w.t("إضافة للقائمة", "Add to roster")}
+              </button>
               <button
                 disabled={!clock}
                 onClick={() =>
                   void a.run(() =>
                     w.save("on_court_intervals", {
-                      ...r,
-                      end_clock_ms: clock!.clockMs,
+                      ...base(),
+                      player_id: inPlayer,
+                      position,
+                      start_clock_ms: clock?.clockMs ?? 0,
                       verified: true,
                     }),
                   )
                 }
               >
-                {w.t("إغلاق", "Close")}
+                {w.t("فتح فترة لعب", "Open interval")}
+              </button>
+              <button
+                disabled={!clock}
+                onClick={() =>
+                  void a.run(() =>
+                    w.substitute({
+                      id: crypto.randomUUID(),
+                      organization_id: w.org,
+                      ...base(),
+                      team_id: team,
+                      out_player_id: outPlayer || null,
+                      in_player_id: inPlayer || null,
+                      position,
+                      period: clock!.period,
+                      clock_ms: clock!.clockMs,
+                      video_ms: time,
+                    } as Row),
+                  )
+                }
+              >
+                {w.t("تبديل", "Substitute")}
               </button>
             </div>
-          ))}
-        </Panel>
-      )}
-      {tab === "annotations" && (
-        <Panel title={w.t("رسومات الفيديو", "Video annotations")}>
-          {w
-            .list("video_annotations")
-            .filter((r) => r.analysis_session_id === sid)
-            .map((r) => (
-              <div key={r.id} className="toolbar">
-                <button onClick={() => seek(n(r.start_ms))}>
-                  {formatTime(n(r.start_ms))} → {formatTime(n(r.end_ms))}
-                </button>
+            {intervals.map((r) => (
+              <div className="interval" key={r.id}>
+                {rowLabel(
+                  w.list("players").find((p) => p.id === r.player_id) ?? r,
+                )}{" "}
+                · {s(r.position)} · {n(r.period)} ·{" "}
+                {formatTime(n(r.start_clock_ms))} →{" "}
+                {r.end_clock_ms == null ? "…" : formatTime(n(r.end_clock_ms))}
                 <button
-                  onClick={() => {
-                    seek(n(r.start_ms));
-                    setAnnotationSnapshot(r);
-                    setAnnotationStart(n(r.start_ms) / 1000);
-                    setAnnotationEnd(n(r.end_ms) / 1000);
-                    setAnnotationId(r.id);
-                    setAnnotation(r.objects as unknown as Drawing[]);
-                    setAnnotate(true);
-                    player.current?.pause();
-                  }}
-                >
-                  {w.t("تحرير", "Edit")}
-                </button>
-                <button
-                  onClick={() =>
-                    void a.run(() => w.save("video_annotations", r, true))
-                  }
-                >
-                  {w.t("حذف", "Delete")}
-                </button>
-              </div>
-            ))}
-        </Panel>
-      )}
-      {tab === "review" && (
-        <Panel title={w.t("مراجعة البيانات القديمة", "Legacy review")}>
-          {w
-            .list("legacy_shot_reviews")
-            .filter((r) => !r.resolved && eventIds.has(s(r.event_id)))
-            .map((r) => (
-              <div key={r.id}>
-                <button
-                  onClick={() => {
-                    const e = events.find((e) => e.id === r.event_id);
-                    if (e) {
-                      edit(e);
-                      setEventType("shot");
-                      setTab("events");
-                    }
-                  }}
-                >
-                  {s(r.reason)}
-                </button>
-                <button
+                  disabled={!clock}
                   onClick={() =>
                     void a.run(() =>
-                      w.save("legacy_shot_reviews", { ...r, resolved: true }),
+                      w.save("on_court_intervals", {
+                        ...r,
+                        end_clock_ms: clock!.clockMs,
+                        verified: true,
+                      }),
                     )
                   }
                 >
-                  {w.t("تمت المراجعة", "Reviewed")}
+                  {w.t("إغلاق", "Close")}
                 </button>
               </div>
             ))}
-        </Panel>
-      )}
+          </Panel>
+        )}
+        {tab === "annotations" && (
+          <Panel title={w.t("رسومات الفيديو", "Video annotations")}>
+            {w
+              .list("video_annotations")
+              .filter((r) => r.analysis_session_id === sid)
+              .map((r) => (
+                <div key={r.id} className="toolbar">
+                  <button onClick={() => seek(n(r.start_ms))}>
+                    {formatTime(n(r.start_ms))} → {formatTime(n(r.end_ms))}
+                  </button>
+                  <button
+                    onClick={() => {
+                      seek(n(r.start_ms));
+                      setAnnotationSnapshot(r);
+                      setAnnotationStart(n(r.start_ms) / 1000);
+                      setAnnotationEnd(n(r.end_ms) / 1000);
+                      setAnnotationId(r.id);
+                      setAnnotation(r.objects as unknown as Drawing[]);
+                      setAnnotate(true);
+                      player.current?.pause();
+                    }}
+                  >
+                    {w.t("تحرير", "Edit")}
+                  </button>
+                  <button
+                    onClick={() =>
+                      void a.run(() => w.save("video_annotations", r, true))
+                    }
+                  >
+                    {w.t("حذف", "Delete")}
+                  </button>
+                </div>
+              ))}
+          </Panel>
+        )}
+        {tab === "review" && (
+          <Panel title={w.t("مراجعة البيانات القديمة", "Legacy review")}>
+            {w
+              .list("legacy_shot_reviews")
+              .filter((r) => !r.resolved && eventIds.has(s(r.event_id)))
+              .map((r) => (
+                <div key={r.id}>
+                  <button
+                    onClick={() => {
+                      const e = events.find((e) => e.id === r.event_id);
+                      if (e) {
+                        edit(e);
+                        setEventType("shot");
+                        setTab("events");
+                      }
+                    }}
+                  >
+                    {s(r.reason)}
+                  </button>
+                  <button
+                    onClick={() =>
+                      void a.run(() =>
+                        w.save("legacy_shot_reviews", { ...r, resolved: true }),
+                      )
+                    }
+                  >
+                    {w.t("تمت المراجعة", "Reviewed")}
+                  </button>
+                </div>
+              ))}
+          </Panel>
+        )}
+      </Tabs.Content>
       <Link href="/playlists">
         {w.t("قوائم المقاطع والاجتماعات", "Clips, playlists & meetings")} →
       </Link>
@@ -1999,6 +2069,6 @@ export function VideoWorkspace({
         onClip={(event) => clip(event)}
         canClip={Boolean(video)}
       />
-    </div>
+    </Tabs.Root>
   );
 }

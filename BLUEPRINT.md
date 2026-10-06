@@ -8,6 +8,8 @@ A coach/analyst manages matches, records possessions and player actions against 
 
 ## Stack and layout
 
+The coaching surface uses MIT-licensed react-resizable-panels and Radix Tabs, with compact match context, source options, transport/timeline, an adjacent intelligence rail and five canonical-sample summary cards. Desktop panels resize by pointer or keyboard; focus and responsive stacking retain the mounted player. Dashboard formulas live in features/analysis/match-dashboard.ts, independent of visual primitives. Missing sample data stays unknown. Upstream notices ship in public/third-party-ui-notices.txt.
+
 Next.js 16, React 19, strict TypeScript, Tailwind 4; vinext/Vite on Cloudflare's Worker runtime, packaged as Pages advanced mode for external DNS; Supabase Auth/PostgreSQL/Data API/RLS; Dexie/IndexedDB; native HTML video and SVG tactical/shot surfaces; Zod; AWS S3 presigning for optional R2; Vitest/Testing Library/Playwright. Exact resolved versions live in pnpm-lock.yaml, not prose guesses. Native browser printing provides Arabic-compatible PDF; CSV is escaped UTF-8.
 
 Deployment target hbi.wadj.online retains authoritative DNS at Spaceship. `build:pages` bundles one `_worker.js` server and client assets with static-route exclusions; no extra service is added. Publishing, external CNAME and live HTTPS/CPU validation remain separate from local builds. See DEPLOYMENT.md. No automatic hosted migrations or nameserver transfer is required.
@@ -18,7 +20,7 @@ Domain modules reside in features; reusable workflows in components/workspace; i
 
 ## Database contract
 
-SQL under supabase/migrations is the authoritative executable schema. Generated database types follow the migrated catalog; run the official Supabase generator after local application. Preserve the first ten migrations; apply 0011–0019 forward. 0017 must commit before 0018 uses the new enum value. Hosted migrations require separate approval; never reset production to upgrade.
+SQL under supabase/migrations is the authoritative executable schema. Generated database types follow the migrated catalog; run the official Supabase generator after local application. Preserve the first ten migrations; apply 0011–0019 forward. 0017 must commit before 0018 uses the new enum value. Hosted 0017–0019 and publication are authorized in this session but remain unapplied until connection/execution is verified; never reset production to upgrade.
 
 | Group        | Relations and intent                                                                                                                           |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |

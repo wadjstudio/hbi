@@ -9,17 +9,20 @@ import { formatTime } from "@/lib/video/time";
 import { s, type Row } from "@/types/workspace";
 import { rowLabel } from "./controls";
 import { useWorkspace } from "./provider";
+import type { ReactNode } from "react";
 
 export function MatchContext({
   match,
   session,
   clock,
   timeMs,
+  selector,
 }: {
   match: Row;
   session?: Row;
   clock: { period: number; clockMs: number } | null;
   timeMs: number;
+  selector?: ReactNode;
 }) {
   const w = useWorkspace();
   const home = w.list("teams").find((team) => team.id === match.home_team_id),
@@ -30,7 +33,7 @@ export function MatchContext({
   return (
     <header className="match-context">
       <div className="match-context-meta">
-        <span className="hbi-kicker">HANDBALL INTELLIGENCE / ANALYSIS</span>
+        <div className="context-match-picker">{selector}</div>
         <b>
           {isReferenceMatch(match)
             ? w.t(referenceMatch.competitionAr, referenceMatch.competitionEn)
@@ -57,11 +60,15 @@ export function MatchContext({
           <strong>
             {match.away_score == null ? "—" : s(match.away_score)}
           </strong>
-          <small>
-            {w.t(
-              "النتيجة المسجلة · ليست عدّ أحداث التحليل",
-              "Recorded result · not tagged-event totals",
+          <small
+            title={w.t(
+              "النتيجة المسجلة مستقلة عن عدّ أحداث التحليل",
+              "Recorded result is independent of tagged events",
             )}
+          >
+            {clock
+              ? `${formatTime(clock.clockMs)} · ${w.t("شوط", "Period")} ${clock.period}`
+              : w.t("ساعة المباراة غير معايرة", "Match clock not calibrated")}
           </small>
         </div>
         <div className="match-context-team">

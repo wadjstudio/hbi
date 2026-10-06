@@ -8,7 +8,7 @@ test("saved Arabic report notes, primary sample, CSV and browser PDF", async ({
   page,
   request,
 }, testInfo) => {
-  test.setTimeout(180000);
+  test.setTimeout(300000);
   const org = "20000000-0000-4000-8000-000000000001";
   const home = "30000000-0000-4000-8000-000000000001";
   const away = "30000000-0000-4000-8000-000000000002";

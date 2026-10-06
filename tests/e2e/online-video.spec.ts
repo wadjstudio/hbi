@@ -3,7 +3,7 @@ test("online source API contract: timing, shots, offline guard and evidence clip
   page,
   context,
 }) => {
-  test.setTimeout(180000);
+  test.setTimeout(300000);
   // Contract fixture only: no fabricated events enter the production database.
   await page.route("https://www.youtube.com/iframe_api", (route) =>
     route.fulfill({

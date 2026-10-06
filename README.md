@@ -18,6 +18,10 @@ Local Supabase requires Docker. Alternatively configure a free hosted Supabase p
 
 ## First coaching workflow
 
+The coaching console uses a resizable video/evidence split and keyboard-accessible tabs. Focus video enlarges the working surface without unmounting the player; Reset layout restores the split. On small screens the same panels stack. Five summary cards show reviewed attempts, shooters, resolved closed possessions, turnover phases and recorded match results. Selecting a statistical sample opens its supporting events. Empty samples and unresolved results remain explicit. Source selection is in an expandable section after attaching a video.
+
+The new interface primitives are MIT-licensed `react-resizable-panels` and Radix Tabs; their notices are in `public/third-party-ui-notices.txt`. They control layout and focus only, not permissions, persistence or analytical formulas.
+
 Overview opens the match hub with the verified ON Sport Al Ahly–Zamalek final (23 May 2025, 31–28). Import creates public source metadata and missing teams through scoped saves; it invents no roster or events. After applying 0017–0019, choose **Analyze official recording · YouTube**, review privacy/terms, load the official player and select the recording team. Tag possessions/shots at the controller’s actual source time; custom HTTPS YouTube URLs are supported.
 
 Online analysis needs internet and seeks to YouTube keyframes. There is no download, proxy, frame extraction or overlay on that player. Local files support precise playback, telestration and prepared-workspace offline work. A local file attached during YouTube analysis creates a separate video/session; timestamps and clock anchors never transfer between edits. A changed source duration blocks new tagging for review. Online clips play intervals in playlists/meetings. Privacy choice is transient, scoped to account/organization and cleared on sign-out.

@@ -33,6 +33,7 @@ hbi-starter/
   vitest.config.ts
   wrangler.jsonc
   .github/workflows/ci.yml
+  app/analyst-console.css
   app/globals.css
   app/layout.tsx
   app/page.tsx
@@ -70,6 +71,7 @@ hbi-starter/
   components/shell/app-sidebar.tsx
   components/ui/.gitkeep
   components/video/.gitkeep
+  components/workspace/analysis-split.tsx
   components/workspace/analysis-timeline.tsx
   components/workspace/analytics.tsx
   components/workspace/charts.tsx
@@ -80,6 +82,7 @@ hbi-starter/
   components/workspace/evidence-drawer.tsx
   components/workspace/evidence-links.tsx
   components/workspace/match-context.tsx
+  components/workspace/match-dashboard.tsx
   components/workspace/match-hub.tsx
   components/workspace/meetings.tsx
   components/workspace/provider.tsx
@@ -102,6 +105,7 @@ hbi-starter/
   features/analysis/.gitkeep
   features/analysis/contracts.ts
   features/analysis/labels.ts
+  features/analysis/match-dashboard.ts
   features/analysis/shot-profile.ts
   features/analysis/workbench.ts
   features/analytics/.gitkeep
@@ -140,6 +144,7 @@ hbi-starter/
   lib/video/local-sources.ts
   lib/video/time.ts
   lib/video/youtube.ts
+  public/third-party-ui-notices.txt
   scripts/.gitkeep
   scripts/build-pages.mjs
   scripts/catalog-types.mjs
@@ -172,6 +177,7 @@ hbi-starter/
   supabase/tests/security.test.sql
   tests/setup.ts
   tests/e2e/conflict.spec.ts
+  tests/e2e/console.spec.ts
   tests/e2e/fixture.ts
   tests/e2e/online-video.spec.ts
   tests/e2e/reports.spec.ts
@@ -182,6 +188,7 @@ hbi-starter/
   tests/unit/backup.test.ts
   tests/unit/domain.test.ts
   tests/unit/local.test.ts
+  tests/unit/match-dashboard.test.ts
   tests/unit/online-source.test.ts
   tests/unit/positions.test.ts
   tests/unit/reports.test.ts

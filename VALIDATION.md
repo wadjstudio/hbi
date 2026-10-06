@@ -1,4 +1,16 @@
-# HBI 0.2.0 validation — 2026-10-04
+# HBI 0.2.0 validation — 2026-10-07
+
+## Resizable coaching console — 2026-10-07
+
+This section records the new console iteration. Earlier results apply to their named revisions, not automatically to this source.
+
+- Two MIT UI dependencies were installed from the official npm registry with a locked resolution: react-resizable-panels 4.14.2 and Radix Tabs 1.1.22. The existing project-specific pnpm store was used; no global package configuration changed. Upstream notices ship with the application.
+- Initial typecheck found missing organization fields in new test/fallback rows; those were corrected. Final `pnpm typecheck` and `pnpm test` passed (31 tests across 11 files). An earlier full lint passed; a later full lint attempt timed out at five minutes while the Windows dev suite was running. Its timeout is retained as a failed verification attempt, not a code-error assertion.
+- The console browser journey passed resizing by keyboard, focus/reset, arrow-key tabs, Arabic RTL and a 390px overflow check. Screenshots in the Playwright result directory show synthetic empty fixtures, not a tagged real match. Five cards and the adjacent intelligence rail contain no fabricated production statistics.
+- The first full Windows dev suite passed four journeys and failed three (cold route/login waits and a native possession-close assertion). A targeted rerun failed on cold login. The second suite passed five and failed two on cold route transitions. The third passed console/smoke and failed the remaining five on route/action/reload waits. These attempts are failures, not full-suite passes. Native seeks now wait for the browser's actual seeked event instead of dispatching a premature timeupdate; the next native run completed its three possession closes, offline edits, undo/redo and synchronization. Navigation/action waits remain finite, and behavioral assertions remain enabled.
+- Two guarded SQL-editor upgrade scripts were generated under outputs/deployment: HBI_UPGRADE_0017.sql commits the enum/history separately; HBI_UPGRADE_0018_0019.sql applies the remaining exact source migrations/history atomically. Their exact text passed the PostgreSQL/WASM upgrade from 0016, retained all 19 history entries, and rejected a repeat execution. No hosted database was reset or modified.
+- The user authorized hosted 0017–0019 and publication. Execution is blocked by Chrome control failing to load its request-header policy; the Supabase CLI also has no linked project. The published app still corresponds to the prior workbench (741d9fc), and hosted history remains 0001–0016. No new site deployment, live online tagging, real multi-analyst session, full real-match analysis or R2 verification is claimed.
+- Final lint of every changed code/test/config file passed, followed by a successful full `pnpm lint` after the dev suite ended. `git diff --check` passed after normalizing the root layout's line endings. The Next 16.3.8 production build passed compilation, TypeScript, static page generation and all application routes. `pnpm build:pages` also passed all vinext/Cloudflare build stages and Pages packaging. Current-source CI is recorded after it finishes.
 
 ## Online analysis and coaching rail — 2026-10-06
 

@@ -13,7 +13,8 @@ export default defineConfig({
   reporter: [["list"], ["html", { open: "never" }]],
   use: {
     baseURL,
-    actionTimeout: 30000,
+    // Cold Next dev routes can take over 30s on Windows; behavior assertions stay bounded separately.
+    actionTimeout: 90000,
     trace: "on-first-retry",
   },
   webServer: [

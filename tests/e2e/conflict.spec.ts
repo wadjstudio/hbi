@@ -5,14 +5,17 @@ const mockURL = `http://127.0.0.1:${process.env.HBI_MOCK_PORT || 54329}`;
 test("concurrent changes preserve both versions until explicit resolution; sign-out hides drafts", async ({
   page,
 }) => {
-  test.setTimeout(120000);
+  test.setTimeout(300000);
   await page.goto("/login");
   await page.getByLabel("Email").fill("coach@example.test");
   await page.getByLabel("Password").fill("test-password");
   await page.getByRole("button", { name: "Enter HBI" }).click();
-  await expect(page.getByText("HBI Test Club").first()).toBeAttached();
+  await expect(page.getByText("HBI Test Club").first()).toBeAttached({
+    timeout: 90000,
+  });
   await page.getByRole("button", { name: "English", exact: true }).click();
   await page.getByRole("link", { name: "Players", exact: true }).click();
+  await expect(page).toHaveURL(/\/players$/, { timeout: 90000 });
   const player = page.locator(".entity-list article").filter({
     has: page.getByRole("link", { name: "Match Playmaker", exact: true }),
   });

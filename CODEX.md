@@ -2,6 +2,8 @@
 
 Build on the foundation; never substitute demo numbers for real observations.
 
+Preserve the resizable coaching console and Radix tab semantics. Resizing, focusing and responsive stacking must not recreate the video controller. Test separator keyboard interaction, arrow-key tabs, Arabic RTL and narrow-screen overflow. Dashboard samples must come from the active session/filter context and link to their source events; show missing/unknown denominators. Retain upstream MIT notices when extending the primitives.
+
 Continue the actual match workbench. Verified source imports use scoped IDs/provider/permissions. 0017–0019 enable official IFrame API online tagging in a distinct source/session. Never fake a local fingerprint, download YouTube content, obscure player controls/ads or transfer timestamps to another edit. Local files support precise/offline/telestration work. Read controller time when recording; pending outcomes and missing/legacy origins stay visible. Filters share canonical samples and evidence; never silently overwrite an event being edited.
 
 - Keep the modular monolith and documented stack. No microservices, Prisma/Drizzle, Redis/Kafka or mandatory AI.

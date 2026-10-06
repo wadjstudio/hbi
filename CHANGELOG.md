@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Resizable coaching console — 2026-10-07
+
+- Added MIT-licensed react-resizable-panels and Radix Tabs with upstream notices, a keyboard-operated divider, focus/reset controls and responsive stacking without remounting media.
+- Compact match selector/context and expandable source options; intelligence cards respond to their panel width. Added five summaries for canonical attempts, shooters, resolved closed possessions, turnover phases and recorded results, with missing-data labels and evidence actions.
+- Added pure dashboard formula tests and browser checks for resizing, keyboard tabs, focus, RTL and narrow-screen overflow. Production data remains untouched by synthetic fixtures.
+- Prepared two guarded hosted upgrade scripts with exact migration history, verified against PostgreSQL/WASM. User authorized 0017–0019 and publication; browser transport currently blocks Supabase execution. No hosted migration or new deployment is claimed.
+
 ## Online analysis and coaching rail — 2026-10-06
 
 - Official YouTube IFrame API transport, direct source-time tagging, possessions, clips and meeting playback; no paid service, downloaded video or new dependency.
@@ -8,7 +15,7 @@
 - Scoped transient privacy/terms choice, logout clearing and a public bilingual privacy page. Original player controls, branding and ads remain visible.
 - Defensive/shot-origin/player/pattern/GK rail cards, missing-origin evidence, compact recording context, Arabic option labels and explicit clock markers. Default phase is unclassified; zone is unknown.
 - Browser fixture isolation is explicit before each journey, preserving pre-login seeded report data. Next browser-test output uses `.next/e2e` to avoid sharing the application build/cache. IFrame API contract tests use a clearly synthetic test-only player, never production observations.
-- Hosted migrations/deployment are pending separate approval. Live real-match tagging and long-video/real multi-analyst/R2 gates remain unverified; this is not a claim of parity with established platforms.
+- At this revision hosted migrations/deployment were pending separate approval. The user subsequently authorized them; see the October 7 entry for execution status. Live real-match tagging and long-video/real multi-analyst/R2 gates remain unverified; this is not a claim of parity with established platforms.
 
 ## Match workbench and verified broadcast — 2026-10-06
 

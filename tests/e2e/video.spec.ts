@@ -8,7 +8,9 @@ test("local video to offline shot, opponent evidence and meeting", async ({
   await page.getByLabel("Email").fill("coach@example.test");
   await page.getByLabel("Password").fill("test-password");
   await page.getByRole("button", { name: "Enter HBI" }).click();
-  await expect(page.getByText("HBI Test Club").first()).toBeAttached();
+  await expect(page.getByText("HBI Test Club").first()).toBeAttached({
+    timeout: 90000,
+  });
   await page.getByRole("button", { name: "English", exact: true }).click();
   // A small local fixture generated entirely through browser media APIs.
   const media = await page.evaluate(async () => {
@@ -89,10 +91,13 @@ test("local video to offline shot, opponent evidence and meeting", async ({
   await page.getByLabel("Cross attack_action").check();
   for (let i = 0; i < 3; i++) {
     await page.locator("video").evaluate(
-      (video, seconds) => {
+      async (video, seconds) => {
         const v = video as HTMLVideoElement;
+        const completed = new Promise<void>((resolve) =>
+          v.addEventListener("seeked", () => resolve(), { once: true }),
+        );
         v.currentTime = seconds;
-        v.dispatchEvent(new Event("timeupdate"));
+        await completed;
       },
       i * 0.5 + 0.1,
     );
@@ -120,10 +125,13 @@ test("local video to offline shot, opponent evidence and meeting", async ({
       ).toHaveCount(1);
     }
     await page.locator("video").evaluate(
-      (video, seconds) => {
+      async (video, seconds) => {
         const v = video as HTMLVideoElement;
+        const completed = new Promise<void>((resolve) =>
+          v.addEventListener("seeked", () => resolve(), { once: true }),
+        );
         v.currentTime = seconds;
-        v.dispatchEvent(new Event("timeupdate"));
+        await completed;
       },
       i * 0.5 + 0.4,
     );
@@ -142,12 +150,17 @@ test("local video to offline shot, opponent evidence and meeting", async ({
   }
   await page.getByRole("button", { name: "Evidence clip" }).first().click();
   await page.getByRole("link", { name: "Opponents", exact: true }).click();
+  await expect(page).toHaveURL(/\/opponents$/, { timeout: 90000 });
+  await expect(
+    page.getByRole("button", { name: "Save evidence-backed insight" }),
+  ).toBeVisible({ timeout: 90000 });
   await page
     .getByRole("button", { name: "Save evidence-backed insight" })
     .click();
   await page.getByRole("button", { name: "Watch evidence" }).first().click();
   await expect(page.locator('a[href*="?event="]').first()).toBeVisible();
   await page.getByRole("link", { name: "Meetings", exact: true }).click();
+  await expect(page).toHaveURL(/\/meetings$/, { timeout: 90000 });
   await page.getByRole("button", { name: "Add", exact: true }).click();
   await page.getByLabel("Meeting title").fill("Opponent preparation");
   await page.getByRole("button", { name: "Save", exact: true }).click();
