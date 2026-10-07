@@ -37,6 +37,7 @@ hbi-starter/
   app/globals.css
   app/layout.tsx
   app/page.tsx
+  app/sesen.css
   app/workbench.css
   app/(auth)/login/login-form.tsx
   app/(auth)/login/page.tsx
@@ -62,7 +63,15 @@ hbi-starter/
   app/api/r2/sign-read/route.ts
   app/api/r2/sign-upload/route.ts
   app/privacy/page.tsx
+  brand/BRAND.md
+  brand/GENERATION.md
+  brand/kit-assets.json
+  brand/preview.html
+  brand/masters/athlete-rail.png
+  brand/masters/lockup.png
+  brand/masters/mark.png
   components/analysis/.gitkeep
+  components/brand/brand-lockup.tsx
   components/charts/.gitkeep
   components/opponent/.gitkeep
   components/playlists/.gitkeep
@@ -127,6 +136,7 @@ hbi-starter/
   features/workspace/backup.ts
   features/workspace/provider.tsx
   hooks/.gitkeep
+  lib/brand.ts
   lib/analytics/.gitkeep
   lib/analytics/metrics.ts
   lib/env/schema.ts
@@ -144,8 +154,30 @@ hbi-starter/
   lib/video/local-sources.ts
   lib/video/time.ts
   lib/video/youtube.ts
+  public/favicon.ico
+  public/manifest.webmanifest
   public/third-party-ui-notices.txt
+  public/brand/apple-touch-icon.png
+  public/brand/athlete-rail.webp
+  public/brand/favicon.ico
+  public/brand/icon-16.png
+  public/brand/icon-192.png
+  public/brand/icon-32.png
+  public/brand/icon-48.png
+  public/brand/icon-512.png
+  public/brand/maskable-192.png
+  public/brand/maskable-512.png
+  public/brand/sesen-lockup.png
+  public/brand/sesen-lockup.webp
+  public/brand/sesen-mark.png
+  public/brand/social-card.png
+  public/brand/courts/handball-court-full.svg
+  public/brand/courts/handball-court-half.svg
+  public/brand/placeholders/coach-neutral.svg
+  public/brand/placeholders/player-neutral.svg
+  public/brand/placeholders/team-neutral.svg
   scripts/.gitkeep
+  scripts/build-brand-assets.mjs
   scripts/build-pages.mjs
   scripts/catalog-types.mjs
   scripts/mock-supabase.mjs
