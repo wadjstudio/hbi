@@ -1,4 +1,84 @@
 /* SESEN final identity. Adapted from the user-supplied UI kit; latest gold navigation wins. */
+.data-sources {
+  display: grid;
+  gap: 18px;
+}
+.source-grid,
+.source-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 12px;
+}
+.source-card,
+.source-results article {
+  border: 1px solid var(--sesen-border);
+  border-radius: 8px;
+  background: linear-gradient(145deg, #0c191e, #091216);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.source-card header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+.source-card h2 {
+  font-size: 16px;
+  font-weight: 650;
+}
+.source-card p {
+  flex: 1;
+  line-height: 1.8;
+}
+.source-card small,
+.source-results small {
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+.source-card a,
+.source-results a {
+  color: var(--sesen-cyan);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.source-status {
+  font-size: 11px;
+  padding: 3px 8px;
+  border: 1px solid var(--sesen-border);
+  border-radius: 999px;
+}
+.source-preview {
+  color: var(--sesen-cyan);
+  border-color: var(--sesen-cyan);
+}
+.source-candidate {
+  color: var(--sesen-gold);
+}
+.source-hold {
+  color: var(--text-muted);
+}
+.source-search {
+  align-items: end;
+  margin-block: 14px;
+}
+.source-search label {
+  display: grid;
+  gap: 6px;
+  flex: 1 1 220px;
+}
+.source-search input {
+  width: 100%;
+  min-width: 0;
+}
+.source-results {
+  margin-block: 14px;
+}
 html:root {
   --sesen-bg: #080e12;
   --sesen-panel: #0d161d;

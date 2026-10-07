@@ -13,6 +13,7 @@ hbi-starter/
   CHANGELOG.md
   CLAUDE.md
   CODEX.md
+  DATA_SOURCES.md
   DEPLOYMENT.md
   FIRST_CODEX_PROMPT.md
   PHASES.md
@@ -42,6 +43,7 @@ hbi-starter/
   app/(auth)/login/login-form.tsx
   app/(auth)/login/page.tsx
   app/(platform)/layout.tsx
+  app/(platform)/data-sources/page.tsx
   app/(platform)/matches/page.tsx
   app/(platform)/matches/[id]/page.tsx
   app/(platform)/meetings/page.tsx
@@ -85,6 +87,7 @@ hbi-starter/
   components/workspace/analytics.tsx
   components/workspace/charts.tsx
   components/workspace/controls.tsx
+  components/workspace/data-sources.tsx
   components/workspace/drawing.tsx
   components/workspace/entities.tsx
   components/workspace/event-participants.tsx
@@ -119,6 +122,9 @@ hbi-starter/
   features/analysis/workbench.ts
   features/analytics/.gitkeep
   features/auth/.gitkeep
+  features/data-sources/audit.json
+  features/data-sources/catalog.ts
+  features/data-sources/wikidata.ts
   features/insights/.gitkeep
   features/matches/.gitkeep
   features/matches/reference-match.ts
@@ -183,6 +189,7 @@ hbi-starter/
   scripts/mock-supabase.mjs
   scripts/verify-db.mjs
   scripts/verify-package.py
+  scripts/verify-wikidata-live.mjs
   stores/.gitkeep
   stores/media-consent.ts
   supabase/config.toml
@@ -210,14 +217,17 @@ hbi-starter/
   tests/setup.ts
   tests/e2e/conflict.spec.ts
   tests/e2e/console.spec.ts
+  tests/e2e/data-sources.spec.ts
   tests/e2e/fixture.ts
   tests/e2e/online-video.spec.ts
   tests/e2e/reports.spec.ts
   tests/e2e/smoke.spec.ts
   tests/e2e/video.spec.ts
   tests/e2e/workflow.spec.ts
+  tests/fixtures/wikidata-known-player.json
   tests/integration/.gitkeep
   tests/unit/backup.test.ts
+  tests/unit/data-sources.test.ts
   tests/unit/domain.test.ts
   tests/unit/local.test.ts
   tests/unit/match-dashboard.test.ts
@@ -232,12 +242,14 @@ hbi-starter/
   tools/local-analysis/README.md
   tools/local-analysis/build_review.py
   tools/local-analysis/detector.py
+  tools/local-analysis/export_mot.py
   tools/local-analysis/render_preview.py
   tools/local-analysis/requirements.txt
   tools/local-analysis/review-template.html
   tools/local-analysis/scan_scoreboard.py
   tools/local-analysis/scoreboard.py
   tools/local-analysis/test_analysis.py
+  tools/local-analysis/test_mot.py
   tools/local-analysis/verify_review.mjs
   types/.gitkeep
   types/workspace.ts

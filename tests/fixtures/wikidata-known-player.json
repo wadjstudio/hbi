@@ -1,0 +1,68 @@
+{
+  "entities": {
+    "Q18921300": {
+      "id": "Q18921300",
+      "lastrevid": 2554193793,
+      "labels": {
+        "ar": {
+          "language": "ar",
+          "value": "أحمد الأحمر"
+        },
+        "en": {
+          "language": "en",
+          "value": "Ahmed El-Ahmar"
+        }
+      },
+      "descriptions": {
+        "ar": {
+          "language": "ar",
+          "value": "لاعب كرة يد مصري"
+        },
+        "en": {
+          "language": "en",
+          "value": "Egyptian handball player"
+        }
+      },
+      "claims": {
+        "P31": [
+          {
+            "rank": "normal",
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P31",
+              "hash": "ad7d38a03cdd40cdc373de0dc4e7b7fcbccb31d9",
+              "datavalue": {
+                "value": {
+                  "entity-type": "item",
+                  "numeric-id": 5,
+                  "id": "Q5"
+                },
+                "type": "wikibase-entityid"
+              },
+              "datatype": "wikibase-item"
+            }
+          }
+        ],
+        "P106": [
+          {
+            "rank": "normal",
+            "mainsnak": {
+              "snaktype": "value",
+              "property": "P106",
+              "hash": "a86a891c00a4a8a2602a4510fca501f911314b22",
+              "datavalue": {
+                "value": {
+                  "entity-type": "item",
+                  "numeric-id": 12840545,
+                  "id": "Q12840545"
+                },
+                "type": "wikibase-entityid"
+              },
+              "datatype": "wikibase-item"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "reviewed_at": "2026-10-08",
+  "recorded_utc": "2026-10-07T22:13:04.859371+00:00",
+  "repositories": [
+    {
+      "repository": "codehass/handball-analytics-backend",
+      "default_branch": "main",
+      "head": "3d34cfd2697acff383f4e37eb2cd1393df3425d6",
+      "archived": false,
+      "pushed_at": "2026-03-23T18:06:57Z",
+      "github_detected_license": null
+    },
+    {
+      "repository": "elymeraj/Handball_Tracking",
+      "default_branch": "main",
+      "head": "2d04528a4e74e567364eb19cb2d4b4054fc054d7",
+      "archived": false,
+      "pushed_at": "2026-09-15T14:57:16Z",
+      "github_detected_license": null
+    },
+    {
+      "repository": "BelNaruto/handball-api",
+      "default_branch": "main",
+      "head": "0152c5440a3e6fc49415215e623c0e5c3d448bf6",
+      "archived": false,
+      "pushed_at": "2024-07-23T06:53:02Z",
+      "github_detected_license": null
+    },
+    {
+      "repository": "AtomScott/TeamTrack",
+      "default_branch": "main",
+      "head": "748a77db7d631818b9736d3af456e65346c466e5",
+      "archived": false,
+      "pushed_at": "2024-04-22T07:22:29Z",
+      "github_detected_license": "MIT"
+    },
+    {
+      "repository": "FoundationVision/ByteTrack",
+      "default_branch": "main",
+      "head": "d1bf0191adff59bc8fcfeaa0b33d3d1642552a99",
+      "archived": false,
+      "pushed_at": "2024-06-19T11:45:05Z",
+      "github_detected_license": "MIT"
+    },
+    {
+      "repository": "cvat-ai/cvat",
+      "default_branch": "develop",
+      "head": "28f5bffaf1b66b81c1e908d3ae626047a54279b0",
+      "archived": false,
+      "pushed_at": "2026-10-07T16:49:10Z",
+      "github_detected_license": "MIT"
+    },
+    {
+      "repository": "AtomScott/SportsLabKit",
+      "default_branch": "develop",
+      "head": "9591d6db9e8de20e6a458ba24a45ac58d23d1358",
+      "archived": false,
+      "pushed_at": "2023-12-19T04:38:38Z",
+      "github_detected_license": "GPL-3.0"
+    },
+    {
+      "repository": "JonathonLuiten/TrackEval",
+      "default_branch": "master",
+      "head": "12c8791b303e0a0b50f753af204249e622d0281a",
+      "archived": false,
+      "pushed_at": "2024-07-03T06:21:21Z",
+      "github_detected_license": "MIT"
+    }
+  ],
+  "live_checks": {
+    "wikidata_search": {
+      "result": "maxlag",
+      "no_auto_retry": true
+    },
+    "wikidata_known_item": {
+      "id": "Q18921300",
+      "revision": 2554193793,
+      "status": 200,
+      "cors": "*",
+      "isolated_chrome_cross_origin_fetch": "passed",
+      "credentials": "omit",
+      "custom_linked_data_headers": false,
+      "url": "https://www.wikidata.org/wiki/Special:EntityData/Q18921300.json"
+    }
+  },
+  "no_third_party_code_or_weights_executed": true
+}

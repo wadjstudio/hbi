@@ -52,6 +52,8 @@ The production app currently records analyst-entered events; selecting a video d
 
 ## Validation
 
+Read [DATA_SOURCES.md](DATA_SOURCES.md) for the audited handball-data and open-source integration decisions. **Data sources** in the sidebar offers an optional Wikidata player-name/revision preview and a 16-source guide. Names are exported for review, not silently imported as current rosters or performance statistics. Public metadata, code, model weights and dataset licenses are reviewed separately. The local pilot can export MOT/CVAT suggestions for independent annotation; it still uses the IoU baseline, not ByteTrack.
+
 ```powershell
 pnpm typecheck
 pnpm lint

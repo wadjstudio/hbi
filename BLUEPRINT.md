@@ -1,5 +1,11 @@
 # SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
 
+## External knowledge and smarter analysis — 8 October 2026
+
+The current source includes `/data-sources`: a reviewed 16-source handball-data/tool guide and optional Wikidata name/revision preview with unreviewed JSON export. Reads are explicit, bounded, credential-free and validated; they do not create rosters, stats or player identities in video. DATA_SOURCES.md records primary links, licensing distinctions, coverage gaps and the next integration decisions. GitHub repository-head/license snapshots and a minimal CC0 real-endpoint fixture accompany the contracts.
+
+The local inference pilot now exports MOT predictions/CVAT review suggestions with dense preview/source-time mapping, validated geometry and scene-local identities. No CVAT server, TrackEval package, ByteTrack upgrade or third-party training dataset is required or installed by this iteration. Future automatic analysis requires independently reviewed handball samples, stronger tracking, ball/team/court calibration, event precision/recall evaluation and an authenticated review/import boundary. Product statistics still use canonical reviewed observations. No migration or hosted deployment is implied by this source update.
+
 ## Final identity — 7 October 2026
 
 SESEN Sports Intelligence is the umbrella brand; Handball Intelligence is this application's specialization. The final user image and SESEN_CODEX_UI_KIT define graphite/ivory surfaces, cyan controls, champagne-gold active navigation, a unified match header, video/timeline/tagging beside evidence and full-width analytics below. The kit's older orange navigation reference is superseded by the final gold image; orange keeps its event meaning. Actual data, session isolation and missing samples remain authoritative.

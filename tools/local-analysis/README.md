@@ -47,6 +47,21 @@ The tracking MP4 contains overlays burned into a short 5 fps derivative with the
 
 ## Verification
 
+### Export for optional local annotation and evaluation
+
+```powershell
+python tools/local-analysis/export_mot.py --report 'C:/path/preview-output/tracking-analysis.json' --source 'E:/path/match.mp4' --output 'C:/path/new-mot-directory' --width 960 --height 540 --name sesen-pilot
+python tools/local-analysis/test_mot.py
+```
+
+The exporter uses the standard library only and refuses existing output directories. It writes 10-column `tracks.txt` predictions, `seqinfo.ini`, `frame-times.csv`, an audit manifest and `cvat-review.zip`. MOT frame/box coordinates are 1-based; pixel widths/heights are unchanged. IDs are separated across heuristic cuts, remain temporary and do not identify athletes. Explicit dimensions must match the unannotated preview, and the preview grid must match the report (currently 5 fps, 960×540). Use an unannotated derivative from the same exact segment for review, not the full 25 fps video or the burned-overlay MP4. No video is copied or included in the archive.
+
+The source hash identifies the caller-supplied recording; old pilot reports do not contain a verified source binding, so this hash alone does not prove that the report was inferred from those bytes. The manifest states this limitation. Preview times are nominal sample positions; they do not replace the scoreboard scanner's decoded source PTS or game-clock calibration.
+
+The archive follows [CVAT's MOT format](https://docs.cvat.ai/docs/dataset_management/formats/format-mot/). Its required `gt/gt.txt` filename contains **unreviewed suggestions**, not reviewed ground truth; visibility=1 is a format default, not a measured property. CVAT itself has not been installed or its importer exercised here. Correct person/athlete/official classification and tracks before exporting independent ground truth for [TrackEval](https://github.com/JonathonLuiten/TrackEval). Never evaluate a tracker against its own predictions or treat interpolation as measured ball/player motion. No HOTA/IDF1 accuracy score is claimed.
+
+See [DATA_SOURCES.md](../../DATA_SOURCES.md) for reviewed sources, dataset/code licensing distinctions and the next ByteTrack/handball-specialist gates. Neither CVAT nor TrackEval becomes a mandatory service or runtime dependency.
+
 ```powershell
 python tools/local-analysis/test_analysis.py
 # After building a review page, with installed project Playwright/Chrome:

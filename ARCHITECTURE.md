@@ -1,5 +1,11 @@
 # SESEN / HBI Architecture
 
+## External knowledge and evaluation interchange
+
+`features/data-sources` owns the audited provider catalog, repository-head/license audit and Zod-validated read-only Wikidata adapter; `components/workspace/data-sources.tsx` owns explicit search/cancel/export UI. The adapter uses bounded credential-free public GETs only, preserves revision/CC0/retrieval provenance, excludes images and requires direct nondeprecated human/handball-player occupation claims. Known IDs use the linked-data endpoint; text search honors maxlag and never retries in a loop. Results live in transient component state and reset across account/organization changes. Nothing enters the outbox or canonical statistics; no migration or privileged route is needed for this preview. Future writes must use existing role/RLS/import-review boundaries.
+
+The optional Python MOT exporter validates the pilot grid and boxes, remaps scene-local IDs and exports predictions/CVAT suggestions with source/report hashes and explicit timing/identity limits. Neither suggestions nor a file called `gt.txt` are reviewed ground truth. CVAT/TrackEval are optional external tools, not services or installed dependencies. See DATA_SOURCES.md for dataset-rights and production acceptance gates.
+
 ## Identity and presentation
 
 `lib/brand.ts` centralizes asset paths and semantic chart colors; `components/brand` renders lockups, decorative marks and visibly neutral player avatars. `app/sesen.css` maps the supplied kit palette onto existing tokens and owns final chrome/responsive presentation. User-requested generated masters in `brand/masters` reproduce the reference identity as raster assets; `scripts/build-brand-assets.mjs` exports deterministic icons/WebP/social images with the existing Next sharp dependency. No runtime image generation or new package is involved. `brand/kit-assets.json` records imported SVG source hashes.

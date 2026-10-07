@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Audited data sources and annotation interchange — 2026-10-08
+
+- Read both supplied PDFs and verified primary project/API documentation. Added DATA_SOURCES.md and a versioned eight-repository license/commit audit. Corrected unsupported SportScore handball coverage, introductory SportDB quotas and SportsLabKit's GPL license; kept dataset rights distinct from repository code permissions.
+- Added an Arabic/English Data sources page with 16 explicitly labelled source decisions, category filters and optional Wikidata lookup/search. Only human records with a direct nondeprecated handball-player occupation are shown. Names, missing labels, source revision, retrieval time and CC0 provenance export as unreviewed JSON; no automatic roster/event import or artwork download.
+- Added bounded, credential-free requests, cancellation/timeout, overload/offline messaging and transient result cleanup on workspace changes. Added a minimal CC0 real-endpoint fixture plus behavior/browser acceptance checks; no service credentials or new runtime package.
+- Added local MOT prediction/CVAT suggestion export with validated dimensions, boxes, scores, dense preview-frame/source-time mapping, scene-separated IDs and source/report hashes. Suggestions never become ground truth or athlete identities automatically. The 50-frame real pilot export has 516 boxes/94 temporary tracklets; this is not an accuracy claim.
+- SQL migrations, permissions, backup format and hosted database are unchanged. No external models/datasets were installed, no original match video was uploaded and no new deployment is claimed. Future ByteTrack, reviewed event ingestion, dataset training and production-engine integration remain acceptance gates.
+
 ## Real-video local analysis pilot — 2026-10-07
 
 - Added optional Python/FFmpeg/ONNX tools with pinned official YOLOX-tiny and OpenCV CRNN model contracts. No web dependency, mandatory paid service, hosted migration, media upload or automatic database event insertion.

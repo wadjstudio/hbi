@@ -20,6 +20,7 @@ import {
   Menu,
   X,
   CloudDownload,
+  Database,
 } from "lucide-react";
 const navigation = [
   ["نظرة عامة", "Overview", "/overview"],
@@ -32,6 +33,7 @@ const navigation = [
   ["قوائم المقاطع", "Playlists", "/playlists"],
   ["الاجتماعات", "Meetings", "/meetings"],
   ["التقارير", "Reports", "/reports"],
+  ["مصادر البيانات", "Data sources", "/data-sources"],
   ["الإعدادات", "Settings", "/settings"],
 ] as const;
 const navigationIcons = [
@@ -45,6 +47,7 @@ const navigationIcons = [
   ListVideo,
   Presentation,
   BarChart3,
+  Database,
   Settings,
 ];
 export function WorkspaceShell({ children }: { children: React.ReactNode }) {
