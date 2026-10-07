@@ -7,6 +7,7 @@
 - Moved match context into the common header without moving the video player. Restored visible recorded-result attribution, adopted a 58/42 split, medium icon rail, mobile modal drawer, Escape/focus return and aria-current navigation.
 - Imported schematic court and neutral avatars from the kit with source hashes. Mapped the inner 400×200 court onto existing normalized coordinates. No demo match, fabricated samples, league averages, faces or licensed team crests were introduced.
 - Updated entry/login/privacy/browser metadata and all architecture/continuation documents. Preserved HBI persistent IDs, database migrations, auth, local drafts, backup format, repository and domain. Added static asset exclusions for Pages.
+- Branded reports and full-screen meetings; printed lockup uses black ink for contrast on white paper. Existing CSV filename/format remains compatible. Online/pending status is visible beside synchronization; detailed shot editing is expandable below the summary tabs/cards.
 - Extended browser acceptance for header integration, mobile navigation, icon URLs and manifest metadata. Current check results and publication state are recorded separately in VALIDATION.md.
 
 ## Resizable coaching console — 2026-10-07

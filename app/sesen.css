@@ -219,6 +219,32 @@ button:disabled {
 .shot-detail-panel .court {
   max-height: 280px;
 }
+.report-brand,
+.presentation-brand {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-block-end: 16px;
+  padding-block-end: 12px;
+  border-bottom: 1px solid var(--sesen-gold-deep);
+  color: var(--sesen-gold);
+  font-size: 12px;
+}
+.report-brand .sesen-lockup,
+.presentation-brand .sesen-lockup {
+  max-width: 190px;
+}
+@media print {
+  .report-brand {
+    color: #111;
+    border-color: #777;
+  }
+  .report-brand .sesen-lockup {
+    filter: grayscale(1) brightness(0);
+  }
+}
 .sesen-shell .topbar button,
 .account-menu > summary {
   min-height: 36px;

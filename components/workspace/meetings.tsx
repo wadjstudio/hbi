@@ -10,6 +10,7 @@ import { getLocalSource, registerLocalSource } from "@/lib/video/local-sources";
 import { inspectVideo } from "@/lib/video/fingerprint";
 import { s, n, type Row } from "@/types/workspace";
 import { YouTubePlayerView } from "./youtube-player";
+import { BrandLockup } from "@/components/brand/brand-lockup";
 export function Meetings() {
   const w = useWorkspace();
   return (
@@ -172,6 +173,12 @@ export function Presentation({ id }: { id: string }) {
   }
   return (
     <div ref={host} className={presenting ? "presentation-stage" : ""}>
+      {presenting && (
+        <div className="presentation-brand">
+          <BrandLockup />
+          <span>{w.t("اجتماع الفريق", "Team meeting")}</span>
+        </div>
+      )}
       <Panel
         title={
           presentation ? rowLabel(presentation) : w.t("الاجتماع", "Meeting")

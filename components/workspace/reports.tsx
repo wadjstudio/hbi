@@ -8,6 +8,7 @@ import { shotsCsv } from "@/features/reports/export";
 import { canWrite } from "@/lib/permissions/roles";
 import { s, type Row, type Value } from "@/types/workspace";
 import { Evidence } from "./analytics";
+import { BrandLockup } from "@/components/brand/brand-lockup";
 export function Reports({ id }: { id?: string }) {
   const w = useWorkspace(),
     a = useAction();
@@ -56,6 +57,10 @@ export function Reports({ id }: { id?: string }) {
     <>
       {!id && <Entities table="reports" title={w.t("التقارير", "Reports")} />}
       <div className="print-report">
+        <div className="report-brand">
+          <BrandLockup />
+          <span>{w.t("تقرير تحليل كرة اليد", "Handball analysis report")}</span>
+        </div>
         <Panel
           title={
             report ? rowLabel(report) : w.t("تقرير التحليل", "Analysis report")
