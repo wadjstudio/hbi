@@ -2,6 +2,8 @@
 
 Final identity supplied by the user on 7 October 2026. Handball Intelligence is the product descriptor; SESEN is the visible name. The original HBI technical identifiers are retained for data compatibility.
 
+Open `preview.html` locally to review exports, favicon sizes, circular masking and palette. This static gallery requests no external resources and contains no match statistics.
+
 ## Assets
 
 | Use | File | Notes |
