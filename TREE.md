@@ -228,6 +228,17 @@ hbi-starter/
   tests/unit/smoke.test.ts
   tests/unit/video-source.test.ts
   tests/unit/workbench.test.ts
+  tools/local-analysis/NOTICE.md
+  tools/local-analysis/README.md
+  tools/local-analysis/build_review.py
+  tools/local-analysis/detector.py
+  tools/local-analysis/render_preview.py
+  tools/local-analysis/requirements.txt
+  tools/local-analysis/review-template.html
+  tools/local-analysis/scan_scoreboard.py
+  tools/local-analysis/scoreboard.py
+  tools/local-analysis/test_analysis.py
+  tools/local-analysis/verify_review.mjs
   types/.gitkeep
   types/workspace.ts
 ```

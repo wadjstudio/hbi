@@ -1,0 +1,4 @@
+# Experimental local tools only; no web/runtime dependency or model weights.
+numpy==2.4.4
+Pillow==12.2.0
+onnxruntime==1.26.0

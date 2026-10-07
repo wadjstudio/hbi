@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; media-src blob:; connect-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <title>SESEN · مراجعة تجربة تحليل المباراة</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #080e12;
+        color: #f4f1e8;
+        font:
+          15px/1.7 system-ui,
+          sans-serif;
+      }
+      header {
+        border-bottom: 1px solid #25414b;
+        padding: 18px 28px;
+        display: flex;
+        gap: 24px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .brand {
+        font-size: 26px;
+        letter-spacing: 7px;
+        color: #11d3d7;
+      }
+      header span {
+        color: #d8b57b;
+      }
+      main {
+        max-width: 1500px;
+        margin: auto;
+        padding: 22px;
+      }
+      .notice {
+        border-inline-start: 3px solid #d8b57b;
+        padding: 12px 18px;
+        background: #172027;
+        color: #d5dfe3;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr);
+        gap: 20px;
+        margin-top: 20px;
+      }
+      .panel {
+        background: #0d161d;
+        border: 1px solid #25414b;
+        border-radius: 8px;
+        padding: 18px;
+      }
+      video {
+        width: 100%;
+        max-height: 60vh;
+        background: #000;
+        direction: ltr;
+      }
+      button,
+      select,
+      input {
+        font: inherit;
+      }
+      button,
+      select,
+      .file {
+        border: 1px solid #31535e;
+        border-radius: 5px;
+        color: #f4f1e8;
+        background: #14232c;
+        padding: 7px 12px;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:hover,
+      button:focus-visible {
+        border-color: #11d3d7;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 12px 0;
+      }
+      .muted {
+        color: #afc3cd;
+      }
+      #source-status {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+      .stats {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+        margin: 15px 0;
+      }
+      .stats strong {
+        display: block;
+        color: #11d3d7;
+        font-size: 24px;
+      }
+      .list {
+        max-height: 65vh;
+        overflow: auto;
+      }
+      .candidate {
+        padding: 14px 0;
+        border-bottom: 1px solid #25414b;
+      }
+      .candidate p {
+        margin: 6px 0;
+      }
+      .candidate[data-decision="accepted"] {
+        border-inline-start: 3px solid #69d76c;
+        padding-inline-start: 10px;
+      }
+      .candidate[data-decision="rejected"] {
+        opacity: 0.6;
+      }
+      .mono {
+        font-family: monospace;
+        direction: ltr;
+        unicode-bidi: isolate;
+      }
+      h1 {
+        font-size: 20px;
+        margin: 0;
+      }
+      h2 {
+        font-size: 17px;
+        margin: 0 0 12px;
+      }
+      details {
+        margin: 20px 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: start;
+        font-size: 13px;
+      }
+      td,
+      th {
+        padding: 8px;
+        border-bottom: 1px solid #25414b;
+      }
+      #observations {
+        overflow: auto;
+        max-height: 420px;
+      }
+      @media (max-width: 900px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        main {
+          padding: 12px;
+        }
+        .list {
+          max-height: 50vh;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <strong class="brand" dir="ltr">SESEN</strong>
+      <h1>مراجعة تجربة التحليل المحلي</h1>
+      <span>مخرجات أولية · لا توجد أحداث معتمدة تلقائيًا</span>
+    </header>
+    <main>
+      <p class="notice">
+        هذا مسح دوري للوحة النتيجة عبر الملف الكامل، وليس تحليلًا تكتيكيًا
+        كاملًا. تغير النتيجة يحدد فترة للمراجعة؛ لا يثبت توقيت الهدف أو المصوّب.
+        القبول هنا قرار مراجعة محلي ولا يضيف هدفًا لقاعدة SESEN.
+      </p>
+      <div id="stats" class="stats"></div>
+      <div class="layout">
+        <section class="panel">
+          <h2>الفيديو الأصلي على جهازك</h2>
+          <label class="file"
+            >إعادة ربط ملف المباراة
+            <input id="file" type="file" accept="video/mp4"
+          /></label>
+          <p id="source-status" class="muted" role="status">
+            اختر الملف المحلي؛ لن يُرفع إلى أي خدمة.
+          </p>
+          <video id="video" controls playsinline preload="metadata"></video>
+          <div class="actions">
+            <button id="download">تصدير قرارات المراجعة JSON</button
+            ><button id="csv">تصدير الاقتراحات CSV</button>
+          </div>
+          <p class="muted">
+            القرارات في ذاكرة هذه الصفحة فقط؛ صدّرها قبل إغلاقها. المطابقة
+            تستخدم الحجم والأبعاد والمدة وبصمة البداية والنهاية. SHA256 الكامل
+            محفوظ في التقرير للتحقق المستقل.
+          </p>
+          <details>
+            <summary>الحدود وبصمة المصدر</summary>
+            <pre
+              id="source-status-details"
+              style="
+                white-space: pre-wrap;
+                overflow-wrap: anywhere;
+                direction: ltr;
+              "
+            ></pre>
+          </details>
+        </section>
+        <section class="panel">
+          <h2>اقتراحات تحتاج مراجعة</h2>
+          <label
+            >عرض
+            <select id="filter">
+              <option value="all">الكل</option>
+              <option value="score_change_candidate">تغير نتيجة محتمل</option>
+              <option value="scoreboard_discontinuity">
+                انقطاع / قراءة غير متسقة
+              </option>
+              <option value="pending">لم تُراجع</option>
+            </select></label
+          >
+          <div id="candidates" class="list"></div>
+        </section>
+      </div>
+      <details>
+        <summary>قراءات لوحة النتيجة والعينات المفقودة</summary>
+        <p class="muted">
+          اليسار ZAM واليمين AHL بحسب المعايرة البصرية لهذا التسجيل. الأوقات من
+          الفيديو، والساعة قراءة OCR مستقلة.
+        </p>
+        <div id="observations"></div>
+      </details>
+    </main>
+    <script type="application/json" id="data">
+      __SESEN_DATA__
+    </script>
+    <script>
+      "use strict";
+      const report = JSON.parse(document.querySelector("#data").textContent);
+      const decisions = new Map();
+      const video = document.querySelector("#video");
+      const status = document.querySelector("#source-status");
+      let linked = false,
+        objectUrl = "",
+        selection = 0;
+      const clock = (ms) => {
+        const seconds = Math.floor(ms / 1000);
+        return `${Math.floor(seconds / 3600)
+          .toString()
+          .padStart(2, "0")}:${Math.floor((seconds % 3600) / 60)
+          .toString()
+          .padStart(2, "0")}:${(seconds % 60).toString().padStart(2, "0")}`;
+      };
+      function element(tag, text, className) {
+        const node = document.createElement(tag);
+        if (text !== undefined) node.textContent = text;
+        if (className) node.className = className;
+        return node;
+      }
+      for (const [title, value] of [
+        ["مدة المصدر", clock(report.source.duration_ms)],
+        ["عينات اللوحة", report.analysis.sample_count],
+        ["عينات مكتملة القراءة", report.analysis.fully_readable_samples],
+        ["أحداث معتمدة تلقائيًا", 0],
+      ]) {
+        const box = element("div", title);
+        box.append(element("strong", String(value)));
+        document.querySelector("#stats").append(box);
+      }
+      document.querySelector("#source-status-details").textContent =
+        JSON.stringify(
+          { source: report.source, analysis: report.analysis },
+          null,
+          2,
+        );
+      function drawCandidates() {
+        const container = document.querySelector("#candidates");
+        container.replaceChildren();
+        const filter = document.querySelector("#filter").value;
+        const rows = report.candidates.filter(
+          (row) =>
+            filter === "all" ||
+            row.kind === filter ||
+            (filter === "pending" && !decisions.has(row.id)),
+        );
+        if (!rows.length) {
+          container.append(element("p", "لا توجد اقتراحات ضمن هذا الفلتر."));
+          return;
+        }
+        for (const row of rows) {
+          const card = element("article", undefined, "candidate");
+          card.dataset.decision = decisions.get(row.id)?.decision || "pending";
+          card.append(
+            element(
+              "strong",
+              row.kind === "score_change_candidate"
+                ? "تغير نتيجة محتمل"
+                : "قراءة تحتاج تصحيح / انقطاع",
+            ),
+          );
+          card.append(
+            element(
+              "p",
+              `${clock(row.video_start_ms)} — ${clock(row.video_end_ms)}`,
+              "mono",
+            ),
+          );
+          card.append(
+            element(
+              "p",
+              `ZAM ${row.before[0]} → ${row.after[0]}  |  AHL ${row.before[1]} → ${row.after[1]}`,
+              "mono",
+            ),
+          );
+          const controls = element("div", undefined, "actions");
+          const play = element("button", "مشاهدة الدليل");
+          play.disabled = !linked;
+          play.addEventListener("click", () => {
+            video.currentTime = Math.max(0, row.video_start_ms / 1000 - 8);
+            video.play().catch(() => {
+              status.textContent = "اضغط تشغيل لبدء مشاهدة المقطع.";
+            });
+          });
+          controls.append(play);
+          for (const [title, decision] of [
+            ["قبول للمراجعة", "accepted"],
+            ["رفض", "rejected"],
+            ["إلغاء القرار", "pending"],
+          ]) {
+            const button = element("button", title);
+            button.addEventListener("click", () => {
+              if (decision === "pending") decisions.delete(row.id);
+              else
+                decisions.set(row.id, {
+                  decision,
+                  reviewed_at: new Date().toISOString(),
+                });
+              drawCandidates();
+            });
+            controls.append(button);
+          }
+          card.append(controls);
+          container.append(card);
+        }
+      }
+      document
+        .querySelector("#filter")
+        .addEventListener("change", drawCandidates);
+      document
+        .querySelector("#file")
+        .addEventListener("change", async (event) => {
+          const attempt = ++selection;
+          linked = false;
+          video.pause();
+          video.removeAttribute("src");
+          video.load();
+          if (objectUrl) URL.revokeObjectURL(objectUrl);
+          objectUrl = "";
+          drawCandidates();
+          const file = event.target.files[0];
+          if (!file) return;
+          try {
+            if (file.size !== report.source.size_bytes)
+              throw new Error("حجم الملف مختلف عن مصدر التحليل.");
+            if (!globalThis.crypto?.subtle)
+              throw new Error(
+                "التحقق من البصمة يحتاج متصفحًا يدعم Web Crypto في صفحة محلية آمنة.",
+              );
+            status.textContent = "جارٍ التحقق من بصمة الملف…";
+            const length = 1024 * 1024,
+              bytes = new Uint8Array(Math.min(file.size, length) * 2);
+            bytes.set(
+              new Uint8Array(await file.slice(0, length).arrayBuffer()),
+            );
+            bytes.set(
+              new Uint8Array(await file.slice(-length).arrayBuffer()),
+              Math.min(file.size, length),
+            );
+            const digest = Array.from(
+              new Uint8Array(await crypto.subtle.digest("SHA-256", bytes)),
+            )
+              .map((v) => v.toString(16).padStart(2, "0"))
+              .join("");
+            if (attempt !== selection) return;
+            if (digest !== report.source.edge_sha256)
+              throw new Error("بصمة الملف لا تطابق مصدر التحليل.");
+            objectUrl = URL.createObjectURL(file);
+            video.src = objectUrl;
+            await new Promise((resolve, reject) => {
+              const timer = setTimeout(() => {
+                cleanup();
+                reject(new Error("انتهت مهلة قراءة الفيديو."));
+              }, 15000);
+              const cleanup = () => {
+                clearTimeout(timer);
+                video.removeEventListener("loadedmetadata", loaded);
+                video.removeEventListener("error", failed);
+              };
+              const loaded = () => {
+                cleanup();
+                resolve();
+              };
+              const failed = () => {
+                cleanup();
+                reject(new Error("تعذر تشغيل الملف."));
+              };
+              video.addEventListener("loadedmetadata", loaded, { once: true });
+              video.addEventListener("error", failed, { once: true });
+            });
+            if (attempt !== selection) return;
+            if (
+              Math.abs(video.duration * 1000 - report.source.duration_ms) >
+                1000 ||
+              video.videoWidth !== report.source.width ||
+              video.videoHeight !== report.source.height
+            )
+              throw new Error("مدة أو أبعاد الفيديو غير مطابقة.");
+            linked = true;
+            status.textContent = "الملف مطابق وجاهز للمراجعة محليًا.";
+            drawCandidates();
+          } catch (error) {
+            if (attempt !== selection) return;
+            status.textContent = error.message;
+            video.removeAttribute("src");
+            video.load();
+            if (objectUrl) URL.revokeObjectURL(objectUrl);
+            objectUrl = "";
+          }
+        });
+      function save(name, text, type) {
+        const url = URL.createObjectURL(new Blob([text], { type }));
+        const a = element("a");
+        a.href = url;
+        a.download = name;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+      document
+        .querySelector("#download")
+        .addEventListener("click", () =>
+          save(
+            "sesen-pilot-review.json",
+            JSON.stringify(
+              {
+                schema: "sesen.pilot-review.v1",
+                source_sha256: report.source.sha256,
+                confirmed_events: [],
+                decisions: Array.from(decisions, ([id, value]) => ({
+                  id,
+                  ...value,
+                })),
+              },
+              null,
+              2,
+            ),
+            "application/json",
+          ),
+        );
+      document.querySelector("#csv").addEventListener("click", () => {
+        const rows = [
+          [
+            "id",
+            "kind",
+            "video_start_ms",
+            "video_end_ms",
+            "zam_before",
+            "zam_after",
+            "ahl_before",
+            "ahl_after",
+            "review_decision",
+          ],
+          ...report.candidates.map((row) => [
+            row.id,
+            row.kind,
+            row.video_start_ms,
+            row.video_end_ms,
+            row.before[0],
+            row.after[0],
+            row.before[1],
+            row.after[1],
+            decisions.get(row.id)?.decision || "pending",
+          ]),
+        ];
+        save(
+          "sesen-scoreboard-candidates.csv",
+          "\uFEFF" + rows.map((row) => row.join(",")).join("\r\n"),
+          "text/csv;charset=utf-8",
+        );
+      });
+      const table = element("table");
+      const head = element("tr");
+      for (const title of ["زمن الفيديو", "ZAM", "AHL", "دقيقة", "ثانية"])
+        head.append(element("th", title));
+      table.append(head);
+      for (const row of report.observations) {
+        const tr = element("tr");
+        for (const value of [
+          clock(row.video_ms),
+          row.parsed.left_score,
+          row.parsed.right_score,
+          row.parsed.minutes,
+          row.parsed.seconds,
+        ])
+          tr.append(
+            element("td", value === null ? "غير مقروء" : String(value)),
+          );
+        table.append(tr);
+      }
+      document.querySelector("#observations").append(table);
+      window.addEventListener("pagehide", () => {
+        if (objectUrl) URL.revokeObjectURL(objectUrl);
+      });
+      drawCandidates();
+    </script>
+  </body>
+</html>

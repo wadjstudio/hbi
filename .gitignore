@@ -16,3 +16,8 @@ playwright-report
 test-results
 .DS_Store
 *.log
+__pycache__/
+*.pyc
+*.onnx
+*.mp4
+local-analysis-output/

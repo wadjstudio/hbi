@@ -14,6 +14,10 @@ Browser: React UI, native video, normalized SVG drawing, Dexie drafts/outbox, ex
 
 `features/` owns domain behavior; `components/workspace/` composes interactive workflows; `lib/analytics` owns pure metric functions; `lib/video` owns media/time utilities; `lib/local` owns durable browser storage; `lib/permissions` mirrors allowed UI actions. `stores/` is reserved for transient state, not business truth. UI code receives data through the workspace provider and does not use a service role.
 
+## Experimental local inference boundary
+
+`tools/local-analysis` is an optional local Python/FFmpeg/ONNX pilot, outside the Next/Cloudflare runtime. It outputs immutable source-bound observations and review-only candidate intervals, plus a bounded generic person-track overlay video. Model checksums are pinned; original video bytes stay local. The standalone review page checks source identity and exports decisions without any database write. It is not yet connected to the authenticated event/outbox path. A future import must validate user/organization/match/video/session, require explicit event review and preserve model/provenance/confidence separately from canonical attempts. Neither score changes nor temporary track IDs establish goals or player identities. No new backend service or schema is introduced by this pilot.
+
 ## Domain
 
 Organization → teams/seasons/competitions/players → match/roster → videos/analysis sessions → clock segments, possessions, tactical assignments, events, canonical shot attempts, substitutions/on-court intervals.

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Real-video local analysis pilot — 2026-10-07
+
+- Added optional Python/FFmpeg/ONNX tools with pinned official YOLOX-tiny and OpenCV CRNN model contracts. No web dependency, mandatory paid service, hosted migration, media upload or automatic database event insertion.
+- Added calibrated full-source periodic scoreboard sampling with actual presentation timestamps, raw/null OCR evidence, repeated-score candidate intervals, discontinuity/replay-regression guards and stable source-bound candidate IDs. Candidates are unreviewed and are not canonical goals or shot times.
+- Added short generic person-track overlay rendering with audio and explicit experimental labels; the baseline is IoU matching, not ByteTrack or player identification. Added a source-verified standalone local review page, decision JSON and CSV export.
+- Added Python behavior tests and a real-file browser verification command. Runtime prerequisites, model provenance, limitations and actual measured results are documented separately. Original application behavior and statistics remain unchanged.
+
 ## SESEN final identity and mobile assets — 2026-10-07
 
 - Integrated the supplied UI kit and final image: graphite/cyan/gold palette, SESEN lockup, active navigation, readable panels and neutral player silhouettes. Reused installed primitives; no new dependency or paid runtime service.

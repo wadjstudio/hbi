@@ -12,6 +12,10 @@ The October 6 workbench puts video, zoomable event/possession/clip lanes and evi
 
 A coach/analyst manages matches, records possessions and player actions against local video, studies the last 3/5/10 opponent matches, inspects evidence, builds tactics and prepares a meeting/report. Every displayed metric exposes its sample and source observations. Manual professional tagging is the source of truth; automatic CV and mandatory AI are excluded.
 
+## Experimental local engine
+
+An optional `tools/local-analysis` prototype now analyzes a user-supplied local broadcast with pinned ONNX models: periodic scoreboard OCR across the source, unreviewed score-change intervals/discontinuities and a short generic person-track overlay export. It uses local Python/FFmpeg/NumPy/Pillow/ONNX Runtime, without a cloud service or production schema change. A standalone review page verifies the selected source and exports decisions; it does not create canonical events. The prototype is separate from the manual V1 web workflow described above. Its frame sampling is not full-frame tactical understanding; temporary track IDs are not players. Automatic tactical recognition and production integration require reviewed handball data, measured evaluation and authenticated review/import contracts. See `tools/local-analysis/README.md` and `VALIDATION.md`.
+
 ## Stack and layout
 
 The coaching surface uses MIT-licensed react-resizable-panels and Radix Tabs, with compact match context, source options, transport/timeline, an adjacent intelligence rail and five canonical-sample summary cards. Desktop panels resize by pointer or keyboard; focus and responsive stacking retain the mounted player. Dashboard formulas live in features/analysis/match-dashboard.ts, independent of visual primitives. Missing sample data stays unknown. Upstream notices ship in public/third-party-ui-notices.txt.

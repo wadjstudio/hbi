@@ -46,6 +46,10 @@ After opening/preparing a match while connected, video playback and drafts conti
 
 Ordinary edits merge the server's returned row without re-downloading the organization after every tag. Use Refresh to pull other analysts' latest data; revision conflicts still protect concurrent edits. Cascading deletions and substitutions trigger reconciliation once their queue drains.
 
+## Experimental local analysis engine
+
+The production app currently records analyst-entered events; selecting a video does not automatically analyze it. A separate [local analysis pilot](tools/local-analysis/README.md) now exercises pinned ONNX models on a real full-match file: periodic scoreboard OCR with review-only score-change intervals, plus a short generic person-track overlay export. It never uploads the recording or writes predictions into match statistics. Temporary track IDs are not player identities. The pilot includes a standalone evidence-review page and Python behavior tests; automatic shot/tactical recognition and production integration remain future acceptance gates. See `VALIDATION.md` for the actual coverage and limitations.
+
 ## Validation
 
 ```powershell
