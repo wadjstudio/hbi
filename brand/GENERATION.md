@@ -1,0 +1,16 @@
+# SESEN asset generation — 2026-10-07
+
+Mode: built-in image_gen, transparent background. Reference: user-provided `ChatGPT Image 7 Oct 2026, 01_46_36.png`. The user explicitly requested creating the missing logo and essential browser/mobile branding. No fallback API key, paid runtime integration or third-party club/player source was used.
+
+## mark.png
+
+Use case: background-extraction / logo-brand. Edit target: supplied SESEN brand board. Produce ONLY the lotus symbol from the upper-left main logo, isolated on a genuinely transparent background, centered square with 10% safe padding. Match its silhouette: tall sharp champagne-gold central petal, black/transparent internal tapered cutout, two pointed cyan/turquoise open leaves on each side curving down to the base with small gold edge highlights. Preserve the supplied final identity and proportions. Crisp clean professional logo edges, subtle gold gradient and turquoise gradient, legible at favicon size. No text, no wordmark, no background, no bounding box, no grid, no shadows outside the mark, no mockup, no extra ornaments. Output one standalone transparent symbol at high resolution. This is for production browser and mobile app icons.
+
+## lockup.png
+
+Use case: logo-brand / background-extraction. Edit target supplied SESEN brand board. Produce ONLY one clean HORIZONTAL logo lockup on actual transparent background. Left: the provided lotus with tall sharp gold central petal and two open turquoise leaves, exactly matching the reference identity. Right: large ivory bespoke geometric italic wordmark S E S E N, five letters only, precisely 'SESEN'. Each E has separated horizontal bars, middle bar turquoise, upper and lower bars ivory, as in the reference. Small widely tracked champagne-gold subtitle below wordmark exactly 'SPORTS INTELLIGENCE'. All logo components on a single row with subtitle below wordmark, symbol height equal to wordmark plus subtitle. Overall wide 4:1 layout, tight trim with 5% safe margins. No black background, no grid, no photographic items, no other typography, no sample boards, no shadows outside logo. Crisp professional edges for a production navigation header. Preserve the final reference style and letter shapes.
+
+## athlete-rail.png
+
+Use case: stylized-concept / logo-brand. Create an original decorative sidebar illustration for SESEN Handball Intelligence in a very tall narrow 1:3 format. One anonymous adult male handball athlete in midair jump shot holding handball overhead, monochrome sculptural black and ivory sportswear, face not identifiable, dramatic diagonal action from lower left to upper right. Thin champagne gold and turquoise light streaks and sparse geometric diagonal shards behind the body, mostly transparent negative space at top. Brand palette black graphite #080E12, cyan #11D3D7, gold #D8B57B, ivory #F4F1E8. Genuinely transparent background. No real club crests, no logos, no words, no number, no UI, no typography, no balls other than one handball, no football. Crisp cutout silhouette, high contrast edges, restrained cinematic editorial sports style. This is ornamental brand artwork only, not actual match/player data. Keep the entire figure within frame.
+

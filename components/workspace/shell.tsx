@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { BrandLockup, BrandMark } from "@/components/brand/brand-lockup";
 import { useWorkspace } from "./provider";
 import { Panel, Notice, useAction, rowLabel } from "./controls";
 import {
@@ -16,6 +17,9 @@ import {
   Presentation,
   BarChart3,
   Settings,
+  Menu,
+  X,
+  CloudDownload,
 } from "lucide-react";
 const navigation = [
   ["نظرة عامة", "Overview", "/overview"],
@@ -50,32 +54,45 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
   const [sync, setSync] = useState(false),
     [name, setName] = useState(""),
     [slug, setSlug] = useState("");
+  const drawer = useRef<HTMLDialogElement>(null);
+  const nav = (mobile = false) => (
+    <nav aria-label={w.t("التنقل الرئيسي", "Main navigation")}>
+      {navigation.map(([ar, en, href], index) => {
+        const Icon = navigationIcons[index] ?? LayoutDashboard;
+        const active = path.startsWith(href);
+        return (
+          <Link
+            className={active ? "active" : ""}
+            aria-current={active ? "page" : undefined}
+            aria-label={w.t(ar, en)}
+            title={w.t(ar, en)}
+            key={href}
+            href={href}
+            onClick={() => {
+              if (mobile) drawer.current?.close();
+            }}
+          >
+            <Icon size={21} aria-hidden="true" />
+            <span>{w.t(ar, en)}</span>
+          </Link>
+        );
+      })}
+    </nav>
+  );
   return (
-    <div className="workspace-shell hbi-shell">
+    <div className="workspace-shell hbi-shell sesen-shell">
       <aside className="sidebar">
-        <Link href="/overview" className="brand">
-          <strong>HBI</strong>
-          <span>
-            HANDBALL
-            <br />
-            INTELLIGENCE
+        <Link
+          href="/overview"
+          className="brand"
+          aria-label="SESEN — Sports Intelligence"
+        >
+          <BrandLockup />
+          <span className="compact-brand">
+            <BrandMark size={36} />
           </span>
         </Link>
-        <nav>
-          {navigation.map(([ar, en, href], index) => {
-            const Icon = navigationIcons[index] ?? LayoutDashboard;
-            return (
-              <Link
-                className={path.startsWith(href) ? "active" : ""}
-                key={href}
-                href={href}
-              >
-                <Icon size={19} />
-                <span>{w.t(ar, en)}</span>
-              </Link>
-            );
-          })}
-        </nav>
+        {nav()}
         <p className="motto">
           {w.t("حلّل · افهم · استعد", "ANALYZE · UNDERSTAND · PREPARE")}
           <br />
@@ -84,35 +101,102 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
       </aside>
       <div className="workspace-body">
         <header className="topbar">
-          <span className="workspace-breadcrumb">
-            {w.t("مساحة المحلل", "Analyst workspace")}
-          </span>
-          <select
-            aria-label="Organization"
-            value={w.org}
-            onChange={(e) => w.selectOrg(e.target.value)}
+          <button
+            className="mobile-menu-button"
+            aria-label={w.t("فتح القائمة", "Open navigation")}
+            onClick={() => drawer.current?.showModal()}
           >
-            <option value="">{w.t("المؤسسة", "Organization")}</option>
-            {w.orgs.map((o) => (
-              <option key={o.id} value={o.id}>
-                {rowLabel(o)}
-              </option>
-            ))}
-          </select>
-          <span className="status">
-            {w.online ? w.t("متصل", "Online") : w.t("دون اتصال", "Offline")} ·{" "}
-            {w.pending.length} {w.t("بانتظار الحفظ", "pending")}
-          </span>
-          <button onClick={() => setSync(!sync)}>
-            {w.t("المزامنة والنسخ", "Sync & backup")}
+            <Menu size={22} />
           </button>
-          <button onClick={() => w.setLang(w.lang === "ar" ? "en" : "ar")}>
-            {w.lang === "ar" ? "English" : "العربية"}
-          </button>
-          <button onClick={() => void w.logout()}>
-            {w.t("خروج", "Sign out")}
-          </button>
+          <Link
+            className="mobile-brand"
+            href="/overview"
+            aria-label="SESEN — Sports Intelligence"
+          >
+            <BrandLockup />
+          </Link>
+          <div id="match-header-slot" className="match-header-slot">
+            <span className="workspace-breadcrumb">
+              {w.t("مساحة المحلل", "Analyst workspace")}
+            </span>
+          </div>
+          <div className="workspace-utilities">
+            <button
+              aria-label={w.t("المزامنة والنسخ", "Sync & backup")}
+              title={w.t("المزامنة والنسخ", "Sync & backup")}
+              aria-expanded={sync}
+              onClick={() => setSync(!sync)}
+            >
+              <CloudDownload size={19} />
+            </button>
+            <button
+              className="language-button"
+              onClick={() => w.setLang(w.lang === "ar" ? "en" : "ar")}
+            >
+              {w.lang === "ar" ? "English" : "العربية"}
+            </button>
+            <details
+              className="account-menu"
+              onKeyDown={(e) => {
+                if (e.key === "Escape") {
+                  e.currentTarget.open = false;
+                  e.currentTarget.querySelector("summary")?.focus();
+                }
+              }}
+              onBlur={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget))
+                  e.currentTarget.open = false;
+              }}
+            >
+              <summary>
+                <Settings size={19} />
+                <span>{w.t("الحساب والحفظ", "Account & sync")}</span>
+              </summary>
+              <div className="account-menu-content">
+                <label>
+                  {w.t("المؤسسة", "Organization")}
+                  <select
+                    aria-label="Organization"
+                    value={w.org}
+                    onChange={(e) => w.selectOrg(e.target.value)}
+                  >
+                    <option value="">{w.t("المؤسسة", "Organization")}</option>
+                    {w.orgs.map((o) => (
+                      <option key={o.id} value={o.id}>
+                        {rowLabel(o)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <span className="status">
+                  {w.online
+                    ? w.t("متصل", "Online")
+                    : w.t("دون اتصال", "Offline")}{" "}
+                  · {w.pending.length} {w.t("بانتظار الحفظ", "pending")}
+                </span>
+                <button onClick={() => void w.logout()}>
+                  {w.t("خروج", "Sign out")}
+                </button>
+              </div>
+            </details>
+          </div>
         </header>
+        <dialog
+          ref={drawer}
+          className="mobile-navigation"
+          aria-label={w.t("التنقل الرئيسي", "Main navigation")}
+        >
+          <header>
+            <BrandLockup />
+            <button
+              aria-label={w.t("إغلاق القائمة", "Close navigation")}
+              onClick={() => drawer.current?.close()}
+            >
+              <X size={22} />
+            </button>
+          </header>
+          {nav(true)}
+        </dialog>
         <main>
           {(w.error || a.error) && <Notice>{w.error || a.error}</Notice>}
           {sync && (

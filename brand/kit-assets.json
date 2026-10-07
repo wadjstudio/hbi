@@ -1,0 +1,27 @@
+[
+  {
+    "path": "/brand/courts/handball-court-full.svg",
+    "source": "SESEN_CODEX_UI_KIT/assets/courts/handball-court-full.svg",
+    "sha256": "5c67a8e7b6b8ccacc2ed909fe249ed3078ff4d0144e2b1f8408084890cd85e25"
+  },
+  {
+    "path": "/brand/courts/handball-court-half.svg",
+    "source": "SESEN_CODEX_UI_KIT/assets/courts/handball-court-half.svg",
+    "sha256": "af5f1d0b9cc107634d0db30d15f5acc60470bfba66055d4c3e65246f335d2255"
+  },
+  {
+    "path": "/brand/placeholders/player-neutral.svg",
+    "source": "SESEN_CODEX_UI_KIT/assets/placeholders/player-neutral.svg",
+    "sha256": "5a948682841337783e5ec524368125b77b3a40437054d8b5ba007634103d20bf"
+  },
+  {
+    "path": "/brand/placeholders/coach-neutral.svg",
+    "source": "SESEN_CODEX_UI_KIT/assets/placeholders/coach-neutral.svg",
+    "sha256": "2925a4fe502c6daeb62338e290eb427ab98df23f2c6b51b18819e5b6726bb6a9"
+  },
+  {
+    "path": "/brand/placeholders/team-neutral.svg",
+    "source": "SESEN_CODEX_UI_KIT/assets/placeholders/team-neutral.svg",
+    "sha256": "2a9d5f09ebfb7966913dd33dc15d86f605f061fbe1244a05a30a5ba3c64ad85c"
+  }
+]

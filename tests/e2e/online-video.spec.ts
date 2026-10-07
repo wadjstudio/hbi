@@ -22,7 +22,7 @@ test("online source API contract: timing, shots, offline guard and evidence clip
   await page.goto("/login");
   await page.getByLabel("Email").fill("coach@example.test");
   await page.getByLabel("Password").fill("test-password");
-  await page.getByRole("button", { name: "Enter HBI" }).click();
+  await page.getByRole("button", { name: "Enter SESEN" }).click();
   await expect(page.getByText("HBI Test Club").first()).toBeAttached();
   await page.getByRole("button", { name: "English", exact: true }).click();
   await page.getByRole("link", { name: "Video Lab", exact: true }).click();

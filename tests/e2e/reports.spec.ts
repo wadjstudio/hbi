@@ -78,7 +78,7 @@ test("saved Arabic report notes, primary sample, CSV and browser PDF", async ({
   await page.goto("/login");
   await page.getByLabel("Email").fill("coach@example.test");
   await page.getByLabel("Password").fill("test-password");
-  await page.getByRole("button", { name: "Enter HBI" }).click();
+  await page.getByRole("button", { name: "Enter SESEN" }).click();
   await page.waitForURL("**/overview", { timeout: 60000 });
   await expect(page.getByText("HBI Test Club").first()).toBeAttached();
   await page.getByRole("button", { name: "English", exact: true }).click();

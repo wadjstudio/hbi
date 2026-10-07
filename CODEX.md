@@ -1,4 +1,6 @@
-# HBI Codex Rules
+# SESEN / HBI Codex Rules
+
+SESEN is the final brand. Use `lib/brand.ts`, `components/brand` and `app/sesen.css`; inspect `brand/BRAND.md` before changing assets. Keep gold navigation distinct from orange attack events. Generated assets are reconstructions from the user reference, not original vector artwork. Do not rename HBI storage/database/backup IDs or the existing domain during a cosmetic change. Do not import the kit's demo match, heatmap, reference screenshots or invented portraits as analysis data. Preserve normalized 400×200 inner-court mapping, LTR media/time axes, labelled navigation and native dialog focus restoration. New browser screenshots are synthetic fixtures and must be described as such.
 
 Build on the foundation; never substitute demo numbers for real observations.
 

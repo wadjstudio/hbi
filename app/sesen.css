@@ -1,0 +1,716 @@
+/* SESEN final identity. Adapted from the user-supplied UI kit; latest gold navigation wins. */
+html:root {
+  --sesen-bg: #080e12;
+  --sesen-panel: #0d161d;
+  --sesen-raised: #14212b;
+  --sesen-border: #263a47;
+  --sesen-cyan: #11d3d7;
+  --sesen-gold: #d8b57b;
+  --sesen-gold-deep: #967042;
+  --sesen-ivory: #f4f1e8;
+  --sesen-font: Inter, "Segoe UI", Arial, sans-serif;
+  --sesen-arabic-font: Cairo, Tahoma, Arial, sans-serif;
+  --sesen-header-height: 80px;
+  --sesen-sidebar-width: 192px;
+  --bg: var(--sesen-bg);
+  --surface-1: #0a1117;
+  --surface-2: var(--sesen-panel);
+  --surface-3: var(--sesen-raised);
+  --border: var(--sesen-border);
+  --workbench-line: var(--sesen-border);
+  --text-primary: var(--sesen-ivory);
+  --text-secondary: #b6c4cf;
+  --text-muted: #95a8b6;
+  --intel-cyan: var(--sesen-cyan);
+  --brand-gold: var(--sesen-gold);
+  --sport-orange: #ff851b;
+  --positive-lime: #77db4b;
+  --danger-red: #ff606b;
+  --warning-yellow: #f2cc44;
+  --violet: #b77bff;
+  --radius: 8px;
+  color-scheme: dark;
+}
+body {
+  background: var(--bg);
+  font-family: var(--sesen-font);
+  font-size: 14px;
+  line-height: 1.5;
+}
+html[lang="ar"] body {
+  font-family: var(--sesen-arabic-font);
+}
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+:focus-visible {
+  outline: 2px solid var(--intel-cyan);
+  outline-offset: 3px;
+}
+button:disabled {
+  opacity: 0.45;
+}
+.hbi-panel,
+.dashboard-card,
+.session-rail .intelligence-section {
+  background: linear-gradient(145deg, #0c191e, #091216);
+  border-color: var(--sesen-border);
+  border-radius: var(--radius);
+}
+.sesen-lockup {
+  display: inline-flex;
+  width: 100%;
+  max-width: 270px;
+  align-items: center;
+}
+.sesen-lockup img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.sesen-player-avatar {
+  display: block;
+  width: 36px;
+  height: 40px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #14212b;
+  border: 1px solid var(--sesen-border);
+}
+.sesen-player-avatar img {
+  width: 100%;
+  height: 100%;
+  opacity: 0.65;
+}
+.sesen-player-avatar b {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  padding: 0 3px;
+  background: #080e12;
+  color: var(--sesen-gold);
+  font: 700 11px/1.5 var(--sesen-font);
+}
+.sesen-shell {
+  direction: inherit;
+  grid-template-columns: var(--sesen-sidebar-width) minmax(0, 1fr);
+}
+.sesen-shell .sidebar {
+  padding: 0 8px 8px;
+  border-right: 0;
+  border-inline-end: 1px solid var(--border);
+  background: linear-gradient(165deg, #081216, #050c10);
+  isolation: isolate;
+  overflow-y: auto;
+}
+.sesen-shell .sidebar::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: min(40vh, 380px);
+  background:
+    linear-gradient(0deg, #050c10 0%, transparent 35%),
+    url("/brand/athlete-rail.webp") bottom center / auto 100% no-repeat;
+  opacity: 0.55;
+  z-index: -1;
+  pointer-events: none;
+}
+.sesen-shell .brand {
+  min-height: var(--sesen-header-height);
+  padding: 14px 3px;
+  margin: 0 0 8px;
+  border-bottom: 1px solid var(--border);
+}
+.sesen-shell .brand span {
+  padding: 0;
+  border: 0;
+}
+.sesen-shell .compact-brand {
+  display: none;
+}
+.sesen-shell .sidebar nav {
+  gap: 5px;
+}
+.sesen-shell .sidebar nav a,
+.mobile-navigation nav a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 44px;
+  padding: 9px 13px;
+  border: 1px solid transparent;
+  border-inline-start: 3px solid transparent;
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+.sesen-shell .sidebar nav a.active,
+.mobile-navigation nav a.active {
+  color: var(--sesen-gold);
+  border-color: #334039;
+  border-inline-start-color: var(--sesen-gold);
+  background: linear-gradient(100deg, #d8b57b28, #11d3d705);
+}
+.sesen-shell .sidebar nav a.active svg {
+  color: var(--sesen-gold);
+}
+.sesen-shell .sidebar nav a:hover,
+.mobile-navigation nav a:hover {
+  background-color: #14212b;
+}
+.sesen-shell .motto {
+  padding: 20px 12px;
+  margin-block-start: auto;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.sesen-shell .motto b {
+  color: var(--sesen-gold);
+}
+.sesen-shell .topbar {
+  min-height: var(--sesen-header-height);
+  padding: 6px 12px;
+  gap: 10px;
+  flex-wrap: nowrap;
+  background: linear-gradient(110deg, #0a151a, #071015);
+  border-bottom-color: var(--border);
+  position: relative;
+  z-index: 30;
+}
+.match-header-slot {
+  flex: 1;
+  min-width: 0;
+}
+.match-header-slot:has(.match-context) > .workspace-breadcrumb {
+  display: none;
+}
+.sesen-shell .workspace-breadcrumb {
+  color: var(--sesen-gold);
+  font-size: 14px;
+}
+.workspace-utilities {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sesen-shell .topbar button,
+.account-menu > summary {
+  min-height: 36px;
+  padding: 6px 9px;
+  font-size: 12px;
+  background: #0c191f;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.account-menu > summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+.account-menu > summary::-webkit-details-marker {
+  display: none;
+}
+.account-menu[open] > summary {
+  border-color: var(--sesen-gold);
+  color: var(--sesen-gold);
+}
+.account-menu-content {
+  position: absolute;
+  inset-inline-end: 10px;
+  inset-block-start: calc(100% - 3px);
+  display: grid;
+  gap: 10px;
+  width: min(280px, calc(100vw - 24px));
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #0d161d;
+  box-shadow: 0 16px 48px #0008;
+}
+.sesen-shell .topbar .account-menu-content select {
+  width: 100%;
+  font-size: 14px;
+  padding: 8px;
+}
+.sesen-shell .topbar .status {
+  font-size: 12px;
+}
+.mobile-menu-button,
+.mobile-brand {
+  display: none;
+}
+.mobile-navigation {
+  margin: 0;
+  height: 100dvh;
+  max-height: 100dvh;
+  width: min(360px, 92vw);
+  max-width: 100vw;
+  padding: 16px;
+  color: var(--text-primary);
+  background: #0a1117;
+  border: 1px solid var(--border);
+}
+html[dir="rtl"] .mobile-navigation {
+  margin-inline-start: 0;
+  margin-inline-end: auto;
+}
+.mobile-navigation::backdrop {
+  background: #000b;
+}
+.mobile-navigation > header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 18px;
+}
+.mobile-navigation > header .sesen-lockup {
+  max-width: 210px;
+}
+.mobile-navigation button {
+  min-height: 44px;
+  min-width: 44px;
+}
+.sesen-shell .workspace-body main {
+  padding: 12px;
+  gap: 12px;
+  max-width: 1920px;
+  margin-inline: auto;
+}
+.match-header-slot .match-context {
+  grid-template-columns: minmax(170px, 1fr) minmax(300px, 1.65fr) auto;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  gap: 16px;
+}
+.match-header-slot .match-context-meta {
+  display: flex;
+  gap: 1px;
+}
+.match-context-meta > b {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+.match-context-meta > small,
+.context-match-picker label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.context-match-picker select {
+  font-size: 12px;
+  padding: 2px 5px;
+  max-width: 200px;
+}
+.context-score strong {
+  font-size: 30px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  grid-row: 1;
+}
+.context-score strong:first-child {
+  grid-column: 1;
+}
+.context-score strong:nth-of-type(2) {
+  grid-column: 3;
+}
+.context-score > span:not(.recorded-result) {
+  grid-column: 2;
+  grid-row: 1;
+}
+.context-score > small {
+  grid-row: 2;
+  grid-column: 1/-1;
+  font-size: 12px;
+  white-space: normal;
+}
+.context-score > .recorded-result {
+  grid-row: 3;
+  grid-column: 1/-1;
+  color: var(--text-muted);
+  font-size: 10px;
+}
+.match-context-team {
+  min-width: 0;
+}
+.match-context-team b {
+  font-size: 13px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.match-context-actions {
+  gap: 5px;
+  grid-column: auto;
+  align-items: flex-end;
+  flex-direction: column;
+}
+.match-context-actions > small {
+  font-size: 11px;
+  text-align: end;
+}
+.match-context-actions > div {
+  display: flex;
+  font-size: 12px;
+  gap: 6px;
+}
+.match-context-actions a,
+.match-context-actions .analysis-mode {
+  padding: 6px 10px;
+  min-height: 34px;
+}
+.match-context-actions .analysis-mode {
+  color: var(--intel-cyan);
+  border-color: var(--intel-cyan);
+  background: #00313766;
+}
+.team-monogram.home {
+  background: #d8b57b1a;
+  color: var(--sesen-gold);
+  border-color: var(--sesen-gold);
+}
+.video-empty .sesen-lockup {
+  width: min(55%, 280px);
+}
+.video-empty p {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+.sesen-login {
+  background:
+    radial-gradient(ellipse at 70% 20%, #11d3d70a, transparent 55%),
+    linear-gradient(130deg, #080e12, #10191c);
+}
+.sesen-login-panel {
+  border-top: 2px solid var(--sesen-gold);
+}
+.sesen-login h1 {
+  margin: 0 0 24px;
+  text-align: center;
+}
+.sesen-login .hbi-kicker {
+  text-align: center;
+  color: var(--sesen-gold);
+}
+.video-workspace .session-settings,
+.source-options,
+.layout-controls > small {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.layout-controls button {
+  font-size: 12px;
+  min-height: 32px;
+}
+.analysis-separator {
+  border-color: var(--border);
+  background: #081216;
+}
+.session-rail {
+  background: #071114;
+  border-color: var(--border);
+  gap: 8px;
+  padding: 6px;
+}
+.session-rail .intelligence-heading {
+  padding: 6px 4px;
+  gap: 9px;
+}
+.intelligence-heading h2 {
+  font-size: 16px;
+  margin: 0;
+}
+.intelligence-heading .hbi-kicker {
+  font-size: 10px;
+  color: var(--sesen-gold);
+}
+.intelligence-heading select {
+  font-size: 12px;
+  width: 105px;
+}
+.session-rail .intelligence-section {
+  padding: 10px;
+}
+.session-rail .intelligence-section h3 {
+  font-size: 14px;
+  line-height: 1.3;
+}
+.session-rail .intelligence-section > header {
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.session-rail .intelligence-section small,
+.session-rail .intelligence-empty {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+.session-rail .intelligence-empty {
+  min-height: 65px;
+}
+.session-rail .rail-summary {
+  background: #0b181c;
+  border-color: var(--border);
+}
+.session-rail .rail-summary small {
+  font-size: 12px;
+}
+.session-rail .defense-ring {
+  flex-shrink: 0;
+}
+.session-rail .defense-legend button {
+  font-size: 12px;
+}
+.session-rail .threat-zone-list button {
+  font-size: 12px;
+  min-height: 32px;
+}
+.session-rail .threat-row {
+  gap: 7px;
+  min-height: 46px;
+  text-align: start;
+}
+.session-rail .threat-row > span:nth-child(2) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.session-rail .threat-row b,
+.pattern-row {
+  font-size: 12px;
+}
+.session-rail .intelligence-section .court {
+  max-height: none;
+  width: 100%;
+}
+.threat-profile svg text {
+  fill: var(--text-secondary);
+}
+.session-rail .intelligence-more {
+  font-size: 12px;
+  padding: 7px 5px;
+}
+.match-dashboard {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: 10px;
+  margin-block: 12px;
+}
+.dashboard-card {
+  padding: 12px;
+}
+.dashboard-card h3 {
+  font-size: 14px;
+  line-height: 1.4;
+}
+.dashboard-card small,
+.dashboard-card > p {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.dashboard-card header {
+  align-items: flex-start;
+}
+.dashboard-player {
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  font-size: 12px;
+  min-height: 44px;
+}
+.profile-ring-row {
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.profile-ring > b {
+  background: #0a1519;
+}
+.phase-bar,
+.recent-result {
+  font-size: 12px;
+  min-height: 36px;
+}
+.phase-bar > i {
+  background: var(--danger-red);
+}
+.video-workspace > .tabs [role="tab"] {
+  font-size: 13px;
+  padding: 6px 16px;
+  min-height: 36px;
+}
+.video-transport,
+.quick-tag-buttons > button,
+.event-filter-bar button {
+  font-size: 12px;
+}
+.quick-tag-buttons > button {
+  min-height: 36px;
+}
+.quick-tag-dock header > b {
+  color: var(--sesen-gold);
+  font-size: 13px;
+}
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .sesen-shell {
+    grid-template-columns: 64px minmax(0, 1fr);
+  }
+  .sesen-shell .sidebar {
+    padding-inline: 5px;
+  }
+  .sesen-shell .brand {
+    justify-content: center;
+  }
+  .sesen-shell .brand .sesen-lockup,
+  .sesen-shell .sidebar nav a span,
+  .sesen-shell .motto {
+    display: none;
+  }
+  .sesen-shell .compact-brand {
+    display: inline-flex;
+  }
+  .sesen-shell .sidebar nav a {
+    justify-content: center;
+    padding-inline: 6px;
+  }
+  .sesen-shell .sidebar::after {
+    display: none;
+  }
+  .match-header-slot .match-context {
+    grid-template-columns: minmax(140px, 1fr) minmax(250px, 1.5fr) auto;
+    gap: 10px;
+  }
+  .account-menu > summary span {
+    display: none;
+  }
+}
+@media (max-width: 1023px) {
+  .sesen-shell {
+    display: block;
+  }
+  .sesen-shell > .sidebar {
+    display: none;
+  }
+  .sesen-shell .topbar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .sesen-shell .mobile-menu-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .mobile-brand {
+    display: flex;
+    width: 156px;
+  }
+  .workspace-utilities {
+    margin-inline-start: auto;
+  }
+  .match-header-slot {
+    flex-basis: 100%;
+    order: 2;
+  }
+  .match-header-slot:not(:has(.match-context)) {
+    display: none;
+  }
+  .match-header-slot .match-context {
+    grid-template-columns: minmax(120px, 1fr) minmax(250px, 1.5fr);
+    padding-block: 4px;
+  }
+  .match-header-slot .match-context-actions {
+    grid-column: 1/-1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .account-menu > summary span {
+    display: none;
+  }
+  .sesen-shell .topbar button,
+  .account-menu > summary {
+    min-height: 44px;
+  }
+}
+@media (max-width: 639px) {
+  .sesen-shell .workspace-body main {
+    padding: 8px;
+  }
+  .sesen-shell .topbar {
+    padding: max(8px, env(safe-area-inset-top))
+      max(8px, env(safe-area-inset-right)) 8px
+      max(8px, env(safe-area-inset-left));
+  }
+  .mobile-brand {
+    width: 130px;
+  }
+  .match-header-slot .match-context {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .match-header-slot .match-context-meta {
+    display: flex;
+  }
+  .match-header-slot .match-context-meta > b,
+  .match-header-slot .match-context-meta > small {
+    display: none;
+  }
+  .context-match-picker label {
+    justify-content: space-between;
+  }
+  .context-match-picker select {
+    max-width: none;
+    width: 78%;
+    font-size: 12px;
+  }
+  .match-context-score {
+    gap: 8px;
+  }
+  .match-context-team {
+    flex: 1;
+    justify-content: center;
+  }
+  .match-context-team b {
+    font-size: 12px;
+  }
+  .match-context-actions > small {
+    font-size: 10px;
+  }
+  .match-context-actions a,
+  .match-context-actions .analysis-mode {
+    min-height: 44px;
+    padding: 6px 8px;
+  }
+  .context-score > small {
+    font-size: 11px;
+  }
+  .match-dashboard {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .dashboard-card:last-child {
+    grid-column: auto;
+  }
+  .video-workspace > .tabs [role="tab"],
+  .quick-tag-buttons > button,
+  .event-filter-bar button,
+  .layout-controls button {
+    min-height: 44px;
+  }
+  .sesen-shell .workspace-body .notice {
+    overflow-wrap: anywhere;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sesen-shell *,
+  .sesen-login * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

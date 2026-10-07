@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Target, ArrowUpRight, Play, Users } from "lucide-react";
+import { ArrowUpRight, Play, Users } from "lucide-react";
 import { tacticalGroups } from "@/features/analysis/workbench";
 import {
   shotSummary,
@@ -13,6 +13,8 @@ import { useWorkspace } from "./provider";
 import { ShotMap } from "./charts";
 import { rowLabel } from "./controls";
 import { ThreatProfile } from "./threat-profile";
+import { BrandMark, PlayerAvatar } from "@/components/brand/brand-lockup";
+import { brand } from "@/lib/brand";
 
 export function SessionAnalysisRail({
   teams,
@@ -68,7 +70,13 @@ export function SessionAnalysisRail({
     (sum, g) => sum + g.possessions.length,
     0,
   );
-  const colors = ["#25d9f5", "#ff6b35", "#87b8d7", "#b7f34a", "#f5c84c"];
+  const colors = [
+    brand.colors.cyan,
+    brand.colors.gold,
+    brand.colors.save,
+    brand.colors.goal,
+    "#95A8B6",
+  ];
   const gradient = systems
     .map((group, i) => {
       const start =
@@ -112,7 +120,7 @@ export function SessionAnalysisRail({
       aria-label={w.t("تحليل بجوار الفيديو", "Video-side intelligence")}
     >
       <header className="intelligence-heading">
-        <Target size={19} />
+        <BrandMark size={30} />
         <div>
           <span className="hbi-kicker">MATCH INTELLIGENCE</span>
           <h2>{team ? rowLabel(team) : w.t("اختر فريقًا", "Choose team")}</h2>
@@ -272,9 +280,7 @@ export function SessionAnalysisRail({
                 )
               }
             >
-              <span className="player-monogram">
-                {s(entry.player?.shirt_number) || "?"}
-              </span>
+              <PlayerAvatar number={s(entry.player?.shirt_number)} />
               <span>
                 <b>{entry.player ? rowLabel(entry.player) : "—"}</b>
                 <small>
@@ -364,7 +370,7 @@ export function SessionAnalysisRail({
                   )
                 }
               >
-                <span className="player-monogram">GK</span>
+                <PlayerAvatar number="GK" />
                 <span>
                   <b>{keeper ? rowLabel(keeper) : "—"}</b>
                   <small>

@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## SESEN final identity and mobile assets — 2026-10-07
+
+- Integrated the supplied UI kit and final image: graphite/cyan/gold palette, SESEN lockup, active navigation, readable panels and neutral player silhouettes. Reused installed primitives; no new dependency or paid runtime service.
+- Recreated transparent mark and horizontal logo with built-in imagegen following the user's instruction, plus original decorative athlete artwork. Shipped masters/provenance, deterministic favicon/Android/iPhone/social exports and regular/maskable manifest icons. Raster reconstructions are not the missing original vectors.
+- Moved match context into the common header without moving the video player. Restored visible recorded-result attribution, adopted a 58/42 split, medium icon rail, mobile modal drawer, Escape/focus return and aria-current navigation.
+- Imported schematic court and neutral avatars from the kit with source hashes. Mapped the inner 400×200 court onto existing normalized coordinates. No demo match, fabricated samples, league averages, faces or licensed team crests were introduced.
+- Updated entry/login/privacy/browser metadata and all architecture/continuation documents. Preserved HBI persistent IDs, database migrations, auth, local drafts, backup format, repository and domain. Added static asset exclusions for Pages.
+- Extended browser acceptance for header integration, mobile navigation, icon URLs and manifest metadata. Current check results and publication state are recorded separately in VALIDATION.md.
+
 ## Resizable coaching console — 2026-10-07
 
 - Added MIT-licensed react-resizable-panels and Radix Tabs with upstream notices, a keyboard-operated divider, focus/reset controls and responsive stacking without remounting media.

@@ -2,15 +2,16 @@ import Link from "next/link";
 export default function Privacy() {
   return (
     <main className="privacy-page" dir="rtl">
-      <Link href="/matches">← HBI</Link>
-      <h1>خصوصية HBI وشروط الاستخدام</h1>
-      <p>آخر تحديث: 6 أكتوبر 2026</p>
+      <Link href="/matches">← SESEN</Link>
+      <h1>خصوصية SESEN وشروط الاستخدام</h1>
+      <p>آخر تحديث: 7 أكتوبر 2026 · SESEN هو الاسم الجديد لتطبيق HBI.</p>
       <h2>بيانات التحليل</h2>
       <p>
-        يحفظ HBI بيانات حسابك ومؤسستك وتحليلات المباريات في Supabase، مع صلاحيات
-        حسب المؤسسة والدور. المسودات والعمليات غير المتزامنة محفوظة في IndexedDB
-        في متصفحك ومنفصلة حسب الحساب والمؤسسة. تسجيل الخروج يمنع عرض مسودات
-        الحساب السابق؛ حذف بيانات المتصفح قد يزيل المسودات التي لم تزامنها.
+        يحفظ SESEN بيانات حسابك ومؤسستك وتحليلات المباريات في Supabase، مع
+        صلاحيات حسب المؤسسة والدور. المسودات والعمليات غير المتزامنة محفوظة في
+        IndexedDB في متصفحك ومنفصلة حسب الحساب والمؤسسة. تسجيل الخروج يمنع عرض
+        مسودات الحساب السابق؛ حذف بيانات المتصفح قد يزيل المسودات التي لم
+        تزامنها.
       </p>
       <h2>الفيديو المحلي</h2>
       <p>
@@ -22,7 +23,7 @@ export default function Privacy() {
       <p>
         اختيار تحميل المشغل يتصل بخدمات YouTube API من Google، التي قد تجمع
         معلومات الجهاز والتشغيل وتستخدم ملفات تعريف الارتباط وتعرض الإعلانات وفق
-        سياستها. لا يطلب HBI حساب YouTube أو صلاحيات OAuth، ولا يخزن بيانات
+        سياستها. لا يطلب SESEN حساب YouTube أو صلاحيات OAuth، ولا يخزن بيانات
         تسجيل دخول YouTube، ولا ينزل التسجيل. نحفظ معرّف المصدر ومدته ومراجع
         التوقيت مع تحليلك، دون تمرير قوائم لاعبيك أو ملاحظاتك إلى YouTube.
       </p>
@@ -36,10 +37,10 @@ export default function Privacy() {
       <p>
         يمكنك تصدير نسخة من مسوداتك وحذف سجلاتك حسب صلاحياتك داخل المؤسسة. إدارة
         العضويات وبيانات المؤسسة تتم بواسطة مالك المؤسسة. لحذف حسابك أو مراجعة
-        الاحتفاظ بالبيانات تواصل مع مسؤول مؤسسة HBI عبر wadj.studio@gmail.com.
+        الاحتفاظ بالبيانات تواصل مع مسؤول المؤسسة عبر wadj.studio@gmail.com.
         النسخ الاحتياطية للبنية المستضيفة قد تخضع لسياسة مزودها.
       </p>
-      <h2>شروط HBI</h2>
+      <h2>شروط SESEN</h2>
       <p>
         استخدم محتوى يحق لك الوصول إليه وتحليله ومشاركته. نتائج التحليل تعتمد
         الأحداث التي يراجعها المحلل، وحجم العينة ونقص البيانات، ولا تمثل إحصاءات
@@ -48,18 +49,18 @@ export default function Privacy() {
       </p>
       <hr />
       <section dir="ltr" lang="en">
-        <h2>HBI privacy & terms</h2>
+        <h2>SESEN privacy & terms</h2>
         <p>
-          HBI stores account, organization and analysis data in Supabase with
-          organization and role access controls. Browser drafts are scoped to
-          your account and organization. Local video remains on your device;
-          metadata and time references are stored. R2 upload is optional and
-          user initiated.
+          SESEN (formerly HBI) stores account, organization and analysis data in
+          Supabase with organization and role access controls. Browser drafts
+          are scoped to your account and organization. Local video remains on
+          your device; metadata and time references are stored. R2 upload is
+          optional and user initiated.
         </p>
         <p>
           Loading the YouTube player uses YouTube API Services. Google may
           process device and playback information, cookies and ads under its
-          privacy policy. HBI requests no YouTube credentials or OAuth access
+          privacy policy. SESEN requests no YouTube credentials or OAuth access
           and downloads no YouTube video. Analysis notes and rosters are not
           sent to YouTube. By using this player you agree to the linked YouTube
           Terms. Use a local file if you prefer not to load YouTube.

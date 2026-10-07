@@ -163,7 +163,7 @@ export function YouTubePlayerView({
           </p>
           <p>
             <a href="/privacy" target="_blank" rel="noreferrer">
-              {w.t("خصوصية HBI وشروط الاستخدام", "HBI privacy & terms")}
+            {w.t("خصوصية SESEN وشروط الاستخدام", "SESEN privacy & terms")}
             </a>{" "}
             ·{" "}
             <a

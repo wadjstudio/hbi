@@ -7,6 +7,8 @@ import { percent } from "@/lib/analytics/metrics";
 import { s, type Row } from "@/types/workspace";
 import { useWorkspace } from "./provider";
 import { rowLabel } from "./controls";
+import { PlayerAvatar } from "@/components/brand/brand-lockup";
+import { brand } from "@/lib/brand";
 export function MatchDashboard({
   teamId,
   events,
@@ -56,7 +58,7 @@ export function MatchDashboard({
           <span
             className="profile-ring"
             style={{
-              background: `conic-gradient(#8beb57 ${(d.summary.efficiency ?? 0) * 100}%, #203849 0)`,
+              background: `conic-gradient(${brand.colors.goal} ${(d.summary.efficiency ?? 0) * 100}%, #263a47 0)`,
             }}
           >
             <b>{percent(d.summary.efficiency)}</b>
@@ -88,9 +90,7 @@ export function MatchDashboard({
                   openShots(player ? rowLabel(player) : "—", p.rows)
                 }
               >
-                <span className="player-monogram">
-                  {s(player?.shirt_number) || "?"}
-                </span>
+                <PlayerAvatar number={s(player?.shirt_number)} />
                 <span>
                   {player
                     ? rowLabel(player)

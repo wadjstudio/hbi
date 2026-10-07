@@ -1,4 +1,10 @@
-# HBI Architecture
+# SESEN / HBI Architecture
+
+## Identity and presentation
+
+`lib/brand.ts` centralizes asset paths and semantic chart colors; `components/brand` renders lockups, decorative marks and visibly neutral player avatars. `app/sesen.css` maps the supplied kit palette onto existing tokens and owns final chrome/responsive presentation. User-requested generated masters in `brand/masters` reproduce the reference identity as raster assets; `scripts/build-brand-assets.mjs` exports deterministic icons/WebP/social images with the existing Next sharp dependency. No runtime image generation or new package is involved. `brand/kit-assets.json` records imported SVG source hashes.
+
+MatchContext portals into the shell's stable header slot without moving media DOM nodes. The modal mobile navigation uses native dialog focus handling. Public static `/brand/*`, `/favicon.ico` and `/manifest.webmanifest` bypass the Pages server. No authenticated HTML is cached for installation; user/org drafts, auth and all HBI persistent identifiers retain their original boundaries. Manifest presentation alone is not full offline app support.
 
 ## Runtime and boundaries
 

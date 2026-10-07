@@ -9,7 +9,7 @@ test("concurrent changes preserve both versions until explicit resolution; sign-
   await page.goto("/login");
   await page.getByLabel("Email").fill("coach@example.test");
   await page.getByLabel("Password").fill("test-password");
-  await page.getByRole("button", { name: "Enter HBI" }).click();
+  await page.getByRole("button", { name: "Enter SESEN" }).click();
   await expect(page.getByText("HBI Test Club").first()).toBeAttached({
     timeout: 90000,
   });
@@ -107,6 +107,7 @@ test("concurrent changes preserve both versions until explicit resolution; sign-
   await expect(
     page.getByRole("link", { name: "Local edit Playmaker", exact: true }),
   ).toBeVisible();
+  await page.locator(".account-menu > summary").click();
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
   await expect(page).toHaveURL(/\/login$/);
   await expect(

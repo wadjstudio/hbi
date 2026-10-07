@@ -35,6 +35,7 @@ import { analysisLabel } from "@/features/analysis/labels";
 import * as Tabs from "@radix-ui/react-tabs";
 import { AnalysisSplit } from "./analysis-split";
 import { MatchDashboard } from "./match-dashboard";
+import { BrandLockup } from "@/components/brand/brand-lockup";
 type History = {
   event: Row;
   shot?: Row;
@@ -874,7 +875,7 @@ export function VideoWorkspace({
                   <ReferenceBroadcast />
                 ) : (
                   <div className="video-empty">
-                    <b>HBI</b>
+                    <BrandLockup />
                     <p>
                       {w.t(
                         "الفيديو يبقى على جهازك. اختر المصدر أو أعد ربطه.",

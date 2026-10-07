@@ -1,4 +1,6 @@
-# HBI continuation prompt
+# SESEN / HBI continuation prompt
+
+Continue the SESEN final brand integrated from the user-supplied October 7 kit and images. Read `brand/BRAND.md` and `brand/GENERATION.md`; use the shipped masters/exports, centralized palette and brand components. Preserve the stable match-header portal, adaptive shell and mobile navigation semantics. HBI technical identities and hbi.wadj.online remain compatible; never rename storage keys or invent sports observations while finishing visual parity. The kit is a specification/assets pack, not ready-made React components or a source of real match statistics.
 
 Preserve the October 7 coaching console: split/focus/reset without remounting video, keyboard tabs, RTL, responsive panels and real-sample dashboard cards. Hosted upgrades 0017–0019 and publication have user authorization in this session, but remain unapplied until the Supabase connection is restored and the scripts are executed. Never treat authorization or a locally tested SQL file as a completed deployment. The two reviewable upgrade files under outputs/deployment commit 0017 separately and retain exact migration history.
 

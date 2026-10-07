@@ -1,4 +1,12 @@
-# HBI 0.2.0 validation — 2026-10-07
+# SESEN / HBI validation — 2026-10-07
+
+## Final SESEN identity — current iteration
+
+- Supplied kit reviewed/extracted with traversal/symlink and size checks; 34 entries, 6,017,548 uncompressed bytes. It contains specifications/assets, not ready-made React implementations or a standalone original logo. User explicitly requested recreating the missing logo and browser/mobile branding.
+- Three transparent built-in imagegen masters are preserved. Web/icons/social exports are deterministic derivatives; imported court/neutral SVG hashes are recorded. The kit's sample heatmap, demonstration data and reference screenshots were not shipped as observed data.
+- Local `pnpm typecheck`, full `pnpm lint` and 31 unit tests across 11 files passed. The first typecheck status request hit approval-review timeout; retry returned its actual successful completion. No safety rejection was inferred from the timeout.
+- Browser acceptance now includes shared header, aria-current, native mobile drawer Escape/focus return, icon URLs, manifest and Apple metadata. Fresh browser/production-build outcomes are pending below; previous iteration passes do not automatically validate this revision.
+- Branding changes no SQL or HBI persistent identities. Hosted 0017–0019 and the new publication remain authorized but unexecuted pending restored Supabase browser access. The live application is not yet this SESEN revision. Native Android/iOS installation and exact original-vector equivalence have not been claimed.
 
 ## Resizable coaching console — 2026-10-07
 

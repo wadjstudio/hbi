@@ -16,7 +16,10 @@ export function LoginForm() {
     setPending(true);
     setError(null);
     const supabase = createClient();
-    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
     setPending(false);
     if (signInError) {
       setError(signInError.message);
@@ -50,12 +53,14 @@ export function LoginForm() {
           className="mt-2 w-full rounded-xl border border-[var(--border)] bg-[var(--surface-3)] px-3 py-2.5 outline-none focus:border-[var(--intel-cyan)]"
         />
       </label>
-      {error ? <p className="text-sm text-[var(--danger-red)]">{error}</p> : null}
+      {error ? (
+        <p className="text-sm text-[var(--danger-red)]">{error}</p>
+      ) : null}
       <button
         disabled={pending}
         className="w-full rounded-xl bg-[var(--intel-cyan)] px-4 py-2.5 font-extrabold text-slate-950 transition hover:brightness-110 disabled:opacity-60"
       >
-        {pending ? "جارٍ الدخول… / Signing in…" : "دخول HBI / Enter HBI"}
+        {pending ? "جارٍ الدخول… / Signing in…" : "دخول SESEN / Enter SESEN"}
       </button>
     </form>
   );

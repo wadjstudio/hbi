@@ -1,6 +1,8 @@
 "use client";
 import Link from "next/link";
-import { Film, Presentation, Clock3 } from "lucide-react";
+import { Film, Presentation } from "lucide-react";
+import { useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import {
   isReferenceMatch,
   referenceMatch,
@@ -10,6 +12,9 @@ import { s, type Row } from "@/types/workspace";
 import { rowLabel } from "./controls";
 import { useWorkspace } from "./provider";
 import type { ReactNode } from "react";
+const subscribe = () => () => {};
+const getHeader = () => document.getElementById("match-header-slot");
+const getServerHeader = () => null;
 
 export function MatchContext({
   match,
@@ -25,12 +30,13 @@ export function MatchContext({
   selector?: ReactNode;
 }) {
   const w = useWorkspace();
+  const header = useSyncExternalStore(subscribe, getHeader, getServerHeader);
   const home = w.list("teams").find((team) => team.id === match.home_team_id),
     away = w.list("teams").find((team) => team.id === match.away_team_id);
   const competition = w
     .list("competitions")
     .find((c) => c.id === match.competition_id);
-  return (
+  const content = (
     <header className="match-context">
       <div className="match-context-meta">
         <div className="context-match-picker">{selector}</div>
@@ -56,6 +62,9 @@ export function MatchContext({
           <strong>
             {match.home_score == null ? "—" : s(match.home_score)}
           </strong>
+          <span className="recorded-result">
+            {w.t("النتيجة المسجلة", "Recorded result")}
+          </span>
           <span>—</span>
           <strong>
             {match.away_score == null ? "—" : s(match.away_score)}
@@ -79,12 +88,6 @@ export function MatchContext({
         </div>
       </div>
       <div className="match-context-actions">
-        <span>
-          <Clock3 size={13} />
-          {clock
-            ? `${w.t("شوط", "Period")} ${clock.period} · ${formatTime(clock.clockMs)}`
-            : w.t("ساعة المباراة غير معايرة", "Match clock not calibrated")}
-        </span>
         <small>
           {w.t("الفيديو", "Video")} <b dir="ltr">{formatTime(timeMs)}</b> ·{" "}
           {session?.is_primary
@@ -106,4 +109,5 @@ export function MatchContext({
       </div>
     </header>
   );
+  return header ? createPortal(content, header) : content;
 }

@@ -1,4 +1,6 @@
-# HBI V1 phases and acceptance gates
+# SESEN / HBI V1 phases and acceptance gates
+
+October 7 final-brand integration: SESEN lockups/mark, deterministic browser/mobile/social exports, manifest/Apple metadata, gold/cyan/graphite presentation, shared match header, kit court/neutral portraits and responsive drawer are implemented. Gate: shipped icon URLs and manifest metadata load; drawer closes with Escape and restores focus; RTL, desktop split, tabs and narrow-screen overflow pass; both build targets include static brand assets. See VALIDATION.md for outcomes. OS installation itself, print collateral and exact original-vector equivalence are not inferred from a browser test. No schema upgrade is required by branding.
 
 The October 7 console iteration adds a resizable video/evidence split, focus/reset controls, keyboard-accessible tabs and five evidence-driven summary cards. Acceptance requires the complete native-video and online-source journeys, RTL/narrow-screen checks and both production builds. Hosted 0017–0019 and publication are authorized by the user; authorization alone is not evidence of execution. Record actual migration/deployment results in VALIDATION.md.
 

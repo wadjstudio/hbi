@@ -7,7 +7,7 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
   await page.goto("/login");
   await page.getByLabel("Email").fill("coach@example.test");
   await page.getByLabel("Password").fill("test-password");
-  await page.getByRole("button", { name: "Enter HBI" }).click();
+  await page.getByRole("button", { name: "Enter SESEN" }).click();
   await expect(page.getByText("HBI Test Club").first()).toBeAttached({
     timeout: 90000,
   });
@@ -47,6 +47,10 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
   ).toHaveAttribute("aria-selected", "true");
   await expect(page.getByRole("tabpanel")).toContainText("Shot efficiency");
   await expect(page.locator(".dashboard-card")).toHaveCount(5);
+  await expect(page.locator("#match-header-slot .match-context")).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Video Lab", exact: true }),
+  ).toHaveAttribute("aria-current", "page");
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
     path: testInfo.outputPath("console-wide.png"),
@@ -59,6 +63,17 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     fullPage: true,
   });
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("button", { name: "فتح القائمة", exact: true }).click();
+  const navigation = page.getByRole("dialog", { name: "التنقل الرئيسي" });
+  await expect(navigation).toBeVisible();
+  await navigation
+    .getByRole("link", { name: "معمل الفيديو", exact: true })
+    .focus();
+  await page.keyboard.press("Escape");
+  await expect(navigation).not.toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "فتح القائمة", exact: true }),
+  ).toBeFocused();
   await expect
     .poll(() =>
       page.evaluate(

@@ -1,4 +1,8 @@
-# HBI — Handball Intelligence 0.2.0
+# SESEN — Handball Intelligence (HBI V1 foundation)
+
+SESEN is the final product identity. The supplied October 7 UI kit is integrated as design tokens, schematic court/neutral avatar assets and interaction specifications. Generated logo masters, responsive lockups, browser favicons, Android regular/maskable icons, iPhone home-screen icon and social card are included. Read `brand/BRAND.md` for assets, generation provenance and installation limitations. The existing hbi.wadj.online address, repository, schema, IndexedDB keys and backup format remain compatible.
+
+The match context now occupies the shell header above the video/evidence split; gold active navigation, cyan controls, graphite panels and larger readable labels follow the final reference. At medium widths navigation collapses to labelled icons; mobile uses a native modal drawer with Escape and focus restoration. Arabic mirrors shell placement while video, court geometry and the chronological timeline retain their orientation. The app manifest supplies standalone/home-screen branding; it does not add offline navigation or bypass sign-in.
 
 مساحة تحليل كرة يد عربية/إنجليزية، مبنية كتطبيق واحد بوحدات واضحة. البداية بالبيانات والصلاحيات، ثم الفيديو والتكتيكات والأدلة والاجتماعات.
 

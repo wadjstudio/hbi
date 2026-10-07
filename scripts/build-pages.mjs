@@ -28,7 +28,7 @@ await build({
   external: ['node:*', 'cloudflare:*'], target: 'es2022', minify: true,
 });
 await writeFile(resolve(output, '_routes.json'), JSON.stringify({
-  version: 1, include: ['/*'], exclude: ['/_next/static/*', '/favicon.ico', '/icons/*'],
+  version: 1, include: ['/*'], exclude: ['/_next/static/*', '/favicon.ico', '/icons/*', '/brand/*', '/manifest.webmanifest'],
 }, null, 2));
 await writeFile(resolve(output, 'wrangler.json'), JSON.stringify({
   name: 'hbi-handball-intelligence', pages_build_output_dir: '.',

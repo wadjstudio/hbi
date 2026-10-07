@@ -1,4 +1,10 @@
-# HBI — Zero-Cost V1 Blueprint, revision 0.2.0
+# SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
+
+## Final identity — 7 October 2026
+
+SESEN Sports Intelligence is the umbrella brand; Handball Intelligence is this application's specialization. The final user image and SESEN_CODEX_UI_KIT define graphite/ivory surfaces, cyan controls, champagne-gold active navigation, a unified match header, video/timeline/tagging beside evidence and full-width analytics below. The kit's older orange navigation reference is superseded by the final gold image; orange keeps its event meaning. Actual data, session isolation and missing samples remain authoritative.
+
+Implemented identity includes generated transparent mark/horizontal lockup masters, optimized web exports, favicons 16/32/48, Android 192/512 regular/maskable icons, Apple 180 icon, manifest/standalone metadata and social sharing card. Masks use a separately padded safe zone. Responsive navigation has desktop labels, medium icon rail with accessible names and mobile native modal drawer. Brand inputs/provenance and asset hashes live in `brand/`; no demo events/portraits/heatmaps were imported. Generated raster reconstruction is not the missing original vector source. The prior HBI repo/domain/storage/schema/backup identities remain stable; no SQL migration is introduced by this branding work. Full offline navigation and OS-specific install verification remain separate acceptance gates.
 
 ## Purpose and acceptance
 

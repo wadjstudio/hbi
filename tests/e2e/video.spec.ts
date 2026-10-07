@@ -7,7 +7,7 @@ test("local video to offline shot, opponent evidence and meeting", async ({
   await page.goto("/login");
   await page.getByLabel("Email").fill("coach@example.test");
   await page.getByLabel("Password").fill("test-password");
-  await page.getByRole("button", { name: "Enter HBI" }).click();
+  await page.getByRole("button", { name: "Enter SESEN" }).click();
   await expect(page.getByText("HBI Test Club").first()).toBeAttached({
     timeout: 90000,
   });

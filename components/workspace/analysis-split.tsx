@@ -28,7 +28,7 @@ export function AnalysisSplit({
         <button
           onClick={() => {
             setFocus(false);
-            group.current?.setLayout({ video: 64, intelligence: 36 });
+            group.current?.setLayout({ video: 58, intelligence: 42 });
           }}
         >
           <RotateCcw size={12} />
@@ -39,7 +39,7 @@ export function AnalysisSplit({
         className="analysis-panels"
         groupRef={group}
         orientation="horizontal"
-        defaultLayout={{ video: 64, intelligence: 36 }}
+        defaultLayout={{ video: 58, intelligence: 42 }}
         disabled={focus}
         style={{ overflow: "visible" }}
       >
