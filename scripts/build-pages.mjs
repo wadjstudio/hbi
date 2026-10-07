@@ -1,4 +1,4 @@
-import { cp, mkdir, rm, writeFile, access } from 'node:fs/promises';
+import { cp, mkdir, rm, writeFile, access, realpath } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -22,7 +22,8 @@ await cp(resolve(root, 'dist/client'), output, { recursive: true });
 for (const asset of ['manifest.webmanifest', 'favicon.ico', 'brand/sesen-lockup.webp', 'brand/icon-192.png', 'brand/maskable-512.png', 'brand/apple-touch-icon.png']) {
   await access(resolve(output, asset));
 }
-const require = createRequire(resolve(root, 'node_modules/wrangler/package.json'));
+// Resolve pnpm's symlink before loading Wrangler's own bundled build dependency.
+const require = createRequire(await realpath(resolve(root, 'node_modules/wrangler/package.json')));
 const { build } = require('esbuild');
 await build({
   entryPoints: [resolve(root, 'dist/server/index.js')],

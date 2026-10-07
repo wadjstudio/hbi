@@ -9,6 +9,7 @@
 - Updated entry/login/privacy/browser metadata and all architecture/continuation documents. Preserved HBI persistent IDs, database migrations, auth, local drafts, backup format, repository and domain. Added static asset exclusions for Pages.
 - Branded reports and full-screen meetings; printed lockup uses black ink for contrast on white paper. Existing CSV filename/format remains compatible. Online/pending status is visible beside synchronization; detailed shot editing is expandable below the summary tabs/cards.
 - Extended browser acceptance for header integration, mobile navigation, icon URLs and manifest metadata. Current check results and publication state are recorded separately in VALIDATION.md.
+- Pages packaging checks required brand/manifest files and resolves Wrangler's real pnpm package path on Linux; CI now validates the complete Pages bundle as well as Next.
 
 ## Resizable coaching console — 2026-10-07
 
