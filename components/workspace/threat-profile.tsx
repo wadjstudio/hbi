@@ -70,8 +70,8 @@ export function ThreatProfile({
         {profile.sample > 0 && (
           <polygon
             points={trace}
-            fill="#ff6b3530"
-            stroke="#ff873d"
+            fill="#D8B57B30"
+            stroke="#D8B57B"
             strokeWidth="2"
           />
         )}

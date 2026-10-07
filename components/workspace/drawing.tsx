@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { type Drawing } from "@/types/workspace";
 import { useWorkspace } from "./provider";
+import { brand } from "@/lib/brand";
 export function DrawingEditor({
   objects,
   onChange,
@@ -16,7 +17,7 @@ export function DrawingEditor({
   const w = useWorkspace();
   const [kind, setKind] = useState<Drawing["kind"]>("player"),
     [label, setLabel] = useState(""),
-    [color, setColor] = useState("#25d9f5"),
+    [color, setColor] = useState<string>(brand.colors.cyan),
     [selected, setSelected] = useState("");
   function point(e: React.MouseEvent<SVGSVGElement>) {
     const r = e.currentTarget.getBoundingClientRect();

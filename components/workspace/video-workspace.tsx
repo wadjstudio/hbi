@@ -1350,6 +1350,31 @@ export function VideoWorkspace({
           />
         }
       />
+      <Tabs.List
+        className="tabs"
+        aria-label={w.t("تفاصيل تحليل المباراة", "Match analysis details")}
+      >
+        {["events", "analytics", "lineups", "annotations", "review"].map(
+          (v) => (
+            <Tabs.Trigger
+              className={tab === v ? "active" : ""}
+              key={v}
+              value={v}
+            >
+              {w.t(
+                {
+                  events: "الأحداث",
+                  analytics: "الإحصاءات",
+                  lineups: "التشكيلات",
+                  annotations: "الرسومات",
+                  review: "المراجعة",
+                }[v] ?? v,
+                v,
+              )}
+            </Tabs.Trigger>
+          ),
+        )}
+      </Tabs.List>
       <MatchDashboard
         teamId={
           teams.some((t) => t.id === focusTeam)
@@ -1728,31 +1753,6 @@ export function VideoWorkspace({
           )}
         </fieldset>
       </details>
-      <Tabs.List
-        className="tabs"
-        aria-label={w.t("تفاصيل تحليل المباراة", "Match analysis details")}
-      >
-        {["events", "analytics", "lineups", "annotations", "review"].map(
-          (v) => (
-            <Tabs.Trigger
-              className={tab === v ? "active" : ""}
-              key={v}
-              value={v}
-            >
-              {w.t(
-                {
-                  events: "الأحداث",
-                  analytics: "الإحصاءات",
-                  lineups: "التشكيلات",
-                  annotations: "الرسومات",
-                  review: "المراجعة",
-                }[v] ?? v,
-                v,
-              )}
-            </Tabs.Trigger>
-          ),
-        )}
-      </Tabs.List>
       <Tabs.Content value={tab} key={tab}>
         {tab === "events" && (
           <Panel title={w.t("الأحداث والأدلة", "Events & evidence")}>
@@ -1802,64 +1802,77 @@ export function VideoWorkspace({
           </Panel>
         )}
         {tab === "analytics" && (
-          <Panel
-            title={`${w.t("كفاءة التصويب", "Shot efficiency")} ${percent(summary.efficiency)} · n=${summary.sample}`}
-          >
-            <ShotMap
-              shots={shots.filter((shot) =>
-                filtered.some((event) => event.id === shot.event_id),
-              )}
-              onSelect={(sh) => {
-                const e = events.find((e) => e.id === sh.event_id);
-                if (e) edit(e);
-              }}
-            />
-            <label>{w.t("موضع التصويب التالي", "Next shot location")}</label>
-            <div
-              className="goal-picker"
-              onClick={(e) => {
-                const r = e.currentTarget.getBoundingClientRect();
-                setGoalPoint({
-                  x: (e.clientX - r.left) / r.width,
-                  y: 1 - (e.clientY - r.top) / r.height,
-                });
-              }}
+          <details className="shot-detail-panel">
+            <summary>
+              {w.t(
+                "كفاءة التصويب · التفاصيل وتحديد الموقع",
+                "Shot efficiency · breakdown & location editor",
+              )}{" "}
+              · {percent(summary.efficiency)} · n={summary.sample}
+            </summary>
+            <Panel
+              title={`${w.t("كفاءة التصويب", "Shot efficiency")} ${percent(summary.efficiency)} · n=${summary.sample}`}
             >
-              {w.t("اضغط موضع الكرة في المرمى", "Click shot placement in goal")}{" "}
-              {goalPoint
-                ? `${goalPoint.x.toFixed(2)}, ${goalPoint.y.toFixed(2)}`
-                : ""}
-            </div>
-            <div
-              className="location-picker"
-              onClick={(e) => {
-                const r = e.currentTarget.getBoundingClientRect();
-                setCourt({
-                  x: (e.clientX - r.left) / r.width,
-                  y: (e.clientY - r.top) / r.height,
-                });
-              }}
-            >
-              {court
-                ? `${court.x.toFixed(2)}, ${court.y.toFixed(2)}`
-                : w.t("اضغط لتحديد الإحداثيات", "Click to place coordinates")}
-            </div>
-            {keepers.map((k) => {
-              const stats = keeperSummary(shots, k.id);
-              return (
-                <button
-                  key={k.id}
-                  onClick={() => {
-                    setParticipantFilter("");
-                    setFilter("shot");
-                    setTab("events");
-                  }}
-                >
-                  {rowLabel(k)} · {percent(stats.percentage)} · n={stats.sample}
-                </button>
-              );
-            })}
-          </Panel>
+              <ShotMap
+                shots={shots.filter((shot) =>
+                  filtered.some((event) => event.id === shot.event_id),
+                )}
+                onSelect={(sh) => {
+                  const e = events.find((e) => e.id === sh.event_id);
+                  if (e) edit(e);
+                }}
+              />
+              <label>{w.t("موضع التصويب التالي", "Next shot location")}</label>
+              <div
+                className="goal-picker"
+                onClick={(e) => {
+                  const r = e.currentTarget.getBoundingClientRect();
+                  setGoalPoint({
+                    x: (e.clientX - r.left) / r.width,
+                    y: 1 - (e.clientY - r.top) / r.height,
+                  });
+                }}
+              >
+                {w.t(
+                  "اضغط موضع الكرة في المرمى",
+                  "Click shot placement in goal",
+                )}{" "}
+                {goalPoint
+                  ? `${goalPoint.x.toFixed(2)}, ${goalPoint.y.toFixed(2)}`
+                  : ""}
+              </div>
+              <div
+                className="location-picker"
+                onClick={(e) => {
+                  const r = e.currentTarget.getBoundingClientRect();
+                  setCourt({
+                    x: (e.clientX - r.left) / r.width,
+                    y: (e.clientY - r.top) / r.height,
+                  });
+                }}
+              >
+                {court
+                  ? `${court.x.toFixed(2)}, ${court.y.toFixed(2)}`
+                  : w.t("اضغط لتحديد الإحداثيات", "Click to place coordinates")}
+              </div>
+              {keepers.map((k) => {
+                const stats = keeperSummary(shots, k.id);
+                return (
+                  <button
+                    key={k.id}
+                    onClick={() => {
+                      setParticipantFilter("");
+                      setFilter("shot");
+                      setTab("events");
+                    }}
+                  >
+                    {rowLabel(k)} · {percent(stats.percentage)} · n=
+                    {stats.sample}
+                  </button>
+                );
+              })}
+            </Panel>
+          </details>
         )}
         {tab === "lineups" && (
           <Panel title={w.t("القائمة والتبديلات", "Roster & substitutions")}>

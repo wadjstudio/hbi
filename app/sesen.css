@@ -199,6 +199,26 @@ button:disabled {
   align-items: center;
   gap: 6px;
 }
+.workspace-save-status {
+  white-space: nowrap;
+  color: var(--text-muted);
+}
+.account-menu > summary span {
+  display: none;
+}
+.shot-detail-panel {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.shot-detail-panel > summary {
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.shot-detail-panel .court {
+  max-height: 280px;
+}
 .sesen-shell .topbar button,
 .account-menu > summary {
   min-height: 36px;
@@ -639,6 +659,16 @@ html[dir="rtl"] .mobile-navigation {
   }
 }
 @media (max-width: 639px) {
+  .workspace-utilities {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 3px;
+  }
+  .workspace-save-status {
+    grid-column: 1/-1;
+    grid-row: 2;
+    text-align: end;
+  }
   .sesen-shell .workspace-body main {
     padding: 8px;
   }

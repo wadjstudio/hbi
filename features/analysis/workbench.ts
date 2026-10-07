@@ -1,13 +1,16 @@
 import { s, type Row } from "@/types/workspace";
+import { brand } from "@/lib/brand";
 
 export const eventColors: Record<string, string> = {
-  goal: "#b7f34a",
-  save: "#25d9f5",
+  goal: brand.colors.goal,
+  save: brand.colors.save,
   miss: "#ff9b54",
   blocked: "#f17987",
-  turnover: "#ff4d5e",
-  two_min: "#f5c84c",
-  shot: "#4ca8ed",
+  turnover: brand.colors.turnover,
+  two_min: "#F2CC44",
+  two_minute_penalty: "#F2CC44",
+  seven_meter_won: "#B77BFF",
+  shot: "#B6C4CF",
 };
 export function filterWorkbenchEvents(
   events: Row[],

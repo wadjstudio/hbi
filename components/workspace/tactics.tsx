@@ -5,6 +5,7 @@ import { Panel, Notice, useAction, rowLabel } from "./controls";
 import { DrawingEditor } from "./drawing";
 import { Entities } from "./entities";
 import { s, n, type Drawing, type Row } from "@/types/workspace";
+import { brand } from "@/lib/brand";
 export function Tactics() {
   const w = useWorkspace();
   return (
@@ -51,7 +52,7 @@ export function TacticBoard({
           id: s(r.object_id),
           kind: (o?.kind ?? "player") as Drawing["kind"],
           label: s(o?.label),
-          color: s(o?.color) || "#25d9f5",
+          color: s(o?.color) || brand.colors.cyan,
           x: n(r.x),
           y: n(r.y),
           ...(r.geometry as object),

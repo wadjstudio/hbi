@@ -121,6 +121,10 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
             </span>
           </div>
           <div className="workspace-utilities">
+            <span className="status workspace-save-status" role="status">
+              {w.online ? w.t("متصل", "Online") : w.t("دون اتصال", "Offline")} ·{" "}
+              {w.pending.length} {w.t("بانتظار الحفظ", "pending")}
+            </span>
             <button
               aria-label={w.t("المزامنة والنسخ", "Sync & backup")}
               title={w.t("المزامنة والنسخ", "Sync & backup")}
@@ -148,7 +152,10 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
                   e.currentTarget.open = false;
               }}
             >
-              <summary>
+              <summary
+                aria-label={w.t("الحساب والحفظ", "Account & sync")}
+                title={w.t("الحساب والحفظ", "Account & sync")}
+              >
                 <Settings size={19} />
                 <span>{w.t("الحساب والحفظ", "Account & sync")}</span>
               </summary>
@@ -168,12 +175,6 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
                     ))}
                   </select>
                 </label>
-                <span className="status">
-                  {w.online
-                    ? w.t("متصل", "Online")
-                    : w.t("دون اتصال", "Offline")}{" "}
-                  · {w.pending.length} {w.t("بانتظار الحفظ", "pending")}
-                </span>
                 <button onClick={() => void w.logout()}>
                   {w.t("خروج", "Sign out")}
                 </button>

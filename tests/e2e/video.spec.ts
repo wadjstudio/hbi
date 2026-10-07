@@ -78,7 +78,7 @@ test("local video to offline shot, opponent evidence and meeting", async ({
     .getByText("Drawing, clips & source sharing", { exact: true })
     .click();
   await page
-    .getByLabel("Team", { exact: true })
+    .getByRole("combobox", { name: "Team", exact: true })
     .selectOption("30000000-0000-4000-8000-000000000002");
   await page
     .getByLabel("Player", { exact: true })
