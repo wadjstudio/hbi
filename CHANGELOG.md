@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Dense annotation review and evaluation — 2026-10-09
+
+- Added a bounded builder with verified derivative/hash/geometry, dense source-time mapping, per-image hashes, reused person suggestions and explicit completed/not-run ball inference. The 120-frame source 35:10.0–35:21.9 sample took 106.13 CPU seconds and produced one generic-ball proposal; visual inspection found a floor-advertisement false positive. No automated full-match processing was accepted.
+- Added an Arabic frame review with zoom, pointer/numeric boxes, accepted/corrected or missing people, scene-local human IDs, role/kit review, explicit ball/completeness states, undo/redo and source-bound export/import. Image loads block stale-frame edits; imports preserve existing edits. No labels propagate automatically or become athlete identities/events.
+- Visible-extent clipping handles source Kalman boxes outside image bounds while preserving raw proposals; wholly invisible/invalid suggestions cannot become accepted review boxes.
+- Added validated mixed-class COCO review, separate explicitly reviewed ball-only data and IoU-based ball diagnostics. Unknown/uncertain/not-run states never become negatives; undefined ratios remain null. Mixed-class labels can be partial and are not training data. Media rights remain unreviewed and no training approval is granted.
+- Added Python behaviour and fixture/actual-sequence Chrome acceptance checks. No web runtime dependency, database migration, hosted deployment, original-video upload or model training was added.
+
 ## Spatial proposals and review — 2026-10-08
 
 - Added one-inference person/generic sports-ball decoding, vectorised greedy NMS preserving score ties, separate inference/postprocessing timings and optional six-tile ball probing. The person-only API remains compatible.

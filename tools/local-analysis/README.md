@@ -1,5 +1,31 @@
 # SESEN local analysis pilot
 
+## Dense human annotation and evaluation
+
+`build_annotation_sequence.py` prepares up to 150 consecutive frames from the verified unannotated 10fps comparison derivative. It checks the derivative's SHA256, size, geometry and frame count, preserves inherited source/report hashes, records individual JPEG hashes and verifies the dense source-time grid. It refuses existing output directories. The original full match is neither copied nor rehashed here; the recorded source hash comes from the preceding verified comparison.
+
+```powershell
+python tools/local-analysis/build_annotation_sequence.py --comparison 'C:/path/new-comparison' --out 'C:/path/new-annotation-review' --model 'C:/path/yolox_s.onnx' --offset-frame 100 --frames 120
+python -m http.server 8774 --bind 127.0.0.1 --directory 'C:/path/new-annotation-review'
+python tools/local-analysis/test_annotations.py
+node tools/local-analysis/verify_annotation_review.mjs
+node tools/local-analysis/verify_annotation_review.mjs 'C:/path/new-annotation-review'
+```
+
+Use the optional environment's Python and FFmpeg/FFprobe. Omitting `--model` marks ball predictions `not_run`, never empty completed detections. Existing person suggestions are reused; generic-ball inference is run once per extracted image. The prepared sample contains source-video 35:10.0–35:21.9, 120 frames. Processing took 106.13 seconds on this CPU and produced one ball proposal; visual inspection found it over floor advertising rather than the visible ball. This is not an independent accuracy measurement or useful automatic ball tracker.
+
+The Arabic review supports frame stepping/slider, zoom, pointer or numeric boxes, accepting/correcting person suggestions, adding missed people, scene-local human identities, role/kit review, explicit completeness, undo/redo, and source-bound JSON export/import. Review states never propagate automatically. Ball states distinguish visible, not visible, uncertain and unreviewed. Pending image loads hide stale overlays and block edits. Source Kalman boxes may extend slightly outside the image: the UI labels/clips their visible extent for review, preserves the raw proposal in the sequence and rejects suggestions with no visible area. Export before closing; state is memory-only. Import rejects wrong sources/frames/geometry and refuses to overwrite existing edits. There is no account authentication or hosted persistence in this standalone tool.
+
+After exporting a human review:
+
+```powershell
+python tools/local-analysis/annotation_dataset.py --sequence 'C:/path/new-annotation-review/sequence.json' --review 'C:/path/sesen-annotation-review.json' --out 'C:/path/new-reviewed-export'
+```
+
+This verifies image files and exports `annotations.review.coco.json`, `ball-only.review.coco.json`, reviewed images and `ball-evaluation.json`. COCO boxes use pixel `[x,y,width,height]`; identities remain scene-local attributes, never athlete records. Mixed-class review can be partial and is **not training data**: standard COCO consumers may ignore the custom completeness attributes. The separate ball-only file includes only explicitly visible/nonvisible ball frames and omits uncertain/unreviewed frames. Broadcast/data rights remain `not_reviewed` and `approved_for_training=false`; no training, dataset publication or automatic app import is performed.
+
+Ball diagnostics use a stated IoU threshold (default 0.25), at most one matched ball per reviewed image, and count unmatched extra proposals as false positives. They exclude uncertain/unreviewed/not-run frames. Zero denominators remain null. Empty reviews therefore produce no accuracy numbers. Model-guided human labels are not an independent blind benchmark; no COCO mAP, HOTA/IDF1, trajectory or tactical accuracy is claimed. Browser tests create synthetic edits in temporary directories; those files are excluded from deliveries.
+
 Experimental local tools, separate from the production analysis workflow. No upload, paid service, cloud worker, database migration or automatic match mutation is performed. Selecting a video in the existing web app does **not** yet invoke this engine.
 
 The pilot implements bounded experiments:

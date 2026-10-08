@@ -1,5 +1,9 @@
 # SESEN / HBI Architecture
 
+## Dense annotation boundary
+
+The optional dense builder verifies a previously hashed 10fps unannotated derivative, extracts a bounded sequence and binds every JPEG/person suggestion/ball proposal to source time, scene and image hash. It never silently marks missing inference as a negative detection. The separate browser review uses normalized boxes, per-frame human edits, undo/redo and validated export/import; image loading blocks edits to prevent stale-frame labels. `annotation_contract.mjs` and Python validation enforce provenance and geometry. `annotation_dataset.py` exports review-only COCO data and ball diagnostics on explicitly reviewed/completed frames. Partial mixed-class labels remain unsuitable for training, and rights/training approval remain unset. This creates no canonical events, hosted services, model training or integration with production selection.
+
 ## Spatial review boundary
 
 `tools/local-analysis/probe_spatial.py` reuses eight cached source snapshots and the pinned S model for independent person/sports-ball decoding. Optional six-crop inference improves small-object sampling at a measured CPU cost, without establishing ball accuracy. `spatial_proposals.py` supplies ambiguous-aware torso colours and exact-image homography validation. `spatial_review.html` exports normalized manual corrections/exclusions/ground anchors with source/model/image hashes and scene/source time. `validate_calibration.py` checks provenance and geometry; its matrix remains unapproved and applies only to that image. No camera-motion compensation, trajectories, metres/speed, tactical labels or canonical-event imports exist. Production video selection still does not invoke these experiments.

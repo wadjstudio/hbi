@@ -1,5 +1,9 @@
 # SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
 
+## Dense review and evaluation groundwork — 9 October 2026
+
+A bounded continuous 120-frame sequence now supports human correction/addition of people and ball boxes, scene-local identities, explicit missing/uncertain states, undo/redo and source-bound review export/import. Review-only COCO interchange distinguishes partial mixed-class labels from a ball-only reviewed subset; rights and training approval remain unset. Ball diagnostics exclude unreviewed/uncertain/not-run frames and keep undefined ratios null. Generic inference on this sample was weak and took 106.13 seconds for twelve seconds of imagery; these tools are groundwork for specialist evaluation, not automated tactical understanding or production inference.
+
 ## Spatial proposals and review — 8 October 2026
 
 An optional eight-snapshot experiment adds generic sports-ball decoding, overlapping crops, jersey-colour suggestions and a manual spatial review/export page. Full-frame inference yielded no ball proposals; costly tiling yielded two unreviewed proposals, so this is not an accepted handball detector. Exact-frame four-point homography validation exists, with human landmark approval still required and no reuse across camera motion. There are no inferred ball trajectories, distances/speeds, team identities or tactical events. Production integration, licensed specialist training, independent annotated evaluation and practical throughput remain acceptance gates.

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; img-src 'self'; connect-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'"
+    />
+    <title>SESEN · مراجعة متصلة</title>
+    <link rel="stylesheet" href="annotation_review.css" />
+  </head>
+  <body>
+    <header>
+      <strong>SESEN</strong>
+      <h1>مراجعة متصلة للكرة والأشخاص</h1>
+      <p>
+        الاقتراح البرتقالي لم يُراجع. المربع السماوي مراجعة بشرية، والذهبي
+        للكرة. الهويات مؤقتة داخل المشهد وليست أرقام قمصان. لا أحداث أو تكتيكات
+        تلقائية.
+      </p>
+    </header>
+    <div class="toolbar">
+      <button id="previous" disabled>الإطار السابق</button
+      ><input
+        id="frame-slider"
+        type="range"
+        min="0"
+        max="0"
+        value="0"
+        aria-label="الإطار"
+      /><button id="next" disabled>الإطار التالي</button><span id="clock"></span
+      ><label
+        >تكبير
+        <select id="zoom">
+          <option value="1">١×</option>
+          <option value="1.5">١٫٥×</option>
+          <option value="2">٢×</option>
+        </select></label
+      >
+    </div>
+    <main>
+      <section class="panel">
+        <div id="viewport">
+          <div id="stage">
+            <img id="image" alt="إطار المباراة للرسم والمراجعة" /><svg
+              id="overlay"
+              role="img"
+              aria-label="مربعات الأشخاص والكرة"
+            ></svg>
+          </div>
+        </div>
+        <div class="toolbar">
+          <label
+            >أداة الرسم
+            <select id="tool">
+              <option value="ball">مربع الكرة</option>
+              <option value="person">مربع شخص</option>
+              <option value="view">مشاهدة</option>
+            </select></label
+          ><label
+            ><input id="show-suggestions" type="checkbox" checked />عرض اقتراحات
+            الأشخاص</label
+          ><button id="undo" disabled>تراجع</button
+          ><button id="redo" disabled>إعادة</button>
+        </div>
+        <p>
+          اسحب لرسم مربع؛ استخدم التكبير للكرة الصغيرة. الأسهم للتنقل، وCtrl+Z
+          للتراجع. للرسم بلوحة المفاتيح أدخل حدود المربع بالنسبة المئوية.
+        </p>
+        <div class="toolbar" dir="ltr">
+          <label
+            >x1%
+            <input id="x1" type="number" min="0" max="100" step="0.1" /></label
+          ><label
+            >y1%
+            <input id="y1" type="number" min="0" max="100" step="0.1" /></label
+          ><label
+            >x2%
+            <input id="x2" type="number" min="0" max="100" step="0.1" /></label
+          ><label
+            >y2%
+            <input id="y2" type="number" min="0" max="100" step="0.1" /></label
+          ><button id="set-box">تعيين المربع</button>
+        </div>
+        <h2>الكرة</h2>
+        <p id="ball-status"></p>
+        <div class="toolbar">
+          <button id="ball-hidden">الكرة غير مرئية</button
+          ><button id="ball-uncertain">موضعها غير محسوم</button
+          ><button id="ball-clear">مسح مراجعة الكرة</button>
+        </div>
+        <div id="balls"></div>
+        <p id="summary"></p>
+      </section>
+      <aside class="panel">
+        <h2>الشخص الذي تراجعه</h2>
+        <label
+          >هوية مؤقتة <input id="person-id" value="p1" maxlength="64" dir="ltr"
+        /></label>
+        <div class="toolbar">
+          <label
+            >الدور
+            <select id="role">
+              <option value="unknown">غير محسوم</option>
+              <option value="player">لاعب</option>
+              <option value="referee">حكم</option>
+              <option value="staff">طاقم</option>
+            </select></label
+          ><label
+            >لون القميص
+            <select id="kit">
+              <option value="unknown">غير محسوم</option>
+              <option value="red">أحمر</option>
+              <option value="white">أبيض</option>
+              <option value="green">أخضر</option>
+              <option value="cyan">سماوي</option>
+            </select></label
+          >
+        </div>
+        <p>
+          <small
+            >نفس الهوية في إطارين تعني أنك راجعت أنه نفس الشخص داخل المشهد.
+            تغيير الكاميرا قد يتطلب هوية جديدة. اللون لا يربط بسجل فريق.</small
+          >
+        </p>
+        <div id="people"></div>
+        <label
+          ><input id="people-complete" type="checkbox" />راجعت كل الأشخاص
+          المرئيين في هذا الإطار</label
+        >
+        <h2>اقتراحات التتبّع</h2>
+        <p>
+          <small
+            >اختر الهوية والدور ثم اعتمد المربع أو تجاهله. الإضافة اليدوية تعوّض
+            شخصًا فُقد كشفه. لا تُنسخ المراجعة تلقائيًا إلى الإطار
+            التالي.</small
+          >
+        </p>
+        <div id="predictions"></div>
+      </aside>
+    </main>
+    <section class="panel">
+      <div class="toolbar">
+        <button id="export" disabled>تصدير المراجعة JSON</button
+        ><label
+          >استيراد مراجعة
+          <input id="import" type="file" accept="application/json,.json"
+        /></label>
+      </div>
+      <p>
+        الحفظ في الذاكرة فقط؛ صدّر قبل إغلاق الصفحة. الاستيراد يستعيد مراجعة نفس
+        العينة ويرفض استبدال تعديلات قائمة. لا رفع أو اتصال بحسابات، وحقوق
+        استخدام الفيديو للتدريب لم تُراجع.
+      </p>
+      <p id="status" role="status" aria-live="polite">جارٍ تحميل العينة…</p>
+    </section>
+    <script type="module" src="annotation_review.mjs"></script>
+  </body>
+</html>

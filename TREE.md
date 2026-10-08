@@ -240,6 +240,12 @@ hbi-starter/
   tests/unit/workbench.test.ts
   tools/local-analysis/NOTICE.md
   tools/local-analysis/README.md
+  tools/local-analysis/annotation_contract.mjs
+  tools/local-analysis/annotation_dataset.py
+  tools/local-analysis/annotation_review.css
+  tools/local-analysis/annotation_review.html
+  tools/local-analysis/annotation_review.mjs
+  tools/local-analysis/build_annotation_sequence.py
   tools/local-analysis/build_review.py
   tools/local-analysis/byte_tracker.py
   tools/local-analysis/compare_tracking.py
@@ -256,11 +262,13 @@ hbi-starter/
   tools/local-analysis/spatial_proposals.py
   tools/local-analysis/spatial_review.html
   tools/local-analysis/test_analysis.py
+  tools/local-analysis/test_annotations.py
   tools/local-analysis/test_mot.py
   tools/local-analysis/test_spatial.py
   tools/local-analysis/test_tracking.py
   tools/local-analysis/tracking_review.html
   tools/local-analysis/validate_calibration.py
+  tools/local-analysis/verify_annotation_review.mjs
   tools/local-analysis/verify_review.mjs
   tools/local-analysis/verify_spatial_review.mjs
   tools/local-analysis/verify_tracking_review.mjs

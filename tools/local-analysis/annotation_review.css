@@ -1,0 +1,154 @@
+:root {
+  color-scheme: dark;
+  font-family: system-ui;
+  background: #051014;
+  color: #e9f3f4;
+}
+body {
+  max-width: 1500px;
+  margin: auto;
+  padding: 18px;
+}
+strong,
+h1 {
+  color: #e9c489;
+}
+h1 {
+  font-size: 24px;
+}
+h2 {
+  font-size: 18px;
+}
+p,
+small {
+  line-height: 1.65;
+}
+small {
+  color: #a7c0c8;
+}
+main {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(280px, 1fr);
+  gap: 16px;
+}
+.panel {
+  min-width: 0;
+  background: #091c22;
+  border: 1px solid #19404c;
+  border-radius: 10px;
+  padding: 14px;
+  margin: 12px 0;
+}
+.toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0;
+}
+input,
+select,
+button {
+  font: inherit;
+  max-width: 100%;
+  background: #0b242c;
+  color: inherit;
+  border: 1px solid #315562;
+  border-radius: 6px;
+  padding: 8px;
+}
+input[type="number"] {
+  width: 65px;
+}
+input[type="range"] {
+  flex: 1;
+  min-width: 120px;
+}
+input[type="checkbox"] {
+  accent-color: #00d3d8;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.45;
+}
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid #00d3d8;
+}
+#viewport {
+  overflow: auto;
+  direction: ltr;
+}
+#stage {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+}
+#image {
+  width: 100%;
+  height: auto;
+}
+#overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+svg text {
+  font-family: system-ui;
+  font-size: 13px;
+  fill: #fff;
+  paint-order: stroke;
+  stroke: #031318;
+  stroke-width: 2px;
+}
+#predictions,
+#people {
+  max-height: 350px;
+  overflow: auto;
+}
+.row {
+  border-bottom: 1px solid #21404a;
+  padding: 8px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+#status {
+  min-height: 28px;
+  color: #e9c489;
+}
+#summary {
+  color: #00d3d8;
+}
+#clock {
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 850px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+  body {
+    padding: 8px;
+  }
+  h1 {
+    font-size: 20px;
+  }
+}
+:root #stage.zoom-1-5 {
+  width: 150%;
+}
+:root #stage.zoom-2 {
+  width: 200%;
+}
+#stage.loading img,
+#stage.loading svg {
+  visibility: hidden;
+  pointer-events: none;
+}
