@@ -23,12 +23,16 @@ def overlap(a, b):
 
 
 def suppress(boxes, scores, threshold=0.45):
-    remaining = sorted(range(len(scores)), key=lambda i: float(scores[i]), reverse=True)
+    boxes = np.asarray(boxes, dtype=np.float64).reshape(-1, 4)
+    remaining = np.argsort(-np.asarray(scores, dtype=np.float64), kind="stable")
+    areas = np.maximum(0, boxes[:, 2] - boxes[:, 0]) * np.maximum(0, boxes[:, 3] - boxes[:, 1])
     selected = []
-    while remaining:
-        best, *rest = remaining
+    while remaining.size:
+        best, rest = int(remaining[0]), remaining[1:]
         selected.append(best)
-        remaining = [i for i in rest if overlap(boxes[best], boxes[i]) <= threshold]
+        intersections = np.maximum(0, np.minimum(boxes[best, 2:], boxes[rest, 2:]) - np.maximum(boxes[best, :2], boxes[rest, :2])).prod(axis=1)
+        ious = intersections / np.maximum(areas[best] + areas[rest] - intersections, 1e-9)
+        remaining = rest[ious <= threshold]
     return selected
 
 
@@ -61,6 +65,15 @@ class PersonDetector:
         self.steps = np.concatenate(steps)
 
     def detect(self, image):
+        groups, timings = self.detect_classes(image, {0: self.threshold})
+        return groups["person"], timings["inference_seconds"]
+
+    def detect_classes(self, image, thresholds=None):
+        """One inference, independent class NMS; sports-ball proposals are not handball events."""
+        thresholds = {0: self.threshold, 32: 0.1} if thresholds is None else thresholds
+        if not thresholds or any(c not in (0, 32) or not 0 < t < 1 for c, t in thresholds.items()):
+            raise ValueError("Only person / sports-ball classes and thresholds in (0,1) are supported")
+        wall_start = time.perf_counter()
         width, height = image.size
         scale = min(self.input_size / width, self.input_size / height)
         resized = image.convert("RGB").resize((int(width * scale), int(height * scale)), Image.Resampling.BILINEAR)
@@ -73,9 +86,16 @@ class PersonDetector:
         elapsed = time.perf_counter() - start
         if predictions.shape != (len(self.grid), 85):
             raise ValueError("Unexpected YOLOX output shape")
-        # COCO class 0 is person. This does not establish team membership.
-        scores = predictions[:, 4] * predictions[:, 5]
-        selected = np.flatnonzero(scores >= self.threshold)
+        post_start = time.perf_counter()
+        groups = {}
+        for class_id, threshold in thresholds.items():
+            name = "person" if class_id == 0 else "sports_ball"
+            groups[name] = self.decode_class(predictions, class_id, threshold, scale, width, height)
+        return groups, {"inference_seconds": elapsed, "postprocess_seconds": time.perf_counter() - post_start, "wall_seconds": time.perf_counter() - wall_start}
+
+    def decode_class(self, predictions, class_id, threshold, scale, width, height):
+        scores = predictions[:, 4] * predictions[:, 5 + class_id]
+        selected = np.flatnonzero(scores >= threshold)
         centers = (predictions[selected, :2] + self.grid[selected]) * self.steps[selected]
         sizes = np.exp(np.clip(predictions[selected, 2:4], -20, 20)) * self.steps[selected]
         boxes = np.column_stack([centers - sizes / 2, centers + sizes / 2]) / scale
@@ -85,7 +105,8 @@ class PersonDetector:
         valid = np.isfinite(boxes).all(axis=1) & np.isfinite(valid_scores) & ((boxes[:, 2] - boxes[:, 0]) > 1) & ((boxes[:, 3] - boxes[:, 1]) > 1)
         boxes, valid_scores = boxes[valid], valid_scores[valid]
         kept = suppress(boxes, valid_scores, self.nms_threshold)
-        return [{"box": [round(float(v), 2) for v in boxes[i]], "score": round(float(valid_scores[i]), 4), "class": "person"} for i in kept], elapsed
+        name = "person" if class_id == 0 else "sports_ball"
+        return [{"box": [round(float(v), 2) for v in boxes[i]], "score": round(float(valid_scores[i]), 4), "class": name} for i in kept]
 
 
 class ShortTrackMatcher:

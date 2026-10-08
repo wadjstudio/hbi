@@ -245,6 +245,7 @@ hbi-starter/
   tools/local-analysis/compare_tracking.py
   tools/local-analysis/detector.py
   tools/local-analysis/export_mot.py
+  tools/local-analysis/probe_spatial.py
   tools/local-analysis/render_comparison.py
   tools/local-analysis/render_preview.py
   tools/local-analysis/requirements-tracking.txt
@@ -252,11 +253,16 @@ hbi-starter/
   tools/local-analysis/review-template.html
   tools/local-analysis/scan_scoreboard.py
   tools/local-analysis/scoreboard.py
+  tools/local-analysis/spatial_proposals.py
+  tools/local-analysis/spatial_review.html
   tools/local-analysis/test_analysis.py
   tools/local-analysis/test_mot.py
+  tools/local-analysis/test_spatial.py
   tools/local-analysis/test_tracking.py
   tools/local-analysis/tracking_review.html
+  tools/local-analysis/validate_calibration.py
   tools/local-analysis/verify_review.mjs
+  tools/local-analysis/verify_spatial_review.mjs
   tools/local-analysis/verify_tracking_review.mjs
   types/.gitkeep
   types/workspace.ts

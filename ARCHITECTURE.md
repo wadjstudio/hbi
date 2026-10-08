@@ -1,5 +1,9 @@
 # SESEN / HBI Architecture
 
+## Spatial review boundary
+
+`tools/local-analysis/probe_spatial.py` reuses eight cached source snapshots and the pinned S model for independent person/sports-ball decoding. Optional six-crop inference improves small-object sampling at a measured CPU cost, without establishing ball accuracy. `spatial_proposals.py` supplies ambiguous-aware torso colours and exact-image homography validation. `spatial_review.html` exports normalized manual corrections/exclusions/ground anchors with source/model/image hashes and scene/source time. `validate_calibration.py` checks provenance and geometry; its matrix remains unapproved and applies only to that image. No camera-motion compensation, trajectories, metres/speed, tactical labels or canonical-event imports exist. Production video selection still does not invoke these experiments.
+
 ## Tracking comparison and feedback
 
 The optional local comparison keeps the pinned tiny/IoU baseline intact, adds a checksum-pinned YOLOX-S profile and imports ByteTrack from pinned Supervision in an isolated Python environment. It samples one bounded source interval, journals both pipelines and a same-detection IoU diagnostic, and verifies the real source hash/unchanged metadata. Rendering is separate from inference so video/UI corrections reuse observations. Only current matched tracks are drawn; lost states remain internal, and scene-local IDs reset at heuristic cuts. Increased box counts or fewer tracklets are not accuracy or reliable player identities.

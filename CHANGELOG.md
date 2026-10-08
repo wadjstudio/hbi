@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Spatial proposals and review — 2026-10-08
+
+- Added one-inference person/generic sports-ball decoding, vectorised greedy NMS preserving score ties, separate inference/postprocessing timings and optional six-tile ball probing. The person-only API remains compatible.
+- Added ambiguous-aware torso-colour suggestions, normalized ball corrections, person exclusion/colour review and ground correspondences bound to exact source/frame/image provenance. Mathematical homography validation rejects degenerate/unstable/crossed anchors; it never approves landmarks or applies calibration across moving cameras.
+- Ran eight actual cached frames: full-frame YOLOX-S produced no ball proposal at threshold 0.1; six overlapping tiles produced two proposals across two frames. These are not recall or verified ball trajectories. Median measured detection time was 1.03 seconds per full-frame probe and 6.32 seconds with tiles on this CPU, so tiling is not a practical full-match solution here.
+- Added standalone Arabic review/export, Python behaviour checks and synthetic/actual-proposal Chrome checks. All feedback remains review-only; no events, metrics, database changes, video uploads or hosted deployment. Continued commercial model/dataset rights review, handball-specific training/evaluation and production integration remain pending.
+
 ## Longer tracking review after real feedback — 2026-10-08
 
 - Preserved the original tiny/IoU experiment and added a pinned official YOLOX-S 640px profile, configurable NMS and finite/nondegenerate output checks. Lower-confidence detections remain available for the optional tracker; increased detection counts do not establish correct athlete coverage.

@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'none'; img-src 'self'; connect-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; base-uri 'none'; form-action 'none'"
+  />
+  <title>SESEN · مراجعة الكرة والقمصان</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: system-ui;
+      background: #051014;
+      color: #e9f4f3;
+    }
+    body {
+      max-width: 1400px;
+      margin: auto;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 24px;
+      color: #e9c489;
+    }
+    h2 {
+      font-size: 18px;
+    }
+    button,
+    select,
+    input {
+      background: #0b222a;
+      border: 1px solid #25505a;
+      color: inherit;
+      border-radius: 6px;
+      padding: 9px;
+      font: inherit;
+      max-width: 100%;
+    }
+    button {
+      cursor: pointer;
+    }
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: 3px solid #00d6d8;
+    }
+    button:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+    p,
+    small {
+      line-height: 1.7;
+    }
+    small {
+      color: #a4bbc1;
+    }
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 12px 0;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(280px, 1fr);
+      gap: 16px;
+    }
+    .panel {
+      background: #091a20;
+      border: 1px solid #17404b;
+      border-radius: 10px;
+      padding: 14px;
+      min-width: 0;
+    }
+    .stage {
+      position: relative;
+      width: 100%;
+      direction: ltr;
+      line-height: 0;
+    }
+    .stage img {
+      width: 100%;
+      height: auto;
+    }
+    .stage svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+      cursor: crosshair;
+    }
+    svg text {
+      font-family: system-ui;
+      paint-order: stroke;
+      stroke: #071319;
+      stroke-width: 2px;
+      fill: #fff;
+      font-size: 12px;
+    }
+    #people {
+      max-height: 360px;
+      overflow: auto;
+    }
+    .person {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 7px 0;
+      border-bottom: 1px solid #17333b;
+    }
+    .person label {
+      flex: 1;
+    }
+    #status {
+      color: #e9c489;
+      min-height: 28px;
+    }
+    input[type="number"] {
+      width: 65px;
+    }
+    .anchor {
+      padding: 6px;
+      line-height: 1.6;
+    }
+    .warning {
+      border-right: 3px solid #e9c489;
+      padding-right: 12px;
+    }
+    @media (max-width: 850px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      body {
+        padding: 10px;
+      }
+    }
+  </style>
+  <body>
+    <h1>SESEN · الكرة والقمصان ومعايرة الملعب</h1>
+    <p class="warning">
+      تجربة مراجعة على ٨ لقطات من نفس الدقيقة. الألوان مجموعات قمصان مقترحة،
+      وليست هوية فريق أو لاعب. مربعات الكرة اقتراحات من نموذج عام؛ لا تُنشئ
+      أحداثًا أو إحصاءات.
+    </p>
+    <p id="engine-info"></p>
+    <div class="toolbar">
+      <button id="previous" disabled>اللقطة السابقة</button
+      ><select id="frames" aria-label="اختيار اللقطة"></select
+      ><button id="next" disabled>اللقطة التالية</button
+      ><span id="clock"></span>
+    </div>
+    <div class="layout">
+      <div class="panel">
+        <div class="stage">
+          <img id="image" alt="لقطة المباراة للمراجعة" /><svg
+            id="overlay"
+            role="img"
+            aria-label="مربعات الأشخاص والكرة ونقاط المعايرة"
+          ></svg>
+        </div>
+        <div class="toolbar">
+          <label
+            >النقر على الصورة
+            <select id="mode">
+              <option value="ball">تحديد مركز الكرة يدويًا</option>
+              <option value="anchor">إضافة نقطة أرضية للمعايرة</option>
+              <option value="view">مشاهدة فقط</option>
+            </select></label
+          ><button id="clear-ball">مسح نقطة الكرة</button>
+        </div>
+        <p id="ball-info"></p>
+        <div id="ball-proposals"></div>
+        <small
+          >نقطة الكرة مرتبطة بهذه اللقطة فقط؛ لا نرسم مسارًا عبر لقطات متباعدة.
+          استخدم Tab للوصول للأدوات؛ يمكنك إدخال موضع الكرة بإحداثيات نسبية
+          أيضًا.</small
+        >
+        <div class="toolbar">
+          <label
+            >س٪
+            <input
+              id="ball-x"
+              type="number"
+              min="0"
+              max="100"
+              step="0.1" /></label
+          ><label
+            >ص٪
+            <input
+              id="ball-y"
+              type="number"
+              min="0"
+              max="100"
+              step="0.1" /></label
+          ><button id="set-ball">تعيين الكرة</button>
+        </div>
+      </div>
+      <aside class="panel">
+        <h2>مراجعة الأشخاص</h2>
+        <p>
+          <small
+            >صحّح لون القميص، أو استبعد الحكم والجمهور من هذه اللقطة. الأخضر
+            والسماوي لا يعنيان حارسًا أو حكمًا تلقائيًا.</small
+          >
+        </p>
+        <div id="people"></div>
+        <h2>نقاط أرضية للمعايرة</h2>
+        <p>
+          <small
+            >اختر وضع المعايرة ثم انقر نقطة معروفة على الأرض وأدخل موضعها بالمتر
+            على ملعب ٤٠ × ٢٠. نحتاج أربع نقاط غير متراصفة. لا تستخدم رؤوس
+            اللاعبين أو الكرة. صلاحيتها لهذه اللقطة فقط بسبب حركة
+            الكاميرا.</small
+          >
+        </p>
+        <div class="toolbar">
+          <label
+            >س بالمتر
+            <input
+              id="court-x"
+              type="number"
+              min="0"
+              max="40"
+              step="0.01" /></label
+          ><label
+            >ص بالمتر
+            <input
+              id="court-y"
+              type="number"
+              min="0"
+              max="20"
+              step="0.01" /></label
+          ><button id="clear-anchors">مسح النقاط</button>
+        </div>
+        <div id="anchors"></div>
+        <p>
+          <small
+            >تُصدّر النقاط للمراجعة والتحقق الحسابي؛ لا تظهر مسافات أو سرعات قبل
+            اعتماد المعايرة.</small
+          >
+        </p>
+      </aside>
+    </div>
+    <div class="toolbar">
+      <button id="export" disabled>تصدير المراجعة JSON</button
+      ><small
+        >المراجعة في الذاكرة فقط؛ صدّرها قبل إغلاق الصفحة. لا رفع للفيديو ولا
+        إرسال إلى قاعدة البيانات.</small
+      >
+    </div>
+    <p id="status" role="status" aria-live="polite">جارٍ تحميل النتائج…</p>
+    <script>
+      const $ = (id) => document.getElementById(id),
+        ns = "http://www.w3.org/2000/svg";
+      const colours = {
+        red: "#ff584c",
+        white: "#f1ede1",
+        green: "#70df68",
+        cyan: "#00d5d8",
+        unknown: "#b2a7c4",
+      };
+      const labels = {
+        red: "أحمر",
+        white: "أبيض",
+        green: "أخضر",
+        cyan: "سماوي",
+        unknown: "غير محسوم",
+      };
+      let data,
+        current = 0;
+      const edits = new Map();
+      function message(text) {
+        $("status").textContent = text;
+      }
+      function frame() {
+        return data.frames[current];
+      }
+      function edit() {
+        const f = frame();
+        if (!edits.has(f.index))
+          edits.set(f.index, {
+            frame_index: f.index,
+            video_ms: f.video_ms,
+            scene: f.scene,
+            image_sha256: f.image_sha256,
+            people: {},
+            ball: null,
+            anchors: [],
+          });
+        return edits.get(f.index);
+      }
+      function element(tag, attrs) {
+        const e = document.createElementNS(ns, tag);
+        for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+        $("overlay").append(e);
+        return e;
+      }
+      function point(p, colour, label) {
+        element("circle", {
+          cx: p[0] * frame().width,
+          cy: p[1] * frame().height,
+          r: 7,
+          fill: "none",
+          stroke: colour,
+          "stroke-width": 3,
+        });
+        const t = element("text", {
+          x: p[0] * frame().width + 9,
+          y: p[1] * frame().height - 9,
+        });
+        t.textContent = label;
+      }
+      function validNumber(id, max) {
+        const input = $(id);
+        if (input.value.trim() === "") return null;
+        const value = Number(input.value);
+        return Number.isFinite(value) && value >= 0 && value <= max
+          ? value
+          : null;
+      }
+      function render() {
+        const f = frame(),
+          state = edit();
+        $("overlay").replaceChildren();
+        $("overlay").setAttribute("viewBox", `0 0 ${f.width} ${f.height}`);
+        $("image").src = f.image;
+        $("clock").textContent =
+          `زمن الفيديو ${Math.floor(f.video_ms / 60000)}:${String(Math.floor(f.video_ms / 1000) % 60).padStart(2, "0")} · مشهد ${f.scene}`;
+        $("frames").value = String(current);
+        $("previous").disabled = current === 0;
+        $("next").disabled = current === data.frames.length - 1;
+        $("people").replaceChildren();
+        for (const t of f.tracks) {
+          const key = String(t.track_id),
+            review = state.people[key] || {
+              colour: t.jersey_colour.group,
+              excluded: false,
+            };
+          const [x, y, x2, y2] = t.box;
+          if (!review.excluded) {
+            element("rect", {
+              x,
+              y,
+              width: x2 - x,
+              height: y2 - y,
+              fill: "none",
+              stroke: colours[review.colour],
+              "stroke-width": 2,
+            });
+            const text = element("text", { x, y: Math.max(13, y - 3) });
+            text.textContent = `#${key} ${labels[review.colour]}`;
+          }
+          const row = document.createElement("div");
+          row.className = "person";
+          const label = document.createElement("label");
+          label.textContent = `شخص #${key} `;
+          const select = document.createElement("select");
+          for (const [value, text] of Object.entries(labels)) {
+            const o = document.createElement("option");
+            o.value = value;
+            o.textContent = text;
+            select.append(o);
+          }
+          select.value = review.colour;
+          select.onchange = () => {
+            state.people[key] = { ...review, colour: select.value };
+            render();
+          };
+          label.append(select);
+          const exclude = document.createElement("button");
+          exclude.textContent = review.excluded ? "إعادة" : "استبعاد";
+          exclude.onclick = () => {
+            state.people[key] = { ...review, excluded: !review.excluded };
+            render();
+          };
+          row.append(label, exclude);
+          $("people").append(row);
+        }
+        $("ball-proposals").replaceChildren();
+        f.ball_proposals.forEach((b, i) => {
+          const [x, y, x2, y2] = b.box;
+          element("rect", {
+            x,
+            y,
+            width: x2 - x,
+            height: y2 - y,
+            fill: "none",
+            stroke: "#e9c489",
+            "stroke-width": 2,
+            "stroke-dasharray": "4 3",
+          });
+          const button = document.createElement("button");
+          button.textContent = `استخدام اقتراح كرة ${i + 1} (${Math.round(b.score * 100)}٪)`;
+          button.onclick = () => {
+            state.ball = {
+              point: [(x + x2) / 2 / f.width, (y + y2) / 2 / f.height],
+              origin: "reviewed_generic_proposal",
+              proposal_index: i,
+            };
+            render();
+          };
+          $("ball-proposals").append(button);
+        });
+        if (state.ball) {
+          point(state.ball.point, "#e9c489", "كرة · مراجعة بشرية");
+          $("ball-x").value = (state.ball.point[0] * 100).toFixed(1);
+          $("ball-y").value = (state.ball.point[1] * 100).toFixed(1);
+        } else {
+          $("ball-x").value = "";
+          $("ball-y").value = "";
+        }
+        $("ball-info").textContent =
+          `اقتراحات النموذج العام: ${f.ball_proposals.length}. ${state.ball ? "تم تحديد الكرة للمراجعة." : "لم يُحدد موضع كرة؛ لا يعني هذا عدم وجودها."}`;
+        $("anchors").replaceChildren();
+        state.anchors.forEach((a, i) => {
+          point(a.image_point, "#00d5d8", String(i + 1));
+          const div = document.createElement("div");
+          div.className = "anchor";
+          div.textContent = `${i + 1}: أرضية (${a.court_point.join("، ")}) م`;
+          const remove = document.createElement("button");
+          remove.textContent = "حذف";
+          remove.onclick = () => {
+            state.anchors.splice(i, 1);
+            render();
+          };
+          div.append(remove);
+          $("anchors").append(div);
+        });
+        $("export").disabled = false;
+      }
+      function setBall(x, y) {
+        edit().ball = { point: [x, y], origin: "manual_point" };
+        render();
+        message("حُفظ تحديد الكرة في ذاكرة المراجعة.");
+      }
+      $("overlay").onclick = (e) => {
+        if (!data || $("mode").value === "view") return;
+        const r = $("overlay").getBoundingClientRect(),
+          p = [(e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height];
+        if (p.some((n) => n < 0 || n > 1)) return;
+        if ($("mode").value === "ball") {
+          setBall(...p);
+          return;
+        }
+        const x = validNumber("court-x", 40),
+          y = validNumber("court-y", 20);
+        if (x === null || y === null) {
+          message("أدخل موضع النقطة المعروفة بالمتر أولًا.");
+          return;
+        }
+        if (edit().anchors.length >= 4) {
+          message("أربع نقاط فقط؛ احذف نقطة لتصحيحها.");
+          return;
+        }
+        edit().anchors.push({ image_point: p, court_point: [x, y] });
+        render();
+        message("نقطة أرضية للمراجعة؛ لم تُعتمد المعايرة بعد.");
+      };
+      $("set-ball").onclick = () => {
+        const x = validNumber("ball-x", 100),
+          y = validNumber("ball-y", 100);
+        if (x === null || y === null) {
+          message("أدخل إحداثيات بين ٠ و١٠٠.");
+          return;
+        }
+        setBall(x / 100, y / 100);
+      };
+      $("clear-ball").onclick = () => {
+        edit().ball = null;
+        render();
+      };
+      $("clear-anchors").onclick = () => {
+        edit().anchors = [];
+        render();
+      };
+      $("previous").onclick = () => {
+        current--;
+        render();
+      };
+      $("next").onclick = () => {
+        current++;
+        render();
+      };
+      $("frames").onchange = () => {
+        current = Number($("frames").value);
+        render();
+      };
+      $("export").onclick = () => {
+        const payload = {
+          schema: "sesen.spatial-feedback.v1",
+          source_sha256: data.source_sha256,
+          model_sha256: data.model_sha256,
+          created_at: new Date().toISOString(),
+          calibration_status: "pending_validation",
+          confirmed_events: [],
+          frames: [...edits.values()],
+        };
+        const url = URL.createObjectURL(
+          new Blob([JSON.stringify(payload, null, 2)], {
+            type: "application/json",
+          }),
+        );
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "sesen-spatial-feedback.json";
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        message("تم تصدير المراجعة؛ لا أحداث مؤكدة أو معايرة معتمدة.");
+      };
+      fetch("proposals.json")
+        .then((r) => {
+          if (!r.ok) throw Error("read");
+          return r.json();
+        })
+        .then((result) => {
+          if (
+            result.schema !== "sesen.spatial-proposals.v1" ||
+            result.frames.length !== 8
+          )
+            throw Error("schema");
+          data = result;
+          if (Number.isFinite(data.median_wall_seconds)) {
+            $("engine-info").textContent =
+              `YOLOX-S / COCO · ${data.ball_tiles ? "ست مناطق إضافية لكل لقطة" : "الصورة كاملة"} · وسيط زمن الكشف ${data.median_wall_seconds.toFixed(2)} ثانية/لقطة · ${data.frames.reduce((sum, f) => sum + f.ball_proposals.length, 0)} اقتراح كرة غير مؤكّد. هذه ليست معالجة مباشرة أو قياس دقة.`;
+          }
+          for (let i = 0; i < data.frames.length; i++) {
+            const o = document.createElement("option");
+            o.value = String(i);
+            o.textContent = `لقطة ${i + 1}`;
+            $("frames").append(o);
+          }
+          render();
+          message("النتائج جاهزة. جميع الاقتراحات تحتاج مراجعة.");
+        })
+        .catch(() =>
+          message(
+            "تعذر تحميل النتائج؛ شغّل الصفحة عبر خادم محلي مع proposals.json.",
+          ),
+        );
+    </script>
+  </body>
+</html>

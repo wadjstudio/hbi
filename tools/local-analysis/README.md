@@ -8,6 +8,32 @@ The pilot implements bounded experiments:
 - A **1–30 second person-track preview**, using a pinned generic YOLOX-tiny model and a one-frame IoU baseline. Track IDs are temporary, can switch/fragment, and do not identify players or teams. This is not ByteTrack. Small balls, player identity, camera calibration, reliable replay classification and tactical event recognition are not implemented.
 - An optional **1–90 second controlled comparison**, using that original baseline at 5fps beside YOLOX-S at 640px, lower detection threshold/less aggressive NMS and Supervision 0.27.0 ByteTrack at 10fps. It retains low-confidence associations and lost states internally but draws only currently matched tracks. It also runs IoU on exactly the same S detections as a tracker diagnostic; tracklet/box counts are not accuracy. A source-only view and timestamped local feedback UI accompany the comparison. Multiple settings change in the visual before/after, so changes cannot be attributed to ByteTrack alone.
 
+## Spatial proposals and manual review
+
+The next bounded experiment reuses eight cached JPEGs and the pinned YOLOX-S model. A single inference exposes COCO person (0) and sports-ball (32) proposals independently; generic sports-ball detections are **not a trained handball detector or a ball trajectory**. Torso HSV colour groups can be corrected or excluded in the review UI; colours do not identify teams, goalkeepers, referees or athletes automatically.
+
+```powershell
+python tools/local-analysis/probe_spatial.py --comparison 'C:/path/new-comparison' --model 'C:/path/yolox_s.onnx' --out 'C:/path/new-spatial-review' --ball-tiles
+python -m http.server 8773 --bind 127.0.0.1 --directory 'C:/path/new-spatial-review'
+python tools/local-analysis/test_spatial.py
+node tools/local-analysis/verify_spatial_review.mjs
+node tools/local-analysis/verify_spatial_review.mjs 'C:/path/new-spatial-review'
+```
+
+Use the same optional environment's Python. The experiment expects the documented 600-frame comparison and its eight saved source snapshots, refuses an existing output directory and reports inference, postprocessing and wall timings separately. Vectorised NMS preserves greedy ordering/ties; randomized parity tests compare it with the scalar baseline. A small cached-box microbenchmark does not measure end-to-end throughput or detection accuracy.
+
+`--ball-tiles` adds six overlapping crops per frame and merges their generic-ball proposals; omit it for the cheaper full-frame-only probe. It adds inference cost and does not make the model handball-specific. The COCO class index is verified against the [official YOLOX class list](https://github.com/Megvii-BaseDetection/YOLOX/blob/main/yolox/data/datasets/coco_classes.py).
+
+The standalone review permits a manual ball point, person colour correction/exclusion, and up to four ground correspondences per exact frame. Coordinates are normalized and remain stable when resizing. It exports source/model/image hashes, source time, scene and pending calibration; no events or database writes. Feedback stays in memory until exported. The browser verifier uses synthetic edits in temporary files, never user feedback.
+
+After reviewing four known ground landmarks on a 40×20m court ([IHF court dimensions](https://www.ihf.info/media-center/news/handball-101-understand-essentials-olympic-handball-tournament-begins)), validate the exported geometry:
+
+```powershell
+python tools/local-analysis/validate_calibration.py --proposals 'C:/path/new-spatial-review/proposals.json' --feedback 'C:/path/sesen-spatial-feedback.json' --out 'C:/path/new-calibration-validation.json'
+```
+
+This rejects mismatched source/frame provenance, coincident/collinear/unstable anchors, crossed mappings and out-of-bounds coordinates. Mathematical validity still requires human landmark approval. The homography applies to that exact image only, never automatically across panning/cuts; there are no inferred metres, speeds or tactical judgements. These tools remain separate from production video selection.
+
 ## Longer tracking comparison and reviewer feedback
 
 Use an isolated environment for the optional tracker; it adds no Next/Cloudflare dependency:
@@ -29,7 +55,7 @@ node tools/local-analysis/verify_tracking_review.mjs 'C:/path/new-comparison'
 
 The comparison is capped at 90 seconds and refuses existing output directories. Models are checksum-pinned, the source SHA256 is computed from the file actually decoded, and source size/modification time are checked again. A flushed observation journal and progress JSON retain partial diagnostics; incomplete runs do not emit a complete report. CPU throughput is measured rather than assumed real time. All three videos are bounded derivatives; the original remains untouched. Source times are nominal preview samples, not calibrated game-clock readings.
 
-The original MOT exporter still accepts only its `sesen.tracking-pilot.v1` report up to 30 seconds. The new comparison uses a separate schema; do not pass its report to that exporter or treat buffered/Kalman states as independent ground truth. Spectators/referees, duplicate/missing boxes, camera motion, cuts and identity swaps remain review gates. No ball model, team classifier, court calibration or automatic tactical judgement has been added.
+The original MOT exporter still accepts only its `sesen.tracking-pilot.v1` report up to 30 seconds. The new comparison uses a separate schema; do not pass its report to that exporter or treat buffered/Kalman states as independent ground truth. Spectators/referees, duplicate/missing boxes, camera motion, cuts and identity swaps remain review gates. The comparison video itself contains no ball/team/court overlay; the separate spatial experiment above adds review aids without automatic tactical judgement.
 
 ## Local prerequisites
 

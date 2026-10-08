@@ -1,5 +1,9 @@
 # SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
 
+## Spatial proposals and review — 8 October 2026
+
+An optional eight-snapshot experiment adds generic sports-ball decoding, overlapping crops, jersey-colour suggestions and a manual spatial review/export page. Full-frame inference yielded no ball proposals; costly tiling yielded two unreviewed proposals, so this is not an accepted handball detector. Exact-frame four-point homography validation exists, with human landmark approval still required and no reuse across camera motion. There are no inferred ball trajectories, distances/speeds, team identities or tactical events. Production integration, licensed specialist training, independent annotated evaluation and practical throughput remain acceptance gates.
+
 ## Tracking review follow-up — 8 October 2026
 
 Reviewer feedback identified a too-short 5fps sample, missed overlapping people and fragmented tracks. A separate local before/after experiment now compares the preserved YOLOX-tiny/IoU baseline against YOLOX-S/ByteTrack at 10fps, with a same-detection IoU diagnostic and a standalone timestamped feedback page. It is capped at 90 seconds, uses explicit model/source provenance and optional isolated Python dependencies, and never converts predictions or feedback into match events. Ball detection, team discrimination, court calibration, robust occlusion/re-identification and tactical recognition remain unimplemented evaluation gates. Production video selection still does not invoke this engine.
