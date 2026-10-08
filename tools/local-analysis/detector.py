@@ -7,6 +7,10 @@ from PIL import Image
 import onnxruntime as ort
 
 MODEL_SHA256 = "427cc366d34e27ff7a03e2899b5e3671425c262ea2291f88bb942bc1cc70b0f7"
+MODEL_PROFILES = {
+    MODEL_SHA256: (416, "YOLOX-tiny/COCO"),
+    "c5c2d13e59ae883e6af3b45daea64af4833a4951c92d116ec270d9ddbe998063": (640, "YOLOX-S/COCO"),
+}
 
 
 def overlap(a, b):
@@ -29,24 +33,27 @@ def suppress(boxes, scores, threshold=0.45):
 
 
 class PersonDetector:
-    def __init__(self, model_path, threshold=0.35):
-        if not 0 < threshold < 1:
-            raise ValueError("Detection threshold must be between zero and one")
+    def __init__(self, model_path, threshold=0.35, nms_threshold=0.45):
+        if not 0 < threshold < 1 or not 0 < nms_threshold < 1:
+            raise ValueError("Detection and NMS thresholds must be between zero and one")
         with open(model_path, "rb") as stream:
             digest = hashlib.file_digest(stream, "sha256").hexdigest()
-        if digest != MODEL_SHA256:
-            raise ValueError("Unexpected model checksum; expected official YOLOX-tiny 0.1.1rc0")
+        if digest not in MODEL_PROFILES:
+            raise ValueError("Unexpected model checksum; expected a pinned official YOLOX model")
+        self.input_size, self.model_name = MODEL_PROFILES[digest]
+        self.model_sha256 = digest
         options = ort.SessionOptions()
         options.intra_op_num_threads = 2
         options.inter_op_num_threads = 1
         self.session = ort.InferenceSession(str(model_path), sess_options=options, providers=["CPUExecutionProvider"])
         self.input_name = self.session.get_inputs()[0].name
-        if self.session.get_inputs()[0].shape != [1, 3, 416, 416]:
+        if self.session.get_inputs()[0].shape != [1, 3, self.input_size, self.input_size]:
             raise ValueError("Unexpected YOLOX input shape")
         self.threshold = threshold
+        self.nms_threshold = nms_threshold
         grids, steps = [], []
         for stride in (8, 16, 32):
-            width = 416 // stride
+            width = self.input_size // stride
             xx, yy = np.meshgrid(np.arange(width), np.arange(width))
             grids.append(np.column_stack([xx.ravel(), yy.ravel()]))
             steps.append(np.full((width * width, 1), stride))
@@ -55,10 +62,10 @@ class PersonDetector:
 
     def detect(self, image):
         width, height = image.size
-        scale = min(416 / width, 416 / height)
+        scale = min(self.input_size / width, self.input_size / height)
         resized = image.convert("RGB").resize((int(width * scale), int(height * scale)), Image.Resampling.BILINEAR)
         # The upstream release expects BGR float32 in [0,255], top-left padding.
-        padded = np.full((416, 416, 3), 114, dtype=np.float32)
+        padded = np.full((self.input_size, self.input_size, 3), 114, dtype=np.float32)
         padded[:resized.height, :resized.width] = np.asarray(resized)[:, :, ::-1]
         tensor = padded.transpose(2, 0, 1)[None].copy()
         start = time.perf_counter()
@@ -75,7 +82,9 @@ class PersonDetector:
         boxes[:, (0, 2)] = np.clip(boxes[:, (0, 2)], 0, width)
         boxes[:, (1, 3)] = np.clip(boxes[:, (1, 3)], 0, height)
         valid_scores = scores[selected]
-        kept = suppress(boxes, valid_scores)
+        valid = np.isfinite(boxes).all(axis=1) & np.isfinite(valid_scores) & ((boxes[:, 2] - boxes[:, 0]) > 1) & ((boxes[:, 3] - boxes[:, 1]) > 1)
+        boxes, valid_scores = boxes[valid], valid_scores[valid]
+        kept = suppress(boxes, valid_scores, self.nms_threshold)
         return [{"box": [round(float(v), 2) for v in boxes[i]], "score": round(float(valid_scores[i]), 4), "class": "person"} for i in kept], elapsed
 
 

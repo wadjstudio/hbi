@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; media-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <title>SESEN · مراجعة التتبّع قبل وبعد</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #080e12;
+        color: #f4f1e8;
+        font:
+          16px/1.7 system-ui,
+          sans-serif;
+      }
+      main {
+        max-width: 1500px;
+        margin: auto;
+        padding: 24px;
+      }
+      header {
+        border-bottom: 1px solid #24414b;
+        margin-bottom: 20px;
+      }
+      h1 {
+        font-size: 24px;
+        margin: 0;
+      }
+      header p {
+        color: #adbcc6;
+      }
+      b {
+        color: #11d3d7;
+      }
+      video {
+        display: block;
+        width: 100%;
+        max-height: 72vh;
+        background: #000;
+        border: 1px solid #24414b;
+        border-radius: 8px;
+      }
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 14px 0;
+        align-items: center;
+      }
+      button,
+      select,
+      textarea {
+        font: inherit;
+        color: inherit;
+        background: #10212a;
+        border: 1px solid #36525d;
+        border-radius: 6px;
+        padding: 8px 14px;
+      }
+      button {
+        cursor: pointer;
+      }
+      button[aria-pressed="true"] {
+        border-color: #11d3d7;
+        color: #11d3d7;
+      }
+      textarea {
+        display: block;
+        width: 100%;
+        min-height: 90px;
+      }
+      section {
+        margin-top: 22px;
+        padding: 18px;
+        border: 1px solid #24414b;
+        border-radius: 8px;
+      }
+      h2 {
+        font-size: 18px;
+        margin-top: 0;
+      }
+      small {
+        color: #adbcc6;
+      }
+      .notes {
+        display: grid;
+        gap: 10px;
+        list-style: none;
+        padding: 0;
+      }
+      .notes li {
+        display: flex;
+        gap: 12px;
+        align-items: start;
+        padding: 12px;
+        background: #10212a;
+      }
+      .notes span {
+        overflow-wrap: anywhere;
+        flex: 1;
+      }
+      .readout {
+        font-variant-numeric: tabular-nums;
+        color: #d8b57b;
+      }
+      label {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+      select {
+        max-width: 100%;
+      }
+      .status {
+        min-height: 24px;
+        color: #d8b57b;
+      }
+      @media (max-width: 600px) {
+        main {
+          padding: 12px;
+        }
+        h1 {
+          font-size: 20px;
+        }
+        .notes li {
+          flex-wrap: wrap;
+        }
+        button,
+        select {
+          min-height: 44px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1><b>SESEN</b> · مراجعة التتبّع قبل وبعد</h1>
+        <p>
+          دقيقة من نفس المباراة: حركة ولعب وتغيّر كاميرا. قارن فقدان الكشف وثبات
+          الهوية وجودة المربعات.
+        </p>
+      </header>
+      <div class="toolbar" role="group" aria-label="نوع المشاهدة">
+        <button data-mode="comparison-preview.mp4" aria-pressed="true">
+          قبل وبعد جنبًا إلى جنب
+        </button>
+        <button data-mode="updated-preview.mp4" aria-pressed="false">
+          النسخة الجديدة بحجم كامل
+        </button>
+        <button data-mode="raw-preview.mp4" aria-pressed="false">
+          اللقطة الأصلية دون مؤثرات
+        </button>
+      </div>
+      <video
+        id="video"
+        controls
+        playsinline
+        preload="metadata"
+        src="comparison-preview.mp4"
+      ></video>
+      <div class="toolbar">
+        <span id="clock" class="readout"></span
+        ><label
+          >سرعة التشغيل
+          <select id="speed">
+            <option value="0.5">نصف السرعة</option>
+            <option value="1" selected>عادية</option>
+            <option value="1.5">×1.5</option>
+          </select></label
+        ><button id="back">رجوع ثانية</button
+        ><button id="forward">تقدّم ثانية</button>
+      </div>
+      <small
+        >اليسار: الكاشف القديم + IoU عند 5fps. اليمين: YOLOX-S + ByteTrack عند
+        10fps. الأرقام هويات أشخاص مؤقتة داخل المشهد، وليست أرقام قمصان. المربع
+        المفقود لا يُرسم كتنبؤ وهمي؛ ByteTrack يحتفظ بحالته مؤقتًا لمحاولة
+        استعادته.</small
+      >
+      <section>
+        <h2>أضف ملاحظة عند اللقطة</h2>
+        <p>
+          أوقف الفيديو عند المشكلة، واختر نوعها واكتب وصفًا. الملاحظة مرتبطة
+          بزمن الفيديو؛ يمكنك الرجوع إليها وتصديرها.
+        </p>
+        <form id="note-form">
+          <label
+            >نوع الملاحظة
+            <select id="kind">
+              <option>فقدان كشف لاعب</option>
+              <option>تبديل هوية التتبّع</option>
+              <option>مربع غير دقيق</option>
+              <option>حركة كرة تحتاج مراجعة</option>
+              <option>ملاحظة تكتيكية بشرية</option>
+              <option>ملاحظة أخرى</option>
+            </select></label
+          >
+          <p>
+            <textarea
+              id="note"
+              aria-label="وصف الملاحظة"
+              required
+              maxlength="2000"
+              placeholder="مثال: المدافع الموجود خلف المهاجم فقد المربع وقت الالتحام"
+            ></textarea>
+          </p>
+          <button>إضافة الملاحظة عند الزمن الحالي</button>
+        </form>
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+        <ul id="notes" class="notes"></ul>
+        <div class="toolbar">
+          <button id="export" disabled>تصدير الملاحظات JSON</button
+          ><small
+            >الملاحظات في الذاكرة فقط؛ صدّرها قبل إغلاق الصفحة. لا تسجيل دخول
+            ولا رفع فيديو أو إرسال إلى قاعدة البيانات.</small
+          >
+        </div>
+      </section>
+      <section>
+        <h2>ما الذي نختبره؟</h2>
+        <p>
+          هل يستعيد المسار بعد الالتحام؟ هل ينتقل الرقم إلى شخص آخر؟ هل المربعات
+          تتابع الوضعية دون تأخر؟ هل يُكشف لاعبون حقيقيون أكثر أم تزداد الأخطاء؟
+        </p>
+        <small
+          >هذه مقارنة بصرية تشمل تغيير الكاشف وإعداداته ومعدل الإطارات والتتبّع
+          معًا؛ ليست قياس دقة مستقلاً لـByteTrack. كشف الكرة والفرق ومعايرة
+          الملعب والتحليل التكتيكي الآلي لم تُنفذ في هذه العينة. مشاهد الجمهور
+          والحكام وتغيّر الكاميرا قد تبقى مصدر أخطاء.</small
+        >
+      </section>
+    </main>
+    <script type="application/json" id="context">
+      __SESEN_COMPARISON_CONTEXT__
+    </script>
+    <script>
+      const context = JSON.parse(
+          document.getElementById("context").textContent,
+        ),
+        video = document.getElementById("video"),
+        notes = [];
+      const stamp = (ms) => {
+        const value = Math.floor(ms / 1000);
+        return `${String(Math.floor(value / 60)).padStart(2, "0")}:${String(value % 60).padStart(2, "0")}.${Math.floor((ms % 1000) / 100)}`;
+      };
+      function clock() {
+        const ms = Math.round(video.currentTime * 1000);
+        document.getElementById("clock").textContent =
+          `العينة ${stamp(ms)} · التسجيل ${stamp(context.video_start_ms + ms)}`;
+      }
+      video.addEventListener("timeupdate", clock);
+      video.addEventListener("loadedmetadata", clock);
+      for (const button of document.querySelectorAll("[data-mode]"))
+        button.addEventListener("click", () => {
+          const time = video.currentTime;
+          video.pause();
+          for (const item of document.querySelectorAll("[data-mode]"))
+            item.setAttribute("aria-pressed", String(item === button));
+          video.src = button.dataset.mode;
+          video.addEventListener(
+            "loadedmetadata",
+            () => {
+              video.currentTime = Math.min(time, video.duration);
+              video.playbackRate = Number(
+                document.getElementById("speed").value,
+              );
+            },
+            { once: true },
+          );
+        });
+      document
+        .getElementById("speed")
+        .addEventListener(
+          "change",
+          (event) => (video.playbackRate = Number(event.target.value)),
+        );
+      document.getElementById("back").onclick = () => {
+        video.pause();
+        video.currentTime = Math.max(0, video.currentTime - 1);
+      };
+      document.getElementById("forward").onclick = () => {
+        video.pause();
+        video.currentTime = Math.min(
+          video.duration || 0,
+          video.currentTime + 1,
+        );
+      };
+      function renderNotes() {
+        const list = document.getElementById("notes");
+        list.replaceChildren();
+        notes.forEach((note, index) => {
+          const li = document.createElement("li"),
+            seek = document.createElement("button"),
+            text = document.createElement("span"),
+            remove = document.createElement("button");
+          seek.textContent = stamp(note.preview_ms);
+          seek.onclick = () => {
+            video.pause();
+            video.currentTime = note.preview_ms / 1000;
+          };
+          text.textContent = `${note.kind}: ${note.comment}`;
+          remove.textContent = "حذف";
+          remove.onclick = () => {
+            notes.splice(index, 1);
+            renderNotes();
+          };
+          li.append(seek, text, remove);
+          list.append(li);
+        });
+        document.getElementById("export").disabled = !notes.length;
+      }
+      document
+        .getElementById("note-form")
+        .addEventListener("submit", (event) => {
+          event.preventDefault();
+          const input = document.getElementById("note"),
+            comment = input.value.trim();
+          if (!comment) return;
+          video.pause();
+          const ms = Math.max(
+            0,
+            Math.min(context.duration_ms, Math.round(video.currentTime * 1000)),
+          );
+          notes.push({
+            preview_ms: ms,
+            source_video_ms: context.video_start_ms + ms,
+            view: document.querySelector("[data-mode][aria-pressed=true]")
+              .dataset.mode,
+            kind: document.getElementById("kind").value,
+            comment,
+          });
+          input.value = "";
+          renderNotes();
+          document.getElementById("status").textContent =
+            "أُضيفت الملاحظة؛ صدّرها قبل الإغلاق.";
+        });
+      document.getElementById("export").onclick = () => {
+        const result = {
+          schema: "sesen.tracking-feedback.v1",
+          source_sha256: context.source_sha256,
+          video_start_ms: context.video_start_ms,
+          duration_ms: context.duration_ms,
+          review_status: "human-feedback-only",
+          notes,
+          confirmed_events: [],
+        };
+        const url = URL.createObjectURL(
+            new Blob([JSON.stringify(result, null, 2)], {
+              type: "application/json",
+            }),
+          ),
+          link = document.createElement("a");
+        link.href = url;
+        link.download = "sesen-tracking-feedback.json";
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      };
+      window.addEventListener("beforeunload", (event) => {
+        if (notes.length) {
+          event.preventDefault();
+          event.returnValue = "";
+        }
+      });
+      clock();
+    </script>
+  </body>
+</html>

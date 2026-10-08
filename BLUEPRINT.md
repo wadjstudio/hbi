@@ -1,10 +1,14 @@
 # SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
 
+## Tracking review follow-up — 8 October 2026
+
+Reviewer feedback identified a too-short 5fps sample, missed overlapping people and fragmented tracks. A separate local before/after experiment now compares the preserved YOLOX-tiny/IoU baseline against YOLOX-S/ByteTrack at 10fps, with a same-detection IoU diagnostic and a standalone timestamped feedback page. It is capped at 90 seconds, uses explicit model/source provenance and optional isolated Python dependencies, and never converts predictions or feedback into match events. Ball detection, team discrimination, court calibration, robust occlusion/re-identification and tactical recognition remain unimplemented evaluation gates. Production video selection still does not invoke this engine.
+
 ## External knowledge and smarter analysis — 8 October 2026
 
 The current source includes `/data-sources`: a reviewed 16-source handball-data/tool guide and optional Wikidata name/revision preview with unreviewed JSON export. Reads are explicit, bounded, credential-free and validated; they do not create rosters, stats or player identities in video. DATA_SOURCES.md records primary links, licensing distinctions, coverage gaps and the next integration decisions. GitHub repository-head/license snapshots and a minimal CC0 real-endpoint fixture accompany the contracts.
 
-The local inference pilot now exports MOT predictions/CVAT review suggestions with dense preview/source-time mapping, validated geometry and scene-local identities. No CVAT server, TrackEval package, ByteTrack upgrade or third-party training dataset is required or installed by this iteration. Future automatic analysis requires independently reviewed handball samples, stronger tracking, ball/team/court calibration, event precision/recall evaluation and an authenticated review/import boundary. Product statistics still use canonical reviewed observations. No migration or hosted deployment is implied by this source update.
+The original local pilot exports MOT predictions/CVAT review suggestions with dense preview/source-time mapping, validated geometry and scene-local identities. No CVAT server, TrackEval package or third-party training dataset is required or installed. The later local comparison adds optional ByteTrack separately. Future automatic analysis requires independently reviewed handball samples, ball/team/court calibration, event precision/recall evaluation and an authenticated review/import boundary. Product statistics still use canonical reviewed observations. No migration or hosted deployment is implied by this source update.
 
 ## Final identity — 7 October 2026
 

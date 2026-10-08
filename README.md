@@ -52,7 +52,7 @@ The production app currently records analyst-entered events; selecting a video d
 
 ## Validation
 
-Read [DATA_SOURCES.md](DATA_SOURCES.md) for the audited handball-data and open-source integration decisions. **Data sources** in the sidebar offers an optional Wikidata player-name/revision preview and a 16-source guide. Names are exported for review, not silently imported as current rosters or performance statistics. Public metadata, code, model weights and dataset licenses are reviewed separately. The local pilot can export MOT/CVAT suggestions for independent annotation; it still uses the IoU baseline, not ByteTrack.
+Read [DATA_SOURCES.md](DATA_SOURCES.md) for the audited handball-data and open-source integration decisions. **Data sources** in the sidebar offers an optional Wikidata player-name/revision preview and a 16-source guide. Names are exported for review, not silently imported as current rosters or performance statistics. Public metadata, code, model weights and dataset licenses are reviewed separately. The original local pilot exports MOT/CVAT suggestions with the IoU baseline. A separate optional YOLOX-S/ByteTrack comparison now offers longer before/after/source views and timestamped reviewer feedback; see [local tool instructions](tools/local-analysis/README.md). It does not add production automatic analysis or ball/tactical recognition.
 
 ```powershell
 pnpm typecheck

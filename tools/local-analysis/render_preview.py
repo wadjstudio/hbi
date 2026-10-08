@@ -85,7 +85,7 @@ def run(args):
             raise
     if not observations:
         raise RuntimeError("No preview frames decoded")
-    report = {"schema": "sesen.tracking-pilot.v1", "video_start_ms": round(args.start * 1000), "requested_duration_ms": round(args.duration * 1000), "sample_fps": fps, "model": "YOLOX-tiny/COCO", "tracker": "one-frame IoU baseline, not ByteTrack", "review_status": "unreviewed", "identity_warning": "Track IDs can switch or fragment; they are not player IDs", "elapsed_seconds": round(time.perf_counter() - started, 2), "observations": observations}
+    report = {"schema": "sesen.tracking-pilot.v1", "video_start_ms": round(args.start * 1000), "requested_duration_ms": round(args.duration * 1000), "sample_fps": fps, "model": detector.model_name, "model_sha256": detector.model_sha256, "tracker": "one-frame IoU baseline, not ByteTrack", "review_status": "unreviewed", "identity_warning": "Track IDs can switch or fragment; they are not player IDs", "elapsed_seconds": round(time.perf_counter() - started, 2), "observations": observations}
     (out / "tracking-analysis.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(json.dumps({"frames": len(observations), "elapsed_seconds": report["elapsed_seconds"], "video": str(out / "tracking-preview.mp4")}))
 

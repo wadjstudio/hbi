@@ -2,10 +2,34 @@
 
 Experimental local tools, separate from the production analysis workflow. No upload, paid service, cloud worker, database migration or automatic match mutation is performed. Selecting a video in the existing web app does **not** yet invoke this engine.
 
-The pilot implements two deliberately bounded capabilities:
+The pilot implements bounded experiments:
 
 - Full-source **periodic scoreboard OCR**, using a manually calibrated ON Sport 1280×720 layout, real decoded presentation timestamps and a pinned generic CRNN model. Repeat reads produce review-only score-change intervals or discontinuities. They are not confirmed goals, shot attempts, exact event times, tactical classifications or player statistics. Missing/unreliable readings remain null. Regressions do not automatically count an earlier score again.
 - A **1–30 second person-track preview**, using a pinned generic YOLOX-tiny model and a one-frame IoU baseline. Track IDs are temporary, can switch/fragment, and do not identify players or teams. This is not ByteTrack. Small balls, player identity, camera calibration, reliable replay classification and tactical event recognition are not implemented.
+- An optional **1–90 second controlled comparison**, using that original baseline at 5fps beside YOLOX-S at 640px, lower detection threshold/less aggressive NMS and Supervision 0.27.0 ByteTrack at 10fps. It retains low-confidence associations and lost states internally but draws only currently matched tracks. It also runs IoU on exactly the same S detections as a tracker diagnostic; tracklet/box counts are not accuracy. A source-only view and timestamped local feedback UI accompany the comparison. Multiple settings change in the visual before/after, so changes cannot be attributed to ByteTrack alone.
+
+## Longer tracking comparison and reviewer feedback
+
+Use an isolated environment for the optional tracker; it adds no Next/Cloudflare dependency:
+
+```powershell
+python -m venv ../sesen-tracking-venv
+../sesen-tracking-venv/Scripts/python.exe -m pip install -r tools/local-analysis/requirements-tracking.txt
+../sesen-tracking-venv/Scripts/python.exe tools/local-analysis/compare_tracking.py --video 'E:/path/match.mp4' --tiny-model 'C:/path/yolox_tiny.onnx' --small-model 'C:/path/yolox_s.onnx' --output 'C:/path/new-comparison' --start 2100 --duration 60
+../sesen-tracking-venv/Scripts/python.exe tools/local-analysis/render_comparison.py --video 'E:/path/match.mp4' --report 'C:/path/new-comparison/comparison.json'
+../sesen-tracking-venv/Scripts/python.exe tools/local-analysis/test_tracking.py
+python -m http.server 8772 --bind 127.0.0.1 --directory 'C:/path/new-comparison'
+```
+
+Open `http://127.0.0.1:8772/index.html`. Switch between the synchronized comparison, updated view and source without overlays; use half-speed, pause and add a timestamped note. Export feedback JSON before closing: notes remain in memory, never become confirmed events and are not sent to Supabase. Browser acceptance for the documented real 60-second sample:
+
+```powershell
+node tools/local-analysis/verify_tracking_review.mjs 'C:/path/new-comparison'
+```
+
+The comparison is capped at 90 seconds and refuses existing output directories. Models are checksum-pinned, the source SHA256 is computed from the file actually decoded, and source size/modification time are checked again. A flushed observation journal and progress JSON retain partial diagnostics; incomplete runs do not emit a complete report. CPU throughput is measured rather than assumed real time. All three videos are bounded derivatives; the original remains untouched. Source times are nominal preview samples, not calibrated game-clock readings.
+
+The original MOT exporter still accepts only its `sesen.tracking-pilot.v1` report up to 30 seconds. The new comparison uses a separate schema; do not pass its report to that exporter or treat buffered/Kalman states as independent ground truth. Spectators/referees, duplicate/missing boxes, camera motion, cuts and identity swaps remain review gates. No ball model, team classifier, court calibration or automatic tactical judgement has been added.
 
 ## Local prerequisites
 
@@ -25,9 +49,10 @@ Download the following **ONNX data files only** from the official projects; the 
 | Model        | Official source                                                                                                                       | SHA256                                                             |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
 | YOLOX-tiny   | [YOLOX release 0.1.1rc0](https://github.com/Megvii-BaseDetection/YOLOX/releases/download/0.1.1rc0/yolox_tiny.onnx)                    | `427cc366d34e27ff7a03e2899b5e3671425c262ea2291f88bb942bc1cc70b0f7` |
+| YOLOX-S      | [YOLOX release 0.1.1rc0](https://github.com/Megvii-BaseDetection/YOLOX/releases/download/0.1.1rc0/yolox_s.onnx)                       | `c5c2d13e59ae883e6af3b45daea64af4833a4951c92d116ec270d9ddbe998063` |
 | CRNN English | [OpenCV Zoo model](https://github.com/opencv/opencv_zoo/blob/main/models/text_recognition_crnn/text_recognition_CRNN_EN_2021sep.onnx) | `a84b1f6e11a65c2d733cb0cc1f014aae3f99051e3f11447dc282faa678eee544` |
 
-Both upstream directories publish Apache-2.0 licenses. The CRNN hash is independently recorded in the upstream Git LFS pointer. The YOLOX hash records the fetched official release artifact. The application package contains no model weights. Read [NOTICE.md](NOTICE.md) for provenance.
+Both upstream model directories publish Apache-2.0 licenses. The CRNN hash is independently recorded in the upstream Git LFS pointer. The YOLOX hashes record fetched official release artifacts; GitHub did not provide an asset digest for S, so its pinned hash is a local download record rather than an independent signature. The application package contains no model weights. Read [NOTICE.md](NOTICE.md) for provenance.
 
 ## Run from the repository root
 
@@ -60,7 +85,7 @@ The source hash identifies the caller-supplied recording; old pilot reports do n
 
 The archive follows [CVAT's MOT format](https://docs.cvat.ai/docs/dataset_management/formats/format-mot/). Its required `gt/gt.txt` filename contains **unreviewed suggestions**, not reviewed ground truth; visibility=1 is a format default, not a measured property. CVAT itself has not been installed or its importer exercised here. Correct person/athlete/official classification and tracks before exporting independent ground truth for [TrackEval](https://github.com/JonathonLuiten/TrackEval). Never evaluate a tracker against its own predictions or treat interpolation as measured ball/player motion. No HOTA/IDF1 accuracy score is claimed.
 
-See [DATA_SOURCES.md](../../DATA_SOURCES.md) for reviewed sources, dataset/code licensing distinctions and the next ByteTrack/handball-specialist gates. Neither CVAT nor TrackEval becomes a mandatory service or runtime dependency.
+See [DATA_SOURCES.md](../../DATA_SOURCES.md) for reviewed sources, dataset/code licensing distinctions and the handball-specialist evaluation gates. ByteTrack is optional in the new local comparison; neither CVAT nor TrackEval becomes a mandatory service or runtime dependency.
 
 ```powershell
 python tools/local-analysis/test_analysis.py

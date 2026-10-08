@@ -1,0 +1,5 @@
+# Optional local comparison only; install in a virtual environment.
+-r requirements.txt
+supervision==0.27.0
+scipy==1.17.1
+opencv-python==5.0.0.93

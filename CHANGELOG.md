@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Longer tracking review after real feedback — 2026-10-08
+
+- Preserved the original tiny/IoU experiment and added a pinned official YOLOX-S 640px profile, configurable NMS and finite/nondegenerate output checks. Lower-confidence detections remain available for the optional tracker; increased detection counts do not establish correct athlete coverage.
+- Added Supervision 0.27.0 ByteTrack in an isolated optional Python environment, current-observation Kalman boxes, short lost-state buffering and scene resets. No lost predictions are drawn as measured people; IDs remain scene-local and can still switch during occlusion.
+- Added bounded source-hashed comparison/journaling and separate rendering, with a same-detection IoU diagnostic. The real 60-second sample at source 35:00–36:00 contains 600 updated frames; dual-pipeline CPU analysis took 1,568.11 seconds. It is not a real-time or full-match throughput claim.
+- Added source/before-after/updated video modes, preserved review time, playback speed, safe timestamped human notes and feedback JSON with no canonical events. Notes stay in memory and require export. No cloud upload, production inference, ball/team/court model or tactical classification was added.
+- Added seven optional tracking behavior checks and a real-media browser verifier; refreshed source decisions, architecture/continuation documents and provenance. Web dependencies, database schemas and hosted deployment remain unchanged.
+
 ## Audited data sources and annotation interchange — 2026-10-08
 
 - Read both supplied PDFs and verified primary project/API documentation. Added DATA_SOURCES.md and a versioned eight-repository license/commit audit. Corrected unsupported SportScore handball coverage, introductory SportDB quotas and SportsLabKit's GPL license; kept dataset rights distinct from repository code permissions.

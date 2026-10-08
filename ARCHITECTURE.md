@@ -1,5 +1,11 @@
 # SESEN / HBI Architecture
 
+## Tracking comparison and feedback
+
+The optional local comparison keeps the pinned tiny/IoU baseline intact, adds a checksum-pinned YOLOX-S profile and imports ByteTrack from pinned Supervision in an isolated Python environment. It samples one bounded source interval, journals both pipelines and a same-detection IoU diagnostic, and verifies the real source hash/unchanged metadata. Rendering is separate from inference so video/UI corrections reuse observations. Only current matched tracks are drawn; lost states remain internal, and scene-local IDs reset at heuristic cuts. Increased box counts or fewer tracklets are not accuracy or reliable player identities.
+
+The standalone review page serves only short derivatives, preserves preview time across source/comparison/updated modes and exports timestamped human feedback in a separate schema with no confirmed events. Notes use safe text rendering and stay in memory. Nothing enters the app's IndexedDB, outbox, canonical events or hosted services. The comparison schema is distinct from the earlier bounded MOT export schema. Ball/team/court/tactical models and independently annotated evaluation remain gates.
+
 ## External knowledge and evaluation interchange
 
 `features/data-sources` owns the audited provider catalog, repository-head/license audit and Zod-validated read-only Wikidata adapter; `components/workspace/data-sources.tsx` owns explicit search/cancel/export UI. The adapter uses bounded credential-free public GETs only, preserves revision/CC0/retrieval provenance, excludes images and requires direct nondeprecated human/handball-player occupation claims. Known IDs use the linked-data endpoint; text search honors maxlag and never retries in a loop. Results live in transient component state and reset across account/organization changes. Nothing enters the outbox or canonical statistics; no migration or privileged route is needed for this preview. Future writes must use existing role/RLS/import-review boundaries.

@@ -241,16 +241,23 @@ hbi-starter/
   tools/local-analysis/NOTICE.md
   tools/local-analysis/README.md
   tools/local-analysis/build_review.py
+  tools/local-analysis/byte_tracker.py
+  tools/local-analysis/compare_tracking.py
   tools/local-analysis/detector.py
   tools/local-analysis/export_mot.py
+  tools/local-analysis/render_comparison.py
   tools/local-analysis/render_preview.py
+  tools/local-analysis/requirements-tracking.txt
   tools/local-analysis/requirements.txt
   tools/local-analysis/review-template.html
   tools/local-analysis/scan_scoreboard.py
   tools/local-analysis/scoreboard.py
   tools/local-analysis/test_analysis.py
   tools/local-analysis/test_mot.py
+  tools/local-analysis/test_tracking.py
+  tools/local-analysis/tracking_review.html
   tools/local-analysis/verify_review.mjs
+  tools/local-analysis/verify_tracking_review.mjs
   types/.gitkeep
   types/workspace.ts
 ```

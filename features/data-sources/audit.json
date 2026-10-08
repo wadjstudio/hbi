@@ -83,5 +83,14 @@
       "url": "https://www.wikidata.org/wiki/Special:EntityData/Q18921300.json"
     }
   },
-  "no_third_party_code_or_weights_executed": true
+  "source_discovery_audit_no_third_party_code_or_weights_executed": true,
+  "later_local_tracking_experiment": {
+    "supervision": "0.27.0",
+    "implementation_license": "MIT",
+    "model": "official YOLOX-S ONNX 0.1.1rc0",
+    "model_sha256": "c5c2d13e59ae883e6af3b45daea64af4833a4951c92d116ec270d9ddbe998063",
+    "optional_isolated_python_environment": true,
+    "production_engine_connected": false,
+    "accuracy_measured": false
+  }
 }
