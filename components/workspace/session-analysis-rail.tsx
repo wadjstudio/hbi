@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { ArrowUpRight, Play, Users } from "lucide-react";
+import { ArrowUpRight, Play, Users, Lightbulb } from "lucide-react";
 import { tacticalGroups } from "@/features/analysis/workbench";
 import {
   shotSummary,
@@ -114,6 +114,22 @@ export function SessionAnalysisRail({
   const goalkeeperIds = [
     ...new Set(defended.map((shot) => s(shot.goalkeeper_id)).filter(Boolean)),
   ];
+  const links = w.list("evidence_links");
+  const insights = w
+    .list("insights")
+    .filter((insight) => insight.team_id === tid)
+    .map((insight) => {
+      const linkedIds = new Set(
+        links
+          .filter((link) => link.insight_id === insight.id)
+          .map((link) => s(link.event_id)),
+      );
+      return {
+        insight,
+        evidence: events.filter((event) => linkedIds.has(event.id)),
+      };
+    })
+    .filter((entry) => entry.evidence.length > 0);
   return (
     <aside
       className="session-rail"
@@ -339,59 +355,102 @@ export function SessionAnalysisRail({
           </p>
         )}
       </section>
-      <section className="intelligence-section keeper-section">
+      <section className="intelligence-section insight-section">
         <header>
-          <h3>{w.t("حراس الفريق", "Team goalkeepers")}</h3>
-          <small>
-            {w.t("تصديات / تصديات + أهداف", "saves / saves + goals")}
-          </small>
+          <h3>{w.t("استنتاجات بالأدلة", "Evidence-backed insights")}</h3>
+          <Lightbulb size={14} aria-hidden="true" />
         </header>
-        {goalkeeperIds.length ? (
-          goalkeeperIds.map((id) => {
-            const keeper = w.list("players").find((player) => player.id === id),
-              summary = keeperSummary(defended, id);
-            const selected = defended.filter(
-              (shot) =>
-                shot.goalkeeper_id === id &&
-                !shot.empty_goal &&
-                !shot.review_required &&
-                ["goal", "save"].includes(s(shot.result)),
-            );
-            return (
-              <button
-                className="threat-row"
-                key={id}
-                onClick={() =>
-                  onEvidence(
-                    keeper ? rowLabel(keeper) : w.t("الحارس", "Goalkeeper"),
-                    events.filter((event) =>
-                      selected.some((shot) => shot.event_id === event.id),
-                    ),
-                  )
-                }
-              >
-                <PlayerAvatar number="GK" />
-                <span>
-                  <b>{keeper ? rowLabel(keeper) : "—"}</b>
-                  <small>
-                    {summary.saves}/{summary.sample} ·{" "}
-                    {w.t("إهدار وحجب مستبعدان", "misses & blocks excluded")}
-                  </small>
-                </span>
-                <strong>{percent(summary.percentage)}</strong>
-                <Play size={13} />
-              </button>
-            );
-          })
+        {insights.length ? (
+          insights.slice(0, 4).map(({ insight, evidence }) => (
+            <button
+              className="insight-evidence-row"
+              key={insight.id}
+              onClick={() => onEvidence(s(insight.title), evidence)}
+            >
+              <span>
+                <b>{s(insight.title)}</b>
+                <small>
+                  {insight.is_reviewed
+                    ? w.t("مراجع", "Reviewed")
+                    : w.t("بانتظار المراجعة", "Needs review")}
+                  {" · "}
+                  {evidence.length}{" "}
+                  {w.t("حدث مرتبط في هذا العرض", "linked events in this view")}
+                </small>
+              </span>
+              <Play size={14} aria-hidden="true" />
+            </button>
+          ))
         ) : (
           <p className="intelligence-empty">
             {w.t(
-              "حدّد الحارس أمام محاولات الخصم لعرض التصديات وأدلتها.",
-              "Identify the keeper facing opponent attempts to show saves and evidence.",
+              "احفظ استنتاجًا بأدلته من تحليل الخصم ليظهر هنا عند وجود أحداثه في العينة.",
+              "Save an insight with evidence in opponent analysis to see it alongside its events here.",
             )}
           </p>
         )}
       </section>
+      <details className="keeper-details">
+        <summary>
+          {w.t("تحليل حراس الفريق", "Team goalkeeper analysis")} ·{" "}
+          {goalkeeperIds.length}
+        </summary>
+        <section className="intelligence-section keeper-section">
+          <header>
+            <h3>{w.t("حراس الفريق", "Team goalkeepers")}</h3>
+            <small>
+              {w.t("تصديات / تصديات + أهداف", "saves / saves + goals")}
+            </small>
+          </header>
+          {goalkeeperIds.length ? (
+            goalkeeperIds.map((id) => {
+              const keeper = w
+                  .list("players")
+                  .find((player) => player.id === id),
+                summary = keeperSummary(defended, id);
+              const selected = defended.filter(
+                (shot) =>
+                  shot.goalkeeper_id === id &&
+                  !shot.empty_goal &&
+                  !shot.review_required &&
+                  ["goal", "save"].includes(s(shot.result)),
+              );
+              return (
+                <button
+                  className="threat-row"
+                  key={id}
+                  onClick={() =>
+                    onEvidence(
+                      keeper ? rowLabel(keeper) : w.t("الحارس", "Goalkeeper"),
+                      events.filter((event) =>
+                        selected.some((shot) => shot.event_id === event.id),
+                      ),
+                    )
+                  }
+                >
+                  <PlayerAvatar number="GK" />
+                  <span>
+                    <b>{keeper ? rowLabel(keeper) : "—"}</b>
+                    <small>
+                      {summary.saves}/{summary.sample} ·{" "}
+                      {w.t("إهدار وحجب مستبعدان", "misses & blocks excluded")}
+                    </small>
+                  </span>
+                  <strong>{percent(summary.percentage)}</strong>
+                  <Play size={13} />
+                </button>
+              );
+            })
+          ) : (
+            <p className="intelligence-empty">
+              {w.t(
+                "حدّد الحارس أمام محاولات الخصم لعرض التصديات وأدلتها.",
+                "Identify the keeper facing opponent attempts to show saves and evidence.",
+              )}
+            </p>
+          )}
+        </section>
+      </details>
       <Link className="intelligence-more" href="/opponents">
         {w.t(
           "فتح تحليل الخصوم عبر المباريات",

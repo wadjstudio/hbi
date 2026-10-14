@@ -38,6 +38,39 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     .click();
   await page.getByRole("button", { name: "Reset layout", exact: true }).click();
   await expect(rail).toBeVisible();
+  // Optional local footage is used only in the isolated test account, never seeded into production.
+  if (process.env.HBI_VISUAL_MATCH) {
+    await page
+      .getByLabel("Select local video", { exact: false })
+      .setInputFiles(process.env.HBI_VISUAL_MATCH);
+    await expect(page.locator("video")).toBeVisible();
+    await page.locator("video").evaluate(async (element) => {
+      const video = element as HTMLVideoElement;
+      if (video.readyState < 2)
+        await new Promise<void>((resolve) =>
+          video.addEventListener("loadeddata", () => resolve(), { once: true }),
+        );
+    });
+  }
+  const layers = page.getByRole("button", {
+    name: "Possessions & clips",
+    exact: true,
+  });
+  await expect(layers).toHaveAttribute("aria-expanded", "false");
+  await layers.click();
+  await expect(page.locator(".timeline-lane")).toHaveCount(3);
+  await layers.click();
+  await expect(page.locator(".timeline-lane")).toHaveCount(1);
+  const breakdown = page.locator(".threat-breakdown");
+  await expect(breakdown).not.toHaveAttribute("open");
+  await breakdown.locator("summary").click();
+  await expect(breakdown.locator(".threat-zone-list")).toBeVisible();
+  await breakdown.locator("summary").click();
+  await expect
+    .poll(
+      async () => (await page.locator(".threat-profile").boundingBox())!.height,
+    )
+    .toBeLessThan(240);
   await page.getByRole("tab", { name: "events", exact: true }).focus();
   await page
     .getByRole("tab", { name: "events", exact: true })
@@ -56,6 +89,23 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     path: testInfo.outputPath("console-wide.png"),
     fullPage: true,
   });
+  for (const width of [1672, 1440, 1024, 768, 375]) {
+    await page.setViewportSize({ width, height: 941 });
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () =>
+            document.documentElement.scrollWidth <=
+            document.documentElement.clientWidth,
+        ),
+      )
+      .toBe(true);
+    await page.screenshot({
+      path: testInfo.outputPath(`console-${width}.png`),
+      fullPage: true,
+    });
+  }
+  await page.setViewportSize({ width: 1560, height: 900 });
   await page.getByRole("button", { name: "العربية", exact: true }).click();
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   await page.screenshot({

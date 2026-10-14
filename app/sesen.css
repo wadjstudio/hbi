@@ -214,7 +214,26 @@ button:disabled {
   display: none;
 }
 .sesen-shell .sidebar nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 5px;
+}
+.sesen-shell .sidebar nav a {
+  grid-column: 1 / -1;
+}
+@media (min-width: 1440px) {
+  .sesen-shell .sidebar nav a[data-secondary] {
+    grid-column: auto;
+    min-height: 36px;
+    padding: 6px 4px;
+    gap: 5px;
+    font-size: 11px;
+  }
+  .sesen-shell .sidebar nav a[data-secondary] svg {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+  }
 }
 .sesen-shell .sidebar nav a,
 .mobile-navigation nav a {
@@ -536,6 +555,60 @@ html[dir="rtl"] .mobile-navigation {
   font-size: 12px;
   min-height: 32px;
 }
+.layout-controls {
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.layout-controls > .session-settings {
+  flex: 1;
+  min-width: 180px;
+  margin: 0;
+}
+.layout-controls > .session-settings[open] {
+  flex-basis: 100%;
+}
+.layout-controls summary,
+.threat-breakdown summary {
+  cursor: pointer;
+  padding-block: 5px;
+}
+.threat-breakdown {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.session-rail .threat-profile svg {
+  height: 140px;
+}
+.video-workspace .analysis-timeline {
+  padding: 5px 8px;
+  margin-block: 6px;
+  background: #061115;
+}
+.analysis-timeline > header {
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.timeline-layers-toggle {
+  padding: 3px 5px;
+  font-size: 10px;
+  background: transparent;
+  color: var(--text-secondary);
+}
+.video-workspace .quick-context {
+  padding-block: 5px;
+}
+.video-workspace .quick-context label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.video-workspace .quick-context select {
+  min-width: 0;
+  flex: 1;
+  width: 0;
+  padding: 5px;
+}
 .analysis-separator {
   border-color: var(--border);
   background: #081216;
@@ -584,8 +657,29 @@ html[dir="rtl"] .mobile-navigation {
   min-height: 65px;
 }
 .session-rail .rail-summary {
-  background: #0b181c;
-  border-color: var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  background: transparent;
+  border: 0;
+  padding-inline: 4px;
+}
+.session-rail .rail-summary button {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  text-align: start;
+}
+.session-rail .rail-summary b {
+  font-size: 13px;
+}
+.session-rail .rail-summary button > small:last-child {
+  font-size: 10px;
 }
 .session-rail .rail-summary small {
   font-size: 12px;
@@ -614,7 +708,7 @@ html[dir="rtl"] .mobile-navigation {
   font-size: 12px;
 }
 .session-rail .intelligence-section .court {
-  max-height: none;
+  max-height: 125px;
   width: 100%;
 }
 .threat-profile svg text {
@@ -623,6 +717,36 @@ html[dir="rtl"] .mobile-navigation {
 .session-rail .intelligence-more {
   font-size: 12px;
   padding: 7px 5px;
+}
+.session-rail .keeper-details {
+  grid-column: 1 / -1;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.keeper-details > summary {
+  cursor: pointer;
+  padding: 5px;
+}
+.insight-evidence-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  margin-top: 6px;
+  padding: 6px;
+  border-inline-start: 2px solid var(--sesen-cyan);
+  text-align: start;
+  font-size: 12px;
+  background: #051216;
+}
+.insight-evidence-row small {
+  display: block;
+  margin-top: 3px;
+}
+.insight-evidence-row svg {
+  flex-shrink: 0;
+  color: var(--sesen-cyan);
 }
 .match-dashboard {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
@@ -680,6 +804,45 @@ html[dir="rtl"] .mobile-navigation {
 .quick-tag-dock header > b {
   color: var(--sesen-gold);
   font-size: 13px;
+}
+.quick-context-details > summary {
+  cursor: pointer;
+  padding-block: 7px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+/* Keep source setup beside the video heading without covering the picture. */
+@media (min-width: 1200px) {
+  .workbench-video-column > .panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 12px;
+  }
+  .workbench-video-column > .panel > * {
+    grid-column: 1 / -1;
+  }
+  .workbench-video-column > .panel > header {
+    grid-column: 1;
+    margin-bottom: 5px;
+  }
+  .workbench-video-column > .panel > .source-options:not([open]) {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    margin: 0;
+  }
+  .workbench-video-column > .panel > .video-advanced-tools:not([open]) {
+    grid-column: 1;
+    grid-row: 6;
+    align-self: center;
+    margin-block: 3px;
+  }
+  .workbench-video-column > .panel > .clock-tools:not([open]) {
+    grid-column: 2;
+    grid-row: 6;
+    align-self: center;
+    font-size: 11px;
+  }
 }
 @media (min-width: 1024px) and (max-width: 1439px) {
   .sesen-shell {

@@ -76,41 +76,44 @@ export function ThreatProfile({
           />
         )}
       </svg>
-      <div className="threat-zone-list">
-        {profile.groups.map((g) => (
-          <button
-            key={g.key}
-            disabled={!g.shots.length}
-            onClick={() => onEvidence(w.t(g.ar, g.en), g.shots)}
-          >
-            <span>{w.t(g.ar, g.en)}</span>
-            <b>{percent(ratio(g.shots.length, profile.sample))}</b>
-            <small>
-              {g.shots.length}/{profile.sample}
-            </small>
-          </button>
-        ))}
-      </div>
-      <small>
-        {w.t(
-          "من المحاولات المراجعة · حد المحور",
-          "Reviewed attempts · axis limit",
-        )}{" "}
-        {percent(scale)} · {profile.pending} {w.t("للمراجعة", "pending")}
-      </small>
-      <button
-        className="evidence-text"
-        disabled={!profile.missing.length}
-        onClick={() =>
-          onEvidence(
-            w.t("مناطق ناقصة أو قديمة", "Missing or legacy origins"),
-            profile.missing,
-          )
-        }
-      >
-        {profile.missing.length}{" "}
-        {w.t("دون منطقة معروفة", "without known origin")}
-      </button>
+      <details className="threat-breakdown">
+        <summary>{w.t("المناطق وأدلتها", "Zones & evidence")}</summary>
+        <div className="threat-zone-list">
+          {profile.groups.map((g) => (
+            <button
+              key={g.key}
+              disabled={!g.shots.length}
+              onClick={() => onEvidence(w.t(g.ar, g.en), g.shots)}
+            >
+              <span>{w.t(g.ar, g.en)}</span>
+              <b>{percent(ratio(g.shots.length, profile.sample))}</b>
+              <small>
+                {g.shots.length}/{profile.sample}
+              </small>
+            </button>
+          ))}
+        </div>
+        <small>
+          {w.t(
+            "من المحاولات المراجعة · حد المحور",
+            "Reviewed attempts · axis limit",
+          )}{" "}
+          {percent(scale)} · {profile.pending} {w.t("للمراجعة", "pending")}
+        </small>
+        <button
+          className="evidence-text"
+          disabled={!profile.missing.length}
+          onClick={() =>
+            onEvidence(
+              w.t("مناطق ناقصة أو قديمة", "Missing or legacy origins"),
+              profile.missing,
+            )
+          }
+        >
+          {profile.missing.length}{" "}
+          {w.t("دون منطقة معروفة", "without known origin")}
+        </button>
+      </details>
     </section>
   );
 }

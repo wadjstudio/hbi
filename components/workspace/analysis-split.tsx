@@ -7,9 +7,11 @@ import { useWorkspace } from "./provider";
 export function AnalysisSplit({
   video,
   intelligence,
+  controls,
 }: {
   video: ReactNode;
   intelligence: ReactNode;
+  controls?: ReactNode;
 }) {
   const w = useWorkspace(),
     group = useGroupRef();
@@ -17,7 +19,9 @@ export function AnalysisSplit({
   return (
     <section className={`analysis-split${focus ? " video-focus" : ""}`}>
       <div className="layout-controls">
-        <small>{w.t("مساحة التحليل", "Analysis workspace")}</small>
+        {controls ?? (
+          <small>{w.t("مساحة التحليل", "Analysis workspace")}</small>
+        )}
         <button aria-pressed={focus} onClick={() => setFocus(!focus)}>
           {focus ? <Columns2 size={13} /> : <Maximize2 size={13} />}
           {w.t(

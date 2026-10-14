@@ -670,60 +670,63 @@ export function VideoWorkspace({
           · {missingAttempts}
         </Notice>
       )}
-      <details className="session-settings">
-        <summary>
-          {w.t("جلسات التحليل وإعداداتها", "Analysis sessions & settings")}
-        </summary>
-        <div className="toolbar">
-          <SelectRow
-            label={w.t("جلسة التحليل", "Analysis session")}
-            rows={sessions}
-            value={sid}
-            onChange={(id) => {
-              clearEditing();
-              setSession(id);
-              setVideo("");
-              setUrl("");
-              setSourceFile(null);
-            }}
-          />
-          <button
-            disabled={!video}
-            onClick={() =>
-              void a.run(async () => {
-                const session = await w.save("analysis_sessions", {
-                  match_id: matchId,
-                  video_id: video?.id,
-                  title: `Analysis ${sessions.length + 1}`,
-                  is_primary: false,
-                });
-                clearEditing();
-                setSession(session.id);
-              })
-            }
-          >
-            {w.t("جلسة إضافية", "Additional session")}
-          </button>
-          <button
-            disabled={!sid || !w.online}
-            onClick={() =>
-              void a.run(async () => {
-                await w.flush();
-                const { createClient } = await import("@/lib/supabase/client");
-                const { error } = await createClient().rpc(
-                  "set_primary_analysis",
-                  { p_session: sid },
-                );
-                if (error) throw new Error(error.message);
-                await w.reload();
-              })
-            }
-          >
-            {w.t("اعتماد للتحليلات المجمعة", "Use for aggregate analytics")}
-          </button>
-        </div>
-      </details>
       <AnalysisSplit
+        controls={
+          <details className="session-settings">
+            <summary>
+              {w.t("جلسات التحليل وإعداداتها", "Analysis sessions & settings")}
+            </summary>
+            <div className="toolbar">
+              <SelectRow
+                label={w.t("جلسة التحليل", "Analysis session")}
+                rows={sessions}
+                value={sid}
+                onChange={(id) => {
+                  clearEditing();
+                  setSession(id);
+                  setVideo("");
+                  setUrl("");
+                  setSourceFile(null);
+                }}
+              />
+              <button
+                disabled={!video}
+                onClick={() =>
+                  void a.run(async () => {
+                    const session = await w.save("analysis_sessions", {
+                      match_id: matchId,
+                      video_id: video?.id,
+                      title: `Analysis ${sessions.length + 1}`,
+                      is_primary: false,
+                    });
+                    clearEditing();
+                    setSession(session.id);
+                  })
+                }
+              >
+                {w.t("جلسة إضافية", "Additional session")}
+              </button>
+              <button
+                disabled={!sid || !w.online}
+                onClick={() =>
+                  void a.run(async () => {
+                    await w.flush();
+                    const { createClient } =
+                      await import("@/lib/supabase/client");
+                    const { error } = await createClient().rpc(
+                      "set_primary_analysis",
+                      { p_session: sid },
+                    );
+                    if (error) throw new Error(error.message);
+                    await w.reload();
+                  })
+                }
+              >
+                {w.t("اعتماد للتحليلات المجمعة", "Use for aggregate analytics")}
+              </button>
+            </div>
+          </details>
+        }
         video={
           <div className="workbench-video-column">
             <Panel
@@ -1139,7 +1142,7 @@ export function VideoWorkspace({
                 ))}
                 <small>n={filtered.length}</small>
               </div>
-              <details>
+              <details className="clock-tools">
                 <summary>
                   {w.t("معايرة ساعة المباراة", "Calibrate match clock")}
                 </summary>
@@ -1258,48 +1261,61 @@ export function VideoWorkspace({
                 ))}
               </details>
             </Panel>
-            <div className="quick-context">
-              <SelectRow
-                label={w.t("فريق التسجيل", "Recording team")}
-                rows={teams}
-                value={team}
-                onChange={(id) => {
-                  setTeam(id);
-                  setActor("");
-                  setKeeper("");
-                }}
-              />
-              <SelectRow
-                label={w.t("المصوّب / المنفذ", "Shooter / actor")}
-                rows={players}
-                value={actor}
-                onChange={setActor}
-              />
-              <label>
-                {w.t("مرحلة التسجيل", "Recording phase")}
-                <select
-                  value={phase}
-                  onChange={(e) => setPhase(e.target.value)}
-                >
-                  {[
-                    "other",
-                    "positional_attack",
-                    "fast_break",
-                    "second_wave",
-                    "transition_defense",
-                    "set_defense",
-                    "seven_vs_six",
-                    "power_play",
-                    "short_handed",
-                    "empty_goal",
-                  ].map((code) => (
-                    <option key={code} value={code}>
-                      {analysisLabel(code, w.lang)}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
+            <details className="quick-context-details">
+              <summary>
+                {w.t("فريق التسجيل", "Recording team")}:{" "}
+                {teams.find((r) => r.id === team)
+                  ? rowLabel(teams.find((r) => r.id === team)!)
+                  : "—"}
+                {" · "}
+                {w.t("اللاعب", "Player")}:{" "}
+                {players.find((r) => r.id === actor)
+                  ? rowLabel(players.find((r) => r.id === actor)!)
+                  : w.t("غير محدد", "Not selected")}
+              </summary>
+              <div className="quick-context">
+                <SelectRow
+                  label={w.t("فريق التسجيل", "Recording team")}
+                  rows={teams}
+                  value={team}
+                  onChange={(id) => {
+                    setTeam(id);
+                    setActor("");
+                    setKeeper("");
+                  }}
+                />
+                <SelectRow
+                  label={w.t("المصوّب / المنفذ", "Shooter / actor")}
+                  rows={players}
+                  value={actor}
+                  onChange={setActor}
+                />
+                <label>
+                  {w.t("مرحلة التسجيل", "Recording phase")}
+                  <select
+                    value={phase}
+                    onChange={(e) => setPhase(e.target.value)}
+                  >
+                    {[
+                      "other",
+                      "positional_attack",
+                      "fast_break",
+                      "second_wave",
+                      "transition_defense",
+                      "set_defense",
+                      "seven_vs_six",
+                      "power_play",
+                      "short_handed",
+                      "empty_goal",
+                    ].map((code) => (
+                      <option key={code} value={code}>
+                        {analysisLabel(code, w.lang)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            </details>
             <QuickTagDock
               available={Boolean(
                 sid &&
@@ -1325,16 +1341,6 @@ export function VideoWorkspace({
               onUndo={() => void a.run(() => history("undo"))}
               onRedo={() => void a.run(() => history("redo"))}
             />
-            <small className="tag-context">
-              {w.t("فريق التسجيل", "Tagging team")}:{" "}
-              {teams.find((r) => r.id === team)
-                ? rowLabel(teams.find((r) => r.id === team)!)
-                : "—"}{" "}
-              · {w.t("اللاعب", "Player")}:{" "}
-              {players.find((r) => r.id === actor)
-                ? rowLabel(players.find((r) => r.id === actor)!)
-                : w.t("غير محدد", "Not selected")}
-            </small>
           </div>
         }
         intelligence={

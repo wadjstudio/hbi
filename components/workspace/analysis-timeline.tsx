@@ -30,6 +30,7 @@ export function AnalysisTimeline({
   const w = useWorkspace();
   const [zoom, setZoom] = useState(1),
     [start, setStart] = useState(0);
+  const [isExpanded, setIsExpanded] = useState(false);
   const window = timelineWindow(durationMs, start, zoom);
   const left = (ms: number) =>
     `${(100 * (ms - window.start)) / Math.max(1, window.width)}%`;
@@ -68,6 +69,13 @@ export function AnalysisTimeline({
       <header>
         <b>{w.t("خط أحداث الفيديو", "Video event timeline")}</b>
         <small>n={events.length}</small>
+        <button
+          className="timeline-layers-toggle"
+          aria-expanded={isExpanded}
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          {w.t("الهجمات والمقاطع", "Possessions & clips")}
+        </button>
         <div className="timeline-zoom">
           <button
             aria-label={w.t("تصغير التايملاين", "Zoom out timeline")}
@@ -128,16 +136,20 @@ export function AnalysisTimeline({
             )}
           </div>
         </div>
-        <div className="timeline-lane">
-          <span>{w.t("هجمات", "Possessions")}</span>
-          <div className="timeline-track">
-            {bands(possessions, "possession")}
-          </div>
-        </div>
-        <div className="timeline-lane">
-          <span>{w.t("مقاطع", "Clips")}</span>
-          <div className="timeline-track">{bands(clips, "clip")}</div>
-        </div>
+        {isExpanded && (
+          <>
+            <div className="timeline-lane">
+              <span>{w.t("هجمات", "Possessions")}</span>
+              <div className="timeline-track">
+                {bands(possessions, "possession")}
+              </div>
+            </div>
+            <div className="timeline-lane">
+              <span>{w.t("مقاطع", "Clips")}</span>
+              <div className="timeline-track">{bands(clips, "clip")}</div>
+            </div>
+          </>
+        )}
       </div>
       {zoom > 1 && (
         <input

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Analysis workspace density and evidence — 2026-10-09
+
+- Consolidated session settings with layout controls, kept sources beside the video heading on desktop, and made recording context a labelled disclosure with the current team/player visible.
+- Reduced timeline clutter with an explicit possessions/clips expansion control; radar region evidence is available through a disclosure. Preserved keyboard resizing, source relinking and calibration.
+- Added saved evidence-backed insights beside the video, restricted to directly linked events in the current view with explicit review state; moved goalkeeper detail into a disclosure. No invented tactical conclusions or sample statistics.
+- Compacted secondary desktop navigation while preserving all routes. Added image-derived design criteria and multi-width screenshot checks with an optional local-video fixture. This is an incremental visual revision, not full reference-image parity or a hosted deployment.
+
 ## Dense annotation review and evaluation — 2026-10-09
 
 - Added a bounded builder with verified derivative/hash/geometry, dense source-time mapping, per-image hashes, reused person suggestions and explicit completed/not-run ball inference. The 120-frame source 35:10.0–35:21.9 sample took 106.13 CPU seconds and produced one generic-ball proposal; visual inspection found a floor-advertisement false positive. No automated full-match processing was accepted.

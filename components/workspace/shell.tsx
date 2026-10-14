@@ -30,9 +30,9 @@ const navigation = [
   ["اللاعبون", "Players", "/players"],
   ["معمل الفيديو", "Video Lab", "/video-lab"],
   ["التكتيكات", "Tactics", "/tactics"],
+  ["التقارير", "Reports", "/reports"],
   ["قوائم المقاطع", "Playlists", "/playlists"],
   ["الاجتماعات", "Meetings", "/meetings"],
-  ["التقارير", "Reports", "/reports"],
   ["مصادر البيانات", "Data sources", "/data-sources"],
   ["الإعدادات", "Settings", "/settings"],
 ] as const;
@@ -44,9 +44,9 @@ const navigationIcons = [
   CircleUser,
   Film,
   Crosshair,
+  BarChart3,
   ListVideo,
   Presentation,
-  BarChart3,
   Database,
   Settings,
 ];
@@ -66,6 +66,7 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
         return (
           <Link
             className={active ? "active" : ""}
+            data-secondary={index >= 8 ? "true" : undefined}
             aria-current={active ? "page" : undefined}
             aria-label={w.t(ar, en)}
             title={w.t(ar, en)}

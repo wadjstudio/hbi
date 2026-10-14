@@ -1,4 +1,12 @@
-# SESEN / HBI validation — 2026-10-09
+# SESEN / HBI validation — 2026-10-14
+
+## Workspace density revision — 2026-10-14
+
+- Reorganized the actual Next video workspace, not the separate tracking review page. Preserved local media, session selection, calibration, recording, evidence and goalkeeper access while reducing permanently expanded controls.
+- Console acceptance covers keyboard resizing/focus mode, timeline layers, expandable radar evidence, navigation and screenshots at 1672, 1560, 1440, 1024, 768 and 375 pixels plus Arabic/mobile. Optional `HBI_VISUAL_MATCH` attaches the bounded actual-match derivative only to the isolated test account; it does not seed real analysis or upload the source.
+- The saved Playwright result after the console and offline-video/evidence/meeting specs reports passed. Desktop and Arabic/mobile captures were visually inspected. Unknown data remains unknown. Full visual parity with the supplied reference is not claimed: the first-screen density and populated-card comparison still require work.
+- All 39 unit tests and full ESLint passed. Typecheck passed on October 14 after Next regenerated a previously truncated E2E validator. A requested cache deletion was blocked by lean-ctx and was not performed; no allowlist was expanded. The subsequent supported Next test-server run regenerated the file.
+- Next production build and the complete Cloudflare Pages build/package passed on October 14. Vite reported bundler-timing/code-splitting warnings without build failure. Started a local production preview on port 3001; this is separate from the annotation-review server on port 8774. Source archive verification is recorded separately after packaging. No hosted deployment, schema change, automatic analysis claim or new runtime dependency.
 
 ## Dense annotation follow-up — 2026-10-09
 

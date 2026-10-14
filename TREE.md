@@ -111,6 +111,7 @@ hbi-starter/
   components/workspace/video-transport.tsx
   components/workspace/video-workspace.tsx
   components/workspace/youtube-player.tsx
+  design-system/MASTER.md
   docs/ui-redesign/RESEARCH.md
   docs/ui-redesign/match-template.csv
   docs/ui-redesign/roster-template.csv
