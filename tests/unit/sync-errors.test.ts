@@ -1,13 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { isTransientSyncFailure } from "../../features/workspace/sync-errors";
+import {
+  MAX_TRANSIENT_RETRIES,
+  isTransientSyncFailure,
+  shouldRetrySync,
+} from "../../features/workspace/sync-errors";
+
+const network = { code: "", message: "TypeError: Failed to fetch" };
 
 describe("sync failure classification", () => {
   it("keeps temporary failures retryable", () => {
-    const network = { code: "", message: "TypeError: Failed to fetch" };
-    expect(isTransientSyncFailure(0, network)).toBe(true);
-    expect(isTransientSyncFailure(408, network)).toBe(true);
-    expect(isTransientSyncFailure(429, network)).toBe(true);
-    expect(isTransientSyncFailure(503, network)).toBe(true);
+    for (const status of [0, 408, 429, 502, 503, 504])
+      expect(isTransientSyncFailure(status, network)).toBe(true);
     expect(
       isTransientSyncFailure(401, { code: "PGRST303", message: "JWT expired" }),
     ).toBe(true);
@@ -22,6 +25,18 @@ describe("sync failure classification", () => {
     ).toBe(false);
     expect(
       isTransientSyncFailure(401, { code: "42501", message: "unauthorized" }),
+    ).toBe(false);
+    expect(
+      isTransientSyncFailure(500, { code: "XX000", message: "internal error" }),
+    ).toBe(false);
+  });
+
+  it("caps retries so a lasting failure is surfaced for review", () => {
+    expect(shouldRetrySync(0, network, 1)).toBe(true);
+    expect(shouldRetrySync(0, network, MAX_TRANSIENT_RETRIES - 1)).toBe(true);
+    expect(shouldRetrySync(0, network, MAX_TRANSIENT_RETRIES)).toBe(false);
+    expect(
+      shouldRetrySync(400, { code: "P0001", message: "Write denied" }, 1),
     ).toBe(false);
   });
 });

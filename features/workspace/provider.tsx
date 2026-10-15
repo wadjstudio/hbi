@@ -10,7 +10,7 @@ import {
 import { useRouter } from "next/navigation";
 import { substitutionInput, syncResponse } from "@/features/analysis/contracts";
 import { parseWorkspaceBackup } from "./backup";
-import { isTransientSyncFailure } from "./sync-errors";
+import { shouldRetrySync } from "./sync-errors";
 import { releaseLocalSources } from "@/lib/video/local-sources";
 import { canWrite } from "@/lib/permissions/roles";
 import { createClient } from "@/lib/supabase/client";
@@ -75,6 +75,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     busy = useRef(false),
     refreshNeeded = useRef(false),
     transientError = useRef(""),
+    retries = useRef(new Map<string, number>()),
     languageLoaded = useRef(false),
     identity = useRef(""),
     rowsRef = useRef(rows);
@@ -196,14 +197,18 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
             });
         if (identity.current !== scope) break;
         if (e) {
-          if (isTransientSyncFailure(status, e)) {
+          const attempts = (retries.current.get(op.id) ?? 0) + 1;
+          if (shouldRetrySync(status, e, attempts)) {
+            retries.current.set(op.id, attempts);
             transientError.current = e.message;
           } else {
+            retries.current.delete(op.id);
             await localDB.operations.update(op.id, { error: e.message });
           }
           setError(e.message);
           break;
         }
+        retries.current.delete(op.id);
         if (transientError.current) {
           const resolved = transientError.current;
           transientError.current = "";
