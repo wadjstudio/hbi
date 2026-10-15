@@ -2,7 +2,7 @@
 
 ## آخر نشر متحقق — 2026-10-15
 
-نُشرت النسخة `fb35e62` على فرع الإنتاج `main` في مشروع Pages الحالي، deployment `0f9403cd-5eba-46f9-ab04-9828663e6123`، بعد التحقق المحلي من التكوين والأدلة والنطاق التاريخي. نجح HTTPS لصفحة الدخول على الدومين النهائي، وتطابقت ملفات JavaScript/CSS المنشورة الـ37 مع حزمة Pages المختبرة بالهاش بايتًا ببايت. بقي DNS في Spaceship وCNAME كما هما، ولم تُطبق مهاجرات أو بيانات اختبار على القاعدة المستضافة. آخر إصدار Supabase أبلغ به المستخدم هو `0019`؛ لم يُجر تدقيق SQL مستقل أو اختبار دخول المدرب المستضاف أثناء هذه المراجعة. أي تعديل كود لاحق يحتاج تحققًا ونشرًا منفصلين؛ لا تفترض أن تحديث الوثائق أو نجاح البناء ينشره تلقائيًا.
+نُشرت النسخة `ddde7a6` من فرع الإنتاج `main` بعد دمج PR #1 لتأمين تخزين R2، على مشروع Pages الحالي: `https://0d3d3a05.hbi-handball-intelligence.pages.dev`. اجتازت النسخة typecheck وlint و50 اختبار وحدة وdb:verify، ثم بُنيت بـ`pnpm build:pages` ونُشرت عبر Wrangler Pages. أعاد `https://hbi.wadj.online/login` الحالة 200، وأعاد `/api/r2/sign-read` الحالة 401 دون جلسة. قبل الترقية أثبت CLI وفحص المخطط أن Supabase كان عند `0016` فقط، خلافًا لما ورد سابقًا في الوثائق. طُبّقت `0017`–`0020` بتاريخ 2026-10-15 عبر Supabase CLI المرتبط، وتحقق بعدها سجل `0001`–`0020` وعمود `youtube_video_id` ودوال `0018`/`0019`؛ كان جدول `videos` فارغًا، وقيمة `storage_limits.max_shared_bytes` هي `1073741824`. أي تعديل كود لاحق يحتاج تحققًا ونشرًا منفصلين؛ لا تفترض أن تحديث الوثائق أو نجاح البناء ينشره تلقائيًا.
 
 ## المسار المختار — 2026-10-06
 
@@ -13,7 +13,7 @@ Cloudflare Pages advanced mode مع بقاء DNS وشراء الدومين في 
 ## الحالة المتحققة
 
 - المصدر على `https://github.com/wadjstudio/hbi`، فرع `main`، وCI للتحقق فقط.
-- مشروع Supabase الحالي يحتوي سجل المهاجرات `0001`–`0016` والجداول. لا تشغّل fresh-install عليه. تطابق نص SQL المستضاف بالكامل لم يُختبر.
+- مشروع Supabase الحالي `tsgecvtldcypsrinthwx` يحتوي سجل المهاجرات `0001`–`0020`، متحققًا عبر Supabase CLI المرتبط بتاريخ 2026-10-15. لا تشغّل fresh-install عليه. تطابق نص SQL المستضاف بالكامل لم يُختبر.
 - ربط Supabase بالريبو متحقق، مجلد العمل `.`، Deploy to production وAutomatic branching متوقفان.
 - نجح دخول أول حساب مدرب وإنشاء مؤسسة HBI، بدور owner وافق عليه المستخدم، واستعادة المؤسسة بعد تحميل الصفحة.
 - نجح اختبار Pages المحلي لوحدة خادم واحدة: HTTP 200 لصفحة `/overview` وCSS/JavaScript، وتحميل مؤسسة HBI الحقيقية في Chrome دون أخطاء console. لا يثبت ذلك CPU/quotas أو تشغيل الدومين المنشور.
@@ -56,11 +56,10 @@ pnpm preview:pages
 بعد اعتماد اسم المشروع والحساب الصحيح، من مجلد المصدر:
 
 ```powershell
-pnpm exec wrangler pages project create hbi-handball-intelligence --production-branch main
 pnpm exec wrangler pages deploy --cwd dist/pages --project-name hbi-handball-intelligence --branch main
 ```
 
-استخدم عنوان `pages.dev` الفعلي الذي يرجعه النشر. اختبر الدخول والمؤسسة وSSR وCSS/JS والتنقل على HTTPS قبل تغيير DNS. لا يفترض الدليل أن الاسم متاح أو أن المشروع أُنشئ. لا تفعّل نشر Supabase الآلي أو تطبيق المهاجرات أثناء ذلك.
+استخدم عنوان `pages.dev` الفعلي الذي يرجعه النشر. اختبر الدخول والمؤسسة وSSR وCSS/JS والتنقل على HTTPS. المشروع والدومين موجودان؛ لا تعِد إنشاء المشروع ولا تغيّر DNS للنشر المعتاد. لا تفعّل نشر Supabase الآلي؛ طبّق المهاجرات المراجعة وفق مسار الترقية أدناه قبل نشر الكود المتوافق.
 
 ## ربط السب دومين فقط
 
@@ -70,7 +69,19 @@ pnpm exec wrangler pages deploy --cwd dist/pages --project-name hbi-handball-int
 
 ## قاعدة جديدة والترقية
 
-ترقية 0017–0019 والنشر مصرح بهما في هذه المحادثة. حتى 7 أكتوبر لم تُنفّذ الترقية: اتصال التحكم في Chrome يفشل بتحميل request-header policy، وSupabase CLI غير مرتبط بهذا المشروع. الملفات الجاهزة تحت outputs/deployment: شغّل HBI_UPGRADE_0017.sql وحده أولًا ليُلتزم enum، ثم HBI_UPGRADE_0018_0019.sql. جرى اختبار النصين كما سيُلصقان مع سجل المهاجرات في PostgreSQL/WASM والتحقق من رفض إعادة التنفيذ. تأكد من hbi Project / tsgecvtldcypsrinthwx قبل التنفيذ، وافحص سجل 0001–0019 والأعمدة والقيود بعدها. لا تشغّل HBI_FRESH_INSTALL.sql على القاعدة الموجودة. انشر الحزمة الجديدة بعد نجاح الترقية؛ لا تغيّر DNS أو إعداد النشر الآلي.
+طُبّقت `0017` و`0018` و`0019` من `main` ثم `0020` بتاريخ 2026-10-15 عبر `pnpm exec supabase db push --linked` على hbi Project / `tsgecvtldcypsrinthwx`. مسار SQL اليدوي السابق تحت `outputs/deployment`، بما فيه `HBI_UPGRADE_0017.sql` و`HBI_UPGRADE_0018_0019.sql`، أصبح متجاوزًا لهذا المشروع ولا يُعاد تشغيله. لا تشغّل `HBI_FRESH_INSTALL.sql` على القاعدة الموجودة.
+
+تحقّق دائمًا من حالة المهاجرات عبر CLI، ولا تعتمد على الوثائق لتحديد ما طُبّق. بعد الموافقة على الترقية والنشر، ومن مجلد المصدر المرتبط بالمشروع الصحيح، استخدم المسار المعتاد:
+
+```powershell
+pnpm exec supabase migration list --linked
+pnpm exec supabase db push --linked --dry-run
+pnpm exec supabase db push --linked
+pnpm build:pages
+pnpm exec wrangler pages deploy --cwd dist/pages --project-name hbi-handball-intelligence --branch main
+```
+
+راجع قائمة المهاجرات المعلّقة في dry-run قبل التطبيق، ثم تحقّق من سجل المهاجرات والأعمدة والدوال بعده. يجب أن تجتاز النسخة اختبارات البناء والتطبيق محليًا قبل الترقية؛ ابنِ وانشر Pages مباشرة بعدها لتقليل فترة عدم التوافق. بعد `0020` يتعطل حجز الرفع في الكود القديم الذي يرسل `p_limit`، كما يُرفض تحديث الاكتمال المباشر؛ لذلك يلزم نشر الكود المتوافق فورًا. لا تغيّر DNS أو إعداد النشر الآلي.
 
 لأي مشروع جديد فارغ، طبّق المهاجرات بالترتيب عبر Supabase CLI. للقاعدة الموجودة طبّق الناقص فقط بعد مراجعة السجل والبيانات؛ لا تستخدم hosted `db reset`. SQL/RLS المرجع النهائي، والتحقق المحلي لا يغني عن عزل حسابين حقيقيين وترقية staging.
 
@@ -79,5 +90,7 @@ pnpm exec wrangler pages deploy --cwd dist/pages --project-name hbi-handball-int
 Zero-Cost ضمن حصص الخطط المجانية. راجع `ZERO_COST_LIMITS.md` وحصص الحساب. وظائف Pages تستخدم حصص Workers؛ قياس CPU وحجم التطبيق مطلوب بعد النشر. لا تُفعّل موارد مدفوعة تلقائيًا.
 
 R2 اختياري. عند استخدامه جهّز bucket/CORS وأسراره في bindings الخادم، دون Git أو ملفات العميل، واختبر الرفع المباشر والحدود والروابط المؤقتة. اختبار R2 الفعلي لم يُنفّذ.
+
+منذ `0020` أصبحت حقول R2 مُدارة عبر دوال قاعدة البيانات والمشغّل `guard_r2_storage`: الحجز عبر `reserve_video_upload(p_video)` دون `p_limit`، والاكتمال عبر `complete_video_upload(p_video)`. الحصة في `public.storage_limits.max_shared_bytes`، وقيمتها المتحققة `1073741824` بايت (1 GiB)؛ لا تُغيّر إلا بـSQL بصفة مالك قاعدة البيانات وبعد الموافقة. أُزيل استخدام `R2_MAX_SHARED_BYTES` من الكود و`.env.example`، ولم يعد يتحكم في الحصة.
 
 مراجع: [Pages advanced mode](https://developers.cloudflare.com/pages/functions/advanced-mode/)، [DNS خارجي](https://developers.cloudflare.com/pages/configuration/custom-domains/)، [حدود Pages](https://developers.cloudflare.com/pages/platform/limits/).
