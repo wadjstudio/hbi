@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Coaching workspace viewport composition — 2026-10-15
+
+- Added a default desktop Fit workspace mode and an explicit natural-size toggle, with full focus mode retaining the larger picture. The video and drawing overlays share the same unchanged aspect/coordinate plane inside a matte; fitting does not crop the footage.
+- Reduced desktop header, timeline and intelligence spacing, and placed quick tagging/context controls in a single row at wide sizes. Narrow screens retain stacked controls. Reused existing brand assets and installed components.
+- Extended console acceptance for fit/natural sizing alongside responsive captures. Chrome console and offline-video/evidence/meeting journeys, final targeted ESLint, typecheck and Next/Cloudflare builds passed; exact scope is recorded in VALIDATION.md.
+- This iteration remains separate from production deployment `d5eca76e` / source `6e21cd5`. Populated visual parity, richer evidence-linked chart composition and historical-sample controls remain acceptance work.
+
 ## Analysis workspace density and evidence — 2026-10-09
 
 - Consolidated session settings with layout controls, kept sources beside the video heading on desktop, and made recording context a labelled disclosure with the current team/player visible.

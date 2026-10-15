@@ -46,9 +46,14 @@ export function QuickTagDock({
             "Using the selected team and participants",
           )}
         </small>
-        <button onClick={onEditor}>
+        <button
+          onClick={onEditor}
+          title={w.t("السياق والمشاركون", "Context & participants")}
+        >
           <SlidersHorizontal size={13} />
-          {w.t("السياق والمشاركون", "Context & participants")}
+          <span className="tag-context-label">
+            {w.t("السياق والمشاركون", "Context & participants")}
+          </span>
         </button>
       </header>
       <div className="quick-tag-buttons">

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { useWorkspace } from "./provider";
 import { Panel, Notice, SelectRow, useAction, rowLabel } from "./controls";
@@ -801,109 +801,117 @@ export function VideoWorkspace({
                   </form>
                 </div>
               </details>
-              <div
-                ref={surface}
-                className="video-surface"
-                style={{
-                  aspectRatio:
-                    video?.width && video?.height
-                      ? `${video.width}/${video.height}`
-                      : "16/9",
-                }}
-              >
-                {isOnlineSource ? (
-                  <YouTubePlayerView
-                    key={`${sid}:${video.id}`}
-                    videoId={s(video.youtube_video_id)}
-                    onController={(controller) => {
-                      onlinePlayer.current = controller;
-                      setOnlineReady(Boolean(controller));
-                    }}
-                    onTime={(ms, active) => {
-                      setTime(ms);
-                      setPlaying(active);
-                    }}
-                    onMetadata={(ms, rates) => {
-                      setOnlineRates(rates.length ? rates : [1]);
-                      if (
-                        video.duration_ms != null &&
-                        Math.abs(n(video.duration_ms) - ms) > 1000
-                      ) {
+              <div className="video-matte">
+                <div
+                  ref={surface}
+                  className="video-surface"
+                  style={
+                    {
+                      "--video-aspect":
+                        video?.width && video?.height
+                          ? n(video.width) / n(video.height)
+                          : 16 / 9,
+                      aspectRatio:
+                        video?.width && video?.height
+                          ? `${video.width}/${video.height}`
+                          : "16/9",
+                    } as CSSProperties
+                  }
+                >
+                  {isOnlineSource ? (
+                    <YouTubePlayerView
+                      key={`${sid}:${video.id}`}
+                      videoId={s(video.youtube_video_id)}
+                      onController={(controller) => {
+                        onlinePlayer.current = controller;
+                        setOnlineReady(Boolean(controller));
+                      }}
+                      onTime={(ms, active) => {
+                        setTime(ms);
+                        setPlaying(active);
+                      }}
+                      onMetadata={(ms, rates) => {
+                        setOnlineRates(rates.length ? rates : [1]);
+                        if (
+                          video.duration_ms != null &&
+                          Math.abs(n(video.duration_ms) - ms) > 1000
+                        ) {
+                          setPlaybackError(
+                            w.t(
+                              "مدة المصدر تغيرت؛ راجع النسخة قبل تسجيل أحداث جديدة.",
+                              "Source duration changed; review this version before recording new events.",
+                            ),
+                          );
+                          return;
+                        }
+                        setPlaybackError("");
+                        setOnlineDuration(ms);
+                        setSegEnd(ms / 1000);
+                        if (
+                          video.duration_ms == null &&
+                          canWrite(w.role, "videos")
+                        )
+                          void a.run(() =>
+                            w.save("videos", {
+                              ...video,
+                              duration_ms: ms,
+                              status: "ready",
+                            }),
+                          );
+                      }}
+                      onPlaybackError={setPlaybackError}
+                    />
+                  ) : url ? (
+                    <video
+                      ref={player}
+                      src={url}
+                      playsInline
+                      onPlay={() => setPlaying(true)}
+                      onPause={() => setPlaying(false)}
+                      onLoadedMetadata={() => setPlaybackError("")}
+                      onError={() =>
                         setPlaybackError(
                           w.t(
-                            "مدة المصدر تغيرت؛ راجع النسخة قبل تسجيل أحداث جديدة.",
-                            "Source duration changed; review this version before recording new events.",
+                            "تعذر تشغيل الفيديو. تحقق من الملف والترميز أو أعد ربط المصدر.",
+                            "Cannot play video. Check the file/codec or relink the source.",
                           ),
-                        );
-                        return;
+                        )
                       }
-                      setPlaybackError("");
-                      setOnlineDuration(ms);
-                      setSegEnd(ms / 1000);
-                      if (
-                        video.duration_ms == null &&
-                        canWrite(w.role, "videos")
-                      )
-                        void a.run(() =>
-                          w.save("videos", {
-                            ...video,
-                            duration_ms: ms,
-                            status: "ready",
-                          }),
-                        );
-                    }}
-                    onPlaybackError={setPlaybackError}
-                  />
-                ) : url ? (
-                  <video
-                    ref={player}
-                    src={url}
-                    playsInline
-                    onPlay={() => setPlaying(true)}
-                    onPause={() => setPlaying(false)}
-                    onLoadedMetadata={() => setPlaybackError("")}
-                    onError={() =>
-                      setPlaybackError(
-                        w.t(
-                          "تعذر تشغيل الفيديو. تحقق من الملف والترميز أو أعد ربط المصدر.",
-                          "Cannot play video. Check the file/codec or relink the source.",
-                        ),
-                      )
-                    }
-                    onTimeUpdate={(e) =>
-                      setTime(Math.round(e.currentTarget.currentTime * 1000))
-                    }
-                  />
-                ) : isReferenceMatch(match) ? (
-                  <ReferenceBroadcast />
-                ) : (
-                  <div className="video-empty">
-                    <BrandLockup />
-                    <p>
-                      {w.t(
-                        "الفيديو يبقى على جهازك. اختر المصدر أو أعد ربطه.",
-                        "Video stays on your device. Select or relink the source.",
-                      )}
-                    </p>
-                  </div>
-                )}
-                {!isOnlineSource &&
-                  annotations.map((layer) => (
-                    <DrawingEditor
-                      key={layer.id}
-                      objects={layer.objects as unknown as Drawing[]}
-                      onChange={() => {}}
-                      overlay
-                      editable={false}
+                      onTimeUpdate={(e) =>
+                        setTime(Math.round(e.currentTarget.currentTime * 1000))
+                      }
                     />
-                  ))}
-                {!isOnlineSource && annotate && (
-                  <DrawingEditor
-                    objects={annotation}
-                    onChange={setAnnotation}
-                    overlay
-                  />
-                )}
+                  ) : isReferenceMatch(match) ? (
+                    <ReferenceBroadcast />
+                  ) : (
+                    <div className="video-empty">
+                      <BrandLockup />
+                      <p>
+                        {w.t(
+                          "الفيديو يبقى على جهازك. اختر المصدر أو أعد ربطه.",
+                          "Video stays on your device. Select or relink the source.",
+                        )}
+                      </p>
+                    </div>
+                  )}
+                  {!isOnlineSource &&
+                    annotations.map((layer) => (
+                      <DrawingEditor
+                        key={layer.id}
+                        objects={layer.objects as unknown as Drawing[]}
+                        onChange={() => {}}
+                        overlay
+                        editable={false}
+                      />
+                    ))}
+                  {!isOnlineSource && annotate && (
+                    <DrawingEditor
+                      objects={annotation}
+                      onChange={setAnnotation}
+                      overlay
+                    />
+                  )}
+                </div>
               </div>
               <VideoTransport
                 onToggle={togglePlayback}

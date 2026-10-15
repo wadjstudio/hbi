@@ -15,6 +15,9 @@ Do not substitute invented players, team crests, league averages or match scores
 
 - Desktop: approximately 195px navigation, compact match header, resizable
   58/42 video/intelligence split, timeline and recording controls under the video.
+  Fit workspace bounds the desktop media plane to viewport height inside a matte;
+  it preserves the source aspect and overlay coordinates. The natural-size toggle
+  and focus mode remain available. Narrow screens use the natural full-width plane.
 - Intelligence: two columns of defensive systems/threat profile, shot map/players,
   tactical patterns/evidence-backed insights. Goalkeeper detail remains available
   through a labelled disclosure. Narrow panels reflow to one column.

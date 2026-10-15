@@ -35,6 +35,7 @@ hbi-starter/
   wrangler.jsonc
   .github/workflows/ci.yml
   app/analyst-console.css
+  app/coaching-console.css
   app/globals.css
   app/layout.tsx
   app/page.tsx

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./analyst-console.css";
 import "./sesen.css";
+import "./coaching-console.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(

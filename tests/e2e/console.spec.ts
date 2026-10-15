@@ -38,6 +38,23 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     .click();
   await page.getByRole("button", { name: "Reset layout", exact: true }).click();
   await expect(rail).toBeVisible();
+  const surface = page.locator(".video-surface");
+  const fittedHeight = (await surface.boundingBox())!.height;
+  await expect(
+    page.getByRole("button", { name: "Fit workspace", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await page
+    .getByRole("button", { name: "Fit workspace", exact: true })
+    .click();
+  await expect
+    .poll(async () => (await surface.boundingBox())!.height)
+    .toBeGreaterThan(fittedHeight);
+  await page
+    .getByRole("button", { name: "Fit workspace", exact: true })
+    .click();
+  await expect
+    .poll(async () => (await surface.boundingBox())!.height)
+    .toBeLessThan(430);
   // Optional local footage is used only in the isolated test account, never seeded into production.
   if (process.env.HBI_VISUAL_MATCH) {
     await page

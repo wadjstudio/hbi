@@ -1,4 +1,12 @@
-# SESEN / HBI validation — 2026-10-14
+# SESEN / HBI validation — 2026-10-15
+
+## Viewport composition follow-up — 2026-10-15
+
+- Added a bounded desktop media plane with natural aspect/overlay coordinates, a stable-labelled Fit workspace toggle, disabled fit control in video focus mode, and natural sizing on narrow screens. Desktop quick tagging now shares one row with its context action at wide sizes.
+- Console and offline-video/evidence/meeting journeys both passed in Chrome using the actual bounded match derivative. After correcting the toggle's accessible name/state, the console journey passed again, including fit/natural size changes and captures across 1672, 1560, 1440, 1024, 768 and 375 pixels plus Arabic/mobile. Final targeted ESLint and TypeScript verification passed.
+- Visual inspection confirms a shorter console and earlier summary cards without cropping the frame. It does not establish populated-card fidelity or final reference-image parity. Historical scope/evidence behavior and richer chart composition remain open acceptance work.
+- Next production build passed using the isolated `.next/e2e` output (`HBI_E2E_MODE=1`, with no mock API environment overrides) to preserve the already-running preview on port 3001. Full Cloudflare Pages build/package passed, with existing bundler-timing warnings. A separate loopback production preview on port 3002 serves the newer source; stop that preview before reusing `.next/e2e` for another browser-test run.
+- This source iteration has not been deployed. The prior tested revision `6e21cd5` was published as Cloudflare production deployment `d5eca76e-73b6-4403-8a6f-d5431ace3ea4`. Its final domain and all nine referenced CSS/JavaScript assets passed HTTPS checks; release evidence is in the workspace output receipt. Hosted migration `0019` was reported by the user after running the read-only history query, not independently audited by the agent.
 
 ## Workspace density revision — 2026-10-14
 

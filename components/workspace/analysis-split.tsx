@@ -1,10 +1,16 @@
 "use client";
 import { useState, type ReactNode } from "react";
 import { Group, Panel, Separator, useGroupRef } from "react-resizable-panels";
-import { Columns2, Maximize2, RotateCcw, GripVertical } from "lucide-react";
+import {
+  Columns2,
+  Maximize2,
+  RotateCcw,
+  GripVertical,
+  Scan,
+} from "lucide-react";
 import { useWorkspace } from "./provider";
 
-export function AnalysisSplit({
+export const AnalysisSplit = ({
   video,
   intelligence,
   controls,
@@ -12,12 +18,17 @@ export function AnalysisSplit({
   video: ReactNode;
   intelligence: ReactNode;
   controls?: ReactNode;
-}) {
+}) => {
   const w = useWorkspace(),
     group = useGroupRef();
   const [focus, setFocus] = useState(false);
+  const [isFit, setIsFit] = useState(true);
   return (
-    <section className={`analysis-split${focus ? " video-focus" : ""}`}>
+    <section
+      className={`analysis-split${focus ? " video-focus" : ""}`}
+      data-fit={isFit ? "viewport" : "natural"}
+      data-slot="analysis-split"
+    >
       <div className="layout-controls">
         {controls ?? (
           <small>{w.t("مساحة التحليل", "Analysis workspace")}</small>
@@ -28,6 +39,15 @@ export function AnalysisSplit({
             focus ? "الفيديو والأدلة" : "تركيز الفيديو",
             focus ? "Video & evidence" : "Focus video",
           )}
+        </button>
+        <button
+          className="video-fit-control"
+          aria-pressed={isFit}
+          disabled={focus}
+          onClick={() => setIsFit(!isFit)}
+        >
+          <Scan size={13} aria-hidden="true" />
+          {w.t("ملاءمة مساحة العمل", "Fit workspace")}
         </button>
         <button
           onClick={() => {
@@ -75,4 +95,4 @@ export function AnalysisSplit({
       </Group>
     </section>
   );
-}
+};
