@@ -36,7 +36,6 @@ export async function POST(request: Request) {
     const key = `${video.organization_id}/${video.id}/source`;
     const { error } = await c.rpc("reserve_video_upload", {
       p_video: video.id,
-      p_limit: config.limit,
     });
     if (error) throw new Error(error.message);
     return NextResponse.json({

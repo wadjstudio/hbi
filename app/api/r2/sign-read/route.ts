@@ -17,10 +17,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     const { data: video } = await c
       .from("videos")
-      .select("r2_object_key,status")
+      .select("id,organization_id,r2_object_key,status")
       .eq("id", video_id)
       .single();
-    if (!video?.r2_object_key || video.status !== "ready")
+    // Sign only this video's own derived key, never an arbitrary stored one.
+    const key = `${video?.organization_id}/${video?.id}/source`;
+    if (!video || video.r2_object_key !== key || video.status !== "ready")
       return NextResponse.json(
         { error: "Source unavailable" },
         { status: 404 },
@@ -31,7 +33,7 @@ export async function POST(request: Request) {
         r2(config),
         new GetObjectCommand({
           Bucket: config.bucket,
-          Key: video.r2_object_key,
+          Key: key,
         }),
         { expiresIn: 120 },
       ),

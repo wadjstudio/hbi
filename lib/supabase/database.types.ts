@@ -1192,9 +1192,11 @@ export type Database = { public: { Tables: {
 "get_team_attack_summary":{Args:{"p_team_id":string;"p_match_ids"?:(string)[];};Returns:Json;};
 "has_org_role":{Args:{"org_id":string;"allowed":("owner" | "technical_director" | "head_coach" | "assistant_coach" | "analyst" | "viewer")[];};Returns:boolean;};
 "is_org_member":{Args:{"org_id":string;};Returns:boolean;};
+"complete_video_upload":{Args:{"p_video":string;};Returns:undefined;};
 "record_substitution":{Args:{"p_row":Json;};Returns:Json;};
 "reorder_items":{Args:{"p_table":string;"p_parent":string;"p_ids":(string)[];};Returns:undefined;};
-"reserve_video_upload":{Args:{"p_video":string;"p_limit":number;};Returns:undefined;};
+"r2_shared_quota_bytes":{Args:Record<PropertyKey, never>;Returns:number;};
+"reserve_video_upload":{Args:{"p_video":string;};Returns:undefined;};
 "set_primary_analysis":{Args:{"p_session":string;};Returns:undefined;};
 }; Enums: {
 "attack_system":"unknown" | "standard_6v6" | "seven_vs_six" | "two_pivots" | "cross" | "double_cross" | "wing_entry" | "pivot_entry" | "backcourt" | "fast_break" | "second_wave" | "custom";
