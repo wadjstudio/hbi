@@ -105,6 +105,7 @@ hbi-starter/
   components/workspace/reference-match.tsx
   components/workspace/reports.tsx
   components/workspace/session-analysis-rail.tsx
+  components/workspace/session-statistics.tsx
   components/workspace/settings.tsx
   components/workspace/shell.tsx
   components/workspace/tactics.tsx
@@ -115,6 +116,7 @@ hbi-starter/
   components/workspace/video-workspace.tsx
   components/workspace/youtube-player.tsx
   design-system/MASTER.md
+  docs/ui-redesign/REFERENCE_AUDIT.md
   docs/ui-redesign/RESEARCH.md
   docs/ui-redesign/match-template.csv
   docs/ui-redesign/roster-template.csv
@@ -123,6 +125,7 @@ hbi-starter/
   features/analysis/intelligence-scope.ts
   features/analysis/labels.ts
   features/analysis/match-dashboard.ts
+  features/analysis/session-statistics.ts
   features/analysis/shot-profile.ts
   features/analysis/workbench.ts
   features/analytics/.gitkeep
@@ -146,6 +149,7 @@ hbi-starter/
   features/videos/.gitkeep
   features/workspace/backup.ts
   features/workspace/provider.tsx
+  features/workspace/sync-errors.ts
   hooks/.gitkeep
   lib/brand.ts
   lib/analytics/.gitkeep
@@ -218,6 +222,7 @@ hbi-starter/
   supabase/migrations/0017_online_video_mode.sql
   supabase/migrations/0018_online_video_identity.sql
   supabase/migrations/0019_video_time_and_evidence.sql
+  supabase/migrations/0020_r2_storage_hardening.sql
   supabase/tests/security.test.sql
   tests/setup.ts
   tests/e2e/conflict.spec.ts
@@ -227,6 +232,7 @@ hbi-starter/
   tests/e2e/history-assertions.ts
   tests/e2e/online-video.spec.ts
   tests/e2e/reports.spec.ts
+  tests/e2e/session-statistics-assertions.ts
   tests/e2e/smoke.spec.ts
   tests/e2e/video.spec.ts
   tests/e2e/workflow.spec.ts
@@ -243,8 +249,10 @@ hbi-starter/
   tests/unit/positions.test.ts
   tests/unit/quick-tag-dock.test.tsx
   tests/unit/reports.test.ts
+  tests/unit/session-statistics.test.ts
   tests/unit/shot-profile.test.ts
   tests/unit/smoke.test.ts
+  tests/unit/sync-errors.test.ts
   tests/unit/video-source.test.ts
   tests/unit/workbench.test.ts
   tools/local-analysis/NOTICE.md

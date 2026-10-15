@@ -8,6 +8,7 @@
 - The final native Next production build passed, including TypeScript checking. Accepted summary geometry at 1672×941: top 741.52px, height 191.47px, bottom 932.98px; no cropping or gate reduction. Cloudflare packaging/publication is recorded after completion.
 - Final Cloudflare Pages build/package passed with existing nonfatal bundler timing warnings. Publication is a separate step; no new migration is needed for these views.
 - Git push exposed concurrent remote sync fixes (PR #2). Rebased the UI revision onto those changes without conflicts and pushed integrated source 6a73176. The merged offline-video/evidence/meeting journey passed. A concurrent unit run hit the unchanged five-second DOM-test timeout and was stopped; the serial final run passed all 55 tests, full lint and native Next production build with TypeScript enabled. Final Cloudflare bundle must be rebuilt from this integrated source, replacing the earlier intermediate UI-only upload.
+- Rebuilt the integrated Cloudflare Pages bundle successfully and published source 6f1f38b as production/main deployment 3bbb2c3b-96f3-45d6-b296-cea3ef34e328. Wrangler confirmed 28 new/36 reused assets and Worker/routes/headers upload; all 38 JS/CSS files matched deployed bytes/type by SHA256. HTTPS login returned 200; Spaceship nameservers and hbi CNAME were unchanged. Worker input SHA256: df1c4bbffe8a63fa2e38aeaf777a64ae8be151fdea20881b3dfc177b837b0e08. No authenticated hosted coach journey, migration, DNS mutation or R2 operation was performed.
 
 ## Phase controls and expanded filters — 2026-10-15
 
