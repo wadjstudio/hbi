@@ -1,5 +1,13 @@
 # SESEN / HBI validation — 2026-10-15
 
+## Phase controls and expanded filters — 2026-10-15
+
+- All 50 unit/component tests passed; full lint and isolated TypeScript checking passed. Coverage separates phase selection from observation callbacks, seven-metre awards/suspensions from attempts, canonical versus legacy shot labels, explicit numerical counts, and defensive term/possession organization/session compatibility.
+- Chrome offline video → shot → opponent evidence → meeting acceptance passed. The final responsive console rerun passed after spacing correction, including Arabic/mobile, keyboard controls, history and evidence. At 1672×941 the summary starts at 747.70px and ends at 939.17px. The initial 945.17px bottom failed the unchanged 941px gate; reduced spacing fixed it.
+- The first browser attempt exposed an invalid rest-property position in the new component; fixed before further acceptance. A component-test-only unsupported query option was removed after TypeScript caught it. An initial full lint attempt timed out; the final full lint passed. Native Next production build with TypeScript enabled passed. Cloudflare packaging/publication results are appended after completion.
+- Local migrations end at 0019, matching the user's reported hosted version. No new SQL is required or applied; this version report is not an independent hosted schema/RLS audit. Fixture observations are synthetic, isolated from production and unrelated to the footage.
+- Complete Cloudflare Pages production build/package passed after the final Next build; only existing nonfatal bundler warnings remain. Publication and deployed-asset verification are recorded in the release receipt after upload.
+
 ## Fitted first-screen composition — 2026-10-15
 
 - Full Chrome console and offline-video/evidence/meeting acceptance passed after compaction. The final console rerun also passed explicit source-time checks after keyboard resizing/tab navigation. Actual bounded local footage and clearly synthetic fixture statistics remain separate.

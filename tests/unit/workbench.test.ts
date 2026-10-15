@@ -34,6 +34,93 @@ it("filters goal evidence through the canonical attempt rather than the legacy e
     filterWorkbenchEvents(events, shots, "turnover").map((e) => e.id),
   ).toEqual(["e3"]);
 });
+it("filters shots and seven-metre awards without inventing attempts or trusting conflicting legacy labels", () => {
+  const events = [
+    row("award", { event_type: "seven_meter_won" }),
+    row("shot", { event_type: "shot" }),
+    row("legacy", { event_type: "seven_meter_shot" }),
+    row("conflict", { event_type: "seven_meter_shot" }),
+  ];
+  const shots = [
+    row("s1", { event_id: "shot", zone: "seven_meter" }),
+    row("s2", { event_id: "conflict", zone: "lw" }),
+  ];
+  expect(
+    filterWorkbenchEvents(events, shots, "seven_meter").map((e) => e.id),
+  ).toEqual(["award", "shot", "legacy"]);
+  expect(filterWorkbenchEvents(events, shots, "shot").map((e) => e.id)).toEqual(
+    ["shot", "legacy", "conflict"],
+  );
+});
+it("filters numerical superiority from recorded counts and transition from the recorded phase", () => {
+  const events = [
+    row("counted", {
+      numerical_for: 7,
+      numerical_against: "6",
+      phase: "fast_break",
+    }),
+    row("phaseOnly", { phase: "seven_vs_six" }),
+    row("invalid", { numerical_for: [7], numerical_against: 6 }),
+    row("missing", { numerical_for: null, numerical_against: 6 }),
+  ];
+  expect(
+    filterWorkbenchEvents(events, [], "numerical:7:6").map((e) => e.id),
+  ).toEqual(["counted"]);
+  expect(
+    filterWorkbenchEvents(events, [], "phase:fast_break").map((e) => e.id),
+  ).toEqual(["counted"]);
+});
+it("filters coded defensive systems only through compatible possession and organization links", () => {
+  const possession = row("p", {
+    match_id: "m",
+    analysis_session_id: "session",
+  });
+  const events = [
+    row("valid", {
+      possession_id: "p",
+      match_id: "m",
+      analysis_session_id: "session",
+    }),
+    row("foreign", {
+      possession_id: "p",
+      match_id: "m",
+      analysis_session_id: "another",
+    }),
+  ];
+  const context = {
+    possessions: [possession],
+    assignments: [
+      row("a", { possession_id: "p", term_id: "t" }),
+      row("duplicate", { possession_id: "p", term_id: "t" }),
+    ],
+    terms: [
+      {
+        ...row("t", { category: "defense_system", code: "6:0" }),
+        organization_id: null,
+      },
+    ],
+  };
+  expect(
+    filterWorkbenchEvents(events, [], "defense:6:0", "", context).map(
+      (e) => e.id,
+    ),
+  ).toEqual(["valid"]);
+  expect(filterWorkbenchEvents(events, [], "defense:5:1", "", context)).toEqual(
+    [],
+  );
+  expect(
+    filterWorkbenchEvents(events, [], "defense:6:0", "", {
+      ...context,
+      assignments: [
+        row("bad", {
+          organization_id: "another",
+          possession_id: "p",
+          term_id: "t",
+        }),
+      ],
+    }),
+  ).toEqual([]);
+});
 it("does not count another session's possessions or repeated descriptors in a tactical sample", () => {
   const groups = tacticalGroups(
     [row("p1")],

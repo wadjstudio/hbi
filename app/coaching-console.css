@@ -631,6 +631,119 @@
     flex-basis: 100%;
   }
 }
+.video-workspace .quick-tag-dock {
+  display: block;
+  padding: 0;
+  margin-top: 0;
+}
+.video-workspace .quick-tag-dock > .quick-tag-context {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+}
+.quick-tag-context > .quick-context-details {
+  flex: 1;
+  min-width: 0;
+}
+.quick-tag-actions,
+.quick-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.quick-tag-row > b {
+  color: var(--sesen-gold);
+  font-size: 11px;
+  white-space: nowrap;
+}
+.quick-tag-row > .quick-tag-buttons {
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.quick-tag-buttons > .tag-transition {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--sesen-cyan);
+  border: 1px solid var(--sesen-cyan);
+  border-radius: 5px;
+  padding-inline: 5px;
+}
+.tag-transition > select {
+  width: auto;
+  max-width: 112px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+.quick-tag-buttons > .tag-defense {
+  border-color: #459eff;
+  color: #85beff;
+}
+.quick-tag-buttons > .tag-seven-meter {
+  border-color: #b77bff;
+  color: #d1a8ff;
+}
+.quick-tag-buttons > .tag-penalty {
+  border-color: #f2cc44;
+  color: #f2cc44;
+}
+.quick-tag-buttons > button[aria-pressed="true"] {
+  box-shadow: inset 0 0 12px #ffffff26;
+}
+.filter-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-inline-end: 4px;
+}
+@media (min-width: 1200px) {
+  .quick-tag-actions > button {
+    min-height: 20px;
+    padding: 2px 5px;
+    font-size: 10px;
+  }
+  .quick-tag-context > .quick-context-details:not([open]) > summary {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .video-workspace .quick-tag-row .quick-tag-buttons > button,
+  .video-workspace .quick-tag-row .tag-transition {
+    min-height: 28px;
+    padding-block: 3px;
+    padding-inline: 5px;
+    font-size: 11px;
+  }
+  .analysis-split .workbench-filters {
+    gap: 4px;
+    margin-block: 2px;
+  }
+  .analysis-split .workbench-filters > button {
+    padding-inline: 5px;
+    font-size: 10px;
+  }
+}
+@media (max-width: 1199px) {
+  .quick-tag-actions > button,
+  .video-workspace .quick-tag-buttons > button,
+  .tag-transition > select {
+    min-height: 44px;
+  }
+  .quick-tag-row {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .quick-tag-row > .quick-tag-buttons {
+    flex-basis: 100%;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .analysis-split {
     scroll-behavior: auto;

@@ -19,7 +19,10 @@ import {
 } from "@/lib/analytics/metrics";
 import { s, n, positions, type Row, type Drawing } from "@/types/workspace";
 import { canWrite } from "@/lib/permissions/roles";
-import { filterWorkbenchEvents } from "@/features/analysis/workbench";
+import {
+  filterWorkbenchEvents,
+  workbenchFilters,
+} from "@/features/analysis/workbench";
 import { isReferenceMatch } from "@/features/matches/reference-match";
 import { MatchHub } from "./match-hub";
 import { MatchContext } from "./match-context";
@@ -211,7 +214,11 @@ export function VideoWorkspace({
       .filter(
         (r) => r.id === match?.home_team_id || r.id === match?.away_team_id,
       ),
-    filtered = filterWorkbenchEvents(events, shots, filter, participantFilter);
+    filtered = filterWorkbenchEvents(events, shots, filter, participantFilter, {
+      possessions,
+      assignments: w.list("possession_tactics"),
+      terms: w.list("tactical_terms"),
+    });
   const intelligenceTeam = teams.some((t) => t.id === focusTeam)
     ? focusTeam
     : teams[1]?.id || teams[0]?.id || "";
@@ -237,6 +244,11 @@ export function VideoWorkspace({
         historicalSample.shots,
         filter,
         participantFilter,
+        {
+          possessions: historicalSample.possessions,
+          assignments: w.list("possession_tactics"),
+          terms: w.list("tactical_terms"),
+        },
       )
     : filtered;
   useEffect(() => {
@@ -367,7 +379,11 @@ export function VideoWorkspace({
     setUrl(meta.url);
     setTeam(s(match.home_team_id));
   }
-  async function record(selectedType = eventType, selectedResult = result) {
+  async function record(
+    selectedType = eventType,
+    selectedResult = result,
+    selectedOutcome = outcome,
+  ) {
     if (!team) throw new Error("Select team");
     const eventLocation =
       selectedType === "shot" ? {} : parseEventCourtPosition(eventX, eventY);
@@ -395,7 +411,7 @@ export function VideoWorkspace({
             : selectedResult === "unknown"
               ? "unknown"
               : "failure"
-          : outcome,
+          : selectedOutcome,
       score_for: scoreFor === "" ? null : Number(scoreFor),
       score_against: scoreAgainst === "" ? null : Number(scoreAgainst),
       actor_player_id: actor || null,
@@ -1225,21 +1241,20 @@ export function VideoWorkspace({
                 className="workbench-filters"
                 aria-label={w.t("فلاتر التحليل", "Analysis filters")}
               >
-                {(
-                  [
-                    ["all", "الكل", "All"],
-                    ["result:goal", "أهداف", "Goals"],
-                    ["result:save", "تصديات", "Saves"],
-                    ["result:miss", "إهدار", "Misses"],
-                    ["turnover", "فقد الكرة", "Turnovers"],
-                  ] as const
-                ).map(([value, ar, en]) => (
+                {workbenchFilters.map(({ value, ar, en, color }) => (
                   <button
                     key={value}
                     className={filter === value ? "active" : ""}
                     aria-pressed={filter === value}
                     onClick={() => setFilter(value)}
                   >
+                    {color && (
+                      <i
+                        className="filter-dot"
+                        style={{ background: color }}
+                        aria-hidden="true"
+                      />
+                    )}
                     {w.t(ar, en)}
                   </button>
                 ))}
@@ -1364,62 +1379,68 @@ export function VideoWorkspace({
                 ))}
               </details>
             </Panel>
-            <details className="quick-context-details">
-              <summary>
-                {w.t("فريق التسجيل", "Recording team")}:{" "}
-                {teams.find((r) => r.id === team)
-                  ? rowLabel(teams.find((r) => r.id === team)!)
-                  : "—"}
-                {" · "}
-                {w.t("اللاعب", "Player")}:{" "}
-                {players.find((r) => r.id === actor)
-                  ? rowLabel(players.find((r) => r.id === actor)!)
-                  : w.t("غير محدد", "Not selected")}
-              </summary>
-              <div className="quick-context">
-                <SelectRow
-                  label={w.t("فريق التسجيل", "Recording team")}
-                  rows={teams}
-                  value={team}
-                  onChange={(id) => {
-                    setTeam(id);
-                    setActor("");
-                    setKeeper("");
-                  }}
-                />
-                <SelectRow
-                  label={w.t("المصوّب / المنفذ", "Shooter / actor")}
-                  rows={players}
-                  value={actor}
-                  onChange={setActor}
-                />
-                <label>
-                  {w.t("مرحلة التسجيل", "Recording phase")}
-                  <select
-                    value={phase}
-                    onChange={(e) => setPhase(e.target.value)}
-                  >
-                    {[
-                      "other",
-                      "positional_attack",
-                      "fast_break",
-                      "second_wave",
-                      "transition_defense",
-                      "set_defense",
-                      "seven_vs_six",
-                      "power_play",
-                      "short_handed",
-                      "empty_goal",
-                    ].map((code) => (
-                      <option key={code} value={code}>
-                        {analysisLabel(code, w.lang)}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-            </details>
             <QuickTagDock
+              context={
+                <details className="quick-context-details">
+                  <summary>
+                    {w.t("فريق التسجيل", "Recording team")}:{" "}
+                    {teams.find((r) => r.id === team)
+                      ? rowLabel(teams.find((r) => r.id === team)!)
+                      : "—"}
+                    {" · "}
+                    {w.t("اللاعب", "Player")}:{" "}
+                    {players.find((r) => r.id === actor)
+                      ? rowLabel(players.find((r) => r.id === actor)!)
+                      : w.t("غير محدد", "Not selected")}
+                    {" · "}
+                    {analysisLabel(phase, w.lang)}
+                  </summary>
+                  <div className="quick-context">
+                    <SelectRow
+                      label={w.t("فريق التسجيل", "Recording team")}
+                      rows={teams}
+                      value={team}
+                      onChange={(id) => {
+                        setTeam(id);
+                        setActor("");
+                        setKeeper("");
+                      }}
+                    />
+                    <SelectRow
+                      label={w.t("المصوّب / المنفذ", "Shooter / actor")}
+                      rows={players}
+                      value={actor}
+                      onChange={setActor}
+                    />
+                    <label>
+                      {w.t("مرحلة التسجيل", "Recording phase")}
+                      <select
+                        value={phase}
+                        onChange={(e) => setPhase(e.target.value)}
+                      >
+                        {[
+                          "other",
+                          "positional_attack",
+                          "fast_break",
+                          "second_wave",
+                          "transition_defense",
+                          "set_defense",
+                          "seven_vs_six",
+                          "power_play",
+                          "short_handed",
+                          "empty_goal",
+                        ].map((code) => (
+                          <option key={code} value={code}>
+                            {analysisLabel(code, w.lang)}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+                </details>
+              }
+              phase={phase}
+              onPhase={setPhase}
               available={Boolean(
                 sid &&
                 team &&
@@ -1439,7 +1460,11 @@ export function VideoWorkspace({
                 setEventType("shot");
                 void a.run(() => record("shot", next));
               }}
-              onTurnover={() => void a.run(() => record("turnover"))}
+              onEvent={(type) => {
+                setEventType(type);
+                setOutcome("unknown");
+                void a.run(() => record(type, result, "unknown"));
+              }}
               onEditor={() => setEditorOpen(!editorOpen)}
               onUndo={() => void a.run(() => history("undo"))}
               onRedo={() => void a.run(() => history("redo"))}
@@ -1952,14 +1977,15 @@ export function VideoWorkspace({
                 onChange={(e) => setFilter(e.target.value)}
               >
                 {[
-                  "all",
-                  "result:goal",
-                  "result:save",
-                  "result:miss",
-                  ...new Set(events.map((e) => s(e.event_type))),
+                  ...new Set([
+                    ...workbenchFilters.map((f) => f.value),
+                    "result:miss",
+                    ...events.map((e) => s(e.event_type)),
+                  ]),
                 ].map((v) => (
                   <option key={v} value={v}>
-                    {analysisLabel(v, w.lang)}
+                    {workbenchFilters.find((f) => f.value === v)?.[w.lang] ??
+                      analysisLabel(v, w.lang)}
                   </option>
                 ))}
               </select>

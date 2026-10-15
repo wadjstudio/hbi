@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Phase controls and expanded analysis filters — 2026-10-15
+
+- Added Attack/Defense context buttons and a transition selector for fast break, second wave and defensive return. Selecting context does not invent a match event; subsequent observations retain the selected phase.
+- Added distinct quick events for a seven-metre award and a two-minute suspension. Awards are not shot attempts; suspensions identify the selected player/team and require explicit numerical-context adjustment. Existing Goal/Save buttons still create one canonical attempt each.
+- Added shared shot, seven-metre, suspension, fast-break, coded defensive-system and recorded 7v6 filters. Defensive filters follow compatible possession/taxonomy links; numerical filters require observed counts. Advanced filtering retains misses and existing event types.
+- Reworked the quick-tag dock into context/actions plus colored recording controls, with responsive wrapping and mobile touch targets. No dependency or migration after 0019 is required.
+
 ## Fitted first-screen composition — 2026-10-15
 
 - Moved layout/session settings into a keyboard-accessible native disclosure beside video source controls. Escape restores focus; outside pointers dismiss it. Focus/fit/reset retain the same video element and source time. On mobile the disclosure stays inside viewport bounds with 44px controls.
