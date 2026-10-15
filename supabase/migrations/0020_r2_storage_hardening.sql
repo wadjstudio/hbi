@@ -43,7 +43,7 @@ revoke all on function public.guard_r2_storage() from public,anon,authenticated;
 drop function public.reserve_video_upload(uuid,bigint);
 create function public.reserve_video_upload(p_video uuid) returns void
 language plpgsql security invoker set search_path=public as $$ declare v public.videos;used bigint;quota bigint;begin
- select * into v from public.videos where id=p_video;if not found then raise exception 'Video inaccessible';end if;
+ select * into v from public.videos where id=p_video for update;if not found then raise exception 'Video inaccessible';end if;
  if not public.has_org_role(v.organization_id,array['owner','technical_director','head_coach','assistant_coach','analyst']::public.org_role[]) then raise exception 'Forbidden';end if;
  quota:=public.r2_shared_quota_bytes();
  if quota is null or v.file_size_bytes is null or v.file_size_bytes<=0 then raise exception 'Invalid quota or size';end if;
@@ -60,7 +60,7 @@ grant execute on function public.reserve_video_upload(uuid) to authenticated;
 -- Called by /api/r2/complete after it verifies the uploaded object's size.
 create function public.complete_video_upload(p_video uuid) returns void
 language plpgsql security invoker set search_path=public as $$ declare v public.videos;begin
- select * into v from public.videos where id=p_video;if not found then raise exception 'Video inaccessible';end if;
+ select * into v from public.videos where id=p_video for update;if not found then raise exception 'Video inaccessible';end if;
  if not public.has_org_role(v.organization_id,array['owner','technical_director','head_coach','assistant_coach','analyst']::public.org_role[]) then raise exception 'Forbidden';end if;
  if v.status<>'uploading' or v.r2_object_key is distinct from v.organization_id::text||'/'||v.id::text||'/source' then raise exception 'No upload reservation';end if;
  perform set_config('hbi.r2_write','on',true);
