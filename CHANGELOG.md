@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Historical scope and source-aware evidence — 2026-10-15
+
+- Added session/last-3/5/10 intelligence controls beside the match video. Historical samples end at the open match date, use one unambiguous primary session per match and report missing/conflicting coverage. The rail shares event filters; timeline and lower cards retain explicit current-session context.
+- Evidence rows identify the originating match/session and missing local media. Review and edit links open the event's actual session, including secondary sessions and same-match transitions. Edit mode hydrates existing fields; view mode does not open an editor.
+- Historical clips and meeting references now resolve the event's video/match directly rather than inheriting the currently playing source. Matching local relinks preserve nonzero time, and attaching the first video to an existing source-less session persists its relationship.
+- Added dated/multi-organization/ambiguous-session/source-identity unit coverage and synthetic multi-match browser acceptance for sample counts, clip identity, relinking at the selected time, direct secondary links, same-match session changes, editing and responsive captures. No new dependency, migration or hosted deployment.
+
 ## Populated evidence charts — 2026-10-15
 
 - Added cumulative reviewed-shot and classified-possession trends. Each keyboard-accessible point opens the exact supporting prefix of session events; pending attempts and unknown possession outcomes stay outside the denominators.

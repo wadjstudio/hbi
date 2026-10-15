@@ -176,6 +176,63 @@ export function consoleData({
     is_reviewed: false,
     evidence: [],
   });
+  const historicalVideo = row(2000, {
+    ...video,
+    id: uid(2000),
+    organization_id: organization,
+    match_id: uid(600),
+    storage_mode: "local",
+    duration_ms: duration,
+  });
+  const historicalSession = row(2001, {
+    match_id: uid(600),
+    video_id: historicalVideo.id,
+    is_primary: true,
+    analyst_id: user,
+    title: "Synthetic historical analysis",
+  });
+  const historicalPossession = row(2004, {
+    match_id: uid(600),
+    analysis_session_id: historicalSession.id,
+    team_id: away,
+    sequence_no: 1,
+    period: 1,
+    start_ms: 5000,
+    end_ms: 6000,
+    result: "goal",
+    phase: "positional_attack",
+  });
+  const historicalEvent = row(2002, {
+    match_id: uid(600),
+    analysis_session_id: historicalSession.id,
+    possession_id: historicalPossession.id,
+    team_id: away,
+    event_type: "shot",
+    period: 1,
+    timestamp_ms: 6000,
+    actor_player_id: players[0].id,
+    created_by: user,
+    note: "SYNTHETIC HISTORICAL EVIDENCE",
+  });
+  const historicalShot = row(2003, {
+    event_id: historicalEvent.id,
+    shooter_id: players[0].id,
+    goalkeeper_id: players[3].id,
+    result: "goal",
+    review_required: false,
+    empty_goal: false,
+    court_x: 0.4,
+    court_y: 0.5,
+    zone: "nine_meter_right",
+  });
+  const historicalInsight = row(2006, {
+    team_id: away,
+    title: "Fixture historical goal",
+    source: "rule",
+    insight_key: "synthetic-history",
+    is_reviewed: false,
+    evidence: [],
+  });
   return {
     competitions: [competition],
     matches: [
@@ -201,11 +258,14 @@ export function consoleData({
           away_score,
           starts_at: `2025-01-${String(20 - i).padStart(2, "0")}T12:00:00Z`,
           status: "analysed",
+          competition_id: competition.id,
+          venue: "Synthetic UI fixture",
           created_by: user,
         }),
       ),
     ],
-    analysis_sessions: [session, secondary],
+    analysis_sessions: [session, secondary, historicalSession],
+    videos: [...(video.id ? [video] : []), historicalVideo],
     players,
     match_roster: players.map((player, i) =>
       row(700 + i, {
@@ -218,11 +278,17 @@ export function consoleData({
       }),
     ),
     tactical_terms: terms,
-    possessions,
-    events: [...events, secondaryEvent],
-    shot_attempts: [...shots, secondaryShot],
-    possession_tactics: tactics,
-    insights: [insight, secondaryInsight],
+    possessions: [...possessions, historicalPossession],
+    events: [...events, secondaryEvent, historicalEvent],
+    shot_attempts: [...shots, secondaryShot, historicalShot],
+    possession_tactics: [
+      ...tactics,
+      row(2005, {
+        possession_id: historicalPossession.id,
+        term_id: terms[0].id,
+      }),
+    ],
+    insights: [insight, secondaryInsight, historicalInsight],
     evidence_links: [
       ...linked.map((event, i) =>
         row(800 + i, { insight_id: insight.id, event_id: event.id }),
@@ -230,6 +296,10 @@ export function consoleData({
       row(1004, {
         insight_id: secondaryInsight.id,
         event_id: secondaryEvent.id,
+      }),
+      row(2007, {
+        insight_id: historicalInsight.id,
+        event_id: historicalEvent.id,
       }),
     ],
     video_clock_segments: [

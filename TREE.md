@@ -120,6 +120,7 @@ hbi-starter/
   docs/ui-redesign/roster-template.csv
   features/analysis/.gitkeep
   features/analysis/contracts.ts
+  features/analysis/intelligence-scope.ts
   features/analysis/labels.ts
   features/analysis/match-dashboard.ts
   features/analysis/shot-profile.ts
@@ -223,6 +224,7 @@ hbi-starter/
   tests/e2e/console.spec.ts
   tests/e2e/data-sources.spec.ts
   tests/e2e/fixture.ts
+  tests/e2e/history-assertions.ts
   tests/e2e/online-video.spec.ts
   tests/e2e/reports.spec.ts
   tests/e2e/smoke.spec.ts
@@ -234,6 +236,7 @@ hbi-starter/
   tests/unit/backup.test.ts
   tests/unit/data-sources.test.ts
   tests/unit/domain.test.ts
+  tests/unit/intelligence-scope.test.ts
   tests/unit/local.test.ts
   tests/unit/match-dashboard.test.ts
   tests/unit/online-source.test.ts

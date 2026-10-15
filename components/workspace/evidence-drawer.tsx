@@ -7,6 +7,9 @@ import { formatTime } from "@/lib/video/time";
 import { n, s, type Row } from "@/types/workspace";
 import { useWorkspace } from "./provider";
 import { Notice, rowLabel, useAction } from "./controls";
+import { evidenceSource } from "@/features/analysis/intelligence-scope";
+import { getLocalSource } from "@/lib/video/local-sources";
+import { matchLabel } from "./entities";
 
 export function EvidenceDrawer({
   selection,
@@ -15,13 +18,15 @@ export function EvidenceDrawer({
   onEdit,
   onClip,
   canClip,
+  sessionId,
 }: {
   selection: { title: string; events: Row[] } | null;
   onClose: () => void;
   onReview: (event: Row) => void;
   onEdit: (event: Row) => void;
   onClip: (event: Row) => Promise<Row>;
-  canClip: boolean;
+  canClip: (event: Row) => boolean;
+  sessionId: string;
 }) {
   const w = useWorkspace(),
     a = useAction(),
@@ -67,8 +72,8 @@ export function EvidenceDrawer({
           <small>
             n={selection?.events.length ?? 0} ·{" "}
             {w.t(
-              "أحداث من نفس جلسة التحليل",
-              "events from this analysis session",
+              "أحداث من العينة المختارة · المصدر موضح لكل حدث",
+              "events in the selected sample · source shown per event",
             )}
           </small>
         </div>
@@ -96,12 +101,51 @@ export function EvidenceDrawer({
       </Link>
       {selection?.events.length ? (
         selection.events.map((event) => {
+          const source = evidenceSource(
+            w.org,
+            event,
+            w.list("matches"),
+            w.list("analysis_sessions"),
+            w.list("videos"),
+          );
+          const isCurrent = source?.session.id === sessionId;
+          const href = source
+            ? `/matches/${source.match.id}?event=${event.id}`
+            : "";
           const actor = w
               .list("players")
               .find((p) => p.id === event.actor_player_id),
             team = w.list("teams").find((t) => t.id === event.team_id);
           return (
             <article className="evidence-source" key={event.id}>
+              <small className="evidence-origin">
+                {source ? (
+                  <>
+                    {matchLabel(source.match, w.list("teams"))} ·{" "}
+                    {s(source.match.starts_at).slice(0, 10) || "—"} ·{" "}
+                    {rowLabel(source.session)}
+                  </>
+                ) : (
+                  w.t(
+                    "علاقة المصدر غير متوافقة",
+                    "Source relationship is incompatible",
+                  )
+                )}
+              </small>
+              {source &&
+                (!source.video ||
+                  (source.video.storage_mode === "local" &&
+                    !getLocalSource(
+                      `${w.user}:${w.org}`,
+                      source.video.id,
+                    ))) && (
+                  <small className="evidence-media-missing">
+                    {w.t(
+                      "الفيديو المحلي يحتاج إعادة ربط قبل المشاهدة",
+                      "Local video needs relinking before viewing",
+                    )}
+                  </small>
+                )}
               <div>
                 <b dir="ltr">{formatTime(n(event.timestamp_ms))}</b>
                 <span>{s(event.event_type)}</span>
@@ -114,33 +158,56 @@ export function EvidenceDrawer({
               </div>
               {event.note && <p>{s(event.note)}</p>}
               <div className="toolbar">
+                {source && !isCurrent ? (
+                  <Link
+                    className="evidence-route"
+                    href={href}
+                    onClick={onClose}
+                  >
+                    <Play size={13} />
+                    {w.t("فتح لقطة المصدر", "Open source moment")}
+                  </Link>
+                ) : (
+                  <button
+                    disabled={!source}
+                    onClick={() => {
+                      onReview(event);
+                      onClose();
+                    }}
+                  >
+                    <Play size={13} />
+                    {w.t("مراجعة اللقطة", "Review moment")}
+                  </button>
+                )}
+                {source && !isCurrent && canWrite(w.role, "events") ? (
+                  <Link
+                    className="evidence-route"
+                    href={`${href}&edit=1`}
+                    onClick={onClose}
+                  >
+                    <Pencil size={13} />
+                    {w.t("فتح المصدر للتحرير", "Open source to edit")}
+                  </Link>
+                ) : (
+                  <button
+                    disabled={!source || !canWrite(w.role, "events")}
+                    onClick={() => {
+                      onEdit(event);
+                      onClose();
+                    }}
+                  >
+                    <Pencil size={13} />
+                    {w.t("تحرير", "Edit")}
+                  </button>
+                )}
                 <button
-                  onClick={() => {
-                    onReview(event);
-                    onClose();
-                  }}
-                >
-                  <Play size={13} />
-                  {w.t("مراجعة اللقطة", "Review moment")}
-                </button>
-                <button
-                  disabled={!canWrite(w.role, "events")}
-                  onClick={() => {
-                    onEdit(event);
-                    onClose();
-                  }}
-                >
-                  <Pencil size={13} />
-                  {w.t("تحرير", "Edit")}
-                </button>
-                <button
-                  disabled={!writable || !canClip || a.busy}
+                  disabled={!writable || !canClip(event) || a.busy}
                   onClick={() => void a.run(() => onClip(event))}
                 >
                   {w.t("مقطع دليل", "Evidence clip")}
                 </button>
                 <button
-                  disabled={!meeting || !canClip || !writable || a.busy}
+                  disabled={!meeting || !canClip(event) || !writable || a.busy}
                   className="primary"
                   onClick={() => void a.run(() => addToMeeting(event))}
                 >

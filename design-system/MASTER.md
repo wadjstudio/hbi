@@ -44,6 +44,10 @@ Do not substitute invented players, team crests, league averages or match scores
   evidence on click or keyboard activation. Turnover maps use recorded normalized
   positions; missing coordinates remain missing. Recent form uses team-relative
   match scores independently of tagged session statistics.
+- The intelligence header offers current-session/3/5/10 scope. Historical coverage
+  is anchored to the open match date and one unambiguous primary per match. Keep
+  timeline/lower-card scope explicit. Evidence identifies the actual source and
+  supports its review/edit/relink/clip flow, including same-match session changes.
 
 ## Acceptance still required for final visual parity
 
@@ -52,7 +56,8 @@ Review real footage and populated, explicitly test-only event fixtures at
 screenshots, not just passing DOM assertions. Verify evidence links, setting
 disclosures, recording, offline behavior and presentation remain usable.
 
-The first density revision is not a claim of pixel parity or completion of the
-automatic analysis engine. Richer populated charts, the desktop first-screen
-composition and visual review against the supplied reference remain acceptance
-work until demonstrated.
+Populated charts and historical source-aware journeys have deterministic browser
+acceptance, with clearly synthetic statistics and actual bounded footage where
+available. This is not pixel parity or completion of the automatic analysis engine.
+The desktop first-screen composition remains taller than the reference and needs
+further visual work and real coaching review.

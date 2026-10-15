@@ -1,4 +1,5 @@
 import { test, expect } from "./fixture";
+import { verifyHistoricalEvidence } from "./history-assertions";
 test("analysis console supports resizing, focus, keyboard tabs and narrow screens", async ({
   page,
   request,
@@ -62,13 +63,13 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
       .getByLabel("Select local video", { exact: false })
       .setInputFiles(process.env.HBI_VISUAL_MATCH);
     await expect(page.locator("video")).toBeVisible();
-    await page.locator("video").evaluate(async (element) => {
-      const video = element as HTMLVideoElement;
-      if (video.readyState < 2)
-        await new Promise<void>((resolve) =>
-          video.addEventListener("loadeddata", () => resolve(), { once: true }),
-        );
-    });
+    await expect
+      .poll(() =>
+        page
+          .locator("video")
+          .evaluate((element: HTMLVideoElement) => element.readyState),
+      )
+      .toBeGreaterThanOrEqual(2);
   }
   const layers = page.getByRole("button", {
     name: "Possessions & clips",
@@ -234,6 +235,7 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     await expect(page.locator(".turnover-point")).toHaveAttribute("cy", "330");
     await page.locator(".event-editor > summary").click();
   }
+  await verifyHistoricalEvidence(page, request);
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
     path: testInfo.outputPath("console-wide.png"),

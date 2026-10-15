@@ -1,5 +1,9 @@
 # SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
 
+## Historical intelligence and source-bound evidence — 15 October 2026
+
+The coaching rail includes session/last-3/5/10 scope controls, anchored through the open match date, with one unambiguous primary analysis per match and visible missing/conflicting coverage. Shared event filters apply to this historical panel; the timeline and lower cards retain current-session context. Evidence rows identify their match, session and missing local file. Review links resolve the actual event session, including secondary sessions and same-match transitions. Edit links hydrate that event's fields; clips and meeting references use its own video rather than the currently playing source. Relinking preserves selected nonzero time. Cumulative reviewed-shot/possession charts, recorded turnover locations and recent team-relative form are implemented, with explicitly synthetic populated browser fixtures kept outside production data. Full first-screen reference parity remains a separate visual gate.
+
 ## Dense review and evaluation groundwork — 9 October 2026
 
 A bounded continuous 120-frame sequence now supports human correction/addition of people and ball boxes, scene-local identities, explicit missing/uncertain states, undo/redo and source-bound review export/import. Review-only COCO interchange distinguishes partial mixed-class labels from a ball-only reviewed subset; rights and training approval remain unset. Ball diagnostics exclude unreviewed/uncertain/not-run frames and keep undefined ratios null. Generic inference on this sample was weak and took 106.13 seconds for twelve seconds of imagery; these tools are groundwork for specialist evaluation, not automated tactical understanding or production inference.
@@ -48,7 +52,7 @@ Domain modules reside in features; reusable workflows in components/workspace; i
 
 ## Database contract
 
-SQL under supabase/migrations is the authoritative executable schema. Generated database types follow the migrated catalog; run the official Supabase generator after local application. Preserve the first ten migrations; apply 0011–0019 forward. 0017 must commit before 0018 uses the new enum value. Hosted 0017–0019 and publication are authorized in this session but remain unapplied until connection/execution is verified; never reset production to upgrade.
+SQL under supabase/migrations is the authoritative executable schema. Generated database types follow the migrated catalog; run the official Supabase generator after local application. Preserve the first ten migrations; apply 0011–0019 forward. 0017 must commit before 0018 uses the new enum value. On October 15 the user reported latest hosted migration `0019` after querying history; this is not an independent SQL audit. Source `6e21cd5` was published that day; later UI revisions are not automatically deployed. Never reset production or blindly rerun migrations to upgrade.
 
 | Group        | Relations and intent                                                                                                                           |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |

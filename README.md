@@ -26,7 +26,9 @@ Local Supabase requires Docker. Alternatively configure a free hosted Supabase p
 
 ## First coaching workflow
 
-The coaching console uses a resizable video/evidence split and keyboard-accessible tabs. Focus video enlarges the working surface without unmounting the player; Reset layout restores the split. On small screens the same panels stack. Five summary cards show reviewed attempts, shooters, resolved closed possessions, turnover phases and recorded match results. Selecting a statistical sample opens its supporting events. Empty samples and unresolved results remain explicit. Source selection is in an expandable section after attaching a video.
+The coaching console uses a resizable video/evidence split and keyboard-accessible tabs. Focus video enlarges the working surface without unmounting the player; Reset layout restores the split. On small screens the same panels stack. Five summary cards show reviewed attempts and cumulative evidence, shooters, resolved closed possessions, recorded turnover locations and team-relative match results. Selecting a statistical sample opens its supporting events. Empty samples and unresolved results remain explicit. Source selection is in an expandable section after attaching a video.
+
+Beside the video, choose **This session** or **Last 3/5/10** for the selected team's intelligence. Historical samples end at the open match's date and use one unambiguous primary session per match; coverage exposes missing/ambiguous sessions. Timeline and lower cards stay on the current session. Each evidence row identifies its match/session and missing local source. Historical review/edit links open the actual source session; clips and meeting items reference that event's video. Relinking a matching file restores the selected nonzero source time. Match results remain independent of tags.
 
 The new interface primitives are MIT-licensed `react-resizable-panels` and Radix Tabs; their notices are in `public/third-party-ui-notices.txt`. They control layout and focus only, not permissions, persistence or analytical formulas.
 

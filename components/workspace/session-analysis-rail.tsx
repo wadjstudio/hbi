@@ -15,6 +15,7 @@ import { rowLabel } from "./controls";
 import { ThreatProfile } from "./threat-profile";
 import { BrandMark, PlayerAvatar } from "@/components/brand/brand-lockup";
 import { brand } from "@/lib/brand";
+import type { IntelligenceScope } from "@/features/analysis/intelligence-scope";
 
 export function SessionAnalysisRail({
   teams,
@@ -25,6 +26,9 @@ export function SessionAnalysisRail({
   focusTeam,
   onTeam,
   onEvidence,
+  scope,
+  onScope,
+  coverage,
 }: {
   teams: Row[];
   events: Row[];
@@ -34,6 +38,15 @@ export function SessionAnalysisRail({
   focusTeam: string;
   onTeam: (id: string) => void;
   onEvidence: (title: string, events: Row[]) => void;
+  scope: IntelligenceScope;
+  onScope: (scope: IntelligenceScope) => void;
+  coverage?: {
+    matches: number;
+    sessions: number;
+    missing: number;
+    ambiguous: number;
+    needsDate: boolean;
+  };
 }) {
   const w = useWorkspace();
   const tid = teams.some((team) => team.id === focusTeam)
@@ -152,7 +165,53 @@ export function SessionAnalysisRail({
             </option>
           ))}
         </select>
+        <div
+          className="intelligence-scope"
+          role="group"
+          aria-label={w.t("نطاق تحليل الفريق", "Team intelligence scope")}
+        >
+          {(["session", 3, 5, 10] as const).map((value) => (
+            <button
+              type="button"
+              key={value}
+              aria-pressed={scope === value}
+              onClick={() => onScope(value)}
+            >
+              {value === "session"
+                ? w.t("الجلسة", "This session")
+                : w.t(`آخر ${value}`, `Last ${value}`)}
+            </button>
+          ))}
+        </div>
       </header>
+      {coverage && (
+        <small className="intelligence-coverage" role="status">
+          {coverage.needsDate ? (
+            w.t(
+              "حدّد تاريخ المباراة لاختيار العينة التاريخية",
+              "Set the match date to select historical samples",
+            )
+          ) : (
+            <>
+              {coverage.sessions}/{coverage.matches}{" "}
+              {w.t(
+                "مباراة بجلسة أساسية · حتى تاريخ المباراة المفتوحة",
+                "matches with a primary session · through the open match date",
+              )}
+              {coverage.missing > 0 &&
+                ` · ${coverage.missing} ${w.t("بدون جلسة أساسية", "without a primary session")}`}
+              {coverage.ambiguous > 0 &&
+                ` · ${coverage.ambiguous} ${w.t("تعارض جلسات مستبعد", "ambiguous sessions excluded")}`}
+              <span className="scope-note">
+                {w.t(
+                  "التايملاين والبطاقات السفلية: الجلسة الحالية",
+                  "Timeline and lower cards: current session",
+                )}
+              </span>
+            </>
+          )}
+        </small>
+      )}
       <div className="rail-summary">
         <button
           onClick={() =>
@@ -176,7 +235,11 @@ export function SessionAnalysisRail({
         >
           <small>{w.t("حجم العينة", "Sample size")}</small>
           <b>{sample.length}</b>
-          <small>{w.t("حدث · جلسة واحدة", "events · one session")}</small>
+          <small>
+            {scope === "session"
+              ? w.t("حدث · جلسة واحدة", "events · one session")
+              : w.t("حدث · العينة التاريخية", "events · historical sample")}
+          </small>
         </button>
       </div>
       <section className="intelligence-section defense-section">

@@ -1,4 +1,55 @@
 /* Final composition layer: preserve the media coordinate plane at every size. */
+.intelligence-scope,
+.intelligence-coverage {
+  grid-column: 1 / -1;
+}
+.intelligence-scope {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-inline-start: auto;
+}
+.session-rail .intelligence-heading {
+  flex-wrap: wrap;
+}
+.scope-note {
+  display: block;
+}
+.intelligence-scope button {
+  min-height: 28px;
+  padding: 4px 9px;
+  font-size: 11px;
+}
+.intelligence-scope button[aria-pressed="true"] {
+  color: var(--sesen-cyan);
+  border-color: var(--sesen-cyan);
+  background: #00313766;
+}
+.intelligence-coverage {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.evidence-origin,
+.evidence-media-missing {
+  display: block;
+  margin-block: 5px;
+}
+.evidence-media-missing {
+  color: var(--sesen-gold);
+}
+.evidence-route {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 9px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--sesen-cyan);
+}
+.evidence-route:hover {
+  border-color: var(--sesen-cyan);
+}
 .evidence-trend {
   display: block;
   width: 100%;

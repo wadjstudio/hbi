@@ -20,6 +20,8 @@ Preserve the resizable coaching console and Radix tab semantics. Resizing, focus
 
 Continue the actual match workbench. Verified source imports use scoped IDs/provider/permissions. 0017–0019 enable official IFrame API online tagging in a distinct source/session. Never fake a local fingerprint, download YouTube content, obscure player controls/ads or transfer timestamps to another edit. Local files support precise/offline/telestration work. Read controller time when recording; pending outcomes and missing/legacy origins stay visible. Filters share canonical samples and evidence; never silently overwrite an event being edited.
 
+Preserve the rail's session/last-3/5/10 samples and coverage: historical analysis is anchored through the open match date and must not double-count primary/secondary sessions or guess a primary when drafts conflict. Resolve every evidence action to its actual match/session/video. Same-match event navigation must refresh the selected session; review and edit have distinct route modes. Never create a historical clip against the currently playing video's ID. Keep the timeline/lower-card session context explicit when the rail uses history.
+
 - Keep the modular monolith and documented stack. No microservices, Prisma/Drizzle, Redis/Kafka or mandatory AI.
 - Ordinary CRUD uses Supabase Data API and RLS. Secret operations use server routes; no service-role bypass for user data.
 - Preserve migrations 0001–0010. Extend with forward migrations; test clean setup and upgrade fixtures. Never rewrite deployed history or silently discard legacy data.

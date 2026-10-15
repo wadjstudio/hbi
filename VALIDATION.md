@@ -1,5 +1,15 @@
 # SESEN / HBI validation — 2026-10-15
 
+## Historical scope and source-aware evidence — 2026-10-15
+
+- All 45 unit tests passed, including date cutoff/3/5/10 selection, unknown dates, foreign rows, missing/ambiguous primary sessions, primary/secondary exclusion and per-event source resolution. No hosted SQL test or migration was run for this UI feature.
+- Chrome console and offline-video/evidence/meeting journeys passed with the actual bounded local derivative. The extended console also passed without local media. Assertions cover 2/3 and 2/5 available-primary coverage, 13 historical team events, exclusion of secondary insight evidence, a historical clip's actual video/match/bounds, unchanged current playback context during clip creation, missing-source notice, source review/relink at six seconds, edit hydration, direct secondary-session links and same-match secondary-to-primary navigation. Fixtures remain explicitly synthetic and loopback-only.
+- Populated 1672px screenshot inspected: historical controls fit the intelligence header without adding another row at this width. The overall first-screen composition is still taller than the supplied reference; source-aware history acceptance is not full visual parity.
+- Initial console waiting for first-frame data exposed an unnecessary seek to zero on metadata load. Only positive saved time is now restored; the test uses a bounded ready-state poll. A later return-navigation test was synchronized with the new route/blank selection before selecting the match. The extended media/no-media runs then passed. These were loading/test synchronization fixes, not reduced evidence assertions.
+- Full lint initially flagged the query-entry effect calling `edit` before declaration under the React immutability rule. Moved that unchanged effect after the function; final checks are recorded when complete below.
+- Final full `pnpm lint`, isolated Next production build with TypeScript enabled, `pnpm typecheck --project tsconfig.next-isolated.json`, and complete `pnpm build:pages` all passed. Pages packaging retained only nonfatal existing bundler timing/code-splitting warnings. No preview served the acceptance output directory during these builds. Source archive verification follows packaging, identified by its adjacent SHA256.
+- Updated architecture, continuation instructions, phases, README and Blueprint for actual scope/source behavior and the existing user-reported `0019`/previous publication state. No new publication or production data writes.
+
 ## Populated evidence charts — 2026-10-15
 
 - All 42 unit tests passed. Targeted ESLint passed after an initial timeout while the test server compiled; final source verification is recorded below when complete.

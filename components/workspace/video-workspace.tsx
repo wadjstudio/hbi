@@ -38,6 +38,11 @@ import { AnalysisSplit } from "./analysis-split";
 import { MatchDashboard } from "./match-dashboard";
 import { BrandLockup } from "@/components/brand/brand-lockup";
 import { brand } from "@/lib/brand";
+import {
+  historicalIntelligence,
+  evidenceSource,
+  type IntelligenceScope,
+} from "@/features/analysis/intelligence-scope";
 type History = {
   event: Row;
   shot?: Row;
@@ -60,6 +65,16 @@ export function VideoWorkspace({
     [time, setTime] = useState(0),
     [tab, setTab] = useState("events");
   const [sourceFile, setSourceFile] = useState<File | null>(null);
+  const [intelligenceScope, setIntelligenceScope] =
+    useState<IntelligenceScope>("session");
+  const [requestedEvent, setRequestedEvent] = useState("");
+  useEffect(() => {
+    queueMicrotask(() =>
+      setRequestedEvent(
+        new URLSearchParams(window.location.search).get("event") ?? "",
+      ),
+    );
+  }, []);
   const [playing, setPlaying] = useState(false),
     [editorOpen, setEditorOpen] = useState(false),
     [focusTeam, setFocusTeam] = useState(""),
@@ -133,6 +148,17 @@ export function VideoWorkspace({
       .filter((r) => r.match_id === matchId),
     session =
       sessions.find((r) => r.id === sessionId) ??
+      sessions.find((r) =>
+        w
+          .list("events")
+          .some(
+            (event) =>
+              event.id === requestedEvent &&
+              event.organization_id === w.org &&
+              event.match_id === matchId &&
+              event.analysis_session_id === r.id,
+          ),
+      ) ??
       sessions.find((r) => r.is_primary),
     sid = session?.id ?? "",
     video = w
@@ -186,30 +212,37 @@ export function VideoWorkspace({
         (r) => r.id === match?.home_team_id || r.id === match?.away_team_id,
       ),
     filtered = filterWorkbenchEvents(events, shots, filter, participantFilter);
+  const intelligenceTeam = teams.some((t) => t.id === focusTeam)
+    ? focusTeam
+    : teams[1]?.id || teams[0]?.id || "";
+  const historicalSample =
+    intelligenceScope === "session"
+      ? null
+      : historicalIntelligence(
+          w.org,
+          intelligenceTeam,
+          matchId,
+          intelligenceScope,
+          {
+            matches: w.list("matches"),
+            sessions: w.list("analysis_sessions"),
+            events: w.list("events"),
+            possessions: w.list("possessions"),
+            shots: w.list("shot_attempts"),
+          },
+        );
+  const railEvents = historicalSample
+    ? filterWorkbenchEvents(
+        historicalSample.events,
+        historicalSample.shots,
+        filter,
+        participantFilter,
+      )
+    : filtered;
   useEffect(() => {
     const linked = getLocalSource(`${w.user}:${w.org}`, video?.id ?? "");
     queueMicrotask(() => setUrl(linked || ""));
   }, [video?.id, w.user, w.org]);
-  useEffect(() => {
-    const id = new URLSearchParams(window.location.search).get("event");
-    if (id) {
-      const e = events.find((r) => r.id === id);
-      if (e) {
-        queueMicrotask(() => {
-          setTime(n(e.timestamp_ms));
-          if (player.current)
-            player.current.currentTime = n(e.timestamp_ms) / 1000;
-          setEdit(id);
-          setEditSnapshot({
-            event: e,
-            shot: shots.find((r) => r.event_id === e.id),
-          });
-        });
-      }
-    }
-    // Open evidence once when entering this session; later refreshes preserve the editing snapshot.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sid]);
   function clearEditing() {
     setEventX("");
     setEventY("");
@@ -320,10 +353,12 @@ export function VideoWorkspace({
         is_primary: !sessions.some((r) => r.is_primary),
       });
       setSession(created.id);
+    } else if (!session.video_id) {
+      await w.save("analysis_sessions", { ...session, video_id: v.id });
     }
     clearEditing();
     setPlaybackError("");
-    setTime(0);
+    setTime(video && !isOnlineSource ? time : 0);
     setVideo(v.id);
     setSegEnd(meta.duration / 1000);
     registerLocalSource(`${w.user}:${w.org}`, v.id, meta.url);
@@ -494,10 +529,25 @@ export function VideoWorkspace({
     return () => window.removeEventListener("keydown", handler);
   });
   async function clip(e?: Row) {
-    if (!video) throw new Error("Video missing");
+    const resolved = e
+      ? evidenceSource(
+          w.org,
+          e,
+          w.list("matches"),
+          w.list("analysis_sessions"),
+          w.list("videos"),
+        )
+      : null;
+    const clipVideo = e ? resolved?.video : video;
+    const clipMatch = e ? resolved?.match.id : matchId;
+    if (!clipVideo || !clipMatch)
+      throw new Error("Evidence video missing or incompatible");
     const ms = e ? n(e.timestamp_ms) : captureTime();
     const start = Math.max(0, Math.round(ms - pre * 1000));
-    const end = Math.min(n(video.duration_ms), Math.round(ms + post * 1000));
+    const end = Math.min(
+      n(clipVideo.duration_ms),
+      Math.round(ms + post * 1000),
+    );
     if (end <= start)
       throw new Error(
         w.t(
@@ -511,7 +561,7 @@ export function VideoWorkspace({
         .list("clips")
         .find(
           (row) =>
-            row.video_id === video.id &&
+            row.video_id === clipVideo.id &&
             n(row.start_ms) === start &&
             n(row.end_ms) === end &&
             w
@@ -522,8 +572,8 @@ export function VideoWorkspace({
         );
     if (existing) return existing;
     const c = await w.save("clips", {
-      video_id: video.id,
-      match_id: matchId,
+      video_id: clipVideo.id,
+      match_id: clipMatch,
       title: e ? `${s(e.event_type)} ${formatTime(ms)}` : formatTime(ms),
       start_ms: start,
       end_ms: end,
@@ -567,6 +617,27 @@ export function VideoWorkspace({
       setFastBreak(Boolean(sh.starts_fast_break));
     }
   }
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    const id = requestedEvent;
+    if (id) {
+      const e = events.find((r) => r.id === id);
+      if (e) {
+        queueMicrotask(() => {
+          if (query.get("edit") === "1") {
+            edit(e);
+            return;
+          }
+          setTime(n(e.timestamp_ms));
+          setSelectedId(e.id);
+          if (player.current)
+            player.current.currentTime = n(e.timestamp_ms) / 1000;
+        });
+      }
+    }
+    // Enter an explicit source event once; background refreshes preserve editing snapshots.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sid, requestedEvent]);
   const summary = shotSummary(shots);
   const missingAttempts = events.filter(
     (e) =>
@@ -657,6 +728,7 @@ export function VideoWorkspace({
             value={matchId}
             onChange={(id) => {
               clearEditing();
+              setRequestedEvent("");
               setFocusTeam("");
               setEvidence(null);
               setSelectedId("");
@@ -696,6 +768,7 @@ export function VideoWorkspace({
                 value={sid}
                 onChange={(id) => {
                   clearEditing();
+                  setRequestedEvent("");
                   setSession(id);
                   setVideo("");
                   setUrl("");
@@ -881,7 +954,10 @@ export function VideoWorkspace({
                       playsInline
                       onPlay={() => setPlaying(true)}
                       onPause={() => setPlaying(false)}
-                      onLoadedMetadata={() => setPlaybackError("")}
+                      onLoadedMetadata={() => {
+                        setPlaybackError("");
+                        if (time > 0) seek(time);
+                      }}
                       onError={() =>
                         setPlaybackError(
                           w.t(
@@ -1367,13 +1443,29 @@ export function VideoWorkspace({
         intelligence={
           <SessionAnalysisRail
             teams={teams}
-            events={filtered}
-            shots={shots}
-            possessions={possessions}
+            events={railEvents}
+            shots={historicalSample?.shots ?? shots}
+            possessions={historicalSample?.possessions ?? possessions}
             filtered={filter !== "all" || Boolean(participantFilter)}
             focusTeam={focusTeam}
             onTeam={setFocusTeam}
             onEvidence={showEvidence}
+            scope={intelligenceScope}
+            onScope={(scope) => {
+              setIntelligenceScope(scope);
+              setEvidence(null);
+            }}
+            coverage={
+              historicalSample
+                ? {
+                    matches: historicalSample.matches.length,
+                    sessions: historicalSample.sessions,
+                    missing: historicalSample.missing,
+                    ambiguous: historicalSample.ambiguous,
+                    needsDate: historicalSample.needsDate,
+                  }
+                : undefined
+            }
           />
         }
       />
@@ -2165,6 +2257,7 @@ export function VideoWorkspace({
       </Link>
       <EvidenceDrawer
         selection={evidence}
+        sessionId={sid}
         onClose={() => setEvidence(null)}
         onReview={(event) => {
           pause();
@@ -2173,7 +2266,17 @@ export function VideoWorkspace({
         }}
         onEdit={edit}
         onClip={(event) => clip(event)}
-        canClip={Boolean(video)}
+        canClip={(event) =>
+          Boolean(
+            evidenceSource(
+              w.org,
+              event,
+              w.list("matches"),
+              w.list("analysis_sessions"),
+              w.list("videos"),
+            )?.video,
+          )
+        }
       />
     </Tabs.Root>
   );
