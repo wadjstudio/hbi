@@ -218,13 +218,18 @@ export function SessionAnalysisRail({
                 ))}
               </div>
             </div>
-            <small>
-              {defense.length}{" "}
-              {w.t(
-                "هجمة في العينة · التوزيع من التوصيفات، وقد يتغير النظام داخل الهجمة",
-                "sample possessions · distribution counts descriptors; systems can change within a possession",
-              )}
-            </small>
+            <details className="chart-method">
+              <summary>
+                {defense.length}{" "}
+                {w.t("هجمة · طريقة الحساب", "possessions · method")}
+              </summary>
+              <small>
+                {w.t(
+                  "التوزيع من التوصيفات، وقد يتغير النظام داخل الهجمة",
+                  "Distribution counts descriptors; systems can change within a possession",
+                )}
+              </small>
+            </details>
           </>
         ) : (
           <p className="intelligence-empty">
@@ -271,10 +276,7 @@ export function SessionAnalysisRail({
               (shot) => shot.court_x == null || shot.court_y == null,
             ).length
           }{" "}
-          {w.t(
-            "محاولة دون إحداثيات · النقر يفتح المصدر",
-            "attempts without coordinates · click to open source",
-          )}
+          {w.t("محاولة دون موقع", "attempts without a location")}
         </small>
       </section>
       <section className="intelligence-section">

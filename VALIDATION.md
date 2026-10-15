@@ -1,5 +1,17 @@
 # SESEN / HBI validation — 2026-10-15
 
+## Populated evidence charts — 2026-10-15
+
+- All 42 unit tests passed. Targeted ESLint passed after an initial timeout while the test server compiled; final source verification is recorded below when complete.
+- Chrome console and offline-video/evidence/meeting journeys passed with the actual bounded local derivative. Extended console acceptance then passed with exact shot/possession prefix counts, secondary-session exclusion, insight evidence/filter counts, keyboard point activation, turnover location editing/reset, five-result form and responsive/Arabic captures. The same console acceptance passed separately without any local media.
+- Fixture statistics, players and scores are explicitly synthetic with a visible `VISUAL TEST DATA · NOT MATCH ANALYSIS` banner; the derivative is footage only. The loopback-only mock server imports the fixture; it does not seed hosted Supabase.
+- Inspected populated 1672px and Arabic/mobile screenshots. Desktop summary cards begin around 877px after compaction versus around 929px before it; the reference begins around 735px. This is concrete progress, not full first-screen/reference parity. Historical 3/5/10-match scope with source-aware evidence remains incomplete.
+- A mock-seeding race initially selected an unpopulated local session before its offline queue arrived at the backend. Acceptance now waits for that primary session before seeding; the complete extended journey passed after correction.
+- The previously started production preview on port 3002 was verified alive. lean-ctx permanently blocked `Stop-Process`; no bypass or allowlist expansion was used. E2E now uses `.next/e2e-3210`, preserving the active `.next/e2e` preview output. The isolated no-media screenshots are excluded from source packaging and Git.
+- These changes are local/source work; no new hosted deployment, schema modification or automatic-analysis claim.
+- Final targeted ESLint passed. The first native build exposed an SVG native `points` prop collision and invalid `dir` prop; fixed with an omitted native prop and SVG `direction`. An isolated Next production build then passed with TypeScript checking enabled. `pnpm exec tsc --noEmit --project tsconfig.next-isolated.json` also passed. The isolated configuration excludes stale generated route families from running previews, not application code or the current route validators.
+- Full `pnpm build:pages` passed, including the vinext/Cloudflare build and Pages packaging. Existing bundler timing/code-splitting warnings remain nonfatal. Source ZIP verification is recorded after packaging; its adjacent checksum identifies the exact archive.
+
 ## Viewport composition follow-up — 2026-10-15
 
 - Added a bounded desktop media plane with natural aspect/overlay coordinates, a stable-labelled Fit workspace toggle, disabled fit control in video focus mode, and natural sizing on narrow screens. Desktop quick tagging now shares one row with its context action at wide sizes.

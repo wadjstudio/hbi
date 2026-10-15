@@ -13,7 +13,7 @@ dist
 *.zip
 coverage
 playwright-report
-test-results
+test-results*
 .DS_Store
 *.log
 __pycache__/

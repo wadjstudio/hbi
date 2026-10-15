@@ -5,7 +5,8 @@ import { useWorkspace } from "./provider";
 import { Panel, Notice, SelectRow, useAction, rowLabel } from "./controls";
 import { DrawingEditor } from "./drawing";
 import { EventParticipants } from "./event-participants";
-import { ShotMap } from "./charts";
+import { ShotMap, Court } from "./charts";
+import { parseEventCourtPosition } from "@/features/analysis/contracts";
 import { matchLabel } from "./entities";
 import { getLocalSource, registerLocalSource } from "@/lib/video/local-sources";
 import { inspectVideo } from "@/lib/video/fingerprint";
@@ -36,6 +37,7 @@ import * as Tabs from "@radix-ui/react-tabs";
 import { AnalysisSplit } from "./analysis-split";
 import { MatchDashboard } from "./match-dashboard";
 import { BrandLockup } from "@/components/brand/brand-lockup";
+import { brand } from "@/lib/brand";
 type History = {
   event: Row;
   shot?: Row;
@@ -111,6 +113,8 @@ export function VideoWorkspace({
     [segStart, setSegStart] = useState(0),
     [segEnd, setSegEnd] = useState(0),
     [running, setRunning] = useState(true);
+  const [eventX, setEventX] = useState(""),
+    [eventY, setEventY] = useState("");
   const [starting, setStarting] = useState(true),
     [outPlayer, setOut] = useState(""),
     [inPlayer, setIn] = useState(""),
@@ -207,6 +211,8 @@ export function VideoWorkspace({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sid]);
   function clearEditing() {
+    setEventX("");
+    setEventY("");
     setEdit("");
     setEditSnapshot(null);
     setAnnotate(false);
@@ -328,6 +334,8 @@ export function VideoWorkspace({
   }
   async function record(selectedType = eventType, selectedResult = result) {
     if (!team) throw new Error("Select team");
+    const eventLocation =
+      selectedType === "shot" ? {} : parseEventCourtPosition(eventX, eventY);
     const existing =
       editSnapshot?.event.id === editId
         ? editSnapshot.event
@@ -356,6 +364,7 @@ export function VideoWorkspace({
       score_for: scoreFor === "" ? null : Number(scoreFor),
       score_against: scoreAgainst === "" ? null : Number(scoreAgainst),
       actor_player_id: actor || null,
+      ...eventLocation,
       actor_position:
         actor && capturedClock
           ? positionAt(
@@ -403,6 +412,8 @@ export function VideoWorkspace({
     setHistoryCounts({ undo: undo.current.length, redo: 0 });
     setEdit("");
     setNote("");
+    setEventX("");
+    setEventY("");
   }
   async function history(direction: "undo" | "redo") {
     const item = (direction === "undo" ? undo : redo).current.pop();
@@ -521,6 +532,8 @@ export function VideoWorkspace({
     return c;
   }
   function edit(e: Row) {
+    setEventX(s(e.shot_x));
+    setEventY(s(e.shot_y));
     setEditorOpen(true);
     setSelectedId(e.id);
     setEditSnapshot({ event: e, shot: shots.find((r) => r.event_id === e.id) });
@@ -1527,6 +1540,71 @@ export function VideoWorkspace({
                     ))}
                   </select>
                 </label>
+                {eventType !== "shot" && (
+                  <fieldset className="event-court-editor">
+                    <legend>
+                      {w.t("موقع الحدث على الملعب", "Event court position")}
+                    </legend>
+                    <Court
+                      onClick={(x, y) => {
+                        setEventX(x.toFixed(3));
+                        setEventY(y.toFixed(3));
+                      }}
+                    >
+                      {eventX !== "" && eventY !== "" && (
+                        <circle
+                          cx={Number(eventX) * 1000}
+                          cy={Number(eventY) * 500}
+                          r="18"
+                          fill={brand.colors.cyan}
+                        />
+                      )}
+                    </Court>
+                    <label>
+                      {w.t(
+                        "الإحداثي الأفقي للحدث",
+                        "Event horizontal coordinate",
+                      )}
+                      <input
+                        type="number"
+                        min="0"
+                        max="1"
+                        step=".001"
+                        value={eventX}
+                        onChange={(e) => setEventX(e.target.value)}
+                      />
+                    </label>
+                    <label>
+                      {w.t(
+                        "الإحداثي الرأسي للحدث",
+                        "Event vertical coordinate",
+                      )}
+                      <input
+                        type="number"
+                        min="0"
+                        max="1"
+                        step=".001"
+                        value={eventY}
+                        onChange={(e) => setEventY(e.target.value)}
+                      />
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEventX("");
+                        setEventY("");
+                      }}
+                    >
+                      {w.t("مسح الموقع", "Clear position")}
+                    </button>
+                    <small>
+                      {w.t(
+                        "اختياري · اضغط الملعب أو أدخل الإحداثيين. يُمسح الموقع بعد التسجيل.",
+                        "Optional · click the court or enter both coordinates. Position clears after recording.",
+                      )}
+                    </small>
+                  </fieldset>
+                )}
                 {eventType === "shot" && (
                   <>
                     <label>

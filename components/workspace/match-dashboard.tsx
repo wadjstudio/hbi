@@ -1,14 +1,19 @@
 "use client";
 import Link from "next/link";
-import { Play, ArrowUpRight } from "lucide-react";
-import { matchDashboard } from "@/features/analysis/match-dashboard";
+import { Play } from "lucide-react";
+import {
+  matchDashboard,
+  recentMatchForm,
+} from "@/features/analysis/match-dashboard";
 import { analysisLabel } from "@/features/analysis/labels";
 import { percent } from "@/lib/analytics/metrics";
-import { s, type Row } from "@/types/workspace";
+import { n, s, type Row } from "@/types/workspace";
 import { useWorkspace } from "./provider";
 import { rowLabel } from "./controls";
 import { PlayerAvatar } from "@/components/brand/brand-lockup";
 import { brand } from "@/lib/brand";
+import { EvidenceTrend } from "./evidence-trend";
+import { Court } from "./charts";
 export function MatchDashboard({
   teamId,
   events,
@@ -29,16 +34,11 @@ export function MatchDashboard({
       title,
       d.sample.filter((e) => rows.some((sh) => sh.event_id === e.id)),
     );
-  const recent = w
-    .list("matches")
-    .filter(
-      (m) =>
-        (m.home_team_id === teamId || m.away_team_id === teamId) &&
-        m.home_score != null &&
-        m.away_score != null,
-    )
-    .sort((a, b) => s(b.starts_at).localeCompare(s(a.starts_at)))
-    .slice(0, 5);
+  const recent = recentMatchForm(teamId, w.list("matches"));
+  const scoreScale = Math.max(
+    1,
+    ...recent.flatMap((entry) => [entry.goalsFor, entry.goalsAgainst]),
+  );
   return (
     <section
       className="match-dashboard"
@@ -70,8 +70,25 @@ export function MatchDashboard({
             <small>{w.t("محاولات للمراجعة", "Attempts to review")}</small>
           </span>
         </button>
+        <EvidenceTrend
+          data-testid="shot-efficiency-trend"
+          points={d.shotTrend}
+          label={w.t(
+            "كفاءة تراكمية حسب المحاولات المراجعة",
+            "Cumulative efficiency by reviewed attempt",
+          )}
+          onEvidence={(point) =>
+            onEvidence(
+              w.t("عينة اتجاه التصويب", "Shot trend sample"),
+              point.events,
+            )
+          }
+        />
         <small>
-          {w.t("كل نتيجة تفتح محاولاتها", "Every result opens its attempts")}
+          {w.t(
+            "تراكمي · كل نقطة تفتح عينتها",
+            "Cumulative · each point opens its sample",
+          )}
         </small>
       </article>
       <article className="dashboard-card">
@@ -138,6 +155,20 @@ export function MatchDashboard({
         <div className="sample-meter">
           <i style={{ width: `${(d.possessionEfficiency ?? 0) * 100}%` }} />
         </div>
+        <EvidenceTrend
+          data-testid="possession-efficiency-trend"
+          points={d.possessionTrend}
+          label={w.t(
+            "كفاءة تراكمية حسب الهجمات ذات النتيجة",
+            "Cumulative efficiency by classified possession",
+          )}
+          onEvidence={(point) =>
+            onEvidence(
+              w.t("عينة اتجاه الهجمات", "Possession trend sample"),
+              point.events,
+            )
+          }
+        />
         <small>
           {d.closed.length - d.resolved.length}{" "}
           {w.t(
@@ -148,35 +179,77 @@ export function MatchDashboard({
       </article>
       <article className="dashboard-card">
         <header>
-          <h3>{w.t("فقد الكرة حسب المرحلة", "Turnovers by phase")}</h3>
+          <h3>{w.t("مواقع فقد الكرة", "Turnover locations")}</h3>
           <small>n={d.turnovers.length}</small>
         </header>
-        {d.phases.length ? (
-          d.phases.map((g) => (
-            <button
-              className="phase-bar"
-              key={g.phase}
-              onClick={() =>
-                onEvidence(analysisLabel(g.phase, w.lang), g.events)
-              }
-            >
-              <span>{analysisLabel(g.phase, w.lang)}</span>
-              <i
-                style={{
-                  width: `${(100 * g.events.length) / Math.max(1, d.turnovers.length)}%`,
+        <div className="turnover-court">
+          <Court>
+            {d.locatedTurnovers.map((event) => (
+              <circle
+                key={event.id}
+                cx={n(event.shot_x) * 1000}
+                cy={n(event.shot_y) * 500}
+                r="20"
+                className="turnover-point"
+                role="button"
+                tabIndex={0}
+                aria-label={w.t(
+                  "دليل موقع فقد الكرة",
+                  "Turnover location evidence",
+                )}
+                onClick={() =>
+                  onEvidence(w.t("موقع فقد الكرة", "Turnover location"), [
+                    event,
+                  ])
+                }
+                onKeyDown={(key) => {
+                  if (key.key === "Enter" || key.key === " ") {
+                    key.preventDefault();
+                    onEvidence(w.t("موقع فقد الكرة", "Turnover location"), [
+                      event,
+                    ]);
+                  }
                 }}
               />
-              <b>{g.events.length}</b>
-            </button>
-          ))
-        ) : (
-          <p>
-            {w.t(
-              "لا توجد أحداث فقد كرة في العينة.",
-              "No turnovers in this sample.",
-            )}
-          </p>
-        )}
+            ))}
+          </Court>
+        </div>
+        <small>
+          {d.locatedTurnovers.length}/{d.turnovers.length}{" "}
+          {w.t(
+            "بموقع مسجل · لا نستنتج المواقع الناقصة",
+            "with a recorded location · missing positions stay unknown",
+          )}
+        </small>
+        <details className="turnover-phases">
+          <summary>{w.t("حسب المرحلة", "By phase")}</summary>
+          {d.phases.length ? (
+            d.phases.map((g) => (
+              <button
+                className="phase-bar"
+                key={g.phase}
+                onClick={() =>
+                  onEvidence(analysisLabel(g.phase, w.lang), g.events)
+                }
+              >
+                <span>{analysisLabel(g.phase, w.lang)}</span>
+                <i
+                  style={{
+                    width: `${(100 * g.events.length) / Math.max(1, d.turnovers.length)}%`,
+                  }}
+                />
+                <b>{g.events.length}</b>
+              </button>
+            ))
+          ) : (
+            <p>
+              {w.t(
+                "لا توجد أحداث فقد كرة في العينة.",
+                "No turnovers in this sample.",
+              )}
+            </p>
+          )}
+        </details>
       </article>
       <article className="dashboard-card">
         <header>
@@ -184,31 +257,104 @@ export function MatchDashboard({
           <small>n={recent.length}</small>
         </header>
         {recent.length ? (
-          recent.map((m) => (
-            <Link
-              className="recent-result"
-              href={`/matches/${m.id}`}
-              key={m.id}
+          <>
+            <div
+              className="recent-form"
+              aria-label={w.t(
+                "النتائج من منظور الفريق",
+                "Results from this team's perspective",
+              )}
             >
+              {recent.map((entry) => (
+                <Link
+                  className={`form-outcome result-${entry.outcome.toLowerCase()}`}
+                  href={`/matches/${entry.match.id}`}
+                  key={entry.match.id}
+                  aria-label={`${w.t("النتيجة", "Result")} ${entry.outcome} · ${entry.goalsFor}–${entry.goalsAgainst}`}
+                >
+                  {w.lang === "ar"
+                    ? { W: "ف", D: "ت", L: "خ" }[entry.outcome]
+                    : entry.outcome}
+                </Link>
+              ))}
+            </div>
+            <div className="recent-averages">
               <span>
-                {rowLabel(
-                  w
-                    .list("teams")
-                    .find(
-                      (t) =>
-                        t.id ===
-                        (m.home_team_id === teamId
-                          ? m.away_team_id
-                          : m.home_team_id),
-                    ) ?? { id: "unknown", organization_id: w.org, name: "—" },
-                )}
+                <b>
+                  {(
+                    recent.reduce((sum, entry) => sum + entry.goalsFor, 0) /
+                    recent.length
+                  ).toFixed(1)}
+                </b>
+                <small>{w.t("له / مباراة", "Scored / match")}</small>
               </span>
-              <b dir="ltr">
-                {s(m.home_score)} – {s(m.away_score)}
-              </b>
-              <ArrowUpRight size={12} />
-            </Link>
-          ))
+              <span>
+                <b>
+                  {(
+                    recent.reduce((sum, entry) => sum + entry.goalsAgainst, 0) /
+                    recent.length
+                  ).toFixed(1)}
+                </b>
+                <small>{w.t("عليه / مباراة", "Conceded / match")}</small>
+              </span>
+            </div>
+            <div
+              className="recent-score-chart"
+              aria-label={w.t(
+                "له وعليه في آخر النتائج",
+                "Scored and conceded in recent results",
+              )}
+            >
+              {recent.map(({ match: m, goalsFor, goalsAgainst }) => (
+                <Link
+                  className="recent-score-pair"
+                  href={`/matches/${m.id}`}
+                  key={m.id}
+                >
+                  <span className="recent-opponent">
+                    {rowLabel(
+                      w
+                        .list("teams")
+                        .find(
+                          (t) =>
+                            t.id ===
+                            (m.home_team_id === teamId
+                              ? m.away_team_id
+                              : m.home_team_id),
+                        ) ?? {
+                        id: "unknown",
+                        organization_id: w.org,
+                        name: "—",
+                      },
+                    )}
+                  </span>
+                  <span
+                    className="score-bars"
+                    aria-label={`${w.t("له", "Scored")} ${goalsFor}, ${w.t("عليه", "conceded")} ${goalsAgainst}`}
+                  >
+                    <i
+                      className="scored-bar"
+                      style={{ height: `${(42 * goalsFor) / scoreScale}px` }}
+                    />
+                    <i
+                      className="conceded-bar"
+                      style={{
+                        height: `${(42 * goalsAgainst) / scoreScale}px`,
+                      }}
+                    />
+                  </span>
+                  <b dir="ltr">
+                    {goalsFor}–{goalsAgainst}
+                  </b>
+                </Link>
+              ))}
+            </div>
+            <small className="score-legend">
+              <i />
+              {w.t("له", "Scored")} <i />
+              {w.t("عليه", "Conceded")}
+            </small>
+          </>
         ) : (
           <p>
             {w.t(

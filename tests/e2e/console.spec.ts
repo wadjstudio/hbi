@@ -1,6 +1,7 @@
 import { test, expect } from "./fixture";
 test("analysis console supports resizing, focus, keyboard tabs and narrow screens", async ({
   page,
+  request,
 }, testInfo) => {
   test.setTimeout(300000);
   await page.setViewportSize({ width: 1560, height: 900 });
@@ -101,6 +102,138 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
   await expect(
     page.getByRole("link", { name: "Video Lab", exact: true }),
   ).toHaveAttribute("aria-current", "page");
+  // Populated acceptance is isolated to the mock account; none of these values describe the footage.
+  if (process.env.HBI_VISUAL_MATCH) {
+    // File decoding can finish before the offline queue reaches the mock backend.
+    await expect
+      .poll(async () => {
+        const response = await request.get(
+          `http://127.0.0.1:${process.env.HBI_MOCK_PORT || 54329}/rest/v1/analysis_sessions`,
+        );
+        const sessions = (await response.json()) as {
+          match_id: string;
+          is_primary: boolean;
+          video_id: string | null;
+        }[];
+        return sessions.some(
+          (session) =>
+            session.match_id === "50000000-0000-4000-8000-000000000001" &&
+            session.is_primary &&
+            session.video_id,
+        );
+      })
+      .toBe(true);
+  }
+  const seeded = await request.post(
+    `http://127.0.0.1:${process.env.HBI_MOCK_PORT || 54329}/test/console-data`,
+  );
+  expect(seeded.ok()).toBe(true);
+  await page.reload();
+  await page
+    .getByLabel("Match", { exact: true })
+    .selectOption("50000000-0000-4000-8000-000000000001");
+  if (process.env.HBI_VISUAL_MATCH) {
+    await page
+      .getByLabel(/Select local video|Relink/)
+      .setInputFiles(process.env.HBI_VISUAL_MATCH);
+    await expect(page.locator("video")).toBeVisible();
+  }
+  await page.getByRole("tab", { name: "analytics", exact: true }).click();
+  await expect(page.locator("#match-header-slot")).toContainText(
+    "VISUAL TEST DATA",
+  );
+  const shotTrend = page.getByTestId("shot-efficiency-trend");
+  const possessionTrend = page.getByTestId("possession-efficiency-trend");
+  await expect(shotTrend.getByRole("button")).toHaveCount(9);
+  await expect(possessionTrend.getByRole("button")).toHaveCount(6);
+  await expect(
+    page.getByText("Wrong session insight", { exact: true }),
+  ).toHaveCount(0);
+  await shotTrend.getByRole("button").last().focus();
+  await page.keyboard.press("Enter");
+  const shotEvidence = page.getByRole("dialog", {
+    name: "Shot trend sample",
+    exact: true,
+  });
+  await expect(shotEvidence.locator(".evidence-source")).toHaveCount(9);
+  await page
+    .getByRole("button", { name: "Close evidence", exact: true })
+    .click();
+  await possessionTrend.getByRole("button").last().click();
+  await expect(
+    page
+      .getByRole("dialog", { name: "Possession trend sample", exact: true })
+      .locator(".evidence-source"),
+  ).toHaveCount(11);
+  await page
+    .getByRole("button", { name: "Close evidence", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", {
+      name: "Turnover location evidence",
+      exact: true,
+    }),
+  ).toHaveCount(1);
+  await page
+    .getByRole("button", { name: "Turnover location evidence", exact: true })
+    .click();
+  await expect(
+    page
+      .getByRole("dialog", { name: "Turnover location", exact: true })
+      .locator(".evidence-source"),
+  ).toHaveCount(1);
+  await page
+    .getByRole("button", { name: "Close evidence", exact: true })
+    .click();
+  await expect(page.locator(".recent-form .form-outcome")).toHaveCount(5);
+  await page.getByRole("button", { name: /Fixture cross sample/ }).click();
+  await expect(
+    page
+      .getByRole("dialog", { name: "Fixture cross sample", exact: true })
+      .locator(".evidence-source"),
+  ).toHaveCount(8);
+  await page
+    .getByRole("button", { name: "Close evidence", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Goals", exact: true }).click();
+  await expect(shotTrend.getByRole("button")).toHaveCount(2);
+  await page.getByRole("button", { name: /Fixture cross sample/ }).click();
+  await expect(
+    page
+      .getByRole("dialog", { name: "Fixture cross sample", exact: true })
+      .locator(".evidence-source"),
+  ).toHaveCount(2);
+  await page
+    .getByRole("button", { name: "Close evidence", exact: true })
+    .click();
+  await page.getByRole("button", { name: "All", exact: true }).click();
+  if (process.env.HBI_VISUAL_MATCH) {
+    await page
+      .getByRole("button", { name: "Turnover location evidence", exact: true })
+      .click();
+    await page
+      .getByRole("dialog", { name: "Turnover location", exact: true })
+      .getByRole("button", { name: "Edit", exact: true })
+      .click();
+    await page
+      .getByLabel("Event horizontal coordinate", { exact: true })
+      .fill("0.33");
+    await page
+      .getByLabel("Event vertical coordinate", { exact: true })
+      .fill("0.66");
+    await page
+      .getByRole("button", { name: "Save event [T]", exact: true })
+      .click();
+    await expect(
+      page.getByLabel("Event horizontal coordinate", { exact: true }),
+    ).toHaveValue("");
+    await expect(
+      page.getByLabel("Event vertical coordinate", { exact: true }),
+    ).toHaveValue("");
+    await expect(page.locator(".turnover-point")).toHaveAttribute("cx", "330");
+    await expect(page.locator(".turnover-point")).toHaveAttribute("cy", "330");
+    await page.locator(".event-editor > summary").click();
+  }
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
     path: testInfo.outputPath("console-wide.png"),

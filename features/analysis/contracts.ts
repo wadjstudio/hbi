@@ -8,6 +8,16 @@ export type CourtInterval =
 const uuid = z.uuid(),
   ms = z.number().int().nonnegative(),
   coordinate = z.number().min(0).max(1);
+export function parseEventCourtPosition(x: string, y: string) {
+  if (!x.trim() && !y.trim()) return { shot_x: null, shot_y: null };
+  if (!x.trim() || !y.trim())
+    throw new Error("Complete both event coordinates or clear both");
+  // Preserve the existing event schema; shot_x/shot_y store normalized legacy event positions.
+  return {
+    shot_x: coordinate.parse(Number(x)),
+    shot_y: coordinate.parse(Number(y)),
+  };
+}
 export const syncResponse = z
   .object({
     status: z.enum(["applied", "conflict"]).default("applied"),

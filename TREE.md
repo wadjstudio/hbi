@@ -30,6 +30,7 @@ hbi-starter/
   postcss.config.mjs
   proxy.ts
   tsconfig.json
+  tsconfig.next-isolated.json
   vite.config.ts
   vitest.config.ts
   wrangler.jsonc
@@ -94,6 +95,7 @@ hbi-starter/
   components/workspace/event-participants.tsx
   components/workspace/evidence-drawer.tsx
   components/workspace/evidence-links.tsx
+  components/workspace/evidence-trend.tsx
   components/workspace/match-context.tsx
   components/workspace/match-dashboard.tsx
   components/workspace/match-hub.tsx
@@ -226,6 +228,7 @@ hbi-starter/
   tests/e2e/smoke.spec.ts
   tests/e2e/video.spec.ts
   tests/e2e/workflow.spec.ts
+  tests/fixtures/console-data.mjs
   tests/fixtures/wikidata-known-player.json
   tests/integration/.gitkeep
   tests/unit/backup.test.ts

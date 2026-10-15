@@ -1,6 +1,7 @@
 // Test-only Auth/Data API fixture. It is never part of the deployed application.
 import http from "node:http";
 import { createHmac, randomUUID } from "node:crypto";
+import { consoleData } from "../tests/fixtures/console-data.mjs";
 const id = "10000000-0000-4000-8000-000000000001",
   org = "20000000-0000-4000-8000-000000000001",
   home = "30000000-0000-4000-8000-000000000001",
@@ -155,6 +156,38 @@ const server = http.createServer(async (req, res) => {
     Object.assign(db, structuredClone(baseline));
     receipts.clear();
     return send({ reset: true });
+  }
+  if (url.pathname === "/test/console-data" && req.method === "POST") {
+    const session = db.analysis_sessions?.find(
+      (entry) => entry.match_id === match && entry.is_primary,
+    ) ?? {
+      id: "a0000000-0000-4000-8000-000000001100",
+      organization_id: org,
+      match_id: match,
+      video_id: null,
+      analyst_id: id,
+      is_primary: true,
+      title: "Synthetic console acceptance",
+      revision: 2,
+    };
+    // A missing local source stays missing; never invent a fingerprint or pretend footage is linked.
+    const video = db.videos?.find((entry) => entry.id === session.video_id) ?? {
+      id: null,
+      duration_ms: 60000,
+    };
+    Object.assign(
+      db,
+      consoleData({
+        organization: org,
+        home,
+        away,
+        match: db.matches.find((entry) => entry.id === match),
+        user: id,
+        session,
+        video,
+      }),
+    );
+    return send({ fixture: "synthetic-console", events: db.events.length });
   }
   if (url.pathname === "/auth/v1/token") {
     return send({

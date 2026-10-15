@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Populated evidence charts — 2026-10-15
+
+- Added cumulative reviewed-shot and classified-possession trends. Each keyboard-accessible point opens the exact supporting prefix of session events; pending attempts and unknown possession outcomes stay outside the denominators.
+- Added a turnover court using only recorded coordinates, plus optional click/numeric event-position editing. Missing, partial, blank or invalid coordinates never become origin points. Saving clears the location draft; shot attempts keep their separate canonical geometry.
+- Added five-result form, scored/conceded averages and paired bars from the selected team's perspective, excluding missing or invalid scores. These remain match results, independent of session tagging.
+- Compacted the populated desktop header/cards, retaining method disclosures and sample/missing-data counts. Synthetic mock-only records exercise duplicate-session exclusion, exact evidence, filtering, position editing, Arabic/mobile and missing local media; no fixture data is written to production.
+- Isolated test-server build output by port so acceptance does not overwrite a running local production preview. No runtime dependency or SQL migration; final reference-image parity and historical scope controls remain open.
+
 ## Coaching workspace viewport composition — 2026-10-15
 
 - Added a default desktop Fit workspace mode and an explicit natural-size toggle, with full focus mode retaining the larger picture. The video and drawing overlays share the same unchanged aspect/coordinate plane inside a matte; fitting does not crop the footage.

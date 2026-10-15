@@ -40,6 +40,10 @@ Do not substitute invented players, team crests, league averages or match scores
   filter. An insight's original title may describe a larger saved sample.
 - Null measurements stay unknown; no fabricated traces, heatmaps, comparative
   baselines or implied automatic tactical analysis.
+- Trend points are actual cumulative reviewed samples, with exact supporting
+  evidence on click or keyboard activation. Turnover maps use recorded normalized
+  positions; missing coordinates remain missing. Recent form uses team-relative
+  match scores independently of tagged session statistics.
 
 ## Acceptance still required for final visual parity
 

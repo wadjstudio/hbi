@@ -1,4 +1,166 @@
 /* Final composition layer: preserve the media coordinate plane at every size. */
+.evidence-trend {
+  display: block;
+  width: 100%;
+  height: 48px;
+  overflow: visible;
+}
+.trend-guide {
+  stroke: #214049;
+  stroke-width: 0.6;
+  fill: none;
+}
+.trend-line {
+  stroke: var(--sesen-cyan);
+  stroke-width: 1.6;
+  fill: none;
+}
+.trend-dot {
+  fill: var(--sesen-cyan);
+}
+.trend-target {
+  fill: transparent;
+  cursor: pointer;
+}
+.trend-target:hover,
+.trend-target:focus-visible {
+  fill: #00d8d929;
+  stroke: var(--sesen-cyan);
+  outline: none;
+}
+.dashboard-card .turnover-court .court {
+  width: 100%;
+  max-height: 90px;
+  margin: 0;
+}
+.turnover-point {
+  fill: #ed4b46b3;
+  stroke: #ff8d77;
+  stroke-width: 4;
+  cursor: pointer;
+}
+.turnover-point:focus-visible {
+  stroke: white;
+  stroke-width: 8;
+  outline: none;
+}
+.turnover-phases {
+  font-size: 11px;
+  margin-top: 4px;
+}
+.turnover-phases summary {
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+.recent-form {
+  display: flex;
+  gap: 7px;
+  margin-bottom: 8px;
+}
+.form-outcome {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 750;
+  text-decoration: none;
+  color: #061115;
+}
+.result-w {
+  background: #62d97f;
+}
+.result-d {
+  background: #edc56c;
+}
+.result-l {
+  background: #ff7374;
+}
+.recent-averages {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.recent-averages > span {
+  display: flex;
+  flex-direction: column;
+}
+.recent-averages b {
+  font-size: 19px;
+  line-height: 1.1;
+}
+.recent-score-chart {
+  display: flex;
+  justify-content: space-around;
+  gap: 5px;
+  margin-top: 6px;
+}
+.recent-score-pair {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  font-size: 10px;
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+.recent-opponent {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.score-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 42px;
+}
+.score-bars > i {
+  display: block;
+  width: 10px;
+}
+.scored-bar,
+.score-legend > i:first-child {
+  background: var(--sesen-cyan);
+}
+.conceded-bar,
+.score-legend > i:nth-child(2) {
+  background: #ed6667;
+}
+.score-legend {
+  display: flex !important;
+  align-items: center;
+  gap: 5px;
+}
+.score-legend > i {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+}
+.event-court-editor {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 12px;
+  grid-column: 1 / -1;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.event-court-editor .court,
+.event-court-editor small {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-height: 220px;
+}
+.event-court-editor > label {
+  min-width: 0;
+}
+.event-court-editor > button {
+  justify-self: start;
+}
 .video-matte {
   display: grid;
   place-items: center;
@@ -28,6 +190,67 @@
   }
   .sesen-shell .topbar {
     padding-block: 3px;
+  }
+  .match-header-slot .context-score {
+    gap: 2px 5px;
+  }
+  .match-header-slot .context-score strong {
+    font-size: 28px;
+    line-height: 1;
+  }
+  .match-header-slot .context-score > small {
+    font-size: 11px;
+    line-height: 1.2;
+  }
+  .match-header-slot .context-score > .recorded-result {
+    font-size: 9px;
+    line-height: 1.1;
+  }
+  .match-header-slot .match-context-meta > small {
+    line-height: 1.2;
+  }
+  .session-rail .intelligence-section small {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .session-rail .chart-method {
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+  .chart-method > summary {
+    cursor: pointer;
+  }
+  .session-rail .pattern-row {
+    padding-block: 6px;
+    min-height: 40px;
+  }
+  .session-rail .threat-row {
+    min-height: 40px;
+    padding-block: 4px;
+  }
+  .dashboard-card {
+    padding: 8px;
+  }
+  .dashboard-card h3 {
+    font-size: 13px;
+  }
+  .dashboard-card small {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .dashboard-card header {
+    margin-bottom: 6px;
+  }
+  .dashboard-card .evidence-trend {
+    height: 36px;
+  }
+  .dashboard-card .profile-ring {
+    width: 80px;
+    height: 80px;
+  }
+  .dashboard-card .profile-ring > b {
+    width: 60px;
+    height: 60px;
   }
   .layout-controls button {
     min-height: 26px;
