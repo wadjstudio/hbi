@@ -1,5 +1,14 @@
 # SESEN / HBI validation — 2026-10-15
 
+## Fitted first-screen composition — 2026-10-15
+
+- Full Chrome console and offline-video/evidence/meeting acceptance passed after compaction. The final console rerun also passed explicit source-time checks after keyboard resizing/tab navigation. Actual bounded local footage and clearly synthetic fixture statistics remain separate.
+- At 1672×941: split top 83.89px, split height 608.31px, intelligence height 605.63px, summary top 744.20px, summary height 191.47px and bottom 935.67px. The supplied reference begins the summaries at approximately 735px. The test now gates top <760px and bottom ≤941px for the linked-footage fitted state; initial missing-source setup is assessed separately.
+- Inspected the populated desktop capture. The frame retains its natural aspect within a matte; no cropping or invented observations. Native menu tests cover Space/Escape/focus return/outside dismissal and mobile bounds/44px triggers. Focus retains the same DOM video element and twelve-second source position. Geometry attempts at 774.52px/948.67px failed before spacing was corrected; thresholds were retained.
+- An initial combined reporter CLI option was parsed incorrectly by PowerShell and did not run the browser tests. The successful runs use the single JSON reporter with a local output file. A blocked inline Node inspection was replaced with the explicitly permitted script-file workflow; no allowlist was expanded.
+- Full lint/unit, missing-media browser and build results are recorded below when final checks finish. No hosted schema or deployment change; full reference parity and remaining header/navigation details are not claimed complete.
+- Final full lint, all 45 unit tests and the separate missing-media console passed. Isolated Next production build with TypeScript enabled, `pnpm typecheck --project tsconfig.next-isolated.json` and complete Cloudflare Pages build/package passed. Production publication was then attempted within existing authorization, but the Pages project lookup failed with Wrangler `fetch failed`; no upload or hosted mutation occurred in that lookup. Public network diagnostics reached the API root but do not establish authenticated Pages access.
+
 ## Historical scope and source-aware evidence — 2026-10-15
 
 - All 45 unit tests passed, including date cutoff/3/5/10 selection, unknown dates, foreign rows, missing/ambiguous primary sessions, primary/secondary exclusion and per-event source resolution. No hosted SQL test or migration was run for this UI feature.

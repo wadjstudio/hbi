@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Fitted first-screen composition — 2026-10-15
+
+- Moved layout/session settings into a keyboard-accessible native disclosure beside video source controls. Escape restores focus; outside pointers dismiss it. Focus/fit/reset retain the same video element and source time. On mobile the disclosure stays inside viewport bounds with 44px controls.
+- Compacted the video timeline/context/filter rows and intelligence header/footer, retained readable sample/missing-data access, and placed recent-score averages/bars alongside each other. Preserved complete source aspect and drawing coordinates.
+- Measured the populated 1672×941 view: summary cards begin at about 744px and finish at about 936px, versus the previous 877px start and the reference's approximately 735px start. This verifies first-screen visibility, not full reference-image parity.
+- Added browser geometry gates, player identity/time preservation, native menu Space/Escape/outside behavior and mobile bounds checks. Playback shortcuts now respect native tab/separator/disclosure handling. No new dependency, migration, automatic analysis or hosted deployment.
+
 ## Historical scope and source-aware evidence — 2026-10-15
 
 - Added session/last-3/5/10 intelligence controls beside the match video. Historical samples end at the open match date, use one unambiguous primary session per match and report missing/conflicting coverage. The rail shares event filters; timeline and lower cards retain explicit current-session context.

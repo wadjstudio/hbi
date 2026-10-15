@@ -1,5 +1,5 @@
 "use client";
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Group, Panel, Separator, useGroupRef } from "react-resizable-panels";
 import {
   Columns2,
@@ -7,6 +7,7 @@ import {
   RotateCcw,
   GripVertical,
   Scan,
+  SlidersHorizontal,
 } from "lucide-react";
 import { useWorkspace } from "./provider";
 
@@ -15,7 +16,7 @@ export const AnalysisSplit = ({
   intelligence,
   controls,
 }: {
-  video: ReactNode;
+  video: (layoutControls: ReactNode) => ReactNode;
   intelligence: ReactNode;
   controls?: ReactNode;
 }) => {
@@ -23,12 +24,38 @@ export const AnalysisSplit = ({
     group = useGroupRef();
   const [focus, setFocus] = useState(false);
   const [isFit, setIsFit] = useState(true);
-  return (
-    <section
-      className={`analysis-split${focus ? " video-focus" : ""}`}
-      data-fit={isFit ? "viewport" : "natural"}
-      data-slot="analysis-split"
+  const menu = useRef<HTMLDetailsElement>(null);
+  useEffect(() => {
+    const dismiss = (event: PointerEvent) => {
+      if (
+        event.target instanceof Node &&
+        !menu.current?.contains(event.target) &&
+        menu.current
+      )
+        menu.current.open = false;
+    };
+    document.addEventListener("pointerdown", dismiss);
+    return () => document.removeEventListener("pointerdown", dismiss);
+  }, []);
+  const layoutControls = (
+    <details
+      ref={menu}
+      className="layout-menu"
+      data-slot="layout-menu"
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          event.preventDefault();
+          if (menu.current) {
+            menu.current.open = false;
+            menu.current.querySelector("summary")?.focus();
+          }
+        }
+      }}
     >
+      <summary aria-label={w.t("العرض والجلسات", "Layout & sessions")}>
+        <SlidersHorizontal size={13} aria-hidden="true" />
+        {w.t("العرض والجلسات", "Layout & sessions")}
+      </summary>
       <div className="layout-controls">
         {controls ?? (
           <small>{w.t("مساحة التحليل", "Analysis workspace")}</small>
@@ -59,6 +86,14 @@ export const AnalysisSplit = ({
           {w.t("إعادة التقسيم", "Reset layout")}
         </button>
       </div>
+    </details>
+  );
+  return (
+    <section
+      className={`analysis-split${focus ? " video-focus" : ""}`}
+      data-fit={isFit ? "viewport" : "natural"}
+      data-slot="analysis-split"
+    >
       <Group
         className="analysis-panels"
         groupRef={group}
@@ -73,7 +108,7 @@ export const AnalysisSplit = ({
           className="analysis-video-panel"
           style={{ overflow: "visible" }}
         >
-          {video}
+          {video(layoutControls)}
         </Panel>
         <Separator
           className="analysis-separator"

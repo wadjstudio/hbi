@@ -490,9 +490,12 @@ export function VideoWorkspace({
   }
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
+      if (e.defaultPrevented) return;
       if (
         e.target instanceof Element &&
-        e.target.closest("input,textarea,select,button,a,[role=button]")
+        e.target.closest(
+          "input,textarea,select,button,a,summary,[role=button],[role=separator],[role=tab],[contenteditable=true]",
+        )
       )
         return;
       if (e.code === "Space") {
@@ -813,24 +816,27 @@ export function VideoWorkspace({
             </div>
           </details>
         }
-        video={
+        video={(layoutControls) => (
           <div className="workbench-video-column">
             <Panel
               title={w.t("الفيديو والتحليل", "Video analysis")}
               actions={
-                <label className="file-button">
-                  {url
-                    ? w.t("إعادة ربط", "Relink")
-                    : w.t("اختيار فيديو محلي", "Select local video")}
-                  <input
-                    type="file"
-                    accept="video/*"
-                    onChange={(e) => {
-                      const f = e.target.files?.[0];
-                      if (f) void a.run(() => attach(f));
-                    }}
-                  />
-                </label>
+                <div className="video-heading-actions">
+                  {layoutControls}
+                  <label className="file-button">
+                    {url
+                      ? w.t("إعادة ربط", "Relink")
+                      : w.t("اختيار فيديو محلي", "Select local video")}
+                    <input
+                      type="file"
+                      accept="video/*"
+                      onChange={(e) => {
+                        const f = e.target.files?.[0];
+                        if (f) void a.run(() => attach(f));
+                      }}
+                    />
+                  </label>
+                </div>
               }
             >
               <details className="source-options" open={!video}>
@@ -1439,7 +1445,7 @@ export function VideoWorkspace({
               onRedo={() => void a.run(() => history("redo"))}
             />
           </div>
-        }
+        )}
         intelligence={
           <SessionAnalysisRail
             teams={teams}

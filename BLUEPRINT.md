@@ -1,5 +1,9 @@
 # SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
 
+## Fitted workstation composition — 15 October 2026
+
+Layout/session controls now sit in a native disclosure alongside video source actions, with Escape/focus return and outside/mobile dismissal. Desktop spacing, intelligence footer and result-chart composition have been revised without cropping footage or changing formulas. The populated linked-footage fixture fits all five summary cards inside 1672×941 (approximately 744px top/936px bottom); the reference begins them near 735px. Native keyboard navigation preserves playback position. This measured composition progress is separate from full visual parity and hosted publication.
+
 ## Historical intelligence and source-bound evidence — 15 October 2026
 
 The coaching rail includes session/last-3/5/10 scope controls, anchored through the open match date, with one unambiguous primary analysis per match and visible missing/conflicting coverage. Shared event filters apply to this historical panel; the timeline and lower cards retain current-session context. Evidence rows identify their match, session and missing local file. Review links resolve the actual event session, including secondary sessions and same-match transitions. Edit links hydrate that event's fields; clips and meeting references use its own video rather than the currently playing source. Relinking preserves selected nonzero time. Cumulative reviewed-shot/possession charts, recorded turnover locations and recent team-relative form are implemented, with explicitly synthetic populated browser fixtures kept outside production data. Full first-screen reference parity remains a separate visual gate.

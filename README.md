@@ -26,6 +26,8 @@ Local Supabase requires Docker. Alternatively configure a free hosted Supabase p
 
 ## First coaching workflow
 
+Open **Layout & sessions** beside the video source for focus/fit/reset and analysis-session settings. Escape closes this disclosure and restores focus; tapping outside also closes it. Native disclosure, tab and separator keys keep their own behavior instead of seeking/tagging the video. The fitted desktop workspace retains the complete source frame and shows all five populated summary cards within a 1672×941 viewport in the accepted local fixture.
+
 The coaching console uses a resizable video/evidence split and keyboard-accessible tabs. Focus video enlarges the working surface without unmounting the player; Reset layout restores the split. On small screens the same panels stack. Five summary cards show reviewed attempts and cumulative evidence, shooters, resolved closed possessions, recorded turnover locations and team-relative match results. Selecting a statistical sample opens its supporting events. Empty samples and unresolved results remain explicit. Source selection is in an expandable section after attaching a video.
 
 Beside the video, choose **This session** or **Last 3/5/10** for the selected team's intelligence. Historical samples end at the open match's date and use one unambiguous primary session per match; coverage exposes missing/ambiguous sessions. Timeline and lower cards stay on the current session. Each evidence row identifies its match/session and missing local source. Historical review/edit links open the actual source session; clips and meeting items reference that event's video. Relinking a matching file restores the selected nonzero source time. Match results remain independent of tags.

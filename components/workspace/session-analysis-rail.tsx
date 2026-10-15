@@ -150,10 +150,10 @@ export function SessionAnalysisRail({
     >
       <header className="intelligence-heading">
         <BrandMark size={30} />
-        <div>
-          <span className="hbi-kicker">MATCH INTELLIGENCE</span>
-          <h2>{team ? rowLabel(team) : w.t("اختر فريقًا", "Choose team")}</h2>
-        </div>
+        <h2>
+          {w.t("التحليل", "Intelligence")} —{" "}
+          {team ? rowLabel(team) : w.t("اختر فريقًا", "Choose team")}
+        </h2>
         <select
           aria-label={w.t("الفريق محل التحليل", "Intelligence team")}
           value={tid}
@@ -455,74 +455,73 @@ export function SessionAnalysisRail({
           </p>
         )}
       </section>
-      <details className="keeper-details">
-        <summary>
-          {w.t("تحليل حراس الفريق", "Team goalkeeper analysis")} ·{" "}
-          {goalkeeperIds.length}
-        </summary>
-        <section className="intelligence-section keeper-section">
-          <header>
-            <h3>{w.t("حراس الفريق", "Team goalkeepers")}</h3>
-            <small>
-              {w.t("تصديات / تصديات + أهداف", "saves / saves + goals")}
-            </small>
-          </header>
-          {goalkeeperIds.length ? (
-            goalkeeperIds.map((id) => {
-              const keeper = w
-                  .list("players")
-                  .find((player) => player.id === id),
-                summary = keeperSummary(defended, id);
-              const selected = defended.filter(
-                (shot) =>
-                  shot.goalkeeper_id === id &&
-                  !shot.empty_goal &&
-                  !shot.review_required &&
-                  ["goal", "save"].includes(s(shot.result)),
-              );
-              return (
-                <button
-                  className="threat-row"
-                  key={id}
-                  onClick={() =>
-                    onEvidence(
-                      keeper ? rowLabel(keeper) : w.t("الحارس", "Goalkeeper"),
-                      events.filter((event) =>
-                        selected.some((shot) => shot.event_id === event.id),
-                      ),
-                    )
-                  }
-                >
-                  <PlayerAvatar number="GK" />
-                  <span>
-                    <b>{keeper ? rowLabel(keeper) : "—"}</b>
-                    <small>
-                      {summary.saves}/{summary.sample} ·{" "}
-                      {w.t("إهدار وحجب مستبعدان", "misses & blocks excluded")}
-                    </small>
-                  </span>
-                  <strong>{percent(summary.percentage)}</strong>
-                  <Play size={13} />
-                </button>
-              );
-            })
-          ) : (
-            <p className="intelligence-empty">
-              {w.t(
-                "حدّد الحارس أمام محاولات الخصم لعرض التصديات وأدلتها.",
-                "Identify the keeper facing opponent attempts to show saves and evidence.",
-              )}
-            </p>
-          )}
-        </section>
-      </details>
-      <Link className="intelligence-more" href="/opponents">
-        {w.t(
-          "فتح تحليل الخصوم عبر المباريات",
-          "Open opponent analysis across matches",
-        )}
-        <ArrowUpRight size={13} />
-      </Link>
+      <div className="intelligence-footer">
+        <details className="keeper-details">
+          <summary>
+            {w.t("تحليل حراس الفريق", "Team goalkeeper analysis")} ·{" "}
+            {goalkeeperIds.length}
+          </summary>
+          <section className="intelligence-section keeper-section">
+            <header>
+              <h3>{w.t("حراس الفريق", "Team goalkeepers")}</h3>
+              <small>
+                {w.t("تصديات / تصديات + أهداف", "saves / saves + goals")}
+              </small>
+            </header>
+            {goalkeeperIds.length ? (
+              goalkeeperIds.map((id) => {
+                const keeper = w
+                    .list("players")
+                    .find((player) => player.id === id),
+                  summary = keeperSummary(defended, id);
+                const selected = defended.filter(
+                  (shot) =>
+                    shot.goalkeeper_id === id &&
+                    !shot.empty_goal &&
+                    !shot.review_required &&
+                    ["goal", "save"].includes(s(shot.result)),
+                );
+                return (
+                  <button
+                    className="threat-row"
+                    key={id}
+                    onClick={() =>
+                      onEvidence(
+                        keeper ? rowLabel(keeper) : w.t("الحارس", "Goalkeeper"),
+                        events.filter((event) =>
+                          selected.some((shot) => shot.event_id === event.id),
+                        ),
+                      )
+                    }
+                  >
+                    <PlayerAvatar number="GK" />
+                    <span>
+                      <b>{keeper ? rowLabel(keeper) : "—"}</b>
+                      <small>
+                        {summary.saves}/{summary.sample} ·{" "}
+                        {w.t("إهدار وحجب مستبعدان", "misses & blocks excluded")}
+                      </small>
+                    </span>
+                    <strong>{percent(summary.percentage)}</strong>
+                    <Play size={13} />
+                  </button>
+                );
+              })
+            ) : (
+              <p className="intelligence-empty">
+                {w.t(
+                  "حدّد الحارس أمام محاولات الخصم لعرض التصديات وأدلتها.",
+                  "Identify the keeper facing opponent attempts to show saves and evidence.",
+                )}
+              </p>
+            )}
+          </section>
+        </details>
+        <Link className="intelligence-more" href="/opponents">
+          {w.t("مساحة تحليل الخصم", "Opponent workspace")}
+          <ArrowUpRight size={13} />
+        </Link>
+      </div>
     </aside>
   );
 }

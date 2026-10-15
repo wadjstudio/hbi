@@ -30,6 +30,8 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
   await expect
     .poll(async () => (await video.boundingBox())!.width)
     .toBeLessThan(initial);
+  await page.getByText("Layout & sessions", { exact: true }).focus();
+  await page.keyboard.press("Space");
   await page.getByRole("button", { name: "Focus video", exact: true }).click();
   await expect(rail).toBeHidden();
   await expect
@@ -57,6 +59,11 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
   await expect
     .poll(async () => (await surface.boundingBox())!.height)
     .toBeLessThan(430);
+  await page.keyboard.press("Escape");
+  await expect(page.locator(".layout-menu")).not.toHaveAttribute("open");
+  await expect(
+    page.getByText("Layout & sessions", { exact: true }),
+  ).toBeFocused();
   // Optional local footage is used only in the isolated test account, never seeded into production.
   if (process.env.HBI_VISUAL_MATCH) {
     await page
@@ -70,6 +77,36 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
           .evaluate((element: HTMLVideoElement) => element.readyState),
       )
       .toBeGreaterThanOrEqual(2);
+    const mounted = await page.locator("video").elementHandle();
+    await page.locator("video").evaluate((v: HTMLVideoElement) => {
+      v.currentTime = 12;
+    });
+    await page.getByText("Layout & sessions", { exact: true }).click();
+    await page
+      .getByRole("button", { name: "Focus video", exact: true })
+      .click();
+    expect(await mounted!.evaluate((node) => node.isConnected)).toBe(true);
+    await expect
+      .poll(() =>
+        page.locator("video").evaluate((v: HTMLVideoElement) => v.currentTime),
+      )
+      .toBeCloseTo(12, 1);
+    await page
+      .getByRole("button", { name: "Video & evidence", exact: true })
+      .click();
+    await page.keyboard.press("Escape");
+    await separator.focus();
+    await separator.press("ArrowRight");
+    await expect
+      .poll(() =>
+        page.locator("video").evaluate((v: HTMLVideoElement) => v.currentTime),
+      )
+      .toBeCloseTo(12, 1);
+    await page.getByText("Layout & sessions", { exact: true }).click();
+    await page
+      .getByRole("button", { name: "Reset layout", exact: true })
+      .click();
+    await page.keyboard.press("Escape");
   }
   const layers = page.getByRole("button", {
     name: "Possessions & clips",
@@ -98,6 +135,12 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     page.getByRole("tab", { name: "analytics", exact: true }),
   ).toHaveAttribute("aria-selected", "true");
   await expect(page.getByRole("tabpanel")).toContainText("Shot efficiency");
+  if (process.env.HBI_VISUAL_MATCH)
+    await expect
+      .poll(() =>
+        page.locator("video").evaluate((v: HTMLVideoElement) => v.currentTime),
+      )
+      .toBeCloseTo(12, 1);
   await expect(page.locator(".dashboard-card")).toHaveCount(5);
   await expect(page.locator("#match-header-slot .match-context")).toBeVisible();
   await expect(
@@ -243,6 +286,51 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
   });
   for (const width of [1672, 1440, 1024, 768, 375]) {
     await page.setViewportSize({ width, height: 941 });
+    if (width === 1672 && process.env.HBI_VISUAL_MATCH) {
+      await testInfo.attach("console-geometry", {
+        body: JSON.stringify(
+          await page.evaluate(() =>
+            [
+              ".analysis-split",
+              ".session-rail",
+              ".intelligence-heading",
+              ".rail-summary",
+              ".intelligence-footer",
+              ".workbench-video-column",
+              ".video-transport",
+              ".analysis-timeline",
+              ".quick-tag-dock",
+              ".match-dashboard",
+            ].map((selector) => {
+              const element = document.querySelector(selector)!;
+              const box = element.getBoundingClientRect();
+              const style = getComputedStyle(element);
+              return {
+                selector,
+                y: box.y,
+                height: box.height,
+                margin: style.margin,
+                padding: style.padding,
+              };
+            }),
+          ),
+          null,
+          2,
+        ),
+        contentType: "application/json",
+      });
+      await expect
+        .poll(
+          async () => (await page.locator(".match-dashboard").boundingBox())!.y,
+        )
+        .toBeLessThan(760);
+      await expect
+        .poll(async () => {
+          const box = (await page.locator(".match-dashboard").boundingBox())!;
+          return box.y + box.height;
+        })
+        .toBeLessThanOrEqual(941);
+    }
     await expect
       .poll(() =>
         page.evaluate(
@@ -287,6 +375,24 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     .toBe(true);
   await expect(separator).toBeHidden();
   await expect(rail).toBeVisible();
+  const layoutTrigger = page.locator(".layout-menu > summary");
+  await expect
+    .poll(async () => (await layoutTrigger.boundingBox())!.height)
+    .toBeGreaterThanOrEqual(44);
+  await layoutTrigger.click();
+  await expect(page.locator(".layout-menu > .layout-controls")).toBeVisible();
+  const menuBox = (await page
+    .locator(".layout-menu > .layout-controls")
+    .boundingBox())!;
+  expect(menuBox.x).toBeGreaterThanOrEqual(0);
+  expect(menuBox.x + menuBox.width).toBeLessThanOrEqual(390);
+  await page.keyboard.press("Escape");
+  await expect(layoutTrigger).toBeFocused();
+  await layoutTrigger.click();
+  await page
+    .getByRole("heading", { name: "الفيديو والتحليل", exact: true })
+    .click();
+  await expect(page.locator(".layout-menu")).not.toHaveAttribute("open");
   await page.screenshot({
     path: testInfo.outputPath("console-mobile.png"),
     fullPage: true,

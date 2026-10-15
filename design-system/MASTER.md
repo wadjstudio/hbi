@@ -1,5 +1,7 @@
 # SESEN analysis workspace
 
+October 15 measured composition: summary cards fit at approximately 744–936px inside 1672×941 using linked footage and explicitly synthetic observations (reference starts near 735px). Layout/session controls occupy a native video-header disclosure; keep keyboard/mouse/touch dismissal and player identity/time intact. This acceptance establishes first-screen visibility; remaining reference details still require audit.
+
 ## Authority and visual target
 
 The user's final SESEN handball workstation image is the visual target. It takes
@@ -59,5 +61,6 @@ disclosures, recording, offline behavior and presentation remain usable.
 Populated charts and historical source-aware journeys have deterministic browser
 acceptance, with clearly synthetic statistics and actual bounded footage where
 available. This is not pixel parity or completion of the automatic analysis engine.
-The desktop first-screen composition remains taller than the reference and needs
-further visual work and real coaching review.
+The populated first-screen summary now fits the accepted viewport close to the
+reference. Remaining header/navigation/interaction details still need a full
+comparison against the original image; geometry alone is not goal completion.
