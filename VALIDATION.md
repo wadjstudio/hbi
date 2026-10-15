@@ -7,6 +7,7 @@
 - The first browser attempt exposed an invalid rest-property position in the new component; fixed before further acceptance. A component-test-only unsupported query option was removed after TypeScript caught it. An initial full lint attempt timed out; the final full lint passed. Native Next production build with TypeScript enabled passed. Cloudflare packaging/publication results are appended after completion.
 - Local migrations end at 0019, matching the user's reported hosted version. No new SQL is required or applied; this version report is not an independent hosted schema/RLS audit. Fixture observations are synthetic, isolated from production and unrelated to the footage.
 - Complete Cloudflare Pages production build/package passed after the final Next build; only existing nonfatal bundler warnings remain. Publication and deployed-asset verification are recorded in the release receipt after upload.
+- Published code `dcb66dc` to production/main as `29059e56-3d39-4182-b39c-c3ba1a122f91`, confirmed through Wrangler metadata. All 37 deployed JavaScript/CSS assets matched local SHA256/content types on retry after an initial connection timeout; HTTPS login returned 200. Worker input SHA256: `69c10cfd2487698ee061cd3b59899a8a39e33ae06637c3785818b9be138118c4`. Nameservers/CNAME unchanged. No authenticated hosted coach journey or SQL mutation was performed.
 
 ## Fitted first-screen composition — 2026-10-15
 
