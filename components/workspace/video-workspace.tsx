@@ -39,6 +39,7 @@ import { analysisLabel } from "@/features/analysis/labels";
 import * as Tabs from "@radix-ui/react-tabs";
 import { AnalysisSplit } from "./analysis-split";
 import { MatchDashboard } from "./match-dashboard";
+import { SessionStatistics } from "./session-statistics";
 import { BrandLockup } from "@/components/brand/brand-lockup";
 import { brand } from "@/lib/brand";
 import {
@@ -66,7 +67,7 @@ export function VideoWorkspace({
     [videoId, setVideo] = useState(""),
     [url, setUrl] = useState(""),
     [time, setTime] = useState(0),
-    [tab, setTab] = useState("events");
+    [tab, setTab] = useState("analytics");
   const [sourceFile, setSourceFile] = useState<File | null>(null);
   const [intelligenceScope, setIntelligenceScope] =
     useState<IntelligenceScope>("session");
@@ -1504,26 +1505,44 @@ export function VideoWorkspace({
         className="tabs"
         aria-label={w.t("تفاصيل تحليل المباراة", "Match analysis details")}
       >
-        {["events", "analytics", "lineups", "annotations", "review"].map(
-          (v) => (
-            <Tabs.Trigger
-              className={tab === v ? "active" : ""}
-              key={v}
-              value={v}
-            >
-              {w.t(
-                {
-                  events: "الأحداث",
-                  analytics: "الإحصاءات",
-                  lineups: "التشكيلات",
-                  annotations: "الرسومات",
-                  review: "المراجعة",
-                }[v] ?? v,
-                v,
-              )}
-            </Tabs.Trigger>
-          ),
-        )}
+        {[
+          "analytics",
+          "lineups",
+          "events",
+          "players",
+          "teams",
+          "comparison",
+          "reports",
+          "annotations",
+          "review",
+        ].map((v) => (
+          <Tabs.Trigger className={tab === v ? "active" : ""} key={v} value={v}>
+            {w.t(
+              {
+                events: "الأحداث",
+                analytics: "الإحصاءات",
+                lineups: "التشكيلات",
+                players: "إحصاءات اللاعبين",
+                teams: "إحصاءات الفريق",
+                comparison: "المقارنة",
+                reports: "التقارير",
+                annotations: "الرسومات",
+                review: "المراجعة",
+              }[v] ?? v,
+              {
+                analytics: "Analytics",
+                lineups: "Lineups",
+                events: "Events",
+                players: "Player stats",
+                teams: "Team stats",
+                comparison: "Comparison",
+                reports: "Reports",
+                annotations: "Annotations",
+                review: "Review",
+              }[v] ?? v,
+            )}
+          </Tabs.Trigger>
+        ))}
       </Tabs.List>
       <MatchDashboard
         teamId={
@@ -1969,6 +1988,28 @@ export function VideoWorkspace({
         </fieldset>
       </details>
       <Tabs.Content value={tab} key={tab}>
+        {(["players", "teams", "comparison", "reports"] as const).map(
+          (view) =>
+            tab === view && (
+              <SessionStatistics
+                key={`${sid}:${view}`}
+                view={view}
+                scope={{ organizationId: w.org, matchId, sessionId: sid }}
+                focusTeam={intelligenceTeam}
+                events={filtered}
+                shots={shots}
+                possessions={
+                  filter !== "all" || participantFilter
+                    ? possessions.filter((p) =>
+                        filtered.some((e) => e.possession_id === p.id),
+                      )
+                    : possessions
+                }
+                intervals={intervals}
+                onEvidence={showEvidence}
+              />
+            ),
+        )}
         {tab === "events" && (
           <Panel title={w.t("الأحداث والأدلة", "Events & evidence")}>
             <div className="toolbar">

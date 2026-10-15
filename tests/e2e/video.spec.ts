@@ -61,6 +61,7 @@ test("local video to offline shot, opponent evidence and meeting", async ({
     buffer: Buffer.from(media!.bytes),
   });
   await expect(page.locator("video")).toBeVisible();
+  await page.getByRole("tab", { name: "Events", exact: true }).click();
   await page.getByText("Calibrate match clock", { exact: true }).click();
   await page.getByRole("button", { name: "Add clock segment" }).click();
   await expect(

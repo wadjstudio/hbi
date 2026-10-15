@@ -145,5 +145,5 @@ export async function verifyHistoricalEvidence(
       .setInputFiles(process.env.HBI_VISUAL_MATCH);
     await expect(page.locator("video")).toBeVisible();
   }
-  await page.getByRole("tab", { name: "analytics", exact: true }).click();
+  await page.getByRole("tab", { name: "Analytics", exact: true }).click();
 }

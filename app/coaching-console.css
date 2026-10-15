@@ -744,6 +744,212 @@
     flex-basis: 100%;
   }
 }
+.session-statistics {
+  background: linear-gradient(130deg, #07191e, #061015);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px;
+  margin-block: 10px;
+}
+.session-statistics-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.session-statistics h2 {
+  font-size: 17px;
+  margin: 0;
+}
+.session-statistics-heading p,
+.session-sample-note {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+.session-statistics-heading label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.session-statistics-heading select {
+  min-width: 130px;
+}
+.session-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 9px;
+}
+.session-metric {
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  gap: 8px;
+  position: relative;
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid #24414a;
+  background: #08181e;
+  border-radius: 5px;
+}
+.session-metric strong {
+  font-size: 25px;
+  color: var(--sesen-cyan);
+}
+.session-metric small {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+.session-metric > svg {
+  position: absolute;
+  inset-inline-end: 8px;
+  top: 10px;
+  color: var(--sesen-gold);
+}
+.session-stat-table {
+  overflow-x: auto;
+  margin-block: 12px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+.session-stat-table table {
+  width: 100%;
+  min-width: 740px;
+  border-collapse: collapse;
+  text-align: start;
+  font-size: 12px;
+}
+.session-stat-table th,
+.session-stat-table td {
+  text-align: start;
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.session-stat-table thead {
+  color: var(--sesen-gold);
+  background: #0a1d23;
+}
+.session-stat-table tbody tr:hover {
+  background: #11303966;
+}
+.session-stat-table small {
+  display: block;
+  color: var(--text-secondary);
+  font-weight: 400;
+  margin-top: 4px;
+}
+.session-stat-table td button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.session-player-name {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 150px;
+}
+.session-player-name .sesen-player-avatar {
+  width: 30px;
+  height: 34px;
+}
+.position-metrics > summary {
+  color: var(--sesen-gold);
+  cursor: pointer;
+  padding-block: 10px;
+}
+.session-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.session-comparison article {
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 12px;
+}
+.session-comparison h3 {
+  color: var(--sesen-gold);
+  margin-block: 0 8px;
+}
+.comparison-metric {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-top: 1px solid var(--border);
+  padding-block: 8px;
+  font-size: 12px;
+}
+.comparison-metric button {
+  color: var(--sesen-cyan);
+  min-width: 70px;
+  font-size: 18px;
+}
+.comparison-metric small {
+  display: block;
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+.session-report-provenance {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 5px 16px;
+  font-size: 12px;
+}
+.session-report-provenance dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.session-report .report-brand {
+  margin-block: 18px;
+}
+.quick-tag-actions > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+@media (max-width: 767px) {
+  .session-statistics {
+    padding: 10px;
+  }
+  .session-comparison {
+    grid-template-columns: 1fr;
+  }
+  .session-statistics button,
+  .session-statistics select {
+    min-height: 44px;
+  }
+}
+@media print {
+  .video-workspace:has(.session-report) > :not([role="tabpanel"]) {
+    display: none !important;
+  }
+  .session-report,
+  .session-report .session-metric {
+    background: white;
+    color: black;
+    box-shadow: none;
+  }
+  .session-report .session-metric {
+    display: flex !important;
+    opacity: 1;
+    break-inside: avoid;
+  }
+  .session-report .session-metric strong {
+    color: black;
+  }
+  .session-report .session-metric > svg {
+    display: none;
+  }
+  .session-report .session-statistics-heading p,
+  .session-report .session-sample-note {
+    color: #333;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .analysis-split {
     scroll-behavior: auto;

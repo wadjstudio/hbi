@@ -1,5 +1,6 @@
 import { test, expect } from "./fixture";
 import { verifyHistoricalEvidence } from "./history-assertions";
+import { verifySessionStatistics } from "./session-statistics-assertions";
 test("analysis console supports resizing, focus, keyboard tabs and narrow screens", async ({
   page,
   request,
@@ -127,12 +128,12 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
       async () => (await page.locator(".threat-profile").boundingBox())!.height,
     )
     .toBeLessThan(240);
-  await page.getByRole("tab", { name: "events", exact: true }).focus();
+  await page.getByRole("tab", { name: "Lineups", exact: true }).focus();
   await page
-    .getByRole("tab", { name: "events", exact: true })
-    .press("ArrowRight");
+    .getByRole("tab", { name: "Lineups", exact: true })
+    .press("ArrowLeft");
   await expect(
-    page.getByRole("tab", { name: "analytics", exact: true }),
+    page.getByRole("tab", { name: "Analytics", exact: true }),
   ).toHaveAttribute("aria-selected", "true");
   await expect(page.getByRole("tabpanel")).toContainText("Shot efficiency");
   if (process.env.HBI_VISUAL_MATCH)
@@ -182,11 +183,12 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
       .setInputFiles(process.env.HBI_VISUAL_MATCH);
     await expect(page.locator("video")).toBeVisible();
   }
-  await page.getByRole("tab", { name: "analytics", exact: true }).click();
+  await page.getByRole("tab", { name: "Analytics", exact: true }).click();
   await expect(page.locator("#match-header-slot")).toContainText(
     "VISUAL TEST DATA",
   );
   const shotTrend = page.getByTestId("shot-efficiency-trend");
+  await verifySessionStatistics(page);
   const possessionTrend = page.getByTestId("possession-efficiency-trend");
   await expect(shotTrend.getByRole("button")).toHaveCount(9);
   await expect(possessionTrend.getByRole("button")).toHaveCount(6);

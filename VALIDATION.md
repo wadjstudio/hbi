@@ -1,4 +1,12 @@
-# SESEN / HBI validation — 2026-10-15
+# SESEN / HBI validation — 2026-10-16
+
+## Embedded match statistics — 2026-10-16
+
+- All 52 unit/component tests and full lint passed on top of merged storage-hardening source 91471ca. A standalone typecheck attempt timed out after 180 seconds during concurrent acceptance; it is not recorded as passing. Final production-build status is recorded after completion.
+- Both Chrome console and local-video/offline/evidence/meeting journeys passed. New acceptance opens team efficiency's exact nine-event sample, compares both teams, checks player rows without inferred profile positions, downloads 10-attempt CSV then a two-goal filtered CSV, and verifies print mode hides the video while preserving report values. Existing responsive/RTL/keyboard/history and 1672×941 geometry gates passed unchanged.
+- Populated workstation screenshot inspected: the reference tab sequence is visible with annotations/review retained; summary cards remain in the first screen. Synthetic observations are labelled explicitly and do not describe the test footage. Full reference typography/header/coach interactions remain incomplete. No hosted data, migration or R2 operation was performed for this UI iteration.
+- The final native Next production build passed, including TypeScript checking. Accepted summary geometry at 1672×941: top 741.52px, height 191.47px, bottom 932.98px; no cropping or gate reduction. Cloudflare packaging/publication is recorded after completion.
+- Final Cloudflare Pages build/package passed with existing nonfatal bundler timing warnings. Publication is a separate step; no new migration is needed for these views.
 
 ## Phase controls and expanded filters — 2026-10-15
 

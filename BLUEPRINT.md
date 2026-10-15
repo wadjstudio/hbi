@@ -1,5 +1,9 @@
 # SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
 
+## Embedded match statistics — 16 October 2026
+
+The workstation now opens Analytics by default and contains player/goalkeeper, team, comparison and report tabs in the reference sequence. Their inputs are restricted to the current organization, match and analysis session; current filters affect samples and exports. Reviewed canonical attempts drive efficiency, unresolved/open possessions stay out of scoring rates, and observed positions/verified intervals drive position/minute metrics. Team metric actions open exact event samples. Reports print without the video/editor and export CSV with event/session identities and raw timestamps. These additions reuse existing libraries and SQL. The latest deployment record verifies the merged 0020 storage hardening; earlier 0019 version statements are historical. Full visual parity and remaining header interactions require further audit.
+
 ## Fitted workstation composition — 15 October 2026
 
 Layout/session controls now sit in a native disclosure alongside video source actions, with Escape/focus return and outside/mobile dismissal. Desktop spacing, intelligence footer and result-chart composition have been revised without cropping footage or changing formulas. The populated linked-footage fixture fits all five summary cards inside 1672×941 (approximately 744px top/936px bottom); the reference begins them near 735px. Native keyboard navigation preserves playback position. This measured composition progress is separate from full visual parity and hosted publication.

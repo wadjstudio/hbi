@@ -1,5 +1,9 @@
 # SESEN / HBI Architecture
 
+## Match workspace statistics — 16 October 2026
+
+The match tab strip now exposes Analytics, Lineups, Events, Player stats, Team stats, Comparison and Reports, alongside annotation/review tools. `features/analysis/session-statistics.ts` scopes every input to organization/match/session and attaches event evidence to team metrics. `components/workspace/session-statistics.tsx` composes roster/shooter/goalkeeper samples, observed match positions, verified interval minutes, side-by-side teams and a filter-bound report. CSV uses the existing audited export with stable IDs/raw time; browser print hides the video/editor and retains the report values. No remote inference, service, dependency or migration was added. Deployment authority is DEPLOYMENT.md: the merged storage-hardening release verified migrations through 0020; earlier user-reported 0019 references are historical.
+
 ## Dense annotation boundary
 
 The optional dense builder verifies a previously hashed 10fps unannotated derivative, extracts a bounded sequence and binds every JPEG/person suggestion/ball proposal to source time, scene and image hash. It never silently marks missing inference as a negative detection. The separate browser review uses normalized boxes, per-frame human edits, undo/redo and validated export/import; image loading blocks edits to prevent stale-frame labels. `annotation_contract.mjs` and Python validation enforce provenance and geometry. `annotation_dataset.py` exports review-only COCO data and ball diagnostics on explicitly reviewed/completed frames. Partial mixed-class labels remain unsuitable for training, and rights/training approval remain unset. This creates no canonical events, hosted services, model training or integration with production selection.

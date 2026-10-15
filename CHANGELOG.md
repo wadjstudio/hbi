@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Embedded match statistics — 2026-10-16
+
+- Added reference-sequence player/goalkeeper, team, comparison and report tabs inside the video workspace; Analytics is the initial view. Existing annotation/review and keyboard/RTL behavior remain available.
+- Scoped samples by organization/match/session, retained canonical reviewed-attempt denominators and excluded unresolved/open possessions from scoring rates. Roster/observed-player rows show unknown positions/minutes explicitly and reuse existing position metrics.
+- Team metric controls open exact supporting event samples. Reports export the selected team/filter's CSV with stable IDs/raw time; print mode retains report values while excluding video/editor controls.
+- Added domain isolation/denominator tests and Chrome acceptance for samples, evidence counts, both teams, player missing data, filtered CSV and print visibility. Reused installed components and merged 0020 storage hardening; no new migration or dependency.
+
 ## Phase controls and expanded analysis filters — 2026-10-15
 
 - Added Attack/Defense context buttons and a transition selector for fast break, second wave and defensive return. Selecting context does not invent a match event; subsequent observations retain the selected phase.
