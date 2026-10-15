@@ -10,6 +10,7 @@ import {
 import { useRouter } from "next/navigation";
 import { substitutionInput, syncResponse } from "@/features/analysis/contracts";
 import { parseWorkspaceBackup } from "./backup";
+import { shouldRetrySync } from "./sync-errors";
 import { releaseLocalSources } from "@/lib/video/local-sources";
 import { canWrite } from "@/lib/permissions/roles";
 import { createClient } from "@/lib/supabase/client";
@@ -73,6 +74,8 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const client = useRef<ReturnType<typeof createClient> | null>(null),
     busy = useRef(false),
     refreshNeeded = useRef(false),
+    transientError = useRef(""),
+    retries = useRef(new Map<string, number>()),
     languageLoaded = useRef(false),
     identity = useRef(""),
     rowsRef = useRef(rows);
@@ -183,7 +186,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       for (const op of ops) {
         if (identity.current !== scope) break;
         if (op.error) break;
-        const { data, error: e } = op.rpc
+        const { data, error: e, status } = op.rpc
           ? await c.rpc(op.rpc, { p_row: op.row })
           : await c.rpc("apply_workspace_change", {
               p_table: op.table,
@@ -194,9 +197,22 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
             });
         if (identity.current !== scope) break;
         if (e) {
-          await localDB.operations.update(op.id, { error: e.message });
+          const attempts = (retries.current.get(op.id) ?? 0) + 1;
+          if (shouldRetrySync(status, e, attempts)) {
+            retries.current.set(op.id, attempts);
+            transientError.current = e.message;
+          } else {
+            retries.current.delete(op.id);
+            await localDB.operations.update(op.id, { error: e.message });
+          }
           setError(e.message);
           break;
+        }
+        retries.current.delete(op.id);
+        if (transientError.current) {
+          const resolved = transientError.current;
+          transientError.current = "";
+          setError((current) => (current === resolved ? "" : current));
         }
         const reply = syncResponse.parse(data);
         if (reply.status === "conflict") {
