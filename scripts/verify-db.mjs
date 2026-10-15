@@ -456,6 +456,55 @@ assert.equal(
 console.log(
   "PASS: online source identity, retry, isolation, time range and evidence-source consistency",
 );
+const r2Key = `${ids.org}/${ids.video}/source`;
+const secondVideo = "60000000-0000-4000-8000-000000000009";
+await asUser(db, ids.user);
+await db.exec(
+  `update videos set file_size_bytes=1000 where id='${ids.video}';
+insert into videos(id,organization_id,match_id,storage_mode,local_fingerprint,file_size_bytes,created_by)values('${secondVideo}','${ids.org}','${ids.match}','local','fixture-2',1000,'${ids.user}')`,
+);
+await denied(
+  db,
+  `update videos set r2_object_key='${ids.org2}/${ids.video}/source' where id='${ids.video}'`,
+);
+await denied(
+  db,
+  `update videos set status='uploading' where id='${ids.video}'`,
+);
+await denied(
+  db,
+  `insert into videos(organization_id,match_id,storage_mode,local_fingerprint,r2_object_key,created_by)values('${ids.org}','${ids.match}','local','fixture-3','${ids.org2}/x/source','${ids.user}')`,
+);
+await denied(db, `select reserve_video_upload('${ids.video}',10737418240)`);
+await denied(db, "select * from storage_limits");
+await db.exec(`select reserve_video_upload('${ids.video}')`);
+assert.deepEqual(
+  (
+    await db.query(
+      `select r2_object_key,status from videos where id='${ids.video}'`,
+    )
+  ).rows[0],
+  { r2_object_key: r2Key, status: "uploading" },
+);
+await denied(
+  db,
+  `update videos set file_size_bytes=1 where id='${ids.video}'`,
+);
+await denied(db, `update videos set status='ready' where id='${ids.video}'`);
+await denied(db, `select complete_video_upload('${secondVideo}')`);
+await db.exec(`select complete_video_upload('${ids.video}')`);
+assert.deepEqual(
+  (
+    await db.query(
+      `select status,storage_mode from videos where id='${ids.video}'`,
+    )
+  ).rows[0],
+  { status: "ready", storage_mode: "r2" },
+);
+await db.exec("reset role;update storage_limits set max_shared_bytes=1500;");
+await asUser(db, ids.user);
+await denied(db, `select reserve_video_upload('${secondVideo}')`);
+console.log("PASS: server-managed R2 key, status, size and quota");
 await db.exec("reset role;");
 const fresh = await initialize();
 await migrate(fresh, migrations);

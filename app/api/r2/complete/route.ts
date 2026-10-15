@@ -19,18 +19,19 @@ export async function POST(request: Request) {
       .select("*")
       .eq("id", video_id)
       .single();
-    if (!v?.r2_object_key || v.status !== "uploading")
+    // The key is derived, never read from the client-editable row.
+    const key = `${v?.organization_id}/${v?.id}/source`;
+    if (!v || v.r2_object_key !== key || v.status !== "uploading")
       throw new Error("No upload reservation");
     const config = settings();
     const head = await r2(config).send(
-      new HeadObjectCommand({ Bucket: config.bucket, Key: v.r2_object_key }),
+      new HeadObjectCommand({ Bucket: config.bucket, Key: key }),
     );
     if (head.ContentLength !== v.file_size_bytes)
       throw new Error("Uploaded size mismatch");
-    const { error } = await c
-      .from("videos")
-      .update({ status: "ready", storage_mode: "r2" })
-      .eq("id", v.id);
+    const { error } = await c.rpc("complete_video_upload", {
+      p_video: v.id,
+    });
     if (error) throw new Error(error.message);
     return NextResponse.json({ ready: true });
   } catch (e) {
