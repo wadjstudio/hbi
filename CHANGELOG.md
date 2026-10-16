@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Coach brief and printable evidence register — 2026-10-16
+
+- Replaced the embedded report's loose export controls/IDs with a coach brief: actual match/competition/date/team context, scoped metric cards, saved event-backed insights and explicit review state.
+- Added an optional complete event register for the selected team/session/filter with source time, recorded game clock, canonical shot result/player and stable event references. Register rows open their exact evidence; PDF inclusion is explicit and does not embed or upload video.
+- Added A4 report styling with repeated table headers, row/insight break protection, a separate appendix page and print-friendly references. Reused local fonts, browser printing and existing CSV export; no new dependency, SQL migration or service.
+- Added report-scope/link-isolation tests and populated team/comparison/report desktop/Arabic-mobile captures plus actual English/Arabic PDF exports. Focused scrollable regions now retain arrow-key scrolling without seeking the video.
+- Reorganized team metric cards as a readable 3×3 desktop grid and kept zero-valued metric/comparison numbers visible when there is no evidence to open. Printing overrides the inherited dark root color scheme and strengthens appendix-reference contrast.
+
 ## Self-hosted sports typography — 2026-10-16
 
 - Added six unmodified official WOFF2 assets: variable Roboto Condensed for Latin/extended Latin and IBM Plex Sans Arabic at 400/500/600/700 for Arabic. Bundled complete OFL notices and a URL/size/SHA256 provenance manifest; no runtime font CDN, package dependency or paid service.

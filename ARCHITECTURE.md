@@ -10,6 +10,8 @@ The provider exposes bounded account display text from Supabase Auth and clears 
 
 ## Match workspace statistics — 16 October 2026
 
+`features/reports/session-brief.ts` scopes and orders the selected team/session events and resolves saved insights only through compatible typed event links. `SessionReport` composes match context, existing metric controls, reviewable insights and an optional complete event appendix. `app/reports.css` owns A4 formatting and print isolation; PDF remains the browser's local print output, with no PDF service or new application dependency. Focused scrollable regions retain native arrow-key handling rather than seeking media.
+
 Typography uses `app/fonts.css` for local WOFF2 faces and `app/typography.css` for the reference hierarchy. `public/fonts/manifest.json` records official distribution URLs, weights, subsets, sizes and hashes; OFL notices ship alongside the assets. Pages verifies these files and serves `/fonts/*` outside the Worker. There is no Next font service, runtime font CDN, new dependency or inference service.
 
 Player metric evidence is computed from the already scoped session sample: reviewed attempts for shooting rates, pending attempts separately, and reviewed non-empty-goal saves/goals for keepers. Inline interval disclosures use period/game-clock bounds and actual positions; they do not infer source-video seeks or full-match coverage. Analytics summary cards are absent from other tab views; grid minimum-width containment keeps the player table's horizontal scrolling local.

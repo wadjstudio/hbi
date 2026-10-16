@@ -41,6 +41,7 @@ hbi-starter/
   app/globals.css
   app/layout.tsx
   app/page.tsx
+  app/reports.css
   app/sesen.css
   app/typography.css
   app/workbench.css
@@ -109,6 +110,7 @@ hbi-starter/
   components/workspace/reference-match.tsx
   components/workspace/reports.tsx
   components/workspace/session-analysis-rail.tsx
+  components/workspace/session-report.tsx
   components/workspace/session-statistics.tsx
   components/workspace/settings.tsx
   components/workspace/shell.tsx
@@ -149,6 +151,7 @@ hbi-starter/
   features/playlists/.gitkeep
   features/reports/.gitkeep
   features/reports/export.ts
+  features/reports/session-brief.ts
   features/seasons/.gitkeep
   features/teams/.gitkeep
   features/video/source.ts
@@ -253,6 +256,7 @@ hbi-starter/
   tests/e2e/session-statistics-assertions.ts
   tests/e2e/smoke.spec.ts
   tests/e2e/spatial-map-assertions.ts
+  tests/e2e/statistics-view-captures.ts
   tests/e2e/typography-assertions.ts
   tests/e2e/video.spec.ts
   tests/e2e/workflow.spec.ts
@@ -270,6 +274,7 @@ hbi-starter/
   tests/unit/positions.test.ts
   tests/unit/quick-tag-dock.test.tsx
   tests/unit/reports.test.ts
+  tests/unit/session-brief.test.ts
   tests/unit/session-statistics-ui.test.tsx
   tests/unit/session-statistics.test.ts
   tests/unit/shot-profile.test.ts

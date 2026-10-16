@@ -1,6 +1,6 @@
 "use client";
 import { useState, type ComponentProps } from "react";
-import { ArrowUpRight, Download, Printer, Users } from "lucide-react";
+import { ArrowUpRight, Users } from "lucide-react";
 import {
   sessionSample,
   teamSessionMetrics,
@@ -9,7 +9,6 @@ import {
   type SessionScope,
 } from "@/features/analysis/session-statistics";
 import { positionMetrics } from "@/features/players/position-metrics";
-import { shotsCsv } from "@/features/reports/export";
 import {
   intervalMinutes,
   keeperSummary,
@@ -18,9 +17,10 @@ import {
 } from "@/lib/analytics/metrics";
 import { s, type Row } from "@/types/workspace";
 import { formatTime } from "@/lib/video/time";
-import { download, useWorkspace } from "./provider";
+import { useWorkspace } from "./provider";
 import { rowLabel } from "./controls";
-import { BrandLockup, PlayerAvatar } from "@/components/brand/brand-lockup";
+import { PlayerAvatar } from "@/components/brand/brand-lockup";
+import { SessionReport } from "./session-report";
 
 type Props = ComponentProps<"section"> &
   SessionSample & {
@@ -179,7 +179,7 @@ export const SessionStatistics = ({
           )}
         </p>
       )}
-      {(view === "teams" || view === "reports") && metricGrid}
+      {view === "teams" && metricGrid}
       {view === "players" && (
         <>
           <p className="session-table-hint">
@@ -550,58 +550,15 @@ export const SessionStatistics = ({
         </div>
       )}
       {view === "reports" && (
-        <>
-          <div className="report-brand">
-            <BrandLockup />
-            <span>
-              {teams.find((t) => t.id === teamId)
-                ? rowLabel(teams.find((t) => t.id === teamId)!)
-                : "—"}
-            </span>
-          </div>
-          <div className="toolbar no-print">
-            <button onClick={() => window.print()}>
-              <Printer size={15} />
-              {w.t("طباعة / حفظ PDF", "Print / save PDF")}
-            </button>
-            <button
-              onClick={() =>
-                download(
-                  shotsCsv(ownShots, ownEvents),
-                  `sesen-${scope.matchId}-${scope.sessionId}-shots.csv`,
-                  "text/csv;charset=utf-8",
-                )
-              }
-            >
-              <Download size={15} />
-              {w.t("تصدير تصويبات العينة CSV", "Export sample shots CSV")}
-            </button>
-          </div>
-          <dl className="session-report-provenance">
-            <dt>{w.t("المباراة", "Match")}</dt>
-            <dd>{scope.matchId}</dd>
-            <dt>{w.t("الجلسة", "Session")}</dt>
-            <dd>{scope.sessionId || "—"}</dd>
-            <dt>{w.t("الفريق", "Team")}</dt>
-            <dd>{teamId || "—"}</dd>
-            <dt>{w.t("الأحداث المحددة", "Selected events")}</dt>
-            <dd>{ownEvents.length}</dd>
-          </dl>
-          <button
-            className="no-print"
-            disabled={!ownEvents.length}
-            onClick={() => onEvidence(heading, ownEvents)}
-          >
-            {w.t("فتح أحداث التقرير", "Open report events")}{" "}
-            <ArrowUpRight size={14} />
-          </button>
-          <p>
-            {w.t(
-              "CSV يحتفظ بمعرفات الأحداث والجلسة والزمن الخام للمراجعة. التقرير يعكس الفلاتر الحالية؛ لا يرفع ملفات فيديو.",
-              "CSV retains event/session identifiers and raw timestamps for audit. This report reflects current filters; it uploads no video.",
-            )}
-          </p>
-        </>
+        <SessionReport
+          scope={scope}
+          teamId={teamId}
+          match={match}
+          events={sample.events}
+          shots={sample.shots}
+          metrics={metricGrid}
+          onEvidence={onEvidence}
+        />
       )}
     </section>
   );

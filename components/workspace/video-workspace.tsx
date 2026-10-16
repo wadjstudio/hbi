@@ -516,7 +516,7 @@ export function VideoWorkspace({
       if (
         e.target instanceof Element &&
         e.target.closest(
-          "input,textarea,select,button,a,summary,[role=button],[role=separator],[role=tab],[contenteditable=true]",
+          "input,textarea,select,button,a,summary,[role=button],[role=separator],[role=tab],[role=region][tabindex],[contenteditable=true]",
         )
       )
         return;

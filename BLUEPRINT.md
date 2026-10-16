@@ -10,6 +10,8 @@ The workstation header now includes actual signed-in identity and organization r
 
 ## Embedded match statistics — 16 October 2026
 
+Embedded reports are now coach briefs with actual match context, selected-sample metrics and saved event-backed insights, including their review status. A complete selected event register can be included explicitly as a PDF appendix. Its references retain source time, recorded period/clock, canonical result/player and event identity; no unchecked JSON evidence, guessed clocks or embedded video is added. Browser A4 printing and existing CSV remain local.
+
 The reference typography now uses locally bundled Roboto Condensed and IBM Plex Sans Arabic with explicit fallback fonts, tabular numeric styling and readable card/tab/radar labels. Distribution bytes and OFL licenses are recorded and verified; no third-party font request or paid service is required at runtime. Loaded-font browser checks complement the existing responsive/RTL and first-screen gates.
 
 Player/keeper metric cells now open their own denominator samples, while pending attempts have a separate review action. Playing-minute disclosures retain interval period, observed position, game-clock bounds and verification state. Analytics summaries appear only in Analytics; player-table overflow is contained and labelled on narrow screens. Full visual parity still requires the remaining reference audit.

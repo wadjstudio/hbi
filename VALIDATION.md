@@ -1,5 +1,15 @@
 # SESEN / HBI validation — 2026-10-16
 
+## Coach brief and evidence register — 2026-10-16
+
+- Focused report scoping and existing player-metric component tests passed. Scope tests reject foreign organization/team/match/session relationships, duplicate event links and unchecked legacy JSON evidence, and preserve the exact filtered chronological sample.
+- Initial native build compiled but found three unchecked test-array accesses; corrected the test types. The final native production build with TypeScript passed. Browser/PDF/visual results follow after completion; no passing PDF layout is inferred from source or print-media DOM checks alone.
+- PDF inspection uses the existing bundled pypdf/pypdfium2 runtime for optional validation artifacts. No PDF parsing/rendering package is added to the application or required for its browser print workflow.
+- Both complete production-mode Chrome journeys passed with retries disabled. New checks open exactly eight saved-insight events, the first chronological register event, and all twelve selected references; focused table arrow keys retain media time. Populated team/comparison/report desktop and 375px Arabic captures were inspected. Existing first-screen summary bounds remain 745.75–936.23px at 1672×941.
+- Actual PDF parsing/rendering exposed dark page margins and an unnecessary second brief page despite passing print-media DOM checks. Compacted print spacing, reset the root print color scheme/background and strengthened reference contrast. Final native rebuild and both Chrome journeys passed. Final PDF verification passed: A4 throughout, one-page fixture brief with no optional event IDs, two-page English/Arabic versions with all twelve register IDs exactly once, no near-empty/editor pages and white margin pixels. Inspected rendered English brief and Arabic brief/appendix; outputs/report-review/verification.json records exact counts. This proves the short isolated fixture, not long-match pagination or hosted user data.
+- Full lint, all 65 unit/component tests and explicit isolated typecheck passed. Real Pages build/publication follow separately. No dependency, SQL migration, hosted data, DNS or R2 operation is required for this UI/report change.
+- Complete Pages build/package passed with the existing nonfatal bundler warnings and the local font/license verifier. Target scan passed the actual hosted Supabase project/domain, public-only variables, AI disabled and absence of the mock URL/key from client/Worker files. Generated Next declarations returned to the existing Vinext baseline. Runtime code was unchanged after final browser/PDF acceptance; publication and delivery verification follow separately.
+
 ## Self-hosted sports typography — 2026-10-16
 
 - Verified six official unmodified WOFF2 files (263,488 bytes), complete OFL notices, expected font headers/lengths/SHA256 and local-only runtime CSS. Provenance is public/fonts/manifest.json; the pinned repository commits identify license snapshots, not a reproducible-build claim.

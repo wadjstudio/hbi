@@ -5,6 +5,7 @@ import "./analyst-console.css";
 import "./sesen.css";
 import "./coaching-console.css";
 import "./typography.css";
+import "./reports.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(

@@ -783,8 +783,12 @@
 }
 .session-metric-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 9px;
+}
+.session-metric:disabled,
+.session-comparison .comparison-metric button:disabled {
+  opacity: 1;
 }
 .session-metric {
   display: flex;
@@ -973,6 +977,9 @@
 @media (max-width: 767px) {
   .session-statistics {
     padding: 10px;
+  }
+  .session-metric-grid {
+    grid-template-columns: 1fr;
   }
   .session-comparison {
     grid-template-columns: 1fr;

@@ -1,0 +1,312 @@
+.session-report-content {
+  min-width: 0;
+}
+.session-report-content .report-cover {
+  padding: 0 0 16px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.session-report-content .report-brand {
+  margin-block: 8px 18px;
+}
+.report-cover h3 {
+  margin: 0 0 6px;
+  font-size: 26px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.report-cover p,
+.report-method,
+.report-provenance p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.report-scope-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-inline-start: 3px solid var(--sesen-gold);
+  background: #d8b57b0a;
+  font-size: 13px;
+}
+.report-export-controls {
+  margin-block: 10px 18px;
+  flex-wrap: wrap;
+}
+.report-export-controls > label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 13px;
+  cursor: pointer;
+  max-width: none;
+}
+.report-export-controls > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.report-export-controls input {
+  min-width: 0;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--sesen-cyan);
+}
+.session-report-content .session-metric-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.report-insights,
+.report-provenance {
+  margin-top: 22px;
+}
+.report-insights h3,
+.report-provenance h3 {
+  font-size: 17px;
+  font-weight: 600;
+}
+.report-insight {
+  padding: 14px;
+  margin-block: 10px;
+  background: #07161c;
+  border: 1px solid var(--border);
+  border-inline-start: 3px solid var(--sesen-cyan);
+  border-radius: 5px;
+  overflow-wrap: anywhere;
+}
+.report-insight > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.report-insight h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+.report-insight p {
+  white-space: pre-wrap;
+  line-height: 1.7;
+  font-size: 14px;
+}
+.report-insight small {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.report-insight > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+.report-review-state {
+  padding: 3px 8px;
+  border: 1px solid var(--sesen-gold);
+  border-radius: 4px;
+  color: var(--sesen-gold);
+  font-size: 12px;
+}
+.report-review-state.is-reviewed {
+  border-color: var(--sesen-cyan);
+  color: var(--sesen-cyan);
+}
+.report-register {
+  margin-block: 20px;
+}
+.report-register > summary {
+  min-height: 44px;
+  padding-block: 10px;
+  cursor: pointer;
+  color: var(--sesen-gold);
+  font-size: 15px;
+}
+.report-register-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+.report-register table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+  text-align: start;
+  font-size: 13px;
+}
+.report-register th,
+.report-register td {
+  padding: 10px;
+  text-align: start;
+  border-bottom: 1px solid var(--border);
+}
+.report-register thead {
+  color: var(--sesen-gold);
+  background: #0a1d23;
+}
+.report-register th small {
+  display: block;
+  margin-top: 5px;
+  font-size: 10px;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+  color: var(--text-secondary);
+}
+.print-event-number {
+  display: none;
+}
+.report-provenance {
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+@media (max-width: 767px) {
+  .session-report-content .session-metric-grid {
+    grid-template-columns: 1fr;
+  }
+  .report-cover h3 {
+    font-size: 22px;
+  }
+}
+@page sesen-session-report {
+  size: A4;
+  margin: 14mm 12mm;
+}
+@media print {
+  html:has(.session-report) {
+    background: white;
+    color-scheme: light;
+  }
+  body:has(.session-report),
+  .sesen-shell:has(.session-report),
+  .workspace-body:has(.session-report),
+  .video-workspace:has(.session-report) {
+    background: white;
+    color: black;
+    box-shadow: none;
+  }
+  .sesen-shell:has(.session-report) {
+    display: block;
+  }
+  .sesen-shell .workspace-body:has(.session-report) main {
+    display: block;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  .session-report {
+    page: sesen-session-report;
+    font-size: 10pt;
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+  .session-report-content {
+    color: #111;
+  }
+  .session-report-content .report-cover,
+  .session-report-content .report-insight,
+  .session-report-content .report-provenance {
+    break-inside: avoid;
+  }
+  .session-report-content .report-cover {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+  .session-report-content .report-brand {
+    margin-block: 0 10px;
+  }
+  .session-report-content .report-cover p {
+    margin-block: 6px;
+  }
+  .session-report-content .report-scope-strip {
+    margin-top: 8px;
+  }
+  .session-report-content .report-insights {
+    margin-top: 14px;
+  }
+  .session-report-content .report-provenance {
+    margin-top: 12px;
+  }
+  .session-report-content .report-provenance h3 {
+    margin-block: 6px;
+    font-size: 14px;
+  }
+  .session-report-content .report-provenance p {
+    margin-block: 6px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .session-report-content p,
+  .session-report-content small,
+  .session-report-content .report-register > summary,
+  .session-report-content .report-review-state,
+  .session-report-content .report-scope-strip {
+    color: #222;
+  }
+  .session-report-content .session-metric {
+    min-height: 18mm;
+    padding: 8px;
+    border: 1px solid #aeb9be;
+  }
+  .session-report-content .session-metric-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .session-report-content .session-metric small {
+    font-size: 8.5pt;
+  }
+  .session-report-content .report-scope-strip,
+  .session-report-content .report-insight,
+  .session-report-content .report-register-scroll {
+    background: white;
+    border-color: #888;
+  }
+  .session-report-content[data-include-evidence="false"] .report-register {
+    display: none;
+  }
+  .session-report-content .report-register {
+    break-before: page;
+  }
+  .session-report-content .report-register-scroll {
+    overflow: visible;
+    border: 0;
+  }
+  .session-report-content .report-register table {
+    min-width: 0;
+    table-layout: fixed;
+    font-size: 8.5pt;
+  }
+  .session-report-content .report-register thead {
+    display: table-header-group;
+    background: white;
+    color: black;
+  }
+  .session-report-content .report-register th,
+  .session-report-content .report-register td {
+    padding: 6px 4px;
+    border-color: #aaa;
+    overflow-wrap: anywhere;
+  }
+  .session-report-content .report-register th:first-child {
+    width: 30%;
+  }
+  .session-report-content .report-register th:nth-child(2) {
+    width: 12%;
+  }
+  .session-report-content .report-register th:nth-child(3) {
+    width: 15%;
+  }
+  .session-report-content .report-register th small {
+    font-size: 6.5pt;
+    color: #333;
+  }
+  .session-report-content .report-register tr {
+    break-inside: avoid;
+  }
+  .session-report-content .print-event-number {
+    display: inline;
+  }
+}

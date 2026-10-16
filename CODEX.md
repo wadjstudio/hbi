@@ -1,5 +1,7 @@
 # SESEN / HBI Codex Rules
 
+Report briefs must retain exact organization/match/session/team/filter scope and typed event-backed insights. Review status remains visible; an insight title can describe a larger saved sample. The optional complete register uses source time separately from recorded game clock and opens exact events. Verify real English/Arabic PDF bytes and rendered pages, not only print-media DOM; avoid dark page backgrounds, clipped rows and editor leakage. Focused scroll regions must not activate video shortcuts.
+
 Preserve the self-hosted WOFF2 faces, full OFL notices and provenance manifest. Font CSS must remain local-only; update asset hashes/filenames deliberately when changing distributions. Run `node scripts/verify-fonts.mjs` and browser family/weight checks when modifying typography. Keep `/fonts/*` static in Pages, readable SVG labels and unchanged 1672×941 geometry gates; font load success alone does not establish visual parity.
 
 Keep player metric drill-down exact: efficiency/reviewed attempts, pending attempts and keeper saves/goals each have their own event sample. Preserve interval verification/open states and unknown totals; do not convert game-clock interval bounds to video timestamps without calibration. Summary cards belong only to Analytics. Test player tables at 375px Arabic with page overflow prohibited and table-local horizontal scrolling retained.

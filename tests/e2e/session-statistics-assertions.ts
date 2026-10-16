@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { expect, test, type Page } from "@playwright/test";
+import { captureStatisticsView } from "./statistics-view-captures";
 
 export const verifySessionStatistics = async (page: Page) => {
   await page.getByRole("tab", { name: "Team stats", exact: true }).click();
@@ -22,6 +23,7 @@ export const verifySessionStatistics = async (page: Page) => {
   await page
     .getByRole("button", { name: "Close evidence", exact: true })
     .click();
+  await captureStatisticsView(page, "team-statistics");
   await page.getByRole("tab", { name: "Comparison", exact: true }).click();
   const comparison = page.getByRole("region", {
     name: "Team comparison",
@@ -35,6 +37,7 @@ export const verifySessionStatistics = async (page: Page) => {
       has: page.getByRole("heading", { name: "Away", exact: true }),
     }),
   ).toContainText("22.2%");
+  await captureStatisticsView(page, "team-comparison");
   await page.getByRole("tab", { name: "Player stats", exact: true }).click();
   const players = page.getByRole("region", {
     name: "Player & goalkeeper statistics",
@@ -42,6 +45,18 @@ export const verifySessionStatistics = async (page: Page) => {
   });
   await expect(players.getByRole("row")).toHaveCount(5);
   await expect(page.locator(".match-dashboard")).toHaveCount(0);
+  const beforeTableKey = await page
+    .getByTestId("video")
+    .evaluate((node: HTMLVideoElement) => node.currentTime);
+  await players
+    .getByRole("region", { name: "Player statistics table", exact: true })
+    .focus();
+  await page.keyboard.press("ArrowRight");
+  expect(
+    await page
+      .getByTestId("video")
+      .evaluate((node: HTMLVideoElement) => node.currentTime),
+  ).toBe(beforeTableKey);
   await expect(
     players.getByRole("row").filter({ hasText: "Fixture Back Test" }),
   ).toContainText("1 / 4");
@@ -148,11 +163,66 @@ export const verifySessionStatistics = async (page: Page) => {
   expect(goals.split("\r\n")).toHaveLength(3);
   expect(goals).not.toContain('"unknown"');
   await page.getByRole("button", { name: "All", exact: true }).click();
+  await expect(report.locator(".report-insight")).toHaveCount(1);
+  await expect(report.locator(".report-insight")).toContainText("Needs review");
+  await report
+    .getByRole("button", { name: "Watch evidence", exact: true })
+    .click();
+  const insightEvidence = page.getByRole("dialog", {
+    name: "Fixture cross sample",
+    exact: true,
+  });
+  await expect(insightEvidence.locator("[data-event-id]")).toHaveCount(8);
+  await page
+    .getByRole("button", { name: "Close evidence", exact: true })
+    .click();
+  await captureStatisticsView(page, "coach-report");
   await page.emulateMedia({ media: "print" });
   await expect(report).toBeVisible();
   await expect(report.locator(".session-metric").first()).toBeVisible();
   await expect(page.locator(".analysis-split")).toBeHidden();
+  await expect(report.locator(".report-register")).toBeHidden();
+  await page.pdf({
+    path: test.info().outputPath("session-report-en-brief.pdf"),
+    preferCSSPageSize: true,
+    printBackground: true,
+  });
   await page.emulateMedia({ media: "screen" });
+  await report
+    .getByRole("checkbox", {
+      name: "Include event register in PDF",
+      exact: true,
+    })
+    .check();
+  await expect(report.locator("[data-report-event-id]")).toHaveCount(12);
+  await report
+    .getByRole("button", { name: "Open evidence 1", exact: true })
+    .click();
+  await expect(
+    page
+      .getByRole("dialog")
+      .locator('[data-event-id="a0000000-0000-4000-8000-000000000201"]'),
+  ).toHaveCount(1);
+  await page
+    .getByRole("button", { name: "Close evidence", exact: true })
+    .click();
+  await page.emulateMedia({ media: "print" });
+  await expect(report.locator(".report-register")).toBeVisible();
+  await page.pdf({
+    path: test.info().outputPath("session-report-en-evidence.pdf"),
+    preferCSSPageSize: true,
+    printBackground: true,
+  });
+  await page.emulateMedia({ media: "screen" });
+  await page.getByRole("button", { name: "العربية", exact: true }).click();
+  await page.emulateMedia({ media: "print" });
+  await page.pdf({
+    path: test.info().outputPath("session-report-ar-evidence.pdf"),
+    preferCSSPageSize: true,
+    printBackground: true,
+  });
+  await page.emulateMedia({ media: "screen" });
+  await page.getByRole("button", { name: "English", exact: true }).click();
   await page.getByRole("tab", { name: "Analytics", exact: true }).click();
   await expect(page.locator(".match-dashboard")).toBeVisible();
 };
