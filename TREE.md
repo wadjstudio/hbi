@@ -89,6 +89,7 @@ hbi-starter/
   components/workspace/analytics.tsx
   components/workspace/charts.tsx
   components/workspace/controls.tsx
+  components/workspace/court.tsx
   components/workspace/data-sources.tsx
   components/workspace/drawing.tsx
   components/workspace/entities.tsx
@@ -109,6 +110,7 @@ hbi-starter/
   components/workspace/session-statistics.tsx
   components/workspace/settings.tsx
   components/workspace/shell.tsx
+  components/workspace/spatial-map.tsx
   components/workspace/tactics.tsx
   components/workspace/tag-template.tsx
   components/workspace/team.tsx
@@ -128,6 +130,7 @@ hbi-starter/
   features/analysis/match-dashboard.ts
   features/analysis/session-statistics.ts
   features/analysis/shot-profile.ts
+  features/analysis/spatial-sample.ts
   features/analysis/workbench.ts
   features/analytics/.gitkeep
   features/auth/.gitkeep
@@ -237,6 +240,7 @@ hbi-starter/
   tests/e2e/reports.spec.ts
   tests/e2e/session-statistics-assertions.ts
   tests/e2e/smoke.spec.ts
+  tests/e2e/spatial-map-assertions.ts
   tests/e2e/video.spec.ts
   tests/e2e/workflow.spec.ts
   tests/fixtures/console-data.mjs
@@ -256,6 +260,7 @@ hbi-starter/
   tests/unit/session-statistics.test.ts
   tests/unit/shot-profile.test.ts
   tests/unit/smoke.test.ts
+  tests/unit/spatial-sample.test.ts
   tests/unit/sync-errors.test.ts
   tests/unit/video-source.test.ts
   tests/unit/workbench.test.ts
