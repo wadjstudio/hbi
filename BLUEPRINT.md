@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
 
+Primary playback and recording controls now follow the reference's stronger gold/cyan timeline treatment and colored action row. Wide desktop provides larger playback targets and nine 36px tagging controls, retaining source aspect ratio and original event semantics. Existing local assets provide the stronger athlete rail; no library, service or data-model change is introduced.
+
 Wide desktop branding now follows the supplied reference footprint: a 286px masthead contains the existing 232px lockup, separate from the navigation rail. Competition context, balanced score/team columns and action controls remain independent. Arabic mirrors placement without mirroring the artwork. Tablet uses the compact mark and mobile retains a 44px home-link target; no additional service, asset or dependency is required.
 
 Match context now has a clearer competition/date/venue hierarchy and complete metadata disclosure for long and narrow layouts. Dates come only from validated saved instants and are labelled UTC; absent values remain unknown. Full team identities remain available when short names are shown. This changes presentation of existing records, without importing statistics or inferring match clock/score from the reference image.

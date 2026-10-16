@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Video transport and recording hierarchy — 2026-10-16
+
+- Styled the native seek input with live gold progress/cyan remainder and visible focus, retaining bounded seeking.
+- Enlarged playback/tag targets and filled the nine-action row on wide desktop; colored gradients and a hand Save icon follow the reference.
+- Strengthened the existing athlete rail at wide desktop without importing or editing an asset.
+- Added browser checks for control geometry and actual pointer/keyboard seeking. No dependencies, schema, DNS or media upload.
+
 ## Reference brand masthead — 2026-10-16
 
 - Reused the existing SESEN lockup/home link in a 286px wide-screen masthead with a 232px image and logical RTL placement; the navigation rail retains its original width.

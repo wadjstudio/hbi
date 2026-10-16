@@ -12,6 +12,7 @@ import {
   Route,
   Timer,
   CircleDot,
+  Hand,
 } from "lucide-react";
 import { useWorkspace } from "./provider";
 export type QuickEvent = "turnover" | "seven_meter_won" | "two_minute_penalty";
@@ -181,7 +182,7 @@ export const QuickTagDock = ({
             disabled={disabled}
             onClick={() => onShot("save")}
           >
-            <Shield size={16} />
+            <Hand size={16} />
             {w.t("تصدٍ", "Save")}
           </button>
           <button

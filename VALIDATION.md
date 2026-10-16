@@ -1,5 +1,14 @@
 # SESEN / HBI validation — 2026-10-16
 
+## Video transport and recording hierarchy — 2026-10-16
+
+- Real-environment Pages build passed with nonfatal bundler timing/ineffective dynamic-import warnings. Target scan confirms the intended hosted project/domain, public-only configuration, AI disabled and no mock target in client/Worker. Next declarations returned to baseline. Worker input SHA256: b5a5e0b1ed8a738d408d00cd5e47d3b30c4ca108622fc019bbb308a97d950cc6. Deployment checks follow after publication.
+- Additional 1672px English/Arabic native-seek acceptance passed with retries disabled, including actual pointer/Home/ArrowRight media time, nine same-row 36px tagging actions and overflow bounds. The wide Arabic empty-data capture was inspected separately from the populated 1560px capture; it does not prove a populated wide Arabic sample. Lint and explicit isolated typecheck passed. Real-environment Pages build/publication follow separately.
+- Both complete Chrome journeys passed without retries; the English 1672px check verified all nine 36px controls in one row, playback targets, usable seek width, actual pointer/Home/ArrowRight time and restoration. Default summary bounds remain 748.25–938.73px. Final English/Arabic captures were inspected and archived; the English capture retains the intentionally focused native seek ring.
+- Full 79-unit run had two 5-second timeouts in unchanged ReviewQueue tests; other tests passed. The complete affected three-test file passed a serial rerun with original timeouts and no implementation/assertion/config changes. Additional wide Arabic/native seek coverage and final lint/Pages publication checks follow separately.
+- Initial native Next production build passed with TypeScript. Both Chrome journeys are being checked against unchanged first-screen/mobile/RTL behavior plus native seek interactions and wide-desktop control geometry. Final results are recorded after completion.
+- Existing artwork/native controls are reused; no new assets, dependencies, schema/DNS/R2 mutations or hosted fixture/media uploads.
+
 ## Reference brand masthead — 2026-10-16
 
 - Published source 535a6ee as production/main eccd7057-add4-43d0-92d8-527d4001de03 (30 uploaded/48 reused assets). All 43 deployed JS/CSS files and six fonts/two OFL notices match local bytes; font MIME/static routes passed. Custom-domain login returns 200; Spaceship nameservers and hbi CNAME remain unchanged. No hosted-account journey, schema mutation, DNS/R2 mutation or fixture/media upload was performed. Final package verification follows the delivery receipt.

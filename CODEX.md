@@ -1,5 +1,7 @@
 # SESEN / HBI Codex Rules
 
+Keep native seek range semantics, progress styling and bounded media-time callbacks together. Verify actual video time after pointer and keyboard input; a styled track alone is insufficient. Preserve source aspect, nine distinct phase/event actions, compact/mobile flow and the original first-screen gates when increasing control sizes.
+
 Preserve the reference masthead footprint without changing the video/sidebar grid. Maintain exactly one accessible visible home link at each breakpoint, the lockup aspect ratio, logical RTL offsets and tablet compact mark. Test desktop logo geometry, separation from metadata, keyboard focus, mobile tap height and the original first-screen/overflow gates. Do not fix a failing brand check by hiding the only available home link.
 
 Keep header dates validated and explicitly zoned; do not infer a kickoff timestamp from a screenshot or provenance note. Contained labels must retain full metadata through the accessible disclosure. Scope identity rows to the organization, preserve unknown values and source-clock/recorded-result distinctions, and test long metadata at desktop/tablet/mobile with keyboard and RTL.

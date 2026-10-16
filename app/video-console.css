@@ -1,0 +1,103 @@
+/* Primary video actions follow the reference's distinct gold/cyan controls. */
+.video-transport .transport-seek {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(
+    to right,
+    var(--sesen-gold) 0 var(--seek-progress),
+    #17434d var(--seek-progress) 100%
+  );
+  cursor: pointer;
+}
+.transport-seek::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  border: 1px solid #fff4d9;
+  background: var(--sesen-gold);
+  box-shadow: 0 0 8px #d8ac6055;
+}
+.transport-seek::-moz-range-thumb {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  border: 1px solid #fff4d9;
+  background: var(--sesen-gold);
+}
+.video-transport .transport-seek:focus-visible {
+  outline: 2px solid var(--sesen-cyan);
+  outline-offset: 5px;
+}
+.video-workspace .quick-tag-buttons > .tag-attack {
+  background: linear-gradient(135deg, #745326, #382919);
+  border-color: var(--sesen-gold);
+  color: #fff5e2;
+}
+.video-workspace .quick-tag-buttons > .tag-defense {
+  background: linear-gradient(135deg, #0b3458, #081c30);
+}
+.video-workspace .quick-tag-buttons > .tag-transition {
+  background: linear-gradient(135deg, #044b50, #06272d);
+}
+.video-workspace .quick-tag-buttons > .tag-goal {
+  background: linear-gradient(135deg, #204818, #10250c);
+}
+.video-workspace .quick-tag-buttons > .tag-save {
+  background: linear-gradient(135deg, #063d65, #05223b);
+  border-color: #16b8fa;
+  color: #a7eaff;
+}
+.video-workspace .quick-tag-buttons > .tag-turnover {
+  background: linear-gradient(135deg, #57221f, #2b1112);
+}
+.video-workspace .quick-tag-buttons > .tag-seven-meter {
+  background: linear-gradient(135deg, #3c1f54, #21132f);
+}
+.video-workspace .quick-tag-buttons > .tag-penalty {
+  background: linear-gradient(135deg, #514418, #2d260f);
+}
+.quick-tag-buttons > button:not(:disabled):hover,
+.quick-tag-buttons > .tag-transition:focus-within {
+  box-shadow:
+    inset 0 0 16px #ffffff1f,
+    0 0 0 1px currentColor;
+}
+@media (min-width: 1600px) {
+  .analysis-split .video-transport {
+    min-height: 36px;
+    gap: 9px;
+  }
+  .analysis-split .video-transport > button {
+    min-width: 32px;
+    min-height: 32px;
+    justify-content: center;
+  }
+  .video-transport > button > svg {
+    width: 18px;
+    height: 18px;
+  }
+  .analysis-split .transport-time {
+    font-size: 12px;
+  }
+  .analysis-split .video-transport > select {
+    min-height: 28px;
+    font-size: 12px;
+  }
+  .video-workspace .quick-tag-row .quick-tag-buttons > button,
+  .video-workspace .quick-tag-row .tag-transition {
+    min-height: 36px;
+    font-size: 13px;
+    justify-content: center;
+  }
+  .video-workspace .quick-tag-row .quick-tag-buttons > button {
+    flex: 1 0 auto;
+  }
+  .sesen-shell .sidebar::after {
+    height: min(51vh, 480px);
+    opacity: 0.8;
+  }
+}

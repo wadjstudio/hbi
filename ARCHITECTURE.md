@@ -1,5 +1,7 @@
 # SESEN / HBI Architecture
 
+app/video-console.css refines the existing transport/tagging controls without replacing native range behavior or media nodes. The seek input supplies its current progress as a CSS custom property; keyboard/pointer seeking still calls the original bounded seek function. Wide-desktop control sizes change at 1600px; compact/mobile layouts retain their existing sizing and flow. Existing artwork is styled through the sidebar pseudo-element.
+
 The shell reuses its existing header home link for a wide, absolutely positioned masthead at 1440px and above. Logical inline offsets mirror the placement in RTL while preserving the logo aspect ratio and the workspace/sidebar grid. The sidebar brand keeps its flow reservation but is hidden at that width; tablet keeps the compact mark, with specificity that overrides the older generic span-hiding rule. app/brand-header.css owns this presentation layer; no data contract changes.
 
 header-date validates saved ISO instants with the installed Zod contract and formats their date in explicit UTC, independent of the device zone. MatchContext scopes identity lookups to the organization, retains short/full team names and provides a native details region for long metadata. The focusable scroll region participates in the existing video-shortcut guard; Escape/outside pointer close it. Missing dates/venues remain explicit without schema changes.

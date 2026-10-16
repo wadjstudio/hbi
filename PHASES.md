@@ -1,5 +1,7 @@
 # SESEN / HBI V1 phases and acceptance gates
 
+Transport/recording refinement gates: wide-desktop playback targets at least 32px, nine 36px tag controls in one row, usable seek width, actual pointer seek and Home/ArrowRight media time, restored source time, existing aspect/focus/relink behavior, mobile/RTL bounds and unchanged first-screen summary acceptance.
+
 Brand-masthead follow-up gates: 232px lockup with a 33px logical inset at wide desktop, preserved aspect ratio, no metadata overlap, unchanged 192px navigation rail, one accessible home link, compact tablet mark, mobile 44px target, keyboard focus and Arabic mirroring. These checks complement rather than replace the populated first-screen and complete video/evidence journeys.
 
 Header-metadata follow-up adds explicit saved-date/venue display and full-details access. Gates include offset date boundaries, invalid/missing values, long competition/team/venue content, 1672/1024/768/375px bounds, RTL, Escape/outside behavior, focusable details scrolling without video seeking and unchanged populated first-screen geometry.

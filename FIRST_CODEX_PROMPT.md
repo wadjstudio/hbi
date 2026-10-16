@@ -1,5 +1,7 @@
 # SESEN / HBI continuation prompt
 
+Retain the gold/cyan native seek track, larger wide-desktop playback/tag controls and stronger existing athlete rail. Preserve source aspect and event semantics; verify actual media time through pointer/keyboard control and responsive geometry. Continue the reference audit rather than equating these controls with the complete target.
+
 Preserve the wide reference masthead and balanced match header, responsive home-link access and tablet mark. Inspect actual Arabic/English desktop/mobile screenshots after shell changes, with unchanged first-screen/overflow gates. Continue the complete reference audit and real-account validation; a matching logo footprint alone does not establish complete visual parity.
 
 Preserve explicit UTC header dates and full long-metadata disclosure; do not invent absent kickoff values. Keep scoped identity lookup, short/full team names, unknown states and source-clock/result separation. Re-run long-header/RTL/mobile/keyboard bounds and first-screen geometry when refining the shell. Continue the complete reference audit rather than treating a metadata improvement as final parity.

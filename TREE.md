@@ -51,6 +51,7 @@ hbi-starter/
   app/review.css
   app/sesen.css
   app/typography.css
+  app/video-console.css
   app/workbench.css
   app/(auth)/login/login-form.tsx
   app/(auth)/login/page.tsx
@@ -280,6 +281,8 @@ hbi-starter/
   tests/e2e/smoke.spec.ts
   tests/e2e/spatial-map-assertions.ts
   tests/e2e/statistics-view-captures.ts
+  tests/e2e/transport-assertions.ts
+  tests/e2e/transport.spec.ts
   tests/e2e/typography-assertions.ts
   tests/e2e/video.spec.ts
   tests/e2e/workflow.spec.ts

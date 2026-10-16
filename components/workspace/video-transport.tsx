@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import {
   Play,
   Pause,
@@ -80,6 +80,12 @@ export function VideoTransport({
           {formatTime(timeMs)} / {formatTime(duration)}
         </span>
         <input
+          className="transport-seek"
+          style={
+            {
+              "--seek-progress": `${duration ? (Math.min(timeMs, duration) / duration) * 100 : 0}%`,
+            } as CSSProperties
+          }
           type="range"
           min="0"
           max={duration || 1}
