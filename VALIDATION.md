@@ -1,5 +1,14 @@
 # SESEN / HBI validation — 2026-10-16
 
+## Reference brand masthead — 2026-10-16
+
+- Real-environment Pages build passed with the existing nonfatal bundler timing warnings. Target scan confirms the intended hosted Supabase/domain, public-only configuration, disabled AI and no loopback target/key in client or Worker. Next declarations returned to baseline. Worker input SHA256: 7f57da2659199032cc23c42843fdd78572a6766c228a7c5dcad284dbf73d7a4c. Publication/asset verification is recorded separately after completion.
+- Final native rebuild, isolated TypeScript check and both complete Chrome journeys passed with retries disabled. Brand geometry/accessibility checks cover 1672/1440/1024/768/375px and Arabic desktop; existing long-context, video/evidence and responsive gates remain unchanged. Summary bounds remain 748.25–938.73px at 1672×941. English/Arabic desktop and compact-tablet captures were inspected and archived as synthetic UI evidence.
+- The full 79-test unit run had one 5-second QuickTagDock timeout while Chrome was active; other tests passed. A serial rerun of that file passed both tests under the original timeout, without code/assertion/config changes. Initial lint passed; the later runtime change was a CSS selector specificity fix. Hosted-account interaction remains untested in this release.
+- Read-only linked Supabase migration listing on this turn confirms local/remote 0001–0020, superseding the earlier user-reported 0019. No migration was applied.
+- Native Next build and lint passed initially. The first browser run passed the video journey but failed the new tablet-brand check: an older higher-specificity span rule hid the compact mark at 1024px. The selector was corrected and the native rebuild passed. Final browser/release results are recorded after completion.
+- Changes reuse shipped assets and existing links; no dependency, schema, DNS or R2 mutation. Mock observations stay on loopback; no real-match analysis or full-reference parity is inferred.
+
 ## Match metadata hierarchy and complete details — 2026-10-16
 
 - Published source 22e4601 as production/main 3b8c9c86-8e12-4d7a-91e5-8fcdc4a57454 (31 new/47 reused assets; Worker/routes/headers succeeded). All 43 deployed JS/CSS assets, six WOFF2 fonts and two OFL notices match local hashes/content types. Login returns 200 with unchanged Spaceship DNS. Worker input SHA256: 225b501683a9ff017c523cd62df5bccccd2b15923617759bd8bd4cd836b7c568. No authenticated hosted coach journey, schema/DNS/R2 mutation or production fixture/media upload occurred. Source ZIP verification passed SHA256/CRC/safe extraction, Blueprint parity, source-only exclusions and original 0001–0010 preservation; final verifier output remains authoritative. Complete reference parity is not claimed.

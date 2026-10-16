@@ -37,6 +37,7 @@ hbi-starter/
   .github/workflows/ci.yml
   app/analyst-console.css
   app/annotations.css
+  app/brand-header.css
   app/coaching-console.css
   app/event-feed.css
   app/fonts.css
@@ -261,6 +262,7 @@ hbi-starter/
   supabase/tests/security.test.sql
   tests/setup.ts
   tests/e2e/annotation-assertions.ts
+  tests/e2e/brand-header-assertions.ts
   tests/e2e/conflict.spec.ts
   tests/e2e/console.spec.ts
   tests/e2e/data-sources.spec.ts

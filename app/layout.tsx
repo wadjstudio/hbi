@@ -12,6 +12,7 @@ import "./annotations.css";
 import "./review.css";
 import "./meetings.css";
 import "./match-header.css";
+import "./brand-header.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(

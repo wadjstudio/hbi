@@ -138,7 +138,7 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
             <Menu size={22} />
           </button>
           <Link
-            className="mobile-brand"
+            className="mobile-brand header-brand"
             href="/overview"
             aria-label="SESEN — Sports Intelligence"
           >

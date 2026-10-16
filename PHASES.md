@@ -1,5 +1,7 @@
 # SESEN / HBI V1 phases and acceptance gates
 
+Brand-masthead follow-up gates: 232px lockup with a 33px logical inset at wide desktop, preserved aspect ratio, no metadata overlap, unchanged 192px navigation rail, one accessible home link, compact tablet mark, mobile 44px target, keyboard focus and Arabic mirroring. These checks complement rather than replace the populated first-screen and complete video/evidence journeys.
+
 Header-metadata follow-up adds explicit saved-date/venue display and full-details access. Gates include offset date boundaries, invalid/missing values, long competition/team/venue content, 1672/1024/768/375px bounds, RTL, Escape/outside behavior, focusable details scrolling without video seeking and unchanged populated first-screen geometry.
 
 Presentation follow-up separates preparation/agenda/notes from a branded modal stage. Gates: organization/typed-target isolation, unavailable references, actual header-to-meeting transition, clip/insight/text/board sequencing, native fullscreen exit, hidden notes, control-safe arrows, Tab containment/focus return, denied-fullscreen fallback, clip bounds/relinking and populated Arabic-mobile views. Full-reference and large-content audits remain separate.

@@ -10,6 +10,7 @@ import { verifyAnnotations } from "./annotation-assertions";
 import { verifyReview } from "./review-assertions";
 import { verifyPresentation } from "./presentation-assertions";
 import { verifyHeaderDetails } from "./header-details-assertions";
+import { verifyBrandHeader } from "./brand-header-assertions";
 test("analysis console supports resizing, focus, keyboard tabs and narrow screens", async ({
   page,
   request,
@@ -303,6 +304,7 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
   });
   for (const width of [1672, 1440, 1024, 768, 375]) {
     await page.setViewportSize({ width, height: 941 });
+    await verifyBrandHeader(page, width);
     if (width === 1672 && process.env.HBI_VISUAL_MATCH) {
       await testInfo.attach("console-geometry", {
         body: JSON.stringify(
@@ -365,6 +367,7 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
   await page.setViewportSize({ width: 1560, height: 900 });
   await page.getByRole("button", { name: "العربية", exact: true }).click();
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+  await verifyBrandHeader(page, 1560);
   await page.screenshot({
     path: testInfo.outputPath("console-arabic.png"),
     fullPage: true,

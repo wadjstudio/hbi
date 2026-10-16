@@ -860,7 +860,7 @@ html[dir="rtl"] .mobile-navigation {
   .sesen-shell .motto {
     display: none;
   }
-  .sesen-shell .compact-brand {
+  .sesen-shell .sidebar .brand .compact-brand {
     display: inline-flex;
   }
   .sesen-shell .sidebar nav a {

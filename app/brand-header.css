@@ -1,0 +1,63 @@
+/* The reference header has a wider brand masthead than its navigation rail. */
+.header-brand {
+  min-height: 44px;
+}
+@media (min-width: 1440px) {
+  .sesen-shell .sidebar > .brand {
+    visibility: hidden;
+  }
+  .sesen-shell .topbar {
+    padding-inline-start: 116px;
+  }
+  .sesen-shell .topbar > .header-brand {
+    display: flex;
+    position: absolute;
+    inset-inline-start: calc(-1 * var(--sesen-sidebar-width));
+    top: 0;
+    bottom: 0;
+    width: 286px;
+    padding-inline: 33px 20px;
+    align-items: center;
+    box-sizing: border-box;
+    background: linear-gradient(110deg, #081318, #061015);
+    border-inline-end: 1px solid #1a343d;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-brand .sesen-lockup {
+    flex: 1;
+    max-width: none;
+  }
+  .match-header-slot .match-context {
+    grid-template-columns: minmax(200px, 0.72fr) minmax(300px, 1.78fr) auto;
+  }
+  .match-context-score {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 36px;
+  }
+  .match-context-score > .match-context-team:first-child {
+    justify-self: end;
+    flex-direction: row-reverse;
+  }
+  .match-context-score > .match-context-team:last-child {
+    justify-self: start;
+  }
+  .match-context-actions .analysis-mode {
+    min-width: 94px;
+    justify-content: center;
+  }
+  .match-context-actions .match-header-menu > summary {
+    min-width: 98px;
+    justify-content: center;
+  }
+  .match-context-actions .match-share-menu > summary {
+    min-width: 80px;
+  }
+  .context-match-picker label {
+    min-width: 0;
+  }
+  .context-match-picker select {
+    min-width: 0;
+    flex: 1;
+  }
+}

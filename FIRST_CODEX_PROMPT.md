@@ -1,5 +1,7 @@
 # SESEN / HBI continuation prompt
 
+Preserve the wide reference masthead and balanced match header, responsive home-link access and tablet mark. Inspect actual Arabic/English desktop/mobile screenshots after shell changes, with unchanged first-screen/overflow gates. Continue the complete reference audit and real-account validation; a matching logo footprint alone does not establish complete visual parity.
+
 Preserve explicit UTC header dates and full long-metadata disclosure; do not invent absent kickoff values. Keep scoped identity lookup, short/full team names, unknown states and source-clock/result separation. Re-run long-header/RTL/mobile/keyboard bounds and first-screen geometry when refining the shell. Continue the complete reference audit rather than treating a metadata improvement as final parity.
 
 Preserve the meeting agenda/large preview and modal presentation stage. Typed targets must stay organization-scoped and unavailable sources explicit. Verify header transitions, real fullscreen/fallback behavior, hidden notes, native-control-safe keyboard handling, focus return and source-bounded/relinked local clips. Continue the original reference audit and large/long content checks; fixtures and successful fullscreen do not establish real-match completeness.

@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence (HBI V1 foundation)
 
+The wide workstation header now uses a 286px SESEN masthead with the existing lockup at 232px, matching the reference footprint while retaining the 192px navigation rail. Match metadata, opposing team identities and actions have separate space. Compact/tablet and mobile branding remain responsive; the home link is available once in the accessibility tree.
+
 The match header now shows a validated saved date in explicit UTC beside venue metadata, with a competition icon and stronger title hierarchy. A keyboard-accessible details disclosure exposes full competition/team/venue text on narrow screens and for long names. Missing/invalid dates remain unrecorded; team/competition lookup stays organization-scoped and recorded results remain separate from tagged event counts.
 
 Meetings now separate an ordered preparation agenda from a large content preview. Presentation mode shows clips, boards, evidence-linked insights or team messages while hiding speaker notes and editing controls. It tracks native fullscreen exit, respects focused controls during keyboard navigation and provides a modal fallback when fullscreen is denied. Missing/cross-organization content stays unavailable rather than crashing the stage; clips retain source-range bounds and explicit local relinking.

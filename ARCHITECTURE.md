@@ -1,5 +1,7 @@
 # SESEN / HBI Architecture
 
+The shell reuses its existing header home link for a wide, absolutely positioned masthead at 1440px and above. Logical inline offsets mirror the placement in RTL while preserving the logo aspect ratio and the workspace/sidebar grid. The sidebar brand keeps its flow reservation but is hidden at that width; tablet keeps the compact mark, with specificity that overrides the older generic span-hiding rule. app/brand-header.css owns this presentation layer; no data contract changes.
+
 header-date validates saved ISO instants with the installed Zod contract and formats their date in explicit UTC, independent of the device zone. MatchContext scopes identity lookups to the organization, retains short/full team names and provides a native details region for long metadata. The focusable scroll region participates in the existing video-shortcut guard; Escape/outside pointer close it. Missing dates/venues remain explicit without schema changes.
 
 meetingItem resolves exactly one typed item target within the organization and retains missing/mixed references as explicit unavailable content. Presentation separates preparation/notes from a modal stage, synchronizes native fullscreen changes, restores focus and respects native controls during navigation. Failed fullscreen exit never reveals notes. ClipPlayer scopes its source, shows raw source bounds and clamps seeking; local relinking retains fingerprint/duration validation. The meeting UI reuses existing rows/FKs/sync and does not upload or process video.

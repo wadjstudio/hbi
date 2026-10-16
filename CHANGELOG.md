@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Reference brand masthead — 2026-10-16
+
+- Reused the existing SESEN lockup/home link in a 286px wide-screen masthead with a 232px image and logical RTL placement; the navigation rail retains its original width.
+- Balanced team/score columns and action widths, preserved tablet/mobile branding and added explicit responsive geometry/focus checks.
+- Browser verification exposed a pre-existing 1024px CSS specificity conflict hiding the compact mark; corrected the selector instead of dropping that check.
+- No schema, dependency, hosted observation, DNS or R2 change.
+
 ## Match metadata hierarchy and complete details — 2026-10-16
 
 - Long-context inspection also fixed closed layout-menu content contributing to tablet overflow and contained intelligence/closed recording-context labels while retaining full identity details.
