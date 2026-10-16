@@ -257,6 +257,7 @@ hbi-starter/
   tests/unit/positions.test.ts
   tests/unit/quick-tag-dock.test.tsx
   tests/unit/reports.test.ts
+  tests/unit/session-statistics-ui.test.tsx
   tests/unit/session-statistics.test.ts
   tests/unit/shot-profile.test.ts
   tests/unit/smoke.test.ts

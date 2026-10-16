@@ -1,5 +1,7 @@
 # SESEN / HBI Codex Rules
 
+Keep player metric drill-down exact: efficiency/reviewed attempts, pending attempts and keeper saves/goals each have their own event sample. Preserve interval verification/open states and unknown totals; do not convert game-clock interval bounds to video timestamps without calibration. Summary cards belong only to Analytics. Test player tables at 375px Arabic with page overflow prohibited and table-local horizontal scrolling retained.
+
 Spatial views must validate both normalized coordinates, preserve 0/1 boundaries and exclude absent/blank/invalid values instead of coercing them to zero. Keep fixed-sector evidence exact, percentages scoped to located observations and missing coverage visible. Glow has no statistical/probability or tracking meaning; density may include unresolved results. Preserve individual editing through Points mode, keyboard sector selection and unchanged geometry under RTL/resizing. Reuse the court primitive without a charts/spatial-map import cycle.
 
 Keep header identity factual: Auth display strings are not membership roles, remote portraits are not implicitly loaded, and initials are an explicit fallback. Share links carry match/session/raw source time without granting access or copying local video. Invalid/unavailable explicit sessions must not fall back to a different analysis. Presentation relevance follows real clip/event evidence links; titles imply no relationship. Preserve menu Escape/focus return/outside dismissal and test deep-link relinking alongside event/edit routes.

@@ -1,5 +1,7 @@
 # SESEN / HBI continuation prompt
 
+Preserve per-cell player/keeper evidence, the separate pending-review action and interval period/clock/position/status disclosures. Analytics cards must not push other tabs' content down. Re-run the statistics component and console tests after changes, including exact evidence IDs and 375px Arabic overflow containment. Continue typography and remaining reference-state inspection; these metric controls alone do not complete the visual goal.
+
 Preserve the recorded-location maps in `spatial-sample.ts` and `SpatialMap`: fixed 5×2 sectors, exact event evidence, known-location percentage denominators, valid 0/1 boundaries and explicit invalid/missing coordinates. Density glow is visual only and includes unresolved observations; never call it a trajectory, attack direction or probability model. Individual editing remains under Points mode. Verify pointer/keyboard sector samples and unchanged coordinates in Arabic before continuing typography/reference refinement.
 
 The header identity/share revision uses bounded Auth display text, actual membership roles, a real pending-sync bell and linked Presentation selection. Share URLs preserve explicit session and raw source time, without transferring video or granting access. Keep invalid/unavailable explicit sessions distinct from primary analysis. Test clipboard contents, source relink at the selected time, old event/edit links, menu Escape/outside/focus and responsive/RTL rendering. Read the updated reference audit; these controls are progress, not proof of full visual parity.

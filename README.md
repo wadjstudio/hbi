@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence (HBI V1 foundation)
 
+Player metrics open their exact reviewed/pending/keeper event samples. Verified-minute disclosures show period, actual position, clock bounds and verification status; incomplete intervals stay unknown. Summary cards belong to Analytics, and narrow player tables scroll within their own keyboard-focusable region.
+
 The optional local tools also prepare dense source-verified annotation sequences, correct/add missed person and ball boxes, resume human review through validated JSON, and export review-only COCO plus explicit-sample ball diagnostics. The 12-second CPU probe remains unsuitable for reliable automatic ball tracking; specialist model evaluation, expert annotations and media rights clearance remain pending. See [local review instructions](tools/local-analysis/README.md).
 
 Optional local analysis now includes a separate eight-frame spatial review: generic ball proposals/overlapping crops, jersey-colour correction, manual normalized ball points and frame-bound ground calibration validation. Actual CPU tests exposed weak generic ball coverage and costly tiling; there is no continuous ball tracking or automatic tactical understanding. See [local tools](tools/local-analysis/README.md) and [measured validation](VALIDATION.md). Production video selection still does not run this engine.

@@ -744,6 +744,11 @@
     flex-basis: 100%;
   }
 }
+.video-workspace,
+.video-workspace > [role="tabpanel"],
+.session-statistics {
+  min-width: 0;
+}
 .session-statistics {
   background: linear-gradient(130deg, #07191e, #061015);
   border: 1px solid var(--border);
@@ -813,6 +818,16 @@
   border: 1px solid var(--border);
   border-radius: 5px;
 }
+.session-table-hint {
+  display: none;
+}
+@media (max-width: 1199px) {
+  .session-table-hint {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+}
 .session-stat-table table {
   width: 100%;
   min-width: 740px;
@@ -853,6 +868,49 @@
 .session-player-name .sesen-player-avatar {
   width: 30px;
   height: 34px;
+}
+.session-player-name .player-review-count {
+  display: block;
+  padding: 3px 0;
+  margin-top: 3px;
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 400;
+}
+.player-stints > summary {
+  cursor: pointer;
+  color: var(--sesen-cyan);
+  min-height: 32px;
+  white-space: nowrap;
+}
+.player-stints[open] {
+  min-width: 240px;
+  max-width: 320px;
+}
+.player-stints p {
+  white-space: normal;
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 1.6;
+}
+.player-stints ul {
+  margin: 8px 0;
+  padding: 0;
+  list-style: none;
+}
+.player-stints li {
+  display: grid;
+  gap: 4px;
+  padding-block: 8px;
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 1199px) {
+  .player-stints > summary,
+  .session-player-name .player-review-count {
+    min-height: 44px;
+  }
 }
 .position-metrics > summary {
   color: var(--sesen-gold);

@@ -1557,23 +1557,25 @@ export function VideoWorkspace({
           </Tabs.Trigger>
         ))}
       </Tabs.List>
-      <MatchDashboard
-        teamId={
-          teams.some((t) => t.id === focusTeam)
-            ? focusTeam
-            : teams[1]?.id || teams[0]?.id || ""
-        }
-        events={filtered}
-        shots={shots}
-        possessions={
-          filter !== "all" || participantFilter
-            ? possessions.filter((p) =>
-                filtered.some((e) => e.possession_id === p.id),
-              )
-            : possessions
-        }
-        onEvidence={showEvidence}
-      />
+      {tab === "analytics" && (
+        <MatchDashboard
+          teamId={
+            teams.some((t) => t.id === focusTeam)
+              ? focusTeam
+              : teams[1]?.id || teams[0]?.id || ""
+          }
+          events={filtered}
+          shots={shots}
+          possessions={
+            filter !== "all" || participantFilter
+              ? possessions.filter((p) =>
+                  filtered.some((e) => e.possession_id === p.id),
+                )
+              : possessions
+          }
+          onEvidence={showEvidence}
+        />
+      )}
       <details className="event-editor" open={editorOpen || Boolean(editId)}>
         <summary
           onClick={(e) => {

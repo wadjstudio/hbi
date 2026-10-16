@@ -1,5 +1,7 @@
 # SESEN / HBI V1 phases and acceptance gates
 
+Player-detail follow-up adds exact reviewed/pending/keeper metric evidence and native interval disclosures. Gates: exact denominator event IDs, excluded empty goals/misses/blocks/pending keeper shots, complete versus open/unverified/missing intervals, Analytics-only summaries and contained 375px Arabic table scrolling. Reference typography and remaining per-view audits are still open.
+
 Location-map follow-up: shared density/points modes, recorded-coordinate validation, fixed sector samples and located-only turnover percentages are implemented. Gates must verify boundary/missing inputs, unique bin assignment, exact source events, pending-result inclusion, keyboard access, point editing and stable geometry in Arabic/responsive layouts. Full reference density/typography must still be inspected in populated screenshots; glow itself is not evidence of an automated tracking model.
 
 Header follow-up: actual account identity/role, Presentation relevance and authenticated match/session/time sharing are implemented. Acceptance checks clipboard bytes, explicit source/session entry, unavailable-session notice, relink at the selected time, menu dismissal/focus and existing responsive/RTL geometry. The bell exposes real pending sync/backup work; it is not a fabricated messaging service. Finish remaining typography, data-driven map composition, metric drill-down and per-view visual audits before closing reference parity.

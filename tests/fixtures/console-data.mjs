@@ -267,6 +267,28 @@ export function consoleData({
     analysis_sessions: [session, secondary, historicalSession],
     videos: [...(video.id ? [video] : []), historicalVideo],
     players,
+    on_court_intervals: [
+      row(950, {
+        ...context,
+        team_id: away,
+        player_id: players[4].id,
+        position: "GK",
+        period: 1,
+        start_clock_ms: 0,
+        end_clock_ms: 30000,
+        verified: true,
+      }),
+      row(951, {
+        ...context,
+        team_id: away,
+        player_id: players[4].id,
+        position: "GK",
+        period: 2,
+        start_clock_ms: 0,
+        end_clock_ms: null,
+        verified: false,
+      }),
+    ],
     match_roster: players.map((player, i) =>
       row(700 + i, {
         match_id: match.id,

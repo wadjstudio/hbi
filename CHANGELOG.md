@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Player metric evidence and on-court detail — 2026-10-16
+
+- Player reviewed attempts/efficiency and pending-attempt counts now open their exact event samples. Goalkeeper controls open only reviewed saves/goals faced, excluding misses, blocks and empty goals; turnover and aggregate evidence have player-specific accessible names.
+- Added inline on-court interval disclosures with period, actual position, game-clock bounds and verification/open status. Missing or incomplete intervals retain an unknown total, and recorded totals do not imply full-match coverage.
+- Added denominator/interval component tests and exact player/keeper event-ID browser checks. Player-table mobile/RTL captures and overflow checks extend the existing console journey. No dependency, migration, paid service or automatic analysis was added.
+- Restricted the five summary cards to Analytics so other selected tabs show their own content sooner. Added an explicit narrow-table scrolling hint and minimum-width containment to prevent page-wide overflow. Ignored local Supabase CLI link/branch state in source control; source packages already exclude these generated directories.
+
 ## Recorded-location density maps — 2026-10-16
 
 - Added a shared SVG density/points view for shot and turnover locations. Glow is drawn around actual normalized coordinates; fixed 5×2 sectors open their exact observation samples through mouse or keyboard.

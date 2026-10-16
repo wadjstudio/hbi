@@ -1,5 +1,14 @@
 # SESEN / HBI validation — 2026-10-16
 
+## Player metric evidence and interval detail — 2026-10-16
+
+- Initial focused component tests passed and isolated typecheck/native production build passed. An earlier focused test process expired during startup; its terminal exit was observed before retrying.
+- The first production-browser run passed exact player/keeper evidence IDs and the complete offline-video/meeting journey. Its new Arabic 375px player-table assertion exposed page-level horizontal overflow. Added minimum-width containment for the workspace/tab content; the unchanged overflow gate must pass on the final rebuilt source before this revision is accepted.
+- Final unit/lint/build/browser and publication results are appended after completion. No hosted data, schema, DNS or media mutation is required for this change. Full reference typography and visual parity remain open.
+- All 63 unit/component tests passed. Full lint passed on retry after the first process expired; the final modified component/browser/fixture files also passed targeted lint. Native production build with TypeScript passed after Analytics-only summary rendering and the mobile table hint were added. Both full production-mode Chrome journeys passed with retries disabled, including exact four-attempt/five-faced-event samples, closed/open keeper interval disclosure, missing player intervals, 375px Arabic page bounds and 44px interval controls. No behavior or geometry threshold was weakened.
+- Inspected the final populated player desktop capture and Arabic-mobile layout. Closed verified and open second-period keeper stints remain explicit, and the unknown total stays a dash. Analytics still measures summary bounds 739.91–931.38px at 1672×941. The fixture's statistics/intervals are synthetic and loopback-only; they do not describe the footage or enter production. Real Pages build/publication are recorded separately below.
+- Complete real-environment Pages build/package passed with the existing nonfatal bundler timing warnings. Target inspection verified the intended hosted Supabase project/domain, public-only configuration, AI disabled and absence of the loopback mock URL/key from client and Worker files. The generated Next declaration returned to its existing Vinext baseline. Production publication remains a separate step.
+
 ## Recorded-location density — 2026-10-16
 
 - All 60 domain/component tests passed, including coordinate boundaries, null/blank/nonfinite/malformed input, exact one-sector assignment and located-only denominators. Full lint passed after resolving a native HTML onSelect prop-name collision with the spatial selection callback. Final native/build/browser results follow after completion.

@@ -8,6 +8,8 @@ dist
 .npmrc
 .wrangler
 .supabase
+supabase/.temp/
+supabase/.branches/
 .cache
 *.tsbuildinfo
 *.zip

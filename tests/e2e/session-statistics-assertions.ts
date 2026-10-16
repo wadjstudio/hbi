@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { expect, type Page } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 export const verifySessionStatistics = async (page: Page) => {
   await page.getByRole("tab", { name: "Team stats", exact: true }).click();
@@ -31,11 +31,9 @@ export const verifySessionStatistics = async (page: Page) => {
     2,
   );
   await expect(
-    comparison
-      .locator("article")
-      .filter({
-        has: page.getByRole("heading", { name: "Away", exact: true }),
-      }),
+    comparison.locator("article").filter({
+      has: page.getByRole("heading", { name: "Away", exact: true }),
+    }),
   ).toContainText("22.2%");
   await page.getByRole("tab", { name: "Player stats", exact: true }).click();
   const players = page.getByRole("region", {
@@ -43,6 +41,7 @@ export const verifySessionStatistics = async (page: Page) => {
     exact: true,
   });
   await expect(players.getByRole("row")).toHaveCount(5);
+  await expect(page.locator(".match-dashboard")).toHaveCount(0);
   await expect(
     players.getByRole("row").filter({ hasText: "Fixture Back Test" }),
   ).toContainText("1 / 4");
@@ -54,6 +53,75 @@ export const verifySessionStatistics = async (page: Page) => {
       .locator("td")
       .first(),
   ).toHaveText("—");
+  const verifyPlayerEvidence = async (name: string, eventNumbers: number[]) => {
+    await players.getByRole("button", { name, exact: true }).click();
+    const evidence = page.getByRole("dialog", { name, exact: true });
+    await expect(evidence.locator("[data-event-id]")).toHaveCount(
+      eventNumbers.length,
+    );
+    for (const number of eventNumbers) {
+      const id = `a0000000-0000-4000-8000-${String(number).padStart(12, "0")}`;
+      await expect(evidence.locator(`[data-event-id="${id}"]`)).toHaveCount(1);
+    }
+    await page
+      .getByRole("button", { name: "Close evidence", exact: true })
+      .click();
+  };
+  await verifyPlayerEvidence(
+    "Fixture Back Test · Efficiency",
+    [201, 207, 213, 219],
+  );
+  await verifyPlayerEvidence(
+    "Fixture Away Keeper Test · Saves / faced",
+    [202, 206, 212, 216, 222],
+  );
+  const intervals = players.getByLabel(
+    "Fixture Back Test · On-court intervals",
+    { exact: true },
+  );
+  await intervals.click();
+  await expect(players.locator(".player-stints[open]")).toContainText(
+    "No recorded intervals.",
+  );
+  await intervals.click();
+  const keeperIntervals = players.getByLabel(
+    "Fixture Away Keeper Test · On-court intervals",
+    { exact: true },
+  );
+  await keeperIntervals.click();
+  const stints = players.locator(".player-stints[open]");
+  await expect(stints).toContainText("Period 1 · GK");
+  await expect(stints).toContainText("0:00 – 0:30");
+  await expect(stints).toContainText("Open interval");
+  await expect(keeperIntervals).toContainText("—");
+  const viewport = page.viewportSize()!;
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await page.screenshot({
+    path: test.info().outputPath("player-statistics-desktop.png"),
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "العربية", exact: true }).click();
+  await page.setViewportSize({ width: 375, height: 844 });
+  const arabicPlayers = page.locator('[data-slot="session-statistics"]');
+  await arabicPlayers.scrollIntoViewIfNeeded();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  expect(
+    (await arabicPlayers
+      .locator(".player-stints > summary")
+      .first()
+      .boundingBox())!.height,
+  ).toBeGreaterThanOrEqual(44);
+  await page.screenshot({
+    path: test.info().outputPath("player-statistics-arabic-mobile.png"),
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "English", exact: true }).click();
+  await page.setViewportSize(viewport);
+  await keeperIntervals.click();
   await page.getByRole("tab", { name: "Reports", exact: true }).click();
   const report = page.getByRole("region", {
     name: "Current session report",
@@ -85,4 +153,5 @@ export const verifySessionStatistics = async (page: Page) => {
   await expect(page.locator(".analysis-split")).toBeHidden();
   await page.emulateMedia({ media: "screen" });
   await page.getByRole("tab", { name: "Analytics", exact: true }).click();
+  await expect(page.locator(".match-dashboard")).toBeVisible();
 };

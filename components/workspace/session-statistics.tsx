@@ -17,6 +17,7 @@ import {
   shotSummary,
 } from "@/lib/analytics/metrics";
 import { s, type Row } from "@/types/workspace";
+import { formatTime } from "@/lib/video/time";
 import { download, useWorkspace } from "./provider";
 import { rowLabel } from "./controls";
 import { BrandLockup, PlayerAvatar } from "@/components/brand/brand-lockup";
@@ -181,6 +182,12 @@ export const SessionStatistics = ({
       {(view === "teams" || view === "reports") && metricGrid}
       {view === "players" && (
         <>
+          <p className="session-table-hint">
+            {w.t(
+              "مرّر الجدول أفقيًا لعرض المقاييس والأدلة، أو ركّز عليه واستخدم أسهم لوحة المفاتيح.",
+              "Scroll the table horizontally for metrics and evidence, or focus it and use the arrow keys.",
+            )}
+          </p>
           <div
             className="session-stat-table"
             tabIndex={0}
@@ -230,6 +237,24 @@ export const SessionStatistics = ({
                     (sh) => sh.goalkeeper_id === id,
                   );
                   const keeper = keeperSummary(faced, id);
+                  const attemptEvents = (rows: Row[]) => {
+                    const ids = new Set(rows.map((sh) => s(sh.event_id)));
+                    return sample.events.filter((e) => ids.has(e.id));
+                  };
+                  const reviewed = attempts.filter(
+                    (sh) => !sh.review_required && sh.result !== "unknown",
+                  );
+                  const keeperEvents = attemptEvents(
+                    faced.filter(
+                      (sh) =>
+                        !sh.review_required &&
+                        !sh.empty_goal &&
+                        ["save", "goal"].includes(s(sh.result)),
+                    ),
+                  );
+                  const playerName = player ? rowLabel(player) : id.slice(0, 8);
+                  const openPlayerMetric = (label: string, rows: Row[]) =>
+                    onEvidence(`${playerName} · ${label}`, rows);
                   const observed = [
                     ...new Set(
                       [
@@ -262,24 +287,66 @@ export const SessionStatistics = ({
                           <PlayerAvatar number={s(player?.shirt_number)} />
                           <span>
                             {player ? rowLabel(player) : id.slice(0, 8)}
-                            <small>
+                            <button
+                              className="player-review-count"
+                              aria-label={`${playerName} · ${w.t("تصويبات للمراجعة", "Attempts to review")}`}
+                              disabled={!summary.pending}
+                              onClick={() =>
+                                openPlayerMetric(
+                                  w.t("تصويبات للمراجعة", "Attempts to review"),
+                                  attemptEvents(
+                                    attempts.filter(
+                                      (sh) => !reviewed.includes(sh),
+                                    ),
+                                  ),
+                                )
+                              }
+                            >
                               {summary.pending} {w.t("للمراجعة", "to review")}
-                            </small>
+                            </button>
                           </span>
                         </div>
                       </th>
                       <td>{observed.join(" / ") || "—"}</td>
                       <td>
-                        {summary.goals} / {summary.sample}
+                        <button
+                          aria-label={`${playerName} · ${w.t("أهداف / محاولات مراجعة", "Goals / reviewed attempts")}`}
+                          disabled={!reviewed.length}
+                          onClick={() =>
+                            openPlayerMetric(
+                              w.t(
+                                "أهداف / محاولات مراجعة",
+                                "Goals / reviewed attempts",
+                              ),
+                              attemptEvents(reviewed),
+                            )
+                          }
+                        >
+                          {summary.goals} / {summary.sample}
+                        </button>
                       </td>
-                      <td>{percent(summary.efficiency)}</td>
                       <td>
                         <button
+                          aria-label={`${playerName} · ${w.t("الكفاءة", "Efficiency")}`}
+                          disabled={!reviewed.length}
+                          onClick={() =>
+                            openPlayerMetric(
+                              w.t("الكفاءة", "Efficiency"),
+                              attemptEvents(reviewed),
+                            )
+                          }
+                        >
+                          {percent(summary.efficiency)}
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          aria-label={`${playerName} · ${w.t("فقد الكرة", "Turnovers")}`}
                           disabled={
                             !actions.some((e) => e.event_type === "turnover")
                           }
                           onClick={() =>
-                            onEvidence(
+                            openPlayerMetric(
                               w.t("فقد الكرة", "Turnovers"),
                               actions.filter(
                                 (e) => e.event_type === "turnover",
@@ -293,14 +360,80 @@ export const SessionStatistics = ({
                           }
                         </button>
                       </td>
-                      <td>{minutes == null ? "—" : minutes.toFixed(1)}</td>
                       <td>
-                        {keeper.sample
-                          ? `${keeper.saves}/${keeper.sample} · ${percent(keeper.percentage)}`
-                          : "—"}
+                        <details
+                          className="player-stints"
+                          data-slot="player-stints"
+                        >
+                          <summary
+                            aria-label={`${playerName} · ${w.t("فترات اللعب", "On-court intervals")}`}
+                          >
+                            {minutes == null ? "—" : minutes.toFixed(1)}
+                            <small>
+                              {stints.length} {w.t("فترة", "intervals")}
+                            </small>
+                          </summary>
+                          <p>
+                            {w.t(
+                              "زمن المباراة حسب الشوط. الإجمالي متاح فقط عندما تكون كل الفترات مغلقة ومؤكدة؛ لا يثبت اكتمال تسجيل المباراة.",
+                              "Game clock by period. Total requires every interval to be closed and verified; it does not confirm full-match coverage.",
+                            )}
+                          </p>
+                          {!stints.length && (
+                            <p>
+                              {w.t(
+                                "لا توجد فترات مسجلة.",
+                                "No recorded intervals.",
+                              )}
+                            </p>
+                          )}
+                          <ul>
+                            {stints.map((stint) => (
+                              <li key={stint.id} data-interval-id={stint.id}>
+                                <b>
+                                  {w.t("شوط", "Period")} {s(stint.period)} ·{" "}
+                                  {s(stint.position) || "—"}
+                                </b>
+                                <span dir="ltr">
+                                  {formatTime(Number(stint.start_clock_ms))} –{" "}
+                                  {stint.end_clock_ms == null
+                                    ? "…"
+                                    : formatTime(Number(stint.end_clock_ms))}
+                                </span>
+                                <small>
+                                  {stint.end_clock_ms == null
+                                    ? w.t("فترة مفتوحة", "Open interval")
+                                    : stint.verified
+                                      ? w.t("مؤكدة", "Verified")
+                                      : w.t(
+                                          "تحتاج التحقق",
+                                          "Needs verification",
+                                        )}
+                                </small>
+                              </li>
+                            ))}
+                          </ul>
+                        </details>
                       </td>
                       <td>
                         <button
+                          aria-label={`${playerName} · ${w.t("تصديات / مواجهات", "Saves / faced")}`}
+                          disabled={!keeperEvents.length}
+                          onClick={() =>
+                            openPlayerMetric(
+                              w.t("تصديات / مواجهات", "Saves / faced"),
+                              keeperEvents,
+                            )
+                          }
+                        >
+                          {keeper.sample
+                            ? `${keeper.saves}/${keeper.sample} · ${percent(keeper.percentage)}`
+                            : "—"}
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          aria-label={`${playerName} · ${w.t("كل الأدلة", "All evidence")}`}
                           disabled={!supporting.length}
                           onClick={() =>
                             onEvidence(
@@ -319,6 +452,12 @@ export const SessionStatistics = ({
               </tbody>
             </table>
           </div>
+          <p className="session-sample-note">
+            {w.t(
+              "أدلة الكفاءة تشمل المحاولات المراجعة فقط. نسبة الحارس = التصديات ÷ (التصديات + الأهداف المستقبلة)، وتستبعد الإهدار والحجب والمرمى الخالي والمحاولات المعلقة.",
+              "Efficiency evidence includes reviewed attempts only. Keeper save rate = saves ÷ (saves + goals conceded), excluding misses, blocks, empty goals and pending attempts.",
+            )}
+          </p>
           {!playerIds.length && (
             <p>
               {w.t(

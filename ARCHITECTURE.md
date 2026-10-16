@@ -10,6 +10,8 @@ The provider exposes bounded account display text from Supabase Auth and clears 
 
 ## Match workspace statistics — 16 October 2026
 
+Player metric evidence is computed from the already scoped session sample: reviewed attempts for shooting rates, pending attempts separately, and reviewed non-empty-goal saves/goals for keepers. Inline interval disclosures use period/game-clock bounds and actual positions; they do not infer source-video seeks or full-match coverage. Analytics summary cards are absent from other tab views; grid minimum-width containment keeps the player table's horizontal scrolling local.
+
 The match tab strip now exposes Analytics, Lineups, Events, Player stats, Team stats, Comparison and Reports, alongside annotation/review tools. `features/analysis/session-statistics.ts` scopes every input to organization/match/session and attaches event evidence to team metrics. `components/workspace/session-statistics.tsx` composes roster/shooter/goalkeeper samples, observed match positions, verified interval minutes, side-by-side teams and a filter-bound report. CSV uses the existing audited export with stable IDs/raw time; browser print hides the video/editor and retains the report values. No remote inference, service, dependency or migration was added. Deployment authority is DEPLOYMENT.md: the merged storage-hardening release verified migrations through 0020; earlier user-reported 0019 references are historical.
 
 ## Dense annotation boundary
