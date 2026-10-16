@@ -1,0 +1,83 @@
+/* Reference typography: compact sports labels, readable samples, stable numeric columns. */
+body {
+  font-kerning: normal;
+}
+.sesen-shell {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.sesen-shell .sidebar nav a:not([data-secondary]),
+.mobile-navigation nav a {
+  font-size: 16px;
+  line-height: 1.25;
+}
+.sesen-shell .sidebar nav a[data-secondary] {
+  font-size: 12px;
+}
+.session-rail .intelligence-heading h2 {
+  font-size: 19px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+.session-rail .intelligence-section h3,
+.dashboard-card h3 {
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+.session-rail .threat-row b,
+.session-rail .pattern-row,
+.dashboard-card .dashboard-player {
+  font-size: 13px;
+}
+.session-rail .intelligence-section small,
+.session-rail .chart-method,
+.dashboard-card small {
+  font-size: 12px;
+  line-height: 1.3;
+}
+.session-rail .threat-profile svg {
+  height: 108px;
+}
+.threat-profile svg text {
+  font-family: inherit;
+  font-size: 22px;
+  font-weight: 400;
+}
+.session-stat-table table {
+  font-size: 13px;
+}
+.video-workspace > .tabs [role="tab"] {
+  font-size: 14px;
+  line-height: 1.2;
+}
+@media (min-width: 1200px) {
+  .match-header-slot .context-score strong {
+    font-size: 32px;
+    font-weight: 600;
+  }
+  .match-header-slot .match-context-meta > strong {
+    font-size: 15px;
+  }
+  .video-workspace .quick-tag-buttons > button,
+  .video-workspace .tag-transition > select {
+    font-size: 13px;
+    line-height: 1.2;
+  }
+  .analysis-split .workbench-filters button {
+    font-size: 12px;
+    line-height: 1.2;
+  }
+  .session-rail .intelligence-scope button {
+    font-size: 12px;
+    line-height: 1.2;
+  }
+}
+html[lang="ar"] .session-rail .intelligence-section h3,
+html[lang="ar"] .dashboard-card h3 {
+  font-size: 13px;
+  line-height: 1.45;
+}
+html[lang="ar"] .session-rail .intelligence-section small,
+html[lang="ar"] .dashboard-card small {
+  line-height: 1.55;
+}

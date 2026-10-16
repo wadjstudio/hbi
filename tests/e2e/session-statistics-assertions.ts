@@ -96,6 +96,7 @@ export const verifySessionStatistics = async (page: Page) => {
   await expect(keeperIntervals).toContainText("—");
   const viewport = page.viewportSize()!;
   await page.setViewportSize({ width: 1672, height: 941 });
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
     path: test.info().outputPath("player-statistics-desktop.png"),
     fullPage: true,

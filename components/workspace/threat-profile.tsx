@@ -38,7 +38,7 @@ export function ThreatProfile({
         <small>n={profile.sample}</small>
       </header>
       <svg
-        viewBox="0 0 280 220"
+        viewBox="-20 0 320 204"
         role="img"
         aria-label={w.t("توزيع مناطق التصويب", "Shot origin distribution")}
       >

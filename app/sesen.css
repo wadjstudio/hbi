@@ -88,8 +88,9 @@ html:root {
   --sesen-gold: #d8b57b;
   --sesen-gold-deep: #967042;
   --sesen-ivory: #f4f1e8;
-  --sesen-font: Inter, "Segoe UI", Arial, sans-serif;
-  --sesen-arabic-font: Cairo, Tahoma, Arial, sans-serif;
+  --sesen-font: "Roboto Condensed", "Segoe UI", Arial, sans-serif;
+  --sesen-arabic-font:
+    "IBM Plex Sans Arabic", "Roboto Condensed", Tahoma, Arial, sans-serif;
   --sesen-header-height: 80px;
   --sesen-sidebar-width: 192px;
   --bg: var(--sesen-bg);

@@ -1,5 +1,7 @@
 # SESEN / HBI Codex Rules
 
+Preserve the self-hosted WOFF2 faces, full OFL notices and provenance manifest. Font CSS must remain local-only; update asset hashes/filenames deliberately when changing distributions. Run `node scripts/verify-fonts.mjs` and browser family/weight checks when modifying typography. Keep `/fonts/*` static in Pages, readable SVG labels and unchanged 1672×941 geometry gates; font load success alone does not establish visual parity.
+
 Keep player metric drill-down exact: efficiency/reviewed attempts, pending attempts and keeper saves/goals each have their own event sample. Preserve interval verification/open states and unknown totals; do not convert game-clock interval bounds to video timestamps without calibration. Summary cards belong only to Analytics. Test player tables at 375px Arabic with page overflow prohibited and table-local horizontal scrolling retained.
 
 Spatial views must validate both normalized coordinates, preserve 0/1 boundaries and exclude absent/blank/invalid values instead of coercing them to zero. Keep fixed-sector evidence exact, percentages scoped to located observations and missing coverage visible. Glow has no statistical/probability or tracking meaning; density may include unresolved results. Preserve individual editing through Points mode, keyboard sector selection and unchanged geometry under RTL/resizing. Reuse the court primitive without a charts/spatial-map import cycle.

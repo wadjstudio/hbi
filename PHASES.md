@@ -1,5 +1,7 @@
 # SESEN / HBI V1 phases and acceptance gates
 
+Typography follow-up bundles official Roboto Condensed/IBM Plex Sans Arabic WOFF2 assets and OFL notices. Gates cover exact local hashes, same-origin loading at 400/500/600/700, static Pages font delivery, readable radar labels and populated desktop/Arabic/mobile captures. The initial enlarged canvas failed first-screen geometry; its compact final framing retains readable labels and the original acceptance thresholds. Remaining per-view/reference audit still applies.
+
 Player-detail follow-up adds exact reviewed/pending/keeper metric evidence and native interval disclosures. Gates: exact denominator event IDs, excluded empty goals/misses/blocks/pending keeper shots, complete versus open/unverified/missing intervals, Analytics-only summaries and contained 375px Arabic table scrolling. Reference typography and remaining per-view audits are still open.
 
 Location-map follow-up: shared density/points modes, recorded-coordinate validation, fixed sector samples and located-only turnover percentages are implemented. Gates must verify boundary/missing inputs, unique bin assignment, exact source events, pending-result inclusion, keyboard access, point editing and stable geometry in Arabic/responsive layouts. Full reference density/typography must still be inspected in populated screenshots; glow itself is not evidence of an automated tracking model.

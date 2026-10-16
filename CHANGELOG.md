@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Self-hosted sports typography — 2026-10-16
+
+- Added six unmodified official WOFF2 assets: variable Roboto Condensed for Latin/extended Latin and IBM Plex Sans Arabic at 400/500/600/700 for Arabic. Bundled complete OFL notices and a URL/size/SHA256 provenance manifest; no runtime font CDN, package dependency or paid service.
+- Added a final typography layer for stronger navigation, card/tab headings, readable sample text, stable numeric columns and larger radar labels. Adjusted the radar canvas to retain label margins without changing its data or scale.
+- Pages validates font/license bytes, includes them in the static bundle and bypasses the Worker for /fonts/*. Browser acceptance explicitly loads both families at all four weights from the application origin before its responsive/RTL journeys.
+
 ## Player metric evidence and on-court detail — 2026-10-16
 
 - Player reviewed attempts/efficiency and pending-attempt counts now open their exact event samples. Goalkeeper controls open only reviewed saves/goals faced, excluding misses, blocks and empty goals; turnover and aggregate evidence have player-specific accessible names.

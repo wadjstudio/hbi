@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence (HBI V1 foundation)
 
+SESEN now bundles its display fonts locally: Roboto Condensed for English/numbers and IBM Plex Sans Arabic for Arabic. Six WOFF2 files total about 263 KB, with complete OFL notices and provenance in `public/fonts`. No runtime Google Fonts connection is needed; see [brand typography](brand/BRAND.md).
+
 Player metrics open their exact reviewed/pending/keeper event samples. Verified-minute disclosures show period, actual position, clock bounds and verification status; incomplete intervals stay unknown. Summary cards belong to Analytics, and narrow player tables scroll within their own keyboard-focusable region.
 
 The optional local tools also prepare dense source-verified annotation sequences, correct/add missed person and ball boxes, resume human review through validated JSON, and export review-only COCO plus explicit-sample ball diagnostics. The 12-second CPU probe remains unsuitable for reliable automatic ball tracking; specialist model evaluation, expert annotations and media rights clearance remain pending. See [local review instructions](tools/local-analysis/README.md).

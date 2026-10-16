@@ -15,6 +15,7 @@ Do not substitute invented players, team crests, league averages or match scores
 
 ## Composition
 
+- Typography: self-host Roboto Condensed for English/numbers and IBM Plex Sans Arabic for Arabic, with existing system fallbacks. Use 16px primary navigation, 19px intelligence heading, 14px card/tab headings and 12px sample text; preserve clear numeric columns with tabular figures. Keep full OFL notices and font provenance. Inspect actual loaded-font states in both languages before accepting fit; do not pass geometry checks through clipped labels or smaller unreadable text.
 - Desktop: approximately 195px navigation, compact match header, resizable
   58/42 video/intelligence split, timeline and recording controls under the video.
   Fit workspace bounds the desktop media plane to viewport height inside a matte;

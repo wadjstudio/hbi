@@ -3,6 +3,7 @@ import { verifyHistoricalEvidence } from "./history-assertions";
 import { verifySessionStatistics } from "./session-statistics-assertions";
 import { verifyHeader } from "./header-assertions";
 import { verifySpatialMaps } from "./spatial-map-assertions";
+import { verifyTypography } from "./typography-assertions";
 test("analysis console supports resizing, focus, keyboard tabs and narrow screens", async ({
   page,
   request,
@@ -10,6 +11,7 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
   test.setTimeout(300000);
   await page.setViewportSize({ width: 1560, height: 900 });
   await page.goto("/login");
+  await verifyTypography(page);
   await page.getByLabel("Email").fill("coach@example.test");
   await page.getByLabel("Password").fill("test-password");
   await page.getByRole("button", { name: "Enter SESEN" }).click();

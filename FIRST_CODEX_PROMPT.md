@@ -1,5 +1,7 @@
 # SESEN / HBI continuation prompt
 
+Keep the local Roboto Condensed/IBM Plex Sans Arabic fonts and final hierarchy in app/typography.css. Font files are official unmodified WOFF2 distributions with manifest hashes and full OFL notices; never replace them with runtime CDN imports. Verify loaded family/weight behavior, static Pages delivery and actual Arabic/English screenshots after font changes. Continue the remaining reference audit rather than declaring completion from font or geometry checks alone.
+
 Preserve per-cell player/keeper evidence, the separate pending-review action and interval period/clock/position/status disclosures. Analytics cards must not push other tabs' content down. Re-run the statistics component and console tests after changes, including exact evidence IDs and 375px Arabic overflow containment. Continue typography and remaining reference-state inspection; these metric controls alone do not complete the visual goal.
 
 Preserve the recorded-location maps in `spatial-sample.ts` and `SpatialMap`: fixed 5×2 sectors, exact event evidence, known-location percentage denominators, valid 0/1 boundaries and explicit invalid/missing coordinates. Density glow is visual only and includes unresolved observations; never call it a trajectory, attack direction or probability model. Individual editing remains under Points mode. Verify pointer/keyboard sector samples and unchanged coordinates in Arabic before continuing typography/reference refinement.

@@ -1,5 +1,13 @@
 # SESEN / HBI validation — 2026-10-16
 
+## Self-hosted sports typography — 2026-10-16
+
+- Verified six official unmodified WOFF2 files (263,488 bytes), complete OFL notices, expected font headers/lengths/SHA256 and local-only runtime CSS. Provenance is public/fonts/manifest.json; the pinned repository commits identify license snapshots, not a reproducible-build claim.
+- The initial native production build with TypeScript passed. Browser font loading and the full video/offline/meeting journey passed, but the console's unchanged 1672×941 first-screen gate rejected summary top 761.75px. Reduced excess radar canvas height and enlarged its internal labels/margins rather than weakening the gate or shrinking sample text. Final acceptance/build/publication results follow after completion.
+- Final native Next build with TypeScript passed; both complete production-mode Chrome journeys passed with retries disabled. Font acceptance loaded real Roboto Condensed and IBM Plex Sans Arabic faces at 400/500/600/700 plus extended Latin and checked same-origin font requests. Existing exact evidence samples, offline/relink/meeting behavior, responsive bounds and RTL geometry passed unchanged. Inspected the loaded-font English and Arabic populated captures; summary bounds are 745.75–936.23px at 1672×941. Synthetic sample statistics remain explicitly unrelated to the footage.
+- Full lint, all 63 unit/component tests and explicit isolated typecheck passed. Real-environment Pages build and publication checks follow after completion. Font acquisition was a one-time build-asset preparation from official distribution endpoints; it does not create a runtime external request or add a dependency/service.
+- Real-environment Pages build/package passed, including the font verifier and copied-font/license existence checks, with existing nonfatal bundler timing warnings. Target scan confirmed the intended hosted project/domain, public-only configuration, AI disabled and no mock URL/key in client/Worker assets. The generated Next declaration returned to its existing Vinext baseline. Publication and deployed font byte/MIME verification remain separate steps.
+
 ## Player metric evidence and interval detail — 2026-10-16
 
 - Initial focused component tests passed and isolated typecheck/native production build passed. An earlier focused test process expired during startup; its terminal exit was observed before retrying.

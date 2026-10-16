@@ -1,8 +1,9 @@
-import { cp, mkdir, rm, writeFile, access, realpath } from 'node:fs/promises';
+import { cp, mkdir, rm, writeFile, readFile, access, realpath } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadEnv } from 'vite';
+import './verify-fonts.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const output = resolve(root, 'dist/pages');
@@ -22,6 +23,10 @@ await cp(resolve(root, 'dist/client'), output, { recursive: true });
 for (const asset of ['manifest.webmanifest', 'favicon.ico', 'brand/sesen-lockup.webp', 'brand/icon-192.png', 'brand/maskable-512.png', 'brand/apple-touch-icon.png']) {
   await access(resolve(output, asset));
 }
+const fonts = JSON.parse(await readFile(resolve(root, 'public/fonts/manifest.json'), 'utf8'));
+for (const item of [...fonts.faces, ...fonts.licenses]) {
+  await access(resolve(output, 'fonts', item.file));
+}
 // Resolve pnpm's symlink before loading Wrangler's own bundled build dependency.
 const require = createRequire(await realpath(resolve(root, 'node_modules/wrangler/package.json')));
 const { build } = require('esbuild');
@@ -32,7 +37,7 @@ await build({
   external: ['node:*', 'cloudflare:*'], target: 'es2022', minify: true,
 });
 await writeFile(resolve(output, '_routes.json'), JSON.stringify({
-  version: 1, include: ['/*'], exclude: ['/_next/static/*', '/favicon.ico', '/icons/*', '/brand/*', '/manifest.webmanifest'],
+  version: 1, include: ['/*'], exclude: ['/_next/static/*', '/favicon.ico', '/icons/*', '/brand/*', '/fonts/*', '/manifest.webmanifest'],
 }, null, 2));
 await writeFile(resolve(output, 'wrangler.json'), JSON.stringify({
   name: 'hbi-handball-intelligence', pages_build_output_dir: '.',

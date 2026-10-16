@@ -1,5 +1,13 @@
 HBI analysis-console UI additions
 
+Self-hosted webfonts (separate from the MIT packages below):
+Roboto Condensed — Copyright 2011 The Roboto Project Authors.
+IBM Plex Sans Arabic — Copyright 2017 IBM Corp.; Reserved Font Name "Plex".
+Both use SIL Open Font License 1.1. Full notices are served at:
+/fonts/licenses/robotocondensed-OFL.txt
+/fonts/licenses/ibmplexsansarabic-OFL.txt
+Distribution URLs and hashes: /fonts/manifest.json. Official WOFF2 files are unmodified.
+
 react-resizable-panels 4.14.2
 https://github.com/bvaughn/react-resizable-panels
 Copyright (c) 2018 Brian Vaughn

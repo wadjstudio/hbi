@@ -37,10 +37,12 @@ hbi-starter/
   .github/workflows/ci.yml
   app/analyst-console.css
   app/coaching-console.css
+  app/fonts.css
   app/globals.css
   app/layout.tsx
   app/page.tsx
   app/sesen.css
+  app/typography.css
   app/workbench.css
   app/(auth)/login/login-form.tsx
   app/(auth)/login/page.tsx
@@ -196,12 +198,22 @@ hbi-starter/
   public/brand/placeholders/coach-neutral.svg
   public/brand/placeholders/player-neutral.svg
   public/brand/placeholders/team-neutral.svg
+  public/fonts/ibm-plex-sans-arabic-arabic-400.woff2
+  public/fonts/ibm-plex-sans-arabic-arabic-500.woff2
+  public/fonts/ibm-plex-sans-arabic-arabic-600.woff2
+  public/fonts/ibm-plex-sans-arabic-arabic-700.woff2
+  public/fonts/manifest.json
+  public/fonts/roboto-condensed-latin-400-700.woff2
+  public/fonts/roboto-condensed-latin-ext-400-700.woff2
+  public/fonts/licenses/ibmplexsansarabic-OFL.txt
+  public/fonts/licenses/robotocondensed-OFL.txt
   scripts/.gitkeep
   scripts/build-brand-assets.mjs
   scripts/build-pages.mjs
   scripts/catalog-types.mjs
   scripts/mock-supabase.mjs
   scripts/verify-db.mjs
+  scripts/verify-fonts.mjs
   scripts/verify-package.py
   scripts/verify-wikidata-live.mjs
   stores/.gitkeep
@@ -241,6 +253,7 @@ hbi-starter/
   tests/e2e/session-statistics-assertions.ts
   tests/e2e/smoke.spec.ts
   tests/e2e/spatial-map-assertions.ts
+  tests/e2e/typography-assertions.ts
   tests/e2e/video.spec.ts
   tests/e2e/workflow.spec.ts
   tests/fixtures/console-data.mjs

@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
+import "./fonts.css";
 import "./globals.css";
 import "./analyst-console.css";
 import "./sesen.css";
 import "./coaching-console.css";
+import "./typography.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
