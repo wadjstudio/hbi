@@ -64,5 +64,29 @@ export const verifyHeader = async (page: Page) => {
         page.locator("video").evaluate((v: HTMLVideoElement) => v.currentTime),
       )
       .toBeCloseTo(12, 1);
+    await expect
+      .poll(() =>
+        page.locator("video").evaluate((video: HTMLVideoElement) => {
+          if (video.readyState < 2 || video.seeking || !video.videoWidth)
+            return false;
+          const canvas = document.createElement("canvas");
+          canvas.width = 16;
+          canvas.height = 9;
+          const context = canvas.getContext("2d")!;
+          context.drawImage(video, 0, 0, 16, 9);
+          const pixels = context.getImageData(0, 0, 16, 9).data;
+          const brightness: number[] = [];
+          for (let i = 0; i < pixels.length; i += 4)
+            brightness.push(pixels[i]! + pixels[i + 1]! + pixels[i + 2]!);
+          return Math.max(...brightness) - Math.min(...brightness) > 20;
+        }),
+      )
+      .toBe(true);
+    await page.evaluate(
+      () =>
+        new Promise<void>((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+        ),
+    );
   }
 };

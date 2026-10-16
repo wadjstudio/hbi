@@ -117,7 +117,11 @@ export function EvidenceDrawer({
               .find((p) => p.id === event.actor_player_id),
             team = w.list("teams").find((t) => t.id === event.team_id);
           return (
-            <article className="evidence-source" key={event.id}>
+            <article
+              className="evidence-source"
+              key={event.id}
+              data-event-id={event.id}
+            >
               <small className="evidence-origin">
                 {source ? (
                   <>

@@ -2,6 +2,7 @@ import { test, expect } from "./fixture";
 import { verifyHistoricalEvidence } from "./history-assertions";
 import { verifySessionStatistics } from "./session-statistics-assertions";
 import { verifyHeader } from "./header-assertions";
+import { verifySpatialMaps } from "./spatial-map-assertions";
 test("analysis console supports resizing, focus, keyboard tabs and narrow screens", async ({
   page,
   request,
@@ -215,6 +216,7 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
   await page
     .getByRole("button", { name: "Close evidence", exact: true })
     .click();
+  await verifySpatialMaps(page);
   await expect(
     page.getByRole("button", {
       name: "Turnover location evidence",

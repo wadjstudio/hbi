@@ -337,6 +337,11 @@ export function Analytics({
         </div>
         <ShotMap
           shots={shots}
+          onGroup={(rows) =>
+            setEvidence(
+              events.filter((e) => rows.some((sh) => sh.event_id === e.id)),
+            )
+          }
           onSelect={(sh) =>
             setEvidence(events.filter((e) => e.id === sh.event_id))
           }

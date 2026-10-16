@@ -26,9 +26,11 @@ export default defineConfig({
     },
     {
       command:
-        process.env.HBI_E2E_BUNDLER === "webpack"
-          ? `pnpm dev --webpack --port ${port}`
-          : `pnpm dev --port ${port}`,
+        process.env.HBI_E2E_SERVER_MODE === "production"
+          ? `pnpm exec next start --port ${port}`
+          : process.env.HBI_E2E_BUNDLER === "webpack"
+            ? `pnpm dev --webpack --port ${port}`
+            : `pnpm dev --port ${port}`,
       url: `${baseURL}/login`,
       reuseExistingServer: !process.env.CI,
       timeout: 600000,

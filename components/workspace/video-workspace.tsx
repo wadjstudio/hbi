@@ -2084,6 +2084,14 @@ export function VideoWorkspace({
               title={`${w.t("كفاءة التصويب", "Shot efficiency")} ${percent(summary.efficiency)} · n=${summary.sample}`}
             >
               <ShotMap
+                onGroup={(rows) =>
+                  showEvidence(
+                    w.t("عينة قطاع التصويب", "Shot location group"),
+                    events.filter((e) =>
+                      rows.some((sh) => sh.event_id === e.id),
+                    ),
+                  )
+                }
                 shots={shots.filter((shot) =>
                   filtered.some((event) => event.id === shot.event_id),
                 )}

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Recorded-location density maps — 2026-10-16
+
+- Added a shared SVG density/points view for shot and turnover locations. Glow is drawn around actual normalized coordinates; fixed 5×2 sectors open their exact observation samples through mouse or keyboard.
+- Turnover percentages use located observations as their denominator, with explicit located/total/missing coverage. Unknown/blank/nonfinite/out-of-range coordinates never become origin points. Zero and boundary coordinates remain valid.
+- Preserved per-shot/event evidence and editing through Points mode, stable normalized geometry under RTL/resizing and explicit missing-data/method disclosures. Density includes unresolved observations and does not imply movement, attack direction, success probability or automatic video analysis.
+- Reused the existing court asset and native SVG gradients; extracted the court primitive to avoid a module cycle. No runtime dependency, database migration or cloud processing was added.
+
 ## Header identity and source-position sharing — 2026-10-16
 
 - Replaced the settings-only account trigger with the signed-in account name/initials and actual organization role. Metadata is display text only; no remote portrait is loaded and no coach role is invented. Account identity clears on sign-out.

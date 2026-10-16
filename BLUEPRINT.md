@@ -1,5 +1,9 @@
 # SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
 
+## Evidence-linked location density — 16 October 2026
+
+Shot/turnover maps now support exact-coordinate density glow, fixed 5×2 sector samples and individual Points mode. Turnover sector shares use only known locations; missing/invalid coordinates remain explicit. Click/keyboard opens the supporting events and retains the existing editing path. Native SVG and the shipped court asset preserve normalized positions through resizing and RTL. This is a view of recorded observations, including unresolved results, with no inferred movement, attack direction, automatic analysis or probability claim. No external mapping service, dependency or schema was introduced.
+
 ## Header and analysis-context sharing — 16 October 2026
 
 The workstation header now includes actual signed-in identity and organization role, a pending-operation bell, relevant Presentation selection and Share. Menus use native keyboard behavior, outside dismissal and responsive bounds. A shared link preserves its explicit match/session/source time and remains authenticated; it does not publish observations, transfer local media or grant access. Relevant meetings are found through clips or event-linked insights. Account display metadata never defines permissions, and no coach portrait or notifications are fabricated. Full reference typography and per-metric interaction refinement remain separate audit work.

@@ -1,5 +1,6 @@
 import { shotSummary, ratio } from "@/lib/analytics/metrics";
 import { n, s, type Row } from "@/types/workspace";
+import { spatialSample } from "./spatial-sample";
 export type EvidenceTrendPoint = {
   value: number;
   sample: number;
@@ -83,15 +84,11 @@ export function matchDashboard(
   const resolved = closed.filter((p) => p.result != null),
     scoring = resolved.filter((p) => p.result === "goal");
   const turnovers = sample.filter((e) => e.event_type === "turnover");
-  const locatedTurnovers = turnovers.filter((e) =>
-    [e.shot_x, e.shot_y].every(
-      (v) =>
-        (typeof v === "number" || (typeof v === "string" && v.trim() !== "")) &&
-        Number.isFinite(Number(v)) &&
-        Number(v) >= 0 &&
-        Number(v) <= 1,
-    ),
-  );
+  const locatedTurnovers = spatialSample(
+    turnovers,
+    "shot_x",
+    "shot_y",
+  ).points.map((p) => p.row);
   const reviewed = attempts
     .filter(
       (shot) =>

@@ -1,5 +1,9 @@
 # SESEN / HBI Architecture
 
+## Spatial observation views — 16 October 2026
+
+`spatial-sample.ts` validates normalized recorded coordinates and assigns each located observation once to a fixed 5×2 sector. Missing/invalid values remain outside spatial denominators; 0/1 boundaries are preserved. `SpatialMap` uses the existing court asset/native SVG, exact-coordinate glow and keyboard/pointer sector evidence. Points mode retains individual event/shot selection; turnover shares use only located rows. Coordinates do not mirror with language. Methods make unresolved results, unknown positions and lack of trajectory/direction inference explicit. Scope remains supplied by the current session/historical filters; no data or video leaves the device for these views.
+
 ## Header context and scoped links — 16 October 2026
 
 The provider exposes bounded account display text from Supabase Auth and clears it on sign-out. Role labels remain sourced from organization membership; display metadata never controls authorization. `header-context.ts` builds encoded session/time URLs and resolves relevant presentations through scoped clip/event evidence. Match routes key their client workspace by event/session/time, restore valid positions on local relink and reject unavailable explicit sessions without substituting primary analysis. Native header disclosures preserve keyboard focus and dismiss on outside pointers; the notification-shaped trigger represents actual outbox state and reuses existing sync/backup behavior.

@@ -326,6 +326,12 @@ export function SessionAnalysisRail({
         </header>
         <ShotMap
           shots={attempts}
+          onGroup={(rows) =>
+            onEvidence(
+              w.t("عينة قطاع التصويب", "Shot location group"),
+              evidenceFor(rows),
+            )
+          }
           onSelect={(shot) =>
             onEvidence(
               w.t("دليل التصويبة", "Shot evidence"),
@@ -333,14 +339,6 @@ export function SessionAnalysisRail({
             )
           }
         />
-        <small>
-          {
-            attempts.filter(
-              (shot) => shot.court_x == null || shot.court_y == null,
-            ).length
-          }{" "}
-          {w.t("محاولة دون موقع", "attempts without a location")}
-        </small>
       </section>
       <section className="intelligence-section">
         <header>

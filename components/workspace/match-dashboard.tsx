@@ -7,13 +7,13 @@ import {
 } from "@/features/analysis/match-dashboard";
 import { analysisLabel } from "@/features/analysis/labels";
 import { percent } from "@/lib/analytics/metrics";
-import { n, s, type Row } from "@/types/workspace";
+import { s, type Row } from "@/types/workspace";
 import { useWorkspace } from "./provider";
 import { rowLabel } from "./controls";
 import { PlayerAvatar } from "@/components/brand/brand-lockup";
 import { brand } from "@/lib/brand";
 import { EvidenceTrend } from "./evidence-trend";
-import { Court } from "./charts";
+import { SpatialMap } from "./spatial-map";
 export function MatchDashboard({
   teamId,
   events,
@@ -183,44 +183,29 @@ export function MatchDashboard({
           <small>n={d.turnovers.length}</small>
         </header>
         <div className="turnover-court">
-          <Court>
-            {d.locatedTurnovers.map((event) => (
-              <circle
-                key={event.id}
-                cx={n(event.shot_x) * 1000}
-                cy={n(event.shot_y) * 500}
-                r="20"
-                className="turnover-point"
-                role="button"
-                tabIndex={0}
-                aria-label={w.t(
-                  "دليل موقع فقد الكرة",
-                  "Turnover location evidence",
-                )}
-                onClick={() =>
-                  onEvidence(w.t("موقع فقد الكرة", "Turnover location"), [
-                    event,
-                  ])
-                }
-                onKeyDown={(key) => {
-                  if (key.key === "Enter" || key.key === " ") {
-                    key.preventDefault();
-                    onEvidence(w.t("موقع فقد الكرة", "Turnover location"), [
-                      event,
-                    ]);
-                  }
-                }}
-              />
-            ))}
-          </Court>
+          <SpatialMap
+            sectorShares
+            rows={d.turnovers}
+            xField="shot_x"
+            yField="shot_y"
+            label={w.t("خريطة مواقع فقد الكرة", "Turnover location map")}
+            groupLabel={w.t("عينة قطاع فقد الكرة", "Turnover location group")}
+            pointClassName="turnover-point"
+            pointLabel={() =>
+              w.t("دليل موقع فقد الكرة", "Turnover location evidence")
+            }
+            pointColor={() => brand.colors.turnover}
+            onSelect={(event) =>
+              onEvidence(w.t("موقع فقد الكرة", "Turnover location"), [event])
+            }
+            onGroup={(rows) =>
+              onEvidence(
+                w.t("عينة قطاع فقد الكرة", "Turnover location group"),
+                rows,
+              )
+            }
+          />
         </div>
-        <small>
-          {d.locatedTurnovers.length}/{d.turnovers.length}{" "}
-          {w.t(
-            "بموقع مسجل · لا نستنتج المواقع الناقصة",
-            "with a recorded location · missing positions stay unknown",
-          )}
-        </small>
         <details className="turnover-phases">
           <summary>{w.t("حسب المرحلة", "By phase")}</summary>
           {d.phases.length ? (
