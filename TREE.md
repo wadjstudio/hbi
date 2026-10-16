@@ -98,6 +98,7 @@ hbi-starter/
   components/workspace/evidence-trend.tsx
   components/workspace/match-context.tsx
   components/workspace/match-dashboard.tsx
+  components/workspace/match-header-actions.tsx
   components/workspace/match-hub.tsx
   components/workspace/meetings.tsx
   components/workspace/provider.tsx
@@ -148,6 +149,7 @@ hbi-starter/
   features/video/source.ts
   features/videos/.gitkeep
   features/workspace/backup.ts
+  features/workspace/header-context.ts
   features/workspace/provider.tsx
   features/workspace/sync-errors.ts
   hooks/.gitkeep
@@ -229,6 +231,7 @@ hbi-starter/
   tests/e2e/console.spec.ts
   tests/e2e/data-sources.spec.ts
   tests/e2e/fixture.ts
+  tests/e2e/header-assertions.ts
   tests/e2e/history-assertions.ts
   tests/e2e/online-video.spec.ts
   tests/e2e/reports.spec.ts
@@ -242,6 +245,7 @@ hbi-starter/
   tests/unit/backup.test.ts
   tests/unit/data-sources.test.ts
   tests/unit/domain.test.ts
+  tests/unit/header-context.test.ts
   tests/unit/intelligence-scope.test.ts
   tests/unit/local.test.ts
   tests/unit/match-dashboard.test.ts
