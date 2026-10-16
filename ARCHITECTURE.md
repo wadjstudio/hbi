@@ -1,5 +1,7 @@
 # SESEN / HBI Architecture
 
+header-date validates saved ISO instants with the installed Zod contract and formats their date in explicit UTC, independent of the device zone. MatchContext scopes identity lookups to the organization, retains short/full team names and provides a native details region for long metadata. The focusable scroll region participates in the existing video-shortcut guard; Escape/outside pointer close it. Missing dates/venues remain explicit without schema changes.
+
 meetingItem resolves exactly one typed item target within the organization and retains missing/mixed references as explicit unavailable content. Presentation separates preparation/notes from a modal stage, synchronizes native fullscreen changes, restores focus and respects native controls during navigation. Failed fullscreen exit never reveals notes. ClipPlayer scopes its source, shows raw source bounds and clamps seeking; local relinking retains fingerprint/duration validation. The meeting UI reuses existing rows/FKs/sync and does not upload or process video.
 
 review-queue.ts derives one issue per scoped event from canonical attempts and unresolved legacy records. It separates missing/unknown results, verification flags, duplicate ambiguity and a corrected canonical attempt awaiting legacy closure. ReviewQueue retains exact event callbacks and explicit category counts. Existing edit state now hydrates the canonical shooter and resets absent shot fields to unknown/empty values; no stale editor state establishes an observation.

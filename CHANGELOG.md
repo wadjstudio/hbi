@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Match metadata hierarchy and complete details — 2026-10-16
+
+- Long-context inspection also fixed closed layout-menu content contributing to tablet overflow and contained intelligence/closed recording-context labels while retaining full identity details.
+- Added a final header layer targeting the actual competition-title element, a gold competition icon, saved date/venue line and full-details disclosure. Long visible labels are contained while their full values remain available through keyboard/pointer interaction.
+- Added validated ISO-instant formatting in explicit UTC, retaining unknown/invalid dates rather than assuming local kickoff time. Team/competition identity lookups now also verify organization; saved short names can be displayed without losing full names in details.
+- Added date boundary/invalid-input tests and a loopback long-metadata browser scenario with restoration. No dependency, schema, DNS or hosted sports-data change is required.
+
 ## Meeting preparation and presentation stage — 2026-10-16
 
 - Added a branded meeting workspace with ordered agenda, large typed preview, visible clip source range, navigation and speaker notes that are absent while presenting. Localized content choices and clear writable-role guards replace generic item controls.

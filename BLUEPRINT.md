@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
 
+Match context now has a clearer competition/date/venue hierarchy and complete metadata disclosure for long and narrow layouts. Dates come only from validated saved instants and are labelled UTC; absent values remain unknown. Full team identities remain available when short names are shown. This changes presentation of existing records, without importing statistics or inferring match clock/score from the reference image.
+
 Meeting preparation now has an ordered agenda beside a large content preview; the presentation stage supports local clips, tactical boards, evidence-backed insights and team messages. Speaker notes are absent during presentation. Native fullscreen exit and focus are synchronized, with a modal fallback when denied. Missing content remains explicit, and local clips show source ranges with bounded seeking and verified relinking. No new service or schema is required.
 
 The Review workspace now combines canonical and legacy issues for the current session/filter sample, with visible reasons, exact evidence, correction and separate gated legacy closure. Corrected known/reviewed attempts can close an old review; unresolved results cannot. Empty queues do not establish complete match analysis. Canonical shooter/edit fields are loaded from the selected observation, with absent values cleared rather than inherited.

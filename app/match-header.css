@@ -1,0 +1,125 @@
+.match-header-slot .match-context-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 28px;
+  gap: 0 6px;
+  min-width: 0;
+  position: relative;
+}
+.match-context-meta .context-match-picker {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.match-context-meta .match-competition {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  font-size: 15px;
+  line-height: 1.25;
+}
+.match-competition > svg {
+  color: #d8b57b;
+  flex-shrink: 0;
+}
+.match-competition > span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.match-context-meta .match-inline-details {
+  grid-column: 1 / -1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
+.match-info {
+  grid-column: 2;
+  grid-row: 2;
+}
+.match-info > summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  width: 28px;
+  border: 1px solid #24444d;
+  border-radius: 5px;
+  color: #9bbbc9;
+  cursor: pointer;
+  list-style: none;
+}
+.match-info > summary::-webkit-details-marker {
+  display: none;
+}
+.match-info[open] > summary {
+  color: #70e9e8;
+  border-color: #0bc5ce;
+}
+.match-info-popover {
+  position: absolute;
+  z-index: 60;
+  inset-inline-start: 0;
+  top: calc(100% + 8px);
+  width: min(380px, calc(100vw - 32px));
+  max-height: min(520px, 70vh);
+  overflow: auto;
+  padding: 15px;
+  background: #0a1b23;
+  border: 1px solid #2c5965;
+  border-radius: 7px;
+  box-shadow: 0 14px 35px #0009;
+}
+.match-info-popover > b {
+  font-size: 17px;
+  color: #e8c68e;
+}
+.match-info-popover dl {
+  display: grid;
+  gap: 4px;
+  margin: 10px 0 0;
+}
+.match-info-popover dt {
+  color: #93adbc;
+  font-size: 12px;
+  margin-top: 7px;
+}
+.match-info-popover dd {
+  margin: 0;
+  color: #e6eef1;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.match-context-team b {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 15px;
+}
+@media (max-width: 650px) {
+  .match-header-slot .match-context-meta {
+    grid-template-columns: minmax(0, 1fr) 44px;
+    gap: 6px;
+  }
+  .match-context-meta .context-match-picker {
+    grid-column: 1;
+  }
+  .match-context-meta .match-info {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .match-info > summary {
+    width: 44px;
+    min-height: 44px;
+  }
+  .match-context-meta .match-competition,
+  .match-context-meta .match-inline-details {
+    display: none;
+  }
+  .match-context-team b {
+    max-width: 110px;
+  }
+}

@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence (HBI V1 foundation)
 
+The match header now shows a validated saved date in explicit UTC beside venue metadata, with a competition icon and stronger title hierarchy. A keyboard-accessible details disclosure exposes full competition/team/venue text on narrow screens and for long names. Missing/invalid dates remain unrecorded; team/competition lookup stays organization-scoped and recorded results remain separate from tagged event counts.
+
 Meetings now separate an ordered preparation agenda from a large content preview. Presentation mode shows clips, boards, evidence-linked insights or team messages while hiding speaker notes and editing controls. It tracks native fullscreen exit, respects focused controls during keyboard navigation and provides a modal fallback when fullscreen is denied. Missing/cross-organization content stays unavailable rather than crashing the stage; clips retain source-range bounds and explicit local relinking.
 
 Review now combines unresolved/verification-needed canonical attempts and legacy issues once per event in the current session/filter selection. Exact evidence, correction and gated legacy closure are separate actions; an empty queue does not mean full-match coverage. Opening an event resets shot fields from that event's canonical attempt, or explicit unknown/empty values, instead of retaining another event's result or goalkeeper.

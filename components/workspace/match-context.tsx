@@ -1,6 +1,8 @@
 "use client";
 import { MatchHeaderActions } from "./match-header-actions";
-import { useSyncExternalStore } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
+import { Info, Trophy } from "lucide-react";
+import { headerDate } from "@/features/workspace/header-date";
 import { createPortal } from "react-dom";
 import {
   isReferenceMatch,
@@ -29,33 +31,112 @@ export function MatchContext({
   selector?: ReactNode;
 }) {
   const w = useWorkspace();
+  const info = useRef<HTMLDetailsElement>(null);
+  useEffect(() => {
+    const close = (event: PointerEvent) => {
+      if (
+        event.target instanceof Node &&
+        !info.current?.contains(event.target) &&
+        info.current
+      )
+        info.current.open = false;
+    };
+    window.addEventListener("pointerdown", close);
+    return () => window.removeEventListener("pointerdown", close);
+  }, []);
   const header = useSyncExternalStore(subscribe, getHeader, getServerHeader);
-  const home = w.list("teams").find((team) => team.id === match.home_team_id),
-    away = w.list("teams").find((team) => team.id === match.away_team_id);
+  const home = w
+      .list("teams")
+      .find(
+        (team) =>
+          team.id === match.home_team_id && team.organization_id === w.org,
+      ),
+    away = w
+      .list("teams")
+      .find(
+        (team) =>
+          team.id === match.away_team_id && team.organization_id === w.org,
+      );
   const competition = w
     .list("competitions")
-    .find((c) => c.id === match.competition_id);
+    .find((c) => c.id === match.competition_id && c.organization_id === w.org);
+  const date = headerDate(match.starts_at, w.lang);
+  const competitionName = isReferenceMatch(match)
+    ? w.t(referenceMatch.competitionAr, referenceMatch.competitionEn)
+    : competition
+      ? rowLabel(competition)
+      : w.t("مساحة تحليل المباراة", "Match analysis workspace");
+  const venue = s(match.venue) || w.t("الملعب غير محدد", "Venue not set");
+  const homeName = home ? rowLabel(home) : "—",
+    awayName = away ? rowLabel(away) : "—";
   const content = (
     <header className="match-context">
       <div className="match-context-meta">
         <div className="context-match-picker">{selector}</div>
-        <b>
-          {isReferenceMatch(match)
-            ? w.t(referenceMatch.competitionAr, referenceMatch.competitionEn)
-            : competition
-              ? rowLabel(competition)
-              : w.t("مساحة تحليل المباراة", "Match analysis workspace")}
+        <b className="match-competition" title={competitionName}>
+          <Trophy size={17} aria-hidden="true" />
+          <span>{competitionName}</span>
         </b>
-        <small>
-          {s(match.venue) || w.t("الملعب غير محدد", "Venue not set")}
+        <small
+          className="match-inline-details"
+          title={`${date ? `${date.label} (UTC) · ` : ""}${venue}`}
+        >
+          {date && (
+            <>
+              <time dateTime={date.iso}>{date.label}</time>
+              <span> (UTC) · </span>
+            </>
+          )}
+          {venue}
         </small>
+        <details
+          ref={info}
+          className="match-info"
+          onKeyDown={(event) => {
+            if (event.key === "Escape") {
+              event.preventDefault();
+              event.currentTarget.open = false;
+              event.currentTarget.querySelector("summary")?.focus();
+            }
+          }}
+        >
+          <summary aria-label={w.t("تفاصيل المباراة", "Match details")}>
+            <Info size={16} aria-hidden="true" />
+          </summary>
+          <div
+            className="match-info-popover"
+            role="region"
+            tabIndex={0}
+            aria-label={w.t("تفاصيل المباراة الكاملة", "Full match details")}
+          >
+            <b>{w.t("تفاصيل المباراة", "Match details")}</b>
+            <dl>
+              <dt>{w.t("البطولة", "Competition")}</dt>
+              <dd>{competitionName}</dd>
+              <dt>{w.t("الفريقان", "Teams")}</dt>
+              <dd>
+                <bdi>{homeName}</bdi> — <bdi>{awayName}</bdi>
+              </dd>
+              <dt>{w.t("التاريخ (UTC)", "Date (UTC)")}</dt>
+              <dd>
+                {date ? (
+                  <time dateTime={date.iso}>{date.label}</time>
+                ) : (
+                  w.t("التاريخ غير مسجل", "Date not recorded")
+                )}
+              </dd>
+              <dt>{w.t("الملعب", "Venue")}</dt>
+              <dd>{venue}</dd>
+            </dl>
+          </div>
+        </details>
       </div>
       <div className="match-context-score" dir="ltr">
         <div className="match-context-team">
           <i className="team-monogram home">
             {s(home?.short_name || home?.name).slice(0, 2) || "H"}
           </i>
-          <b>{home ? rowLabel(home) : "—"}</b>
+          <b title={homeName}>{s(home?.short_name) || homeName}</b>
         </div>
         <div className="context-score">
           <strong>
@@ -83,7 +164,7 @@ export function MatchContext({
           <i className="team-monogram away">
             {s(away?.short_name || away?.name).slice(0, 2) || "A"}
           </i>
-          <b>{away ? rowLabel(away) : "—"}</b>
+          <b title={awayName}>{s(away?.short_name) || awayName}</b>
         </div>
       </div>
       <div className="match-context-actions">

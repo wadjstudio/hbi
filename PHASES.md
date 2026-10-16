@@ -1,5 +1,7 @@
 # SESEN / HBI V1 phases and acceptance gates
 
+Header-metadata follow-up adds explicit saved-date/venue display and full-details access. Gates include offset date boundaries, invalid/missing values, long competition/team/venue content, 1672/1024/768/375px bounds, RTL, Escape/outside behavior, focusable details scrolling without video seeking and unchanged populated first-screen geometry.
+
 Presentation follow-up separates preparation/agenda/notes from a branded modal stage. Gates: organization/typed-target isolation, unavailable references, actual header-to-meeting transition, clip/insight/text/board sequencing, native fullscreen exit, hidden notes, control-safe arrows, Tab containment/focus return, denied-fullscreen fallback, clip bounds/relinking and populated Arabic-mobile views. Full-reference and large-content audits remain separate.
 
 Review follow-up covers pending canonical and legacy issues, event deduplication, exact evidence/correction, category counts and gated legacy closure. Gates include relationship isolation, unknown versus verification/ambiguity, readonly access, correction through the existing editor/save workflow, legacy closure after correction and desktop/Arabic-mobile layout. Empty queues must not imply full-match completeness.

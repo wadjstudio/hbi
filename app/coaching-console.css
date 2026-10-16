@@ -1,4 +1,22 @@
 /* Final composition layer: preserve the media coordinate plane at every size. */
+.layout-menu:not([open]) > .layout-controls {
+  display: none;
+}
+.session-rail .intelligence-heading h2 {
+  min-width: 0;
+  max-width: calc(100% - 40px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.quick-context-details > summary {
+  overflow-wrap: anywhere;
+}
+.quick-context-details:not([open]) > summary {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .video-heading-actions {
   display: flex;
   align-items: center;

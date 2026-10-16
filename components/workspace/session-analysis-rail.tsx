@@ -150,7 +150,9 @@ export function SessionAnalysisRail({
     >
       <header className="intelligence-heading">
         <BrandMark size={30} />
-        <h2>
+        <h2
+          title={`${w.t("التحليل", "Intelligence")} — ${team ? rowLabel(team) : w.t("اختر فريقًا", "Choose team")}`}
+        >
           {w.t("التحليل", "Intelligence")} —{" "}
           {team ? rowLabel(team) : w.t("اختر فريقًا", "Choose team")}
         </h2>

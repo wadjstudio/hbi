@@ -43,6 +43,7 @@ hbi-starter/
   app/globals.css
   app/layout.tsx
   app/lineups.css
+  app/match-header.css
   app/meetings.css
   app/page.tsx
   app/reports.css
@@ -171,6 +172,7 @@ hbi-starter/
   features/videos/.gitkeep
   features/workspace/backup.ts
   features/workspace/header-context.ts
+  features/workspace/header-date.ts
   features/workspace/provider.tsx
   features/workspace/sync-errors.ts
   hooks/.gitkeep
@@ -265,6 +267,7 @@ hbi-starter/
   tests/e2e/event-feed-assertions.ts
   tests/e2e/fixture.ts
   tests/e2e/header-assertions.ts
+  tests/e2e/header-details-assertions.ts
   tests/e2e/history-assertions.ts
   tests/e2e/lineup-assertions.ts
   tests/e2e/online-video.spec.ts
@@ -287,6 +290,7 @@ hbi-starter/
   tests/unit/drawing.test.tsx
   tests/unit/event-feed.test.tsx
   tests/unit/header-context.test.ts
+  tests/unit/header-date.test.ts
   tests/unit/intelligence-scope.test.ts
   tests/unit/lineup-snapshot.test.ts
   tests/unit/local.test.ts

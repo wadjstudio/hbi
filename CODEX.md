@@ -1,5 +1,7 @@
 # SESEN / HBI Codex Rules
 
+Keep header dates validated and explicitly zoned; do not infer a kickoff timestamp from a screenshot or provenance note. Contained labels must retain full metadata through the accessible disclosure. Scope identity rows to the organization, preserve unknown values and source-clock/recorded-result distinctions, and test long metadata at desktop/tablet/mobile with keyboard and RTL.
+
 Presentation targets must resolve to exactly one typed reference in the current organization; missing clips may not be asserted non-null. Hide speaker notes/editing in the stage, including fullscreen failure paths. Synchronize fullscreen exit and focus, contain Tab in the dialog and preserve native control arrow handling. Keep source-range bounds, file fingerprint/duration checks and read-only agenda guards. Do not equate a populated synthetic meeting with real match analysis.
 
 Review issues must be deduplicated per scoped event and include pending canonical attempts as well as legacy records. Preserve unknown results, verification flags and duplicate ambiguity. Legacy closure requires a known reviewed canonical result; viewing remains available to readonly roles. Editing must load the canonical shooter and clear absent shot fields, never inherit another event's result/keeper/location.
