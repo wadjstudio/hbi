@@ -57,16 +57,20 @@ type History = {
 };
 export function VideoWorkspace({
   matchId: initialMatch,
+  initialSession = "",
+  initialTimeMs = 0,
 }: {
   matchId?: string;
+  initialSession?: string;
+  initialTimeMs?: number;
 }) {
   const w = useWorkspace(),
     a = useAction();
   const [matchId, setMatch] = useState(initialMatch ?? ""),
-    [sessionId, setSession] = useState(""),
+    [sessionId, setSession] = useState(initialSession),
     [videoId, setVideo] = useState(""),
     [url, setUrl] = useState(""),
-    [time, setTime] = useState(0),
+    [time, setTime] = useState(initialTimeMs),
     [tab, setTab] = useState("analytics");
   const [sourceFile, setSourceFile] = useState<File | null>(null);
   const [intelligenceScope, setIntelligenceScope] =
@@ -149,21 +153,22 @@ export function VideoWorkspace({
   const match = w.list("matches").find((r) => r.id === matchId),
     sessions = w
       .list("analysis_sessions")
-      .filter((r) => r.match_id === matchId),
+      .filter((r) => r.match_id === matchId && r.organization_id === w.org),
     session =
       sessions.find((r) => r.id === sessionId) ??
-      sessions.find((r) =>
-        w
-          .list("events")
-          .some(
-            (event) =>
-              event.id === requestedEvent &&
-              event.organization_id === w.org &&
-              event.match_id === matchId &&
-              event.analysis_session_id === r.id,
-          ),
-      ) ??
-      sessions.find((r) => r.is_primary),
+      (!sessionId
+        ? (sessions.find((r) =>
+            w
+              .list("events")
+              .some(
+                (event) =>
+                  event.id === requestedEvent &&
+                  event.organization_id === w.org &&
+                  event.match_id === matchId &&
+                  event.analysis_session_id === r.id,
+              ),
+          ) ?? sessions.find((r) => r.is_primary))
+        : undefined),
     sid = session?.id ?? "",
     video = w
       .list("videos")
@@ -765,6 +770,14 @@ export function VideoWorkspace({
         }
       />
       {a.error && <Notice>{a.error}</Notice>}
+      {sessionId && !session && w.ready && (
+        <Notice>
+          {w.t(
+            "الجلسة المطلوبة غير متاحة لهذه المباراة داخل المؤسسة. اختر جلسة من إعدادات التحليل.",
+            "The requested session is unavailable for this match and organization. Choose a session in analysis settings.",
+          )}
+        </Notice>
+      )}
       {playbackError && <Notice>{playbackError}</Notice>}
       {missingAttempts > 0 && (
         <Notice>

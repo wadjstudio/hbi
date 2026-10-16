@@ -1,6 +1,7 @@
 import { test, expect } from "./fixture";
 import { verifyHistoricalEvidence } from "./history-assertions";
 import { verifySessionStatistics } from "./session-statistics-assertions";
+import { verifyHeader } from "./header-assertions";
 test("analysis console supports resizing, focus, keyboard tabs and narrow screens", async ({
   page,
   request,
@@ -281,6 +282,7 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     await page.locator(".event-editor > summary").click();
   }
   await verifyHistoricalEvidence(page, request);
+  await verifyHeader(page);
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
     path: testInfo.outputPath("console-wide.png"),

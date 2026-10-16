@@ -1,5 +1,9 @@
 # SESEN / HBI Architecture
 
+## Header context and scoped links — 16 October 2026
+
+The provider exposes bounded account display text from Supabase Auth and clears it on sign-out. Role labels remain sourced from organization membership; display metadata never controls authorization. `header-context.ts` builds encoded session/time URLs and resolves relevant presentations through scoped clip/event evidence. Match routes key their client workspace by event/session/time, restore valid positions on local relink and reject unavailable explicit sessions without substituting primary analysis. Native header disclosures preserve keyboard focus and dismiss on outside pointers; the notification-shaped trigger represents actual outbox state and reuses existing sync/backup behavior.
+
 ## Match workspace statistics — 16 October 2026
 
 The match tab strip now exposes Analytics, Lineups, Events, Player stats, Team stats, Comparison and Reports, alongside annotation/review tools. `features/analysis/session-statistics.ts` scopes every input to organization/match/session and attaches event evidence to team metrics. `components/workspace/session-statistics.tsx` composes roster/shooter/goalkeeper samples, observed match positions, verified interval minutes, side-by-side teams and a filter-bound report. CSV uses the existing audited export with stable IDs/raw time; browser print hides the video/editor and retains the report values. No remote inference, service, dependency or migration was added. Deployment authority is DEPLOYMENT.md: the merged storage-hardening release verified migrations through 0020; earlier user-reported 0019 references are historical.

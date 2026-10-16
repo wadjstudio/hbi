@@ -1,6 +1,5 @@
 "use client";
-import Link from "next/link";
-import { Film, Presentation } from "lucide-react";
+import { MatchHeaderActions } from "./match-header-actions";
 import { useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -96,16 +95,12 @@ export function MatchContext({
               ? w.t("جلسة إضافية", "Additional session")
               : w.t("لم تبدأ الجلسة", "No session yet")}
         </small>
-        <div>
-          <span className="analysis-mode">
-            <Film size={13} />
-            {w.t("تحليل", "Analysis")}
-          </span>
-          <Link href="/meetings">
-            <Presentation size={14} />
-            {w.t("الاجتماعات", "Meetings")}
-          </Link>
-        </div>
+        <MatchHeaderActions
+          key={`${match.id}:${session?.id ?? ""}`}
+          match={match}
+          session={session}
+          timeMs={timeMs}
+        />
       </div>
     </header>
   );

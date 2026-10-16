@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Header identity and source-position sharing — 2026-10-16
+
+- Replaced the settings-only account trigger with the signed-in account name/initials and actual organization role. Metadata is display text only; no remote portrait is loaded and no coach role is invented. Account identity clears on sign-out.
+- Added reference-style Presentation and Share menus beside Analysis. Related meetings follow actual clip/event evidence links, while sharing copies a signed-in match/session/source-time URL without transferring video or changing access.
+- Explicit session links restore the requested session and source position; unavailable sessions show a notice instead of falling back to another session. Existing event/edit navigation retains its behavior.
+- Reused the existing sync/backup panel behind a bell with a real pending-operation badge. Added compact identity, responsive popovers, outside/Escape dismissal, focus return and a larger intelligence heading.
+- Added identity/link/relevance unit tests and Chrome acceptance for account role, clipboard copy, source/session restoration, unavailable sessions and local-file relinking. No dependency, migration, automatic upload or public access grant.
+
 ## Embedded match statistics — 2026-10-16
 
 - Added reference-sequence player/goalkeeper, team, comparison and report tabs inside the video workspace; Analytics is the initial view. Existing annotation/review and keyboard/RTL behavior remain available.

@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { substitutionInput, syncResponse } from "@/features/analysis/contracts";
 import { parseWorkspaceBackup } from "./backup";
 import { shouldRetrySync } from "./sync-errors";
+import { accountIdentity, type AccountIdentity } from "./header-context";
 import { releaseLocalSources } from "@/lib/video/local-sources";
 import { canWrite } from "@/lib/permissions/roles";
 import { createClient } from "@/lib/supabase/client";
@@ -28,6 +29,7 @@ type Context = {
   rows: Rows;
   org: string;
   user: string;
+  account: AccountIdentity;
   role: string;
   orgs: Row[];
   lang: "ar" | "en";
@@ -63,6 +65,11 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const [rows, setRows] = useState<Rows>({}),
     [org, setOrg] = useState(""),
     [user, setUser] = useState(""),
+    [account, setAccount] = useState<AccountIdentity>({
+      name: "",
+      email: "",
+      initials: "",
+    }),
     [role, setRole] = useState("viewer"),
     [orgs, setOrgs] = useState<Row[]>([]);
   const [lang, setLang] = useState<"ar" | "en">("ar"),
@@ -186,7 +193,11 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       for (const op of ops) {
         if (identity.current !== scope) break;
         if (op.error) break;
-        const { data, error: e, status } = op.rpc
+        const {
+          data,
+          error: e,
+          status,
+        } = op.rpc
           ? await c.rpc(op.rpc, { p_row: op.row })
           : await c.rpc("apply_workspace_change", {
               p_table: op.table,
@@ -263,6 +274,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     void c.auth.getUser().then(async ({ data }) => {
       if (!data.user) return;
       setUser(data.user.id);
+      setAccount(accountIdentity(data.user));
       const { data: members, error: e } = await c
         .from("organization_members")
         .select("role,organization_id,organizations(*)")
@@ -290,6 +302,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         setRows({});
         setPending([]);
         setUser("");
+        setAccount({ name: "", email: "", initials: "" });
         setOrg("");
         router.replace("/login");
       }
@@ -594,6 +607,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     rows,
     org,
     user,
+    account,
     role,
     orgs,
     lang,
@@ -629,6 +643,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       setRows({});
       setPending([]);
       setUser("");
+      setAccount({ name: "", email: "", initials: "" });
       setOrg("");
       await client.current?.auth.signOut({ scope: "local" });
       router.replace("/login");

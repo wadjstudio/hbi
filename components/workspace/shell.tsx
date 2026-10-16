@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BrandLockup, BrandMark } from "@/components/brand/brand-lockup";
 import { useWorkspace } from "./provider";
 import { Panel, Notice, useAction, rowLabel } from "./controls";
@@ -19,7 +19,8 @@ import {
   Settings,
   Menu,
   X,
-  CloudDownload,
+  Bell,
+  ChevronDown,
   Database,
 } from "lucide-react";
 const navigation = [
@@ -58,6 +59,30 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
     [name, setName] = useState(""),
     [slug, setSlug] = useState("");
   const drawer = useRef<HTMLDialogElement>(null);
+  const accountMenu = useRef<HTMLDetailsElement>(null);
+  useEffect(() => {
+    const close = (event: PointerEvent) => {
+      if (
+        event.target instanceof Node &&
+        !accountMenu.current?.contains(event.target) &&
+        accountMenu.current
+      )
+        accountMenu.current.open = false;
+    };
+    window.addEventListener("pointerdown", close);
+    return () => window.removeEventListener("pointerdown", close);
+  }, []);
+  const role =
+    (
+      {
+        owner: w.t("مالك المؤسسة", "Owner"),
+        technical_director: w.t("مدير فني", "Technical director"),
+        head_coach: w.t("مدرب رئيسي", "Head coach"),
+        assistant_coach: w.t("مدرب مساعد", "Assistant coach"),
+        analyst: w.t("محلل", "Analyst"),
+        viewer: w.t("مشاهد", "Viewer"),
+      } as Record<string, string>
+    )[w.role] ?? w.role;
   const nav = (mobile = false) => (
     <nav aria-label={w.t("التنقل الرئيسي", "Main navigation")}>
       {navigation.map(([ar, en, href], index) => {
@@ -135,7 +160,12 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
               aria-expanded={sync}
               onClick={() => setSync(!sync)}
             >
-              <CloudDownload size={19} />
+              <Bell size={19} aria-hidden="true" />
+              {w.pending.length > 0 && (
+                <i className="sync-badge" aria-hidden="true">
+                  {w.pending.length}
+                </i>
+              )}
             </button>
             <button
               className="language-button"
@@ -144,6 +174,7 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
               {w.lang === "ar" ? "English" : "العربية"}
             </button>
             <details
+              ref={accountMenu}
               className="account-menu"
               onKeyDown={(e) => {
                 if (e.key === "Escape") {
@@ -160,10 +191,25 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
                 aria-label={w.t("الحساب والحفظ", "Account & sync")}
                 title={w.t("الحساب والحفظ", "Account & sync")}
               >
-                <Settings size={19} />
-                <span>{w.t("الحساب والحفظ", "Account & sync")}</span>
+                <i className="account-avatar" aria-hidden="true">
+                  {w.account.initials || <CircleUser size={22} />}
+                </i>
+                <span className="account-identity">
+                  <b dir="auto">{w.account.name || w.t("الحساب", "Account")}</b>
+                  <small>{role}</small>
+                </span>
+                <ChevronDown size={13} aria-hidden="true" />
               </summary>
               <div className="account-menu-content">
+                <p className="account-email" dir="auto">
+                  {w.account.email || w.t("بريد غير متاح", "Email unavailable")}
+                </p>
+                <small>
+                  {role} ·{" "}
+                  {w.orgs.find((o) => o.id === w.org)
+                    ? rowLabel(w.orgs.find((o) => o.id === w.org)!)
+                    : w.t("لا توجد مؤسسة", "No organization")}
+                </small>
                 <label>
                   {w.t("المؤسسة", "Organization")}
                   <select
@@ -179,6 +225,14 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
                     ))}
                   </select>
                 </label>
+                <Link
+                  href="/settings"
+                  onClick={() => {
+                    if (accountMenu.current) accountMenu.current.open = false;
+                  }}
+                >
+                  {w.t("إعدادات مساحة العمل", "Workspace settings")}
+                </Link>
                 <button onClick={() => void w.logout()}>
                   {w.t("خروج", "Sign out")}
                 </button>
@@ -206,6 +260,10 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
           {(w.error || a.error) && <Notice>{w.error || a.error}</Notice>}
           {sync && (
             <Panel title={w.t("الحفظ والمزامنة", "Save & sync")}>
+              <p>
+                {w.online ? w.t("متصل", "Online") : w.t("دون اتصال", "Offline")}{" "}
+                · {w.pending.length} {w.t("عملية معلقة", "pending operations")}
+              </p>
               <div className="toolbar">
                 <button onClick={() => void w.flush()}>
                   {w.t("مزامنة", "Sync")}

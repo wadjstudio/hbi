@@ -1,5 +1,12 @@
 # SESEN / HBI validation — 2026-10-16
 
+## Header identity and scoped sharing — 2026-10-16
+
+- All 58 unit/component tests, full lint and isolated TypeScript check passed. Identity/relevance/link tests reject nontext display metadata, unsafe times and foreign clip/evidence relationships.
+- Both Chrome console and video/offline/evidence/meeting journeys passed. New header acceptance verifies actual account email/role, Escape/focus return, clipboard contents, Presentation menu relevance explanation, outside dismissal, explicit session/source-time entry, rejection of an unavailable session and relinking at 12 seconds. Existing historical event/edit links, sample/CSV/print behavior and responsive/RTL geometry passed unchanged.
+- Inspected the populated 1672px screenshot: account initials/name/role, Analysis/Presentation/Share and real sync trigger fit in the header. Neutral initials do not imply a coach photo. No real user data or match statistics were seeded; fixture identity/statistics remain isolated. Final production builds/publication are recorded after completion.
+- Native Next production build passed with TypeScript enabled after browser acceptance. At 1672×941 the summaries retain top 741.52px/bottom 932.98px and the media coordinate plane remains unchanged. Final Cloudflare build/publication follows separately.
+
 ## Embedded match statistics — 2026-10-16
 
 - All 52 unit/component tests and full lint passed on top of merged storage-hardening source 91471ca. A standalone typecheck attempt timed out after 180 seconds during concurrent acceptance; it is not recorded as passing. Final production-build status is recorded after completion.
