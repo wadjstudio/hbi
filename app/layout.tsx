@@ -9,6 +9,7 @@ import "./reports.css";
 import "./lineups.css";
 import "./event-feed.css";
 import "./annotations.css";
+import "./review.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(

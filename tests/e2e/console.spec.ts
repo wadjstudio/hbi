@@ -7,6 +7,7 @@ import { verifyTypography } from "./typography-assertions";
 import { verifyLineup } from "./lineup-assertions";
 import { verifyEventFeed } from "./event-feed-assertions";
 import { verifyAnnotations } from "./annotation-assertions";
+import { verifyReview } from "./review-assertions";
 test("analysis console supports resizing, focus, keyboard tabs and narrow screens", async ({
   page,
   request,
@@ -411,4 +412,5 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     path: testInfo.outputPath("console-mobile.png"),
     fullPage: true,
   });
+  await verifyReview(page);
 });

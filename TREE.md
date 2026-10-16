@@ -45,6 +45,7 @@ hbi-starter/
   app/lineups.css
   app/page.tsx
   app/reports.css
+  app/review.css
   app/sesen.css
   app/typography.css
   app/workbench.css
@@ -115,6 +116,7 @@ hbi-starter/
   components/workspace/quick-tag-dock.tsx
   components/workspace/reference-match.tsx
   components/workspace/reports.tsx
+  components/workspace/review-queue.tsx
   components/workspace/session-analysis-rail.tsx
   components/workspace/session-report.tsx
   components/workspace/session-statistics.tsx
@@ -138,6 +140,7 @@ hbi-starter/
   features/analysis/intelligence-scope.ts
   features/analysis/labels.ts
   features/analysis/match-dashboard.ts
+  features/analysis/review-queue.ts
   features/analysis/session-statistics.ts
   features/analysis/shot-profile.ts
   features/analysis/spatial-sample.ts
@@ -264,6 +267,7 @@ hbi-starter/
   tests/e2e/lineup-assertions.ts
   tests/e2e/online-video.spec.ts
   tests/e2e/reports.spec.ts
+  tests/e2e/review-assertions.ts
   tests/e2e/session-statistics-assertions.ts
   tests/e2e/smoke.spec.ts
   tests/e2e/spatial-map-assertions.ts
@@ -288,6 +292,7 @@ hbi-starter/
   tests/unit/positions.test.ts
   tests/unit/quick-tag-dock.test.tsx
   tests/unit/reports.test.ts
+  tests/unit/review-queue.test.tsx
   tests/unit/session-brief.test.ts
   tests/unit/session-statistics-ui.test.tsx
   tests/unit/session-statistics.test.ts

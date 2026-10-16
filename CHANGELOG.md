@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Unified analysis review queue — 2026-10-16
+
+- Replaced the legacy-only button list with a scoped, categorized queue for unresolved results, verification flags, missing canonical attempts, duplicate-attempt ambiguity and corrected attempts with an open legacy review. Each event appears once; exact evidence and saved reasons remain visible.
+- Added direct correction and separate legacy closure. Closure stays disabled until the canonical result is known and reviewed; readonly roles keep evidence access. Filters and empty states explicitly describe the current selection rather than full-match completeness.
+- Corrected event editing to hydrate the canonical shooter and reset all shot fields when no canonical attempt exists, preventing stale results, keepers or positions from a previously edited event.
+- Reused current SQL/data contracts and local synchronization; no dependency, migration, automatic event recognition or production sample data was added.
+
 ## Telestration layer library and drawing controls — 2026-10-16
 
 - Added a scoped annotation library with drawing-only previews, source-time ranges, object counts, pause-on-entry status and view/edit/delete actions. Missing local footage and empty selections have explicit guidance; readonly roles retain viewing while writes remain disabled.

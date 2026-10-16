@@ -1,5 +1,7 @@
 # SESEN / HBI Architecture
 
+review-queue.ts derives one issue per scoped event from canonical attempts and unresolved legacy records. It separates missing/unknown results, verification flags, duplicate ambiguity and a corrected canonical attempt awaiting legacy closure. ReviewQueue retains exact event callbacks and explicit category counts. Existing edit state now hydrates the canonical shooter and resets absent shot fields to unknown/empty values; no stale editor state establishes an observation.
+
 AnnotationLibrary scopes layers to organization/session/video, validates drawing payloads for previews and retains separate source-time ranges. Active overlays and pause-on-entry use the same source relationship. DrawingEditor uses explicit add/select tools, actual style hydration and keyboard object movement; drawing-motion translates both anchors with whole-shape boundary clamping. No tracking inference, upload or schema change is involved.
 
 ## Spatial observation views — 16 October 2026

@@ -1,5 +1,7 @@
 # SESEN / HBI continuation prompt
 
+Retain the unified current-selection Review queue: pending canonical attempts and legacy issues appear once per event, with exact evidence/correction and separately gated old-review closure. Preserve status distinctions and readonly viewing. Editing absent canonical data must reset stale fields. Continue populated presentation transitions and remaining reference/long-data gates; a clean queue does not prove a fully analyzed match.
+
 Retain the source-scoped annotation library and manual drawing controls. Verify existing-layer editing through save, normalized whole-vector movement, actual media-time preservation, range-end visibility and Arabic mobile bounds. Preserve pause-on-entry flags and reveal save controls when editing from the library. Continue Review/presentation and remaining reference inspection; do not infer automatic analysis from telestration previews.
 
 Preserve interval-backed schematic Lineups and the canonical EventFeed. Starter flags/profile positions cannot establish current presence; unknown clocks and ambiguous/invalid intervals stay explicit. Retain scoped roster/source/clock/role guards and old local substitution behavior. Test actual native video time, physical role-anchor behavior in Arabic and exact event IDs/actions when changing these views. Remaining annotation/review/presentation and long-data visual gates are still part of the original reference goal.

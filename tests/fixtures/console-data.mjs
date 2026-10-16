@@ -328,6 +328,24 @@ export function consoleData({
       }),
     ],
     insights: [insight, secondaryInsight, historicalInsight],
+    legacy_shot_reviews: [
+      row(3100, {
+        event_id: events[1].id,
+        reason:
+          "Synthetic review: compare canonical result with original event",
+        resolved: false,
+      }),
+      row(3101, {
+        event_id: events[23].id,
+        reason: "Synthetic review: unresolved shot result",
+        resolved: false,
+      }),
+      row(3102, {
+        event_id: secondaryEvent.id,
+        reason: "Excluded secondary-session review",
+        resolved: false,
+      }),
+    ],
     video_annotations: [
       row(3000, {
         analysis_session_id: session.id,

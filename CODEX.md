@@ -1,5 +1,7 @@
 # SESEN / HBI Codex Rules
 
+Review issues must be deduplicated per scoped event and include pending canonical attempts as well as legacy records. Preserve unknown results, verification flags and duplicate ambiguity. Legacy closure requires a known reviewed canonical result; viewing remains available to readonly roles. Editing must load the canonical shooter and clear absent shot fields, never inherit another event's result/keeper/location.
+
 Keep annotation libraries, active rendering and pause-on-entry scoped to the exact organization/session/video. A drawing-only preview must not imply a decoded video thumbnail or automatic tracking. Selection must hydrate stored style, translation must move both anchors and keyboard arrows must not seek the video. Opening an existing layer must reveal save controls and preserve its pause setting; validate source-time bounds and role guards.
 
 Lineup markers are schematic recorded roles, never tracked locations, inferred formations or profile-default positions. Preserve period and [start,end) semantics, unknown clocks, pending/open records and overlap/invalid-time notices. Scope actions to the selected recording team; do not reclose closed/wrong-period records or allow incompatible incoming/outgoing players. Event feeds must use canonical shooter/result and exact event actions, with pending/legacy review states. Native media-time tests must target the video element, not a resizable wrapper.

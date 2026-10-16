@@ -1,5 +1,7 @@
 # SESEN / HBI V1 phases and acceptance gates
 
+Review follow-up covers pending canonical and legacy issues, event deduplication, exact evidence/correction, category counts and gated legacy closure. Gates include relationship isolation, unknown versus verification/ambiguity, readonly access, correction through the existing editor/save workflow, legacy closure after correction and desktop/Arabic-mobile layout. Empty queues must not imply full-match completeness.
+
 Telestration follow-up adds scoped layer previews, labelled tools, Select mode, keyboard movement and whole-arrow translation. Gates cover foreign-source/session exclusion, readonly viewing, valid visibility bounds, duplicate-render prevention while editing, save-control visibility, actual persisted movement, end-exclusive visibility and populated desktop/Arabic-mobile layouts. Manual drawings do not establish automated tracking or tactical recognition.
 
 Lineup/event follow-up adds schematic interval-backed presence, separate declared roster and a canonical event feed. Gates: context isolation, half-open/period boundaries, unknown clock without roster inference, open/unverified/ambiguous/invalid intervals, source/roster/role action guards, exact canonical event actions and populated desktop/Arabic-mobile views. Diagram anchors must retain physical positions under RTL/resizing, and table-key tests must inspect actual native media time.

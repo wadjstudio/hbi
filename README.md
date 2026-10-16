@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence (HBI V1 foundation)
 
+Review now combines unresolved/verification-needed canonical attempts and legacy issues once per event in the current session/filter selection. Exact evidence, correction and gated legacy closure are separate actions; an empty queue does not mean full-match coverage. Opening an event resets shot fields from that event's canonical attempt, or explicit unknown/empty values, instead of retaining another event's result or goalkeeper.
+
 Video annotations now have a source/session-scoped layer library with drawing-only previews, visibility ranges and pause-on-entry status. The shared drawing editor has labelled icon tools, explicit selection mode and keyboard object selection/movement. Moving an arrow/path translates both anchors together; the preview is manual telestration, not automatic player tracking.
 
 Lineups now shows schematic recorded roles at the calibrated period/clock, an interval-detail panel and a separate declared roster. Starter flags and profile positions never stand in for on-court evidence. Events now has a source-time feed with canonical shooter/result, missing-clock/review states and exact evidence/edit/clip actions. Existing setup and participant tools remain available in labelled disclosures.

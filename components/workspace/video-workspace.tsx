@@ -5,6 +5,7 @@ import { useWorkspace } from "./provider";
 import { Panel, Notice, SelectRow, useAction, rowLabel } from "./controls";
 import { DrawingEditor } from "./drawing";
 import { AnnotationLibrary } from "./annotation-library";
+import { ReviewQueue } from "./review-queue";
 import { EventParticipants } from "./event-participants";
 import { ShotMap, Court } from "./charts";
 import { parseEventCourtPosition } from "@/features/analysis/contracts";
@@ -659,6 +660,7 @@ export function VideoWorkspace({
     return c;
   }
   function edit(e: Row) {
+    const sh = shots.find((r) => r.event_id === e.id);
     setEventX(s(e.shot_x));
     setEventY(s(e.shot_y));
     setEditorOpen(true);
@@ -666,7 +668,7 @@ export function VideoWorkspace({
     setEditSnapshot({ event: e, shot: shots.find((r) => r.event_id === e.id) });
     seek(n(e.timestamp_ms));
     setEdit(e.id);
-    setActor(s(e.actor_player_id));
+    setActor(sh ? s(sh.shooter_id) : s(e.actor_player_id));
     setTeam(s(e.team_id));
     setEventType(s(e.event_type));
     setNote(s(e.note));
@@ -676,23 +678,20 @@ export function VideoWorkspace({
     setPhase(s(e.phase) || "positional_attack");
     setNumericalFor(n(e.numerical_for ?? 6));
     setNumericalAgainst(n(e.numerical_against ?? 6));
-    const sh = shots.find((r) => r.event_id === e.id);
-    if (sh) {
-      setResult(s(sh.result));
-      setKeeper(s(sh.goalkeeper_id));
-      setEmpty(Boolean(sh.empty_goal));
-      setZone(s(sh.zone));
-      setCourt(
-        sh.court_x != null ? { x: n(sh.court_x), y: n(sh.court_y) } : null,
-      );
-      setGoalPoint(
-        sh.goal_x != null ? { x: n(sh.goal_x), y: n(sh.goal_y) } : null,
-      );
-      setShotType(s(sh.shot_type_id));
-      setDistance(s(sh.distance_m));
-      setRebound(s(sh.rebound) || "unknown");
-      setFastBreak(Boolean(sh.starts_fast_break));
-    }
+    setResult(s(sh?.result) || "unknown");
+    setKeeper(s(sh?.goalkeeper_id));
+    setEmpty(Boolean(sh?.empty_goal));
+    setZone(s(sh?.zone) || "unknown");
+    setCourt(
+      sh?.court_x != null ? { x: n(sh.court_x), y: n(sh.court_y) } : null,
+    );
+    setGoalPoint(
+      sh?.goal_x != null ? { x: n(sh.goal_x), y: n(sh.goal_y) } : null,
+    );
+    setShotType(s(sh?.shot_type_id));
+    setDistance(s(sh?.distance_m));
+    setRebound(s(sh?.rebound) || "unknown");
+    setFastBreak(Boolean(sh?.starts_fast_break));
   }
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
@@ -2445,35 +2444,33 @@ export function VideoWorkspace({
           </Panel>
         )}
         {tab === "review" && (
-          <Panel title={w.t("مراجعة البيانات القديمة", "Legacy review")}>
-            {w
-              .list("legacy_shot_reviews")
-              .filter((r) => !r.resolved && eventIds.has(s(r.event_id)))
-              .map((r) => (
-                <div key={r.id}>
-                  <button
-                    onClick={() => {
-                      const e = events.find((e) => e.id === r.event_id);
-                      if (e) {
-                        edit(e);
-                        setEventType("shot");
-                        setTab("events");
-                      }
-                    }}
-                  >
-                    {s(r.reason)}
-                  </button>
-                  <button
-                    onClick={() =>
-                      void a.run(() =>
-                        w.save("legacy_shot_reviews", { ...r, resolved: true }),
-                      )
-                    }
-                  >
-                    {w.t("تمت المراجعة", "Reviewed")}
-                  </button>
-                </div>
-              ))}
+          <Panel title={w.t("مراجعة التحليل", "Analysis review")}>
+            <ReviewQueue
+              scope={{ organizationId: w.org, matchId, sessionId: sid }}
+              events={filtered}
+              shots={shots}
+              legacy={w.list("legacy_shot_reviews")}
+              isCanEdit={
+                !a.busy &&
+                canWrite(w.role, "events") &&
+                canWrite(w.role, "shot_attempts")
+              }
+              isCanResolve={!a.busy && canWrite(w.role, "legacy_shot_reviews")}
+              onEvidence={(event) =>
+                showEvidence(w.t("دليل المراجعة", "Review evidence"), [event])
+              }
+              onCorrect={({ event }) => {
+                pause();
+                edit(event);
+                setEventType("shot");
+                setTab("events");
+              }}
+              onResolve={(row) =>
+                void a.run(() =>
+                  w.save("legacy_shot_reviews", { ...row, resolved: true }),
+                )
+              }
+            />
           </Panel>
         )}
       </Tabs.Content>
