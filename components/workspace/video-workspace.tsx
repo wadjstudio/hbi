@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useWorkspace } from "./provider";
 import { Panel, Notice, SelectRow, useAction, rowLabel } from "./controls";
 import { DrawingEditor } from "./drawing";
+import { AnnotationLibrary } from "./annotation-library";
 import { EventParticipants } from "./event-participants";
 import { ShotMap, Court } from "./charts";
 import { parseEventCourtPosition } from "@/features/analysis/contracts";
@@ -203,6 +204,8 @@ export function VideoWorkspace({
       .list("video_annotations")
       .filter(
         (r) =>
+          r.organization_id === w.org &&
+          r.video_id === video?.id &&
           r.analysis_session_id === sid &&
           n(r.start_ms) <= time &&
           time < n(r.end_ms),
@@ -728,6 +731,8 @@ export function VideoWorkspace({
   useEffect(() => {
     const active = (w.rows.video_annotations ?? []).filter(
       (r) =>
+        r.organization_id === w.org &&
+        r.video_id === video?.id &&
         r.analysis_session_id === sid &&
         n(r.start_ms) <= time &&
         time < n(r.end_ms),
@@ -739,7 +744,7 @@ export function VideoWorkspace({
       }
     for (const id of pausedLayers.current)
       if (!active.some((r) => r.id === id)) pausedLayers.current.delete(id);
-  }, [time, sid, w.rows]);
+  }, [time, sid, w.rows, w.org, video?.id]);
   async function startPossession() {
     if (open) throw new Error("Close current possession");
     const timestamp = captureTime();
@@ -1069,15 +1074,17 @@ export function VideoWorkspace({
                     </div>
                   )}
                   {!isOnlineSource &&
-                    annotations.map((layer) => (
-                      <DrawingEditor
-                        key={layer.id}
-                        objects={layer.objects as unknown as Drawing[]}
-                        onChange={() => {}}
-                        overlay
-                        editable={false}
-                      />
-                    ))}
+                    annotations
+                      .filter((layer) => !annotate || layer.id !== annotationId)
+                      .map((layer) => (
+                        <DrawingEditor
+                          key={layer.id}
+                          objects={layer.objects as unknown as Drawing[]}
+                          onChange={() => {}}
+                          overlay
+                          editable={false}
+                        />
+                      ))}
                   {!isOnlineSource && annotate && (
                     <DrawingEditor
                       objects={annotation}
@@ -1113,7 +1120,10 @@ export function VideoWorkspace({
                   else if (player.current) player.current.playbackRate = rate;
                 }}
               />
-              <details className="video-advanced-tools">
+              <details
+                className="video-advanced-tools"
+                open={annotate || undefined}
+              >
                 <summary>
                   {w.t(
                     "الرسم والمقاطع ومشاركة المصدر",
@@ -1186,7 +1196,12 @@ export function VideoWorkspace({
                         )}
                   </span>
                   <button
-                    disabled={isOnlineSource || !available}
+                    disabled={
+                      isOnlineSource ||
+                      !available ||
+                      !canWrite(w.role, "video_annotations") ||
+                      a.busy
+                    }
                     onClick={() => {
                       pause();
                       setAnnotate(!annotate);
@@ -1228,6 +1243,16 @@ export function VideoWorkspace({
                         />
                       </label>
                       <button
+                        disabled={
+                          a.busy ||
+                          !available ||
+                          !canWrite(w.role, "video_annotations") ||
+                          !Number.isFinite(annotationStart) ||
+                          !Number.isFinite(annotationEnd) ||
+                          annotationStart < 0 ||
+                          annotationEnd <= annotationStart ||
+                          annotationEnd * 1000 > n(video?.duration_ms)
+                        }
                         onClick={() =>
                           void a.run(async () => {
                             if (!video || !sid)
@@ -1239,7 +1264,9 @@ export function VideoWorkspace({
                               analysis_session_id: sid,
                               start_ms: Math.round(annotationStart * 1000),
                               end_ms: Math.round(annotationEnd * 1000),
-                              pause_on_entry: true,
+                              pause_on_entry: annotationSnapshot
+                                ? Boolean(annotationSnapshot.pause_on_entry)
+                                : true,
                               objects: annotation,
                             });
                             setAnnotate(false);
@@ -2390,37 +2417,31 @@ export function VideoWorkspace({
         )}
         {tab === "annotations" && (
           <Panel title={w.t("رسومات الفيديو", "Video annotations")}>
-            {w
-              .list("video_annotations")
-              .filter((r) => r.analysis_session_id === sid)
-              .map((r) => (
-                <div key={r.id} className="toolbar">
-                  <button onClick={() => seek(n(r.start_ms))}>
-                    {formatTime(n(r.start_ms))} → {formatTime(n(r.end_ms))}
-                  </button>
-                  <button
-                    onClick={() => {
-                      seek(n(r.start_ms));
-                      setAnnotationSnapshot(r);
-                      setAnnotationStart(n(r.start_ms) / 1000);
-                      setAnnotationEnd(n(r.end_ms) / 1000);
-                      setAnnotationId(r.id);
-                      setAnnotation(r.objects as unknown as Drawing[]);
-                      setAnnotate(true);
-                      player.current?.pause();
-                    }}
-                  >
-                    {w.t("تحرير", "Edit")}
-                  </button>
-                  <button
-                    onClick={() =>
-                      void a.run(() => w.save("video_annotations", r, true))
-                    }
-                  >
-                    {w.t("حذف", "Delete")}
-                  </button>
-                </div>
-              ))}
+            <AnnotationLibrary
+              rows={w.list("video_annotations")}
+              organizationId={w.org}
+              sessionId={sid}
+              videoId={video?.id ?? ""}
+              isCanSeek={available && !isOnlineSource}
+              isCanEdit={canWrite(w.role, "video_annotations") && !a.busy}
+              onSeek={(r) => {
+                pause();
+                seek(n(r.start_ms));
+              }}
+              onEdit={(r) => {
+                seek(n(r.start_ms));
+                setAnnotationSnapshot(r);
+                setAnnotationStart(n(r.start_ms) / 1000);
+                setAnnotationEnd(n(r.end_ms) / 1000);
+                setAnnotationId(r.id);
+                setAnnotation(r.objects as unknown as Drawing[]);
+                setAnnotate(true);
+                player.current?.pause();
+              }}
+              onRemove={(r) =>
+                void a.run(() => w.save("video_annotations", r, true))
+              }
+            />
           </Panel>
         )}
         {tab === "review" && (

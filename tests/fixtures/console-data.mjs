@@ -328,6 +328,60 @@ export function consoleData({
       }),
     ],
     insights: [insight, secondaryInsight, historicalInsight],
+    video_annotations: [
+      row(3000, {
+        analysis_session_id: session.id,
+        video_id: video.id,
+        start_ms: 6000,
+        end_ms: 11000,
+        pause_on_entry: true,
+        objects: [
+          {
+            id: uid(3010),
+            kind: "arrow",
+            label: "Fixture cross",
+            color: "#00cccc",
+            x: 0.3,
+            y: 0.4,
+            x2: 0.5,
+            y2: 0.5,
+          },
+          {
+            id: uid(3011),
+            kind: "player",
+            label: "17",
+            color: "#e4be82",
+            x: 0.25,
+            y: 0.6,
+          },
+        ],
+      }),
+      row(3001, {
+        analysis_session_id: session.id,
+        video_id: video.id,
+        start_ms: 20000,
+        end_ms: 25000,
+        pause_on_entry: false,
+        objects: [
+          {
+            id: uid(3012),
+            kind: "zone",
+            label: "Fixture zone",
+            color: "#00cccc",
+            x: 0.6,
+            y: 0.4,
+          },
+        ],
+      }),
+      row(3002, {
+        analysis_session_id: secondary.id,
+        video_id: video.id,
+        start_ms: 6000,
+        end_ms: 11000,
+        pause_on_entry: true,
+        objects: [],
+      }),
+    ],
     evidence_links: [
       ...linked.map((event, i) =>
         row(800 + i, { insight_id: insight.id, event_id: event.id }),

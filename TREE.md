@@ -36,6 +36,7 @@ hbi-starter/
   wrangler.jsonc
   .github/workflows/ci.yml
   app/analyst-console.css
+  app/annotations.css
   app/coaching-console.css
   app/event-feed.css
   app/fonts.css
@@ -92,6 +93,7 @@ hbi-starter/
   components/workspace/analysis-split.tsx
   components/workspace/analysis-timeline.tsx
   components/workspace/analytics.tsx
+  components/workspace/annotation-library.tsx
   components/workspace/charts.tsx
   components/workspace/controls.tsx
   components/workspace/court.tsx
@@ -158,6 +160,7 @@ hbi-starter/
   features/reports/export.ts
   features/reports/session-brief.ts
   features/seasons/.gitkeep
+  features/tactics/drawing-motion.ts
   features/teams/.gitkeep
   features/video/source.ts
   features/videos/.gitkeep
@@ -250,6 +253,7 @@ hbi-starter/
   supabase/migrations/0020_r2_storage_hardening.sql
   supabase/tests/security.test.sql
   tests/setup.ts
+  tests/e2e/annotation-assertions.ts
   tests/e2e/conflict.spec.ts
   tests/e2e/console.spec.ts
   tests/e2e/data-sources.spec.ts
@@ -273,6 +277,7 @@ hbi-starter/
   tests/unit/backup.test.ts
   tests/unit/data-sources.test.ts
   tests/unit/domain.test.ts
+  tests/unit/drawing.test.tsx
   tests/unit/event-feed.test.tsx
   tests/unit/header-context.test.ts
   tests/unit/intelligence-scope.test.ts

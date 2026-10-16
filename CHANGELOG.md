@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Telestration layer library and drawing controls — 2026-10-16
+
+- Added a scoped annotation library with drawing-only previews, source-time ranges, object counts, pause-on-entry status and view/edit/delete actions. Missing local footage and empty selections have explicit guidance; readonly roles retain viewing while writes remain disabled.
+- Replaced the drawing-kind dropdown with labelled icon tools and explicit selection mode. Object selection hydrates the actual label/color; keyboard object buttons support physical arrow-key movement at 1%/5% steps. Moving arrows/paths translates both anchors together and clamps the whole vector at the edges. SVG arrows now have visible arrowheads and selected objects have an outline.
+- Scoped active rendering and pause-on-entry to the organization, session and video; editing hides the duplicate saved rendering. Save requires a writable role, available source and a finite positive visibility interval within the source duration.
+- No dependency, migration, cloud video processing or automatic tracking is added. General interval correction and remaining reference states are separate work.
+
 ## Visual lineups and event feed — 2026-10-16
 
 - Added a scoped period-clock lineup overview with schematic recorded roles, neutral shirt markers, interval detail and a separate declared roster. Half-open intervals drive presence; unknown clocks, invalid timing, unknown roles and overlapping player records stay explicit. Profile positions and starter flags never fill missing on-court data.

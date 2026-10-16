@@ -1,0 +1,133 @@
+.drawing-tools {
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  gap: 5px;
+}
+.drawing-tool-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.drawing-tool-picker button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.drawing-tools button[aria-pressed="true"] {
+  border-color: #06ccd1;
+  color: #86f3f0;
+  background: #06373d;
+}
+.drawing-object-picker {
+  position: relative;
+}
+.drawing-object-picker summary {
+  cursor: pointer;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+.drawing-object-picker[open] {
+  background: #0a1c24;
+  border: 1px solid #277481;
+  padding: 6px;
+  max-width: 100%;
+}
+.drawing-object-picker p {
+  font-size: 12px;
+  max-width: 340px;
+}
+.drawing-object-picker button {
+  margin: 3px;
+}
+.annotation-library > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.annotation-library h3 {
+  margin: 0 0 5px;
+  font-size: 19px;
+}
+.annotation-library h3 span,
+.annotation-library p,
+.annotation-layer-body small {
+  color: #a8bdc7;
+}
+.annotation-library p {
+  margin: 0;
+}
+.annotation-method,
+.annotation-pause {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #e9c68e;
+}
+.annotation-layer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.annotation-layer-card {
+  overflow: hidden;
+  border: 1px solid #16414a;
+  border-radius: 7px;
+  background: linear-gradient(145deg, #0b1b22, #041016);
+}
+.annotation-preview {
+  position: relative;
+  aspect-ratio: 2 / 1;
+  background-color: #071217;
+  background-image:
+    linear-gradient(#14303955 1px, transparent 1px),
+    linear-gradient(90deg, #14303955 1px, transparent 1px);
+  background-size: 25px 25px;
+  border-bottom: 1px solid #16414a;
+}
+.annotation-preview > span {
+  display: block;
+  padding: 12px;
+}
+.annotation-layer-body {
+  padding: 12px;
+  display: grid;
+  gap: 6px;
+}
+.annotation-layer-body > b {
+  font-size: 20px;
+  text-align: start;
+}
+.annotation-layer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+.annotation-layer-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 38px;
+}
+@media (max-width: 700px) {
+  .annotation-library > header {
+    flex-direction: column;
+  }
+  .drawing-tools button,
+  .drawing-tools summary,
+  .annotation-layer-actions button {
+    min-height: 44px;
+  }
+  .drawing-tools {
+    max-height: 45%;
+    overflow-y: auto;
+  }
+  .drawing-tools input {
+    min-width: 0;
+  }
+}

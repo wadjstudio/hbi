@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
 
+The annotation workspace now includes drawing-only layer previews, visibility ranges, object counts and pause-on-entry status with direct view/edit/delete actions. Missing local footage is explicit. Shared labelled drawing tools include selection and keyboard movement; arrow/path translation retains the vector. Editing opens the save controls automatically and preserves the layer's original pause setting. These are manual telestration tools, not automatic match understanding.
+
 ## Evidence-linked location density — 16 October 2026
 
 Shot/turnover maps now support exact-coordinate density glow, fixed 5×2 sector samples and individual Points mode. Turnover sector shares use only known locations; missing/invalid coordinates remain explicit. Click/keyboard opens the supporting events and retains the existing editing path. Native SVG and the shipped court asset preserve normalized positions through resizing and RTL. This is a view of recorded observations, including unresolved results, with no inferred movement, attack direction, automatic analysis or probability claim. No external mapping service, dependency or schema was introduced.

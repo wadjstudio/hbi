@@ -1,5 +1,7 @@
 # SESEN / HBI Architecture
 
+AnnotationLibrary scopes layers to organization/session/video, validates drawing payloads for previews and retains separate source-time ranges. Active overlays and pause-on-entry use the same source relationship. DrawingEditor uses explicit add/select tools, actual style hydration and keyboard object movement; drawing-motion translates both anchors with whole-shape boundary clamping. No tracking inference, upload or schema change is involved.
+
 ## Spatial observation views — 16 October 2026
 
 `spatial-sample.ts` validates normalized recorded coordinates and assigns each located observation once to a fixed 5×2 sector. Missing/invalid values remain outside spatial denominators; 0/1 boundaries are preserved. `SpatialMap` uses the existing court asset/native SVG, exact-coordinate glow and keyboard/pointer sector evidence. Points mode retains individual event/shot selection; turnover shares use only located rows. Coordinates do not mirror with language. Methods make unresolved results, unknown positions and lack of trajectory/direction inference explicit. Scope remains supplied by the current session/historical filters; no data or video leaves the device for these views.

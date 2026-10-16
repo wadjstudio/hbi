@@ -1,5 +1,14 @@
 # SESEN / HBI validation — 2026-10-16
 
+## Telestration layer library and drawing controls — 2026-10-16
+
+- Complete real-environment Pages build/package passed with existing nonfatal bundler timing warnings. Target scan confirmed the intended hosted Supabase project/domain, public-only configuration, AI disabled and no loopback mock URL/key in client/Worker assets. Generated Next declarations returned to the existing baseline. Publication is recorded separately after verification.
+- Final full lint, all 72 unit/component tests and explicit isolated typecheck passed. Native Next and production-mode browser results above cover the final runtime source. Real Pages build/publication are separate steps; no full-reference or automated-analysis completion is inferred.
+- Final native production rebuild and both complete production-mode Chrome journeys passed with retries disabled. New browser checks confirm stored-style hydration, 5% whole-arrow keyboard movement without seeking media, saved edited geometry in the workspace, end-exclusive layer visibility, frame viewing paused, one rendering during edit and Arabic 375px bounds/44px actions. Desktop editor/library and Arabic-mobile library captures were inspected; synthetic drawings are explicitly unrelated to the footage. Full-page capture sticky placement after lower-page actions is not first-screen parity evidence.
+- The first full browser run passed drawing selection/style/vector checks but exposed a real UX failure: editing a layer left Save inside the closed advanced-tools disclosure. Editing now opens that disclosure, and View frame pauses the footage. Existing pause-on-entry flags are preserved rather than forced true on update. The native production rebuild passed; final complete browser results follow separately.
+- Focused tests passed whole-vector movement/clamping, selection style hydration, keyboard movement, Select-mode accidental-write prevention, exact organization/session/video isolation and readonly viewing. Native production build with TypeScript passed after correcting two integration references to the existing string organization ID and imported role helper. Final browser/layout/publication verification follows after completion.
+- Expanded only loopback console fixture layers; they are manually authored synthetic drawings unrelated to the footage. No hosted mutation, schema change or video upload is required.
+
 ## Visual lineups and event feed — 2026-10-16
 
 - Final delivery verification passed SHA256/CRC, safe extraction, external Blueprint parity, source-only exclusions and byte-for-byte preservation of original migrations 0001–0010. The ZIP excludes credentials, dependencies, generated builds and test media.
