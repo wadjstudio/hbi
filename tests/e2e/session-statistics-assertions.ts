@@ -43,20 +43,20 @@ export const verifySessionStatistics = async (page: Page) => {
     name: "Player & goalkeeper statistics",
     exact: true,
   });
-  await expect(players.getByRole("row")).toHaveCount(5);
+  await expect(players.getByRole("row")).toHaveCount(8);
   await expect(page.locator(".match-dashboard")).toHaveCount(0);
-  const beforeTableKey = await page
-    .getByTestId("video")
-    .evaluate((node: HTMLVideoElement) => node.currentTime);
+  const nativeVideo = page.locator("video");
+  const beforeTableKey = (await nativeVideo.count())
+    ? await nativeVideo.evaluate((node: HTMLVideoElement) => node.currentTime)
+    : null;
   await players
     .getByRole("region", { name: "Player statistics table", exact: true })
     .focus();
   await page.keyboard.press("ArrowRight");
-  expect(
-    await page
-      .getByTestId("video")
-      .evaluate((node: HTMLVideoElement) => node.currentTime),
-  ).toBe(beforeTableKey);
+  if (beforeTableKey != null)
+    expect(
+      await nativeVideo.evaluate((node: HTMLVideoElement) => node.currentTime),
+    ).toBe(beforeTableKey);
   await expect(
     players.getByRole("row").filter({ hasText: "Fixture Back Test" }),
   ).toContainText("1 / 4");

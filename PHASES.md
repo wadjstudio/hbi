@@ -1,5 +1,7 @@
 # SESEN / HBI V1 phases and acceptance gates
 
+Lineup/event follow-up adds schematic interval-backed presence, separate declared roster and a canonical event feed. Gates: context isolation, half-open/period boundaries, unknown clock without roster inference, open/unverified/ambiguous/invalid intervals, source/roster/role action guards, exact canonical event actions and populated desktop/Arabic-mobile views. Diagram anchors must retain physical positions under RTL/resizing, and table-key tests must inspect actual native media time.
+
 Coach-brief follow-up adds scoped saved insights, an optional complete evidence register and local A4 printing. Gates cover relationship isolation, current-filter samples, direct evidence actions, source/game-clock separation, populated team/comparison/report desktop/Arabic-mobile views and actual PDF extraction/rendering/pagination. Browser generation alone does not prove a clean printable artifact; retain the visual check.
 
 Typography follow-up bundles official Roboto Condensed/IBM Plex Sans Arabic WOFF2 assets and OFL notices. Gates cover exact local hashes, same-origin loading at 400/500/600/700, static Pages font delivery, readable radar labels and populated desktop/Arabic/mobile captures. The initial enlarged canvas failed first-screen geometry; its compact final framing retains readable labels and the original acceptance thresholds. Remaining per-view/reference audit still applies.

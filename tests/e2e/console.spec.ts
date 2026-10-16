@@ -4,6 +4,8 @@ import { verifySessionStatistics } from "./session-statistics-assertions";
 import { verifyHeader } from "./header-assertions";
 import { verifySpatialMaps } from "./spatial-map-assertions";
 import { verifyTypography } from "./typography-assertions";
+import { verifyLineup } from "./lineup-assertions";
+import { verifyEventFeed } from "./event-feed-assertions";
 test("analysis console supports resizing, focus, keyboard tabs and narrow screens", async ({
   page,
   request,
@@ -193,6 +195,8 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
   );
   const shotTrend = page.getByTestId("shot-efficiency-trend");
   await verifySessionStatistics(page);
+  await verifyLineup(page);
+  await verifyEventFeed(page);
   const possessionTrend = page.getByTestId("possession-efficiency-trend");
   await expect(shotTrend.getByRole("button")).toHaveCount(9);
   await expect(possessionTrend.getByRole("button")).toHaveCount(6);

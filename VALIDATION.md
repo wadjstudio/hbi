@@ -1,5 +1,15 @@
 # SESEN / HBI validation — 2026-10-16
 
+## Visual lineups and event feed — 2026-10-16
+
+- Complete real-environment Pages build/package passed with the existing nonfatal bundler timing warnings. Target inspection passed the intended hosted Supabase project/domain, public-only variables, disabled AI and absence of mock URL/key in client/Worker assets. Next declarations returned to their existing baseline; publication is verified separately below.
+- Final native production build, explicit isolated typecheck, full lint and all 69 unit/component tests passed. Both complete production-mode Chrome journeys passed with retries disabled. The new checks cover the 30-second half-open interval boundary, six recorded roles versus an unknown role, pending verification, keyboard interval detail, stable actual normalized court positions in Arabic at 375px, 24 canonical event rows and the exact five-goal filter. Native video time is now read from the media element in the scroll-key assertion. No thresholds were weakened.
+- Desktop lineup/event captures were inspected; Arabic-mobile captures and no-page-overflow/44px controls were generated and asserted. The PDF regression inspector passed again: one-page fixture brief, two-page English/Arabic evidence versions, all twelve references once, A4 and white margins. These are isolated synthetic observations over bounded real footage, not an analysis of that footage or a hosted account journey. General interval correction, crowded role layouts and the remaining reference states remain open.
+- Focused lineup-snapshot and event-feed component tests passed. Coverage includes organization/match/session/team scope, period and half-open boundaries, unknown clock without inferred starters, open/unverified records, duplicate-player ambiguity, unknown roles/invalid timing, canonical shooter attribution, missing clock, exact action inputs and read-only legacy evidence.
+- Review found the previous scroll-key acceptance read currentTime from the resizable panel wrapper, which could compare undefined values. The assertion now targets the actual native video when present; final acceptance uses the bounded local footage and must demonstrate retained actual source time. The implementation's scroll-region shortcut guard remains unchanged.
+- Initial native build compiled but rejected a Playwright-only exact query option mistakenly used in new Testing Library tests. Removed that unsupported option; test names/assertions are unchanged. Final build/browser/visual results follow after completion.
+- Expanded only the isolated console fixture's declared roster and recorded intervals for lineup states. No production sports data, profile-derived presence, automatic tracking, hosted mutation or schema change is introduced.
+
 ## Coach brief and evidence register — 2026-10-16
 
 - Focused report scoping and existing player-metric component tests passed. Scope tests reject foreign organization/team/match/session relationships, duplicate event links and unchecked legacy JSON evidence, and preserve the exact filtered chronological sample.

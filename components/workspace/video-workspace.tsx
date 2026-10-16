@@ -40,6 +40,9 @@ import * as Tabs from "@radix-ui/react-tabs";
 import { AnalysisSplit } from "./analysis-split";
 import { MatchDashboard } from "./match-dashboard";
 import { SessionStatistics } from "./session-statistics";
+import { LineupOverview } from "./lineup-overview";
+import { EventFeed } from "./event-feed";
+import { lineupSnapshot } from "@/features/players/lineup-snapshot";
 import { BrandLockup } from "@/components/brand/brand-lockup";
 import { brand } from "@/lib/brand";
 import {
@@ -228,6 +231,52 @@ export function VideoWorkspace({
   const intelligenceTeam = teams.some((t) => t.id === focusTeam)
     ? focusTeam
     : teams[1]?.id || teams[0]?.id || "";
+  const lineupTeamId = teams.some((row) => row.id === team)
+    ? team
+    : s(match?.home_team_id);
+  const lineupState = lineupSnapshot(
+    { organizationId: w.org, matchId, sessionId: sid },
+    lineupTeamId,
+    clock,
+    { roster, intervals },
+  );
+  const lineupPlayers = w
+    .list("players")
+    .filter(
+      (row) =>
+        row.organization_id === w.org &&
+        lineupState.roster.some((entry) => entry.player_id === row.id),
+    );
+  const canEnterLineup = (id: string) =>
+    Boolean(
+      clock &&
+      lineupState.hasClock &&
+      lineupPlayers.some((row) => row.id === id) &&
+      !lineupState.invalid.some((row) => row.player_id === id) &&
+      !lineupState.intervals.some(
+        (row) =>
+          row.player_id === id &&
+          row.period === clock.period &&
+          (row.end_clock_ms == null || n(row.end_clock_ms) > clock.clockMs),
+      ),
+    );
+  const canLeaveLineup = (id: string) =>
+    Boolean(
+      clock &&
+      lineupState.hasClock &&
+      !lineupState.invalid.some((row) => row.player_id === id) &&
+      !lineupState.ambiguous.some((row) => row.player_id === id) &&
+      lineupState.intervals.some(
+        (row) =>
+          row.player_id === id &&
+          row.period === clock.period &&
+          row.end_clock_ms == null &&
+          n(row.start_clock_ms) < clock.clockMs,
+      ),
+    );
+  const lineupWritable = Boolean(
+    available && sid && !a.busy && canWrite(w.role, "on_court_intervals"),
+  );
   const historicalSample =
     intelligenceScope === "session"
       ? null
@@ -2029,6 +2078,7 @@ export function VideoWorkspace({
           <Panel title={w.t("الأحداث والأدلة", "Events & evidence")}>
             <div className="toolbar">
               <select
+                aria-label={w.t("فلتر سجل الأحداث", "Event feed filter")}
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
               >
@@ -2052,25 +2102,26 @@ export function VideoWorkspace({
                 onChange={setParticipantFilter}
               />
             </div>
-            <div className="entity-list">
-              {filtered.map((e) => (
-                <article key={e.id}>
-                  <button onClick={() => edit(e)}>
-                    {formatTime(n(e.timestamp_ms))} · {s(e.event_type)} ·{" "}
-                    {rowLabel(
-                      w
-                        .list("players")
-                        .find((p) => p.id === e.actor_player_id) ?? e,
-                    )}
-                  </button>
-                  <span>{s(e.note)}</span>
-                  <button onClick={() => void a.run(() => clip(e))}>
-                    {w.t("مقطع دليل", "Evidence clip")}
-                  </button>
-                </article>
-              ))}
-            </div>
-            <EventParticipants events={events} matchId={matchId} />
+            <EventFeed
+              scope={{ organizationId: w.org, matchId, sessionId: sid }}
+              events={filtered}
+              shots={shots}
+              isCanEdit={!a.busy && canWrite(w.role, "events")}
+              isCanClip={
+                !a.busy &&
+                canWrite(w.role, "clips") &&
+                Boolean(video?.id && duration > 0)
+              }
+              onEdit={edit}
+              onClip={(event) => void a.run(() => clip(event))}
+              onEvidence={showEvidence}
+            />
+            <details className="event-participant-tools">
+              <summary>
+                {w.t("إدارة المشاركين في الأحداث", "Manage event participants")}
+              </summary>
+              <EventParticipants events={events} matchId={matchId} />
+            </details>
           </Panel>
         )}
         {tab === "analytics" && (
@@ -2156,128 +2207,185 @@ export function VideoWorkspace({
         )}
         {tab === "lineups" && (
           <Panel title={w.t("القائمة والتبديلات", "Roster & substitutions")}>
-            <label>
-              <input
-                type="checkbox"
-                checked={starting}
-                onChange={(e) => setStarting(e.target.checked)}
-              />
-              {w.t("تشكيلة البداية", "Starting lineup")}
-            </label>
-            <div className="entity-list">
-              {roster.map((r) => (
-                <article key={r.id}>
-                  {rowLabel(
-                    w.list("players").find((p) => p.id === r.player_id) ?? r,
-                  )}{" "}
-                  ·{" "}
-                  {r.starting ? w.t("أساسي", "Starting") : w.t("بديل", "Bench")}
-                </article>
-              ))}
-            </div>
-            <div className="form-grid">
-              <SelectRow
-                label={w.t("لاعب", "Player")}
-                rows={w.list("players")}
-                value={inPlayer}
-                onChange={setIn}
-              />
-              <SelectRow
-                label={w.t("خروج", "Out")}
-                rows={players}
-                value={outPlayer}
-                onChange={setOut}
-              />
-              <label>
-                {w.t("المركز", "Position")}
-                <select
-                  value={position}
-                  onChange={(e) => setPosition(e.target.value)}
-                >
-                  {positions.map((p) => (
-                    <option key={p}>{p}</option>
-                  ))}
-                </select>
-              </label>
-            </div>
-            <div className="toolbar">
-              <button
-                onClick={() =>
-                  void a.run(() =>
-                    w.direct("match_roster", {
-                      match_id: matchId,
-                      player_id: inPlayer,
-                      team_id: team,
-                      side: team === match?.home_team_id ? "home" : "away",
-                      starting,
-                    }),
-                  )
-                }
+            <LineupOverview
+              scope={{ organizationId: w.org, matchId, sessionId: sid }}
+              teamId={lineupTeamId}
+              teams={teams}
+              roster={roster}
+              intervals={intervals}
+              clock={clock}
+              onTeamChange={(id) => {
+                setTeam(id);
+                setIn("");
+                setOut("");
+                setActor("");
+                setKeeper("");
+              }}
+            />
+            <details className="lineup-editors">
+              <summary>
+                {w.t(
+                  "إدارة القائمة وفترات اللعب والتبديلات",
+                  "Roster, interval and substitution tools",
+                )}
+              </summary>
+              <fieldset
+                disabled={!canWrite(w.role, "on_court_intervals") || a.busy}
               >
-                {w.t("إضافة للقائمة", "Add to roster")}
-              </button>
-              <button
-                disabled={!clock}
-                onClick={() =>
-                  void a.run(() =>
-                    w.save("on_court_intervals", {
-                      ...base(),
-                      player_id: inPlayer,
-                      position,
-                      start_clock_ms: clock?.clockMs ?? 0,
-                      verified: true,
-                    }),
-                  )
-                }
-              >
-                {w.t("فتح فترة لعب", "Open interval")}
-              </button>
-              <button
-                disabled={!clock}
-                onClick={() =>
-                  void a.run(() =>
-                    w.substitute({
-                      id: crypto.randomUUID(),
-                      organization_id: w.org,
-                      ...base(),
-                      team_id: team,
-                      out_player_id: outPlayer || null,
-                      in_player_id: inPlayer || null,
-                      position,
-                      period: clock!.period,
-                      clock_ms: clock!.clockMs,
-                      video_ms: time,
-                    } as Row),
-                  )
-                }
-              >
-                {w.t("تبديل", "Substitute")}
-              </button>
-            </div>
-            {intervals.map((r) => (
-              <div className="interval" key={r.id}>
-                {rowLabel(
-                  w.list("players").find((p) => p.id === r.player_id) ?? r,
-                )}{" "}
-                · {s(r.position)} · {n(r.period)} ·{" "}
-                {formatTime(n(r.start_clock_ms))} →{" "}
-                {r.end_clock_ms == null ? "…" : formatTime(n(r.end_clock_ms))}
-                <button
-                  disabled={!clock}
-                  onClick={() =>
-                    void a.run(() =>
-                      w.save("on_court_intervals", {
-                        ...r,
-                        end_clock_ms: clock!.clockMs,
-                        verified: true,
-                      }),
-                    )
-                  }
-                >
-                  {w.t("إغلاق", "Close")}
-                </button>
-              </div>
-            ))}
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={starting}
+                    onChange={(e) => setStarting(e.target.checked)}
+                  />
+                  {w.t("الإضافة كأساسي معلن", "Add as declared starter")}
+                </label>
+                <div className="form-grid">
+                  <SelectRow
+                    label={w.t("لاعب", "Player")}
+                    rows={w.list("players")}
+                    value={inPlayer}
+                    onChange={setIn}
+                  />
+                  <SelectRow
+                    label={w.t("خروج", "Out")}
+                    rows={lineupPlayers}
+                    value={outPlayer}
+                    onChange={setOut}
+                  />
+                  <label>
+                    {w.t("المركز", "Position")}
+                    <select
+                      value={position}
+                      onChange={(e) => setPosition(e.target.value)}
+                    >
+                      {positions.map((p) => (
+                        <option key={p}>{p}</option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+                <div className="toolbar">
+                  <button
+                    disabled={
+                      !w.online ||
+                      !inPlayer ||
+                      !lineupTeamId ||
+                      roster.some((row) => row.player_id === inPlayer)
+                    }
+                    onClick={() =>
+                      void a.run(() =>
+                        w.direct("match_roster", {
+                          match_id: matchId,
+                          player_id: inPlayer,
+                          team_id: lineupTeamId,
+                          side:
+                            lineupTeamId === match?.home_team_id
+                              ? "home"
+                              : "away",
+                          starting,
+                        }),
+                      )
+                    }
+                  >
+                    {w.t("إضافة للقائمة", "Add to roster")}
+                  </button>
+                  <button
+                    disabled={!lineupWritable || !canEnterLineup(inPlayer)}
+                    onClick={() =>
+                      void a.run(() =>
+                        w.save("on_court_intervals", {
+                          ...base(),
+                          team_id: lineupTeamId,
+                          player_id: inPlayer,
+                          position,
+                          start_clock_ms: clock?.clockMs ?? 0,
+                          verified: true,
+                        }),
+                      )
+                    }
+                  >
+                    {w.t("فتح فترة لعب", "Open interval")}
+                  </button>
+                  <button
+                    disabled={
+                      !lineupWritable ||
+                      !clock ||
+                      inPlayer === outPlayer ||
+                      !(inPlayer || outPlayer) ||
+                      Boolean(inPlayer && !canEnterLineup(inPlayer)) ||
+                      Boolean(outPlayer && !canLeaveLineup(outPlayer))
+                    }
+                    onClick={() =>
+                      void a.run(() =>
+                        w.substitute({
+                          id: crypto.randomUUID(),
+                          organization_id: w.org,
+                          ...base(),
+                          team_id: lineupTeamId,
+                          out_player_id: outPlayer || null,
+                          in_player_id: inPlayer || null,
+                          position,
+                          period: clock!.period,
+                          clock_ms: clock!.clockMs,
+                          video_ms: time,
+                        } as Row),
+                      )
+                    }
+                  >
+                    {w.t("تبديل", "Substitute")}
+                  </button>
+                </div>
+                {!w.online && (
+                  <p className="notice">
+                    {w.t(
+                      "إدارة القائمة تحتاج اتصالًا. فترات اللعب والتبديلات تستخدم الحفظ المحلي في مساحة المباراة المجهزة.",
+                      "Roster setup needs a connection. Intervals and substitutions use local saves in the prepared match workspace.",
+                    )}
+                  </p>
+                )}
+                <p className="lineup-method">
+                  {w.t(
+                    "لفتح فترة أو تسجيل تبديل: اختر لاعبًا من قائمة الفريق، واربط الفيديو وعاير الساعة. إغلاق الفترة يحتاج الشوط نفسه وزمنًا لاحقًا للبداية؛ الفترات المنتهية تبقى للقراءة.",
+                    "To open an interval or substitute, choose a roster player, link the source and calibrate its clock. Closing requires the same period and a later clock; closed intervals remain read-only.",
+                  )}
+                </p>
+                {lineupState.intervals.map((r) => (
+                  <div className="interval" key={r.id}>
+                    {rowLabel(
+                      w.list("players").find((p) => p.id === r.player_id) ?? r,
+                    )}{" "}
+                    · {s(r.position)} · {n(r.period)} ·{" "}
+                    {formatTime(n(r.start_clock_ms))} →{" "}
+                    {r.end_clock_ms == null
+                      ? "…"
+                      : formatTime(n(r.end_clock_ms))}
+                    <button
+                      disabled={
+                        !lineupWritable ||
+                        !clock ||
+                        r.end_clock_ms != null ||
+                        lineupState.invalid.some((row) => row.id === r.id) ||
+                        lineupState.ambiguous.some((row) => row.id === r.id) ||
+                        r.period !== clock.period ||
+                        clock.clockMs <= n(r.start_clock_ms)
+                      }
+                      onClick={() =>
+                        void a.run(() =>
+                          w.save("on_court_intervals", {
+                            ...r,
+                            end_clock_ms: clock!.clockMs,
+                            verified: true,
+                          }),
+                        )
+                      }
+                    >
+                      {w.t("إغلاق", "Close")}
+                    </button>
+                  </div>
+                ))}
+              </fieldset>
+            </details>
           </Panel>
         )}
         {tab === "annotations" && (

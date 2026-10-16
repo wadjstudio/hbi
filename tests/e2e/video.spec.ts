@@ -113,16 +113,16 @@ test("local video to offline shot, opponent evidence and meeting", async ({
       .getByRole("button", { name: "Save event [T]", exact: true })
       .click();
     await expect(
-      page.locator(".entity-list article").filter({ hasText: "shot" }),
+      page.locator('.event-feed-row[data-result="goal"]'),
     ).toHaveCount(i + 1);
     if (i === 0) {
       await page.getByRole("button", { name: "Undo", exact: true }).click();
       await expect(
-        page.locator(".entity-list article").filter({ hasText: "shot" }),
+        page.locator('.event-feed-row[data-result="goal"]'),
       ).toHaveCount(0);
       await page.getByRole("button", { name: "Redo", exact: true }).click();
       await expect(
-        page.locator(".entity-list article").filter({ hasText: "shot" }),
+        page.locator('.event-feed-row[data-result="goal"]'),
       ).toHaveCount(1);
     }
     await page.locator("video").evaluate(

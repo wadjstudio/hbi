@@ -26,12 +26,17 @@ export function consoleData({
     "Fixture Home Keeper",
     "Fixture Away Keeper",
     "Fixture Home Back",
+    "Fixture Left Back",
+    "Fixture Center",
+    "Fixture Right Wing",
   ].map((name, i) =>
     row(10 + i, {
       first_name: name,
       last_name: "Test",
-      primary_position: ["RB", "P", "LW", "GK", "GK", "CB"][i],
-      shirt_number: [17, 66, 24, 1, 12, 10][i],
+      primary_position: ["RB", "P", "LW", "GK", "GK", "CB", "LB", "CB", "RW"][
+        i
+      ],
+      shirt_number: [17, 66, 24, 1, 12, 10, 8, 10, 11][i],
     }),
   );
   const terms = [
@@ -268,6 +273,18 @@ export function consoleData({
     videos: [...(video.id ? [video] : []), historicalVideo],
     players,
     on_court_intervals: [
+      ...[1, 2, 6, 7, 8].map((playerIndex, index) =>
+        row(952 + index, {
+          ...context,
+          team_id: away,
+          player_id: players[playerIndex].id,
+          position: players[playerIndex].primary_position,
+          period: 1,
+          start_clock_ms: 0,
+          end_clock_ms: 30000,
+          verified: playerIndex !== 7,
+        }),
+      ),
       row(950, {
         ...context,
         team_id: away,

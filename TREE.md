@@ -37,9 +37,11 @@ hbi-starter/
   .github/workflows/ci.yml
   app/analyst-console.css
   app/coaching-console.css
+  app/event-feed.css
   app/fonts.css
   app/globals.css
   app/layout.tsx
+  app/lineups.css
   app/page.tsx
   app/reports.css
   app/sesen.css
@@ -96,10 +98,12 @@ hbi-starter/
   components/workspace/data-sources.tsx
   components/workspace/drawing.tsx
   components/workspace/entities.tsx
+  components/workspace/event-feed.tsx
   components/workspace/event-participants.tsx
   components/workspace/evidence-drawer.tsx
   components/workspace/evidence-links.tsx
   components/workspace/evidence-trend.tsx
+  components/workspace/lineup-overview.tsx
   components/workspace/match-context.tsx
   components/workspace/match-dashboard.tsx
   components/workspace/match-header-actions.tsx
@@ -147,6 +151,7 @@ hbi-starter/
   features/opponents/.gitkeep
   features/organizations/.gitkeep
   features/players/.gitkeep
+  features/players/lineup-snapshot.ts
   features/players/position-metrics.ts
   features/playlists/.gitkeep
   features/reports/.gitkeep
@@ -248,9 +253,11 @@ hbi-starter/
   tests/e2e/conflict.spec.ts
   tests/e2e/console.spec.ts
   tests/e2e/data-sources.spec.ts
+  tests/e2e/event-feed-assertions.ts
   tests/e2e/fixture.ts
   tests/e2e/header-assertions.ts
   tests/e2e/history-assertions.ts
+  tests/e2e/lineup-assertions.ts
   tests/e2e/online-video.spec.ts
   tests/e2e/reports.spec.ts
   tests/e2e/session-statistics-assertions.ts
@@ -266,8 +273,10 @@ hbi-starter/
   tests/unit/backup.test.ts
   tests/unit/data-sources.test.ts
   tests/unit/domain.test.ts
+  tests/unit/event-feed.test.tsx
   tests/unit/header-context.test.ts
   tests/unit/intelligence-scope.test.ts
+  tests/unit/lineup-snapshot.test.ts
   tests/unit/local.test.ts
   tests/unit/match-dashboard.test.ts
   tests/unit/online-source.test.ts

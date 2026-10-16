@@ -1,5 +1,7 @@
 # SESEN / HBI Codex Rules
 
+Lineup markers are schematic recorded roles, never tracked locations, inferred formations or profile-default positions. Preserve period and [start,end) semantics, unknown clocks, pending/open records and overlap/invalid-time notices. Scope actions to the selected recording team; do not reclose closed/wrong-period records or allow incompatible incoming/outgoing players. Event feeds must use canonical shooter/result and exact event actions, with pending/legacy review states. Native media-time tests must target the video element, not a resizable wrapper.
+
 Report briefs must retain exact organization/match/session/team/filter scope and typed event-backed insights. Review status remains visible; an insight title can describe a larger saved sample. The optional complete register uses source time separately from recorded game clock and opens exact events. Verify real English/Arabic PDF bytes and rendered pages, not only print-media DOM; avoid dark page backgrounds, clipped rows and editor leakage. Focused scroll regions must not activate video shortcuts.
 
 Preserve the self-hosted WOFF2 faces, full OFL notices and provenance manifest. Font CSS must remain local-only; update asset hashes/filenames deliberately when changing distributions. Run `node scripts/verify-fonts.mjs` and browser family/weight checks when modifying typography. Keep `/fonts/*` static in Pages, readable SVG labels and unchanged 1672×941 geometry gates; font load success alone does not establish visual parity.

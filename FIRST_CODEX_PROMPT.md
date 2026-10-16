@@ -1,5 +1,7 @@
 # SESEN / HBI continuation prompt
 
+Preserve interval-backed schematic Lineups and the canonical EventFeed. Starter flags/profile positions cannot establish current presence; unknown clocks and ambiguous/invalid intervals stay explicit. Retain scoped roster/source/clock/role guards and old local substitution behavior. Test actual native video time, physical role-anchor behavior in Arabic and exact event IDs/actions when changing these views. Remaining annotation/review/presentation and long-data visual gates are still part of the original reference goal.
+
 Preserve the embedded coach brief and explicit event-register/PDF toggle. Saved insights need compatible typed event links into the selected sample; do not replace missing data or review status with generated conclusions. Re-run report scope tests, exact event actions and actual English/Arabic PDF generation when changing these views. Inspect rendered print pages and the populated team/comparison/report mobile layouts, including native scroll-region keyboard behavior.
 
 Keep the local Roboto Condensed/IBM Plex Sans Arabic fonts and final hierarchy in app/typography.css. Font files are official unmodified WOFF2 distributions with manifest hashes and full OFL notices; never replace them with runtime CDN imports. Verify loaded family/weight behavior, static Pages delivery and actual Arabic/English screenshots after font changes. Continue the remaining reference audit rather than declaring completion from font or geometry checks alone.

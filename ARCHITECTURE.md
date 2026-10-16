@@ -10,6 +10,8 @@ The provider exposes bounded account display text from Supabase Auth and clears 
 
 ## Match workspace statistics — 16 October 2026
 
+`features/players/lineup-snapshot.ts` isolates lineup context and resolves half-open period-clock intervals, separating invalid timing, unknown roles and duplicate-player overlaps. `LineupOverview` uses schematic role anchors on the existing normalized court, not observed coordinates or a formation inference. Roster setup stays online; prepared interval/substitution writes retain the local queue. `EventFeed` reuses session scoping and canonical attempts for explicit source time, shooter/result and evidence actions. New CSS is limited to these views; no schema/service/dependency is added.
+
 `features/reports/session-brief.ts` scopes and orders the selected team/session events and resolves saved insights only through compatible typed event links. `SessionReport` composes match context, existing metric controls, reviewable insights and an optional complete event appendix. `app/reports.css` owns A4 formatting and print isolation; PDF remains the browser's local print output, with no PDF service or new application dependency. Focused scrollable regions retain native arrow-key handling rather than seeking media.
 
 Typography uses `app/fonts.css` for local WOFF2 faces and `app/typography.css` for the reference hierarchy. `public/fonts/manifest.json` records official distribution URLs, weights, subsets, sizes and hashes; OFL notices ship alongside the assets. Pages verifies these files and serves `/fonts/*` outside the Worker. There is no Next font service, runtime font CDN, new dependency or inference service.

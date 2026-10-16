@@ -6,6 +6,8 @@ import "./sesen.css";
 import "./coaching-console.css";
 import "./typography.css";
 import "./reports.css";
+import "./lineups.css";
+import "./event-feed.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(

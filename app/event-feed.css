@@ -1,0 +1,108 @@
+.event-feed > header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  padding-block: 12px;
+}
+.event-feed > header b {
+  font-size: 16px;
+  font-weight: 600;
+}
+.event-feed > header small {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.event-feed-row {
+  display: grid;
+  grid-template-columns: 100px 32px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 10px;
+  border-top: 1px solid var(--border);
+  border-inline-start: 3px solid transparent;
+}
+.event-feed-row:hover {
+  background: #0c263033;
+}
+.event-feed-row[data-result="goal"] {
+  border-inline-start-color: var(--positive-lime);
+}
+.event-feed-row[data-result="save"] {
+  border-inline-start-color: var(--sesen-cyan);
+}
+.event-feed-row[data-result="unknown"] {
+  border-inline-start-color: var(--sesen-gold);
+}
+.event-feed-time {
+  display: grid;
+  gap: 4px;
+}
+.event-feed-time b {
+  font-size: 20px;
+  line-height: 1.2;
+}
+.event-feed-time small,
+.event-feed-time > span {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.event-feed-description {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.event-feed-description h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.event-feed-description p {
+  margin: 0 0 4px;
+  font-size: 13px;
+}
+.event-feed-description small {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.event-review-state {
+  display: block;
+  color: var(--sesen-gold);
+  font-size: 12px;
+  margin-top: 5px;
+}
+.event-feed-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.event-feed-actions button {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  min-height: 36px;
+  font-size: 13px;
+}
+.event-participant-tools {
+  margin-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.event-participant-tools > summary {
+  min-height: 44px;
+  padding-block: 12px;
+  color: var(--sesen-gold);
+  font-size: 14px;
+  cursor: pointer;
+}
+@media (max-width: 900px) {
+  .event-feed-row {
+    grid-template-columns: 80px 28px minmax(0, 1fr);
+    gap: 8px;
+  }
+  .event-feed-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+  .event-feed-actions button {
+    min-height: 44px;
+  }
+}

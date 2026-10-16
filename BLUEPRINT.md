@@ -10,6 +10,8 @@ The workstation header now includes actual signed-in identity and organization r
 
 ## Embedded match statistics — 16 October 2026
 
+Lineups now visualizes only unambiguous recorded period-clock intervals at schematic role anchors. Unknown clocks stay unknown; declared starters/profile positions do not populate the diagram. Invalid/overlapping records remain explicit and setup controls require compatible roster/source/clock/role context. The event feed shows canonical shooter/result, independent source/game clocks, review state and exact evidence/edit/clip actions; generic participant tools remain accessible on demand.
+
 Embedded reports are now coach briefs with actual match context, selected-sample metrics and saved event-backed insights, including their review status. A complete selected event register can be included explicitly as a PDF appendix. Its references retain source time, recorded period/clock, canonical result/player and event identity; no unchecked JSON evidence, guessed clocks or embedded video is added. Browser A4 printing and existing CSV remain local.
 
 The reference typography now uses locally bundled Roboto Condensed and IBM Plex Sans Arabic with explicit fallback fonts, tabular numeric styling and readable card/tab/radar labels. Distribution bytes and OFL licenses are recorded and verified; no third-party font request or paid service is required at runtime. Loaded-font browser checks complement the existing responsive/RTL and first-screen gates.

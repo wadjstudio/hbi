@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Visual lineups and event feed — 2026-10-16
+
+- Added a scoped period-clock lineup overview with schematic recorded roles, neutral shirt markers, interval detail and a separate declared roster. Half-open intervals drive presence; unknown clocks, invalid timing, unknown roles and overlapping player records stay explicit. Profile positions and starter flags never fill missing on-court data.
+- Moved setup into a labelled disclosure and scoped interval lists/actions to the selected recording team. Entry/substitution/close controls require role, linked source, calibrated clock, compatible roster and valid non-overlapping interval context; closed/wrong-period records cannot be closed again.
+- Replaced generic event cards with a source-time feed showing canonical shooter/result, separate recorded clock, pending/legacy review state and exact evidence/edit/clip actions. Participant management remains available through a disclosure.
+- Added domain/action tests and populated desktop/Arabic-mobile browser journeys, including half-open boundaries and physical role-anchor preservation. Corrected the prior table-key test to read the actual video element rather than the resizable panel wrapper. No new dependency, migration or automated player tracking.
+
 ## Coach brief and printable evidence register — 2026-10-16
 
 - Replaced the embedded report's loose export controls/IDs with a coach brief: actual match/competition/date/team context, scoped metric cards, saved event-backed insights and explicit review state.

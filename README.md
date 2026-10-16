@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence (HBI V1 foundation)
 
+Lineups now shows schematic recorded roles at the calibrated period/clock, an interval-detail panel and a separate declared roster. Starter flags and profile positions never stand in for on-court evidence. Events now has a source-time feed with canonical shooter/result, missing-clock/review states and exact evidence/edit/clip actions. Existing setup and participant tools remain available in labelled disclosures.
+
 The embedded Reports tab now prepares a coach brief with actual match context, current-selection metrics and saved event-backed insights with explicit review state. Optionally include the complete selected event register in browser print/PDF; source time and recorded game clock remain separate, and each on-screen reference opens its event. Reports export metadata/observations only, without embedding or uploading the local video.
 
 SESEN now bundles its display fonts locally: Roboto Condensed for English/numbers and IBM Plex Sans Arabic for Arabic. Six WOFF2 files total about 263 KB, with complete OFL notices and provenance in `public/fonts`. No runtime Google Fonts connection is needed; see [brand typography](brand/BRAND.md).
