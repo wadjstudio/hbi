@@ -1,5 +1,7 @@
 # SESEN / HBI continuation prompt
 
+Preserve the meeting agenda/large preview and modal presentation stage. Typed targets must stay organization-scoped and unavailable sources explicit. Verify header transitions, real fullscreen/fallback behavior, hidden notes, native-control-safe keyboard handling, focus return and source-bounded/relinked local clips. Continue the original reference audit and large/long content checks; fixtures and successful fullscreen do not establish real-match completeness.
+
 Retain the unified current-selection Review queue: pending canonical attempts and legacy issues appear once per event, with exact evidence/correction and separately gated old-review closure. Preserve status distinctions and readonly viewing. Editing absent canonical data must reset stale fields. Continue populated presentation transitions and remaining reference/long-data gates; a clean queue does not prove a fully analyzed match.
 
 Retain the source-scoped annotation library and manual drawing controls. Verify existing-layer editing through save, normalized whole-vector movement, actual media-time preservation, range-end visibility and Arabic mobile bounds. Preserve pause-on-entry flags and reveal save controls when editing from the library. Continue Review/presentation and remaining reference inspection; do not infer automatic analysis from telestration previews.

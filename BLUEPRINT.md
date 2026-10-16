@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
 
+Meeting preparation now has an ordered agenda beside a large content preview; the presentation stage supports local clips, tactical boards, evidence-backed insights and team messages. Speaker notes are absent during presentation. Native fullscreen exit and focus are synchronized, with a modal fallback when denied. Missing content remains explicit, and local clips show source ranges with bounded seeking and verified relinking. No new service or schema is required.
+
 The Review workspace now combines canonical and legacy issues for the current session/filter sample, with visible reasons, exact evidence, correction and separate gated legacy closure. Corrected known/reviewed attempts can close an old review; unresolved results cannot. Empty queues do not establish complete match analysis. Canonical shooter/edit fields are loaded from the selected observation, with absent values cleared rather than inherited.
 
 The annotation workspace now includes drawing-only layer previews, visibility ranges, object counts and pause-on-entry status with direct view/edit/delete actions. Missing local footage is explicit. Shared labelled drawing tools include selection and keyboard movement; arrow/path translation retains the vector. Editing opens the save controls automatically and preserves the layer's original pause setting. These are manual telestration tools, not automatic match understanding.

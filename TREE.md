@@ -43,6 +43,7 @@ hbi-starter/
   app/globals.css
   app/layout.tsx
   app/lineups.css
+  app/meetings.css
   app/page.tsx
   app/reports.css
   app/review.css
@@ -159,6 +160,7 @@ hbi-starter/
   features/players/lineup-snapshot.ts
   features/players/position-metrics.ts
   features/playlists/.gitkeep
+  features/presentations/item.ts
   features/reports/.gitkeep
   features/reports/export.ts
   features/reports/session-brief.ts
@@ -266,6 +268,7 @@ hbi-starter/
   tests/e2e/history-assertions.ts
   tests/e2e/lineup-assertions.ts
   tests/e2e/online-video.spec.ts
+  tests/e2e/presentation-assertions.ts
   tests/e2e/reports.spec.ts
   tests/e2e/review-assertions.ts
   tests/e2e/session-statistics-assertions.ts
@@ -288,6 +291,7 @@ hbi-starter/
   tests/unit/lineup-snapshot.test.ts
   tests/unit/local.test.ts
   tests/unit/match-dashboard.test.ts
+  tests/unit/meeting-item.test.ts
   tests/unit/online-source.test.ts
   tests/unit/positions.test.ts
   tests/unit/quick-tag-dock.test.tsx

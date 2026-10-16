@@ -1,5 +1,7 @@
 # SESEN / HBI V1 phases and acceptance gates
 
+Presentation follow-up separates preparation/agenda/notes from a branded modal stage. Gates: organization/typed-target isolation, unavailable references, actual header-to-meeting transition, clip/insight/text/board sequencing, native fullscreen exit, hidden notes, control-safe arrows, Tab containment/focus return, denied-fullscreen fallback, clip bounds/relinking and populated Arabic-mobile views. Full-reference and large-content audits remain separate.
+
 Review follow-up covers pending canonical and legacy issues, event deduplication, exact evidence/correction, category counts and gated legacy closure. Gates include relationship isolation, unknown versus verification/ambiguity, readonly access, correction through the existing editor/save workflow, legacy closure after correction and desktop/Arabic-mobile layout. Empty queues must not imply full-match completeness.
 
 Telestration follow-up adds scoped layer previews, labelled tools, Select mode, keyboard movement and whole-arrow translation. Gates cover foreign-source/session exclusion, readonly viewing, valid visibility bounds, duplicate-render prevention while editing, save-control visibility, actual persisted movement, end-exclusive visibility and populated desktop/Arabic-mobile layouts. Manual drawings do not establish automated tracking or tactical recognition.

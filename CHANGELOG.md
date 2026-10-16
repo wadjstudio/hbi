@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Meeting preparation and presentation stage — 2026-10-16
+
+- Added a branded meeting workspace with ordered agenda, large typed preview, visible clip source range, navigation and speaker notes that are absent while presenting. Localized content choices and clear writable-role guards replace generic item controls.
+- Added exact organization/typed-target resolution and missing-content states instead of asserting that referenced clips exist. Clip source lookup is organization-scoped and relinking requires an available source record. Seeking within local clips stays inside their source interval.
+- Presentation follows native fullscreen exit, restores focus, respects interactive/video controls during arrow navigation and traps Tab in the presentation dialog. Fullscreen denial keeps a usable stage; failed fullscreen exit keeps notes hidden rather than exposing preparation content.
+- Expanded isolated meeting fixtures/browser journeys with clip, insight, text and board; no dependency, schema, hosted data or media upload is required.
+
 ## Unified analysis review queue — 2026-10-16
 
 - Replaced the legacy-only button list with a scoped, categorized queue for unresolved results, verification flags, missing canonical attempts, duplicate-attempt ambiguity and corrected attempts with an open legacy review. Each event appears once; exact evidence and saved reasons remain visible.

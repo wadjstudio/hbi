@@ -328,6 +328,84 @@ export function consoleData({
       }),
     ],
     insights: [insight, secondaryInsight, historicalInsight],
+    clips: [
+      row(4020, {
+        title: "Fixture evidence clip",
+        video_id: video.id,
+        match_id: match.id,
+        start_ms: 6000,
+        end_ms: 11000,
+        created_by: user,
+      }),
+    ],
+    presentations: [
+      row(4000, { title: "Fixture match meeting", created_by: user }),
+    ],
+    presentation_items: [
+      row(4010, {
+        presentation_id: uid(4000),
+        position: 0,
+        clip_id: uid(4020),
+        speaker_note: "PRIVATE COACH NOTE",
+        autoplay: false,
+      }),
+      row(4011, {
+        presentation_id: uid(4000),
+        position: 1,
+        insight_id: insight.id,
+      }),
+      row(4012, {
+        presentation_id: uid(4000),
+        position: 2,
+        body: "Breathe. Reset. Attack.",
+      }),
+      row(4013, {
+        presentation_id: uid(4000),
+        position: 3,
+        tactic_id: uid(4030),
+      }),
+    ],
+    tactic_documents: [
+      row(4030, { title: "Fixture crossing board", created_by: user }),
+    ],
+    tactic_frames: [
+      row(4031, {
+        document_id: uid(4030),
+        title: "Opening shape",
+        position: 0,
+      }),
+    ],
+    tactic_objects: [
+      row(4032, {
+        document_id: uid(4030),
+        kind: "player",
+        label: "17",
+        color: "#00cccc",
+      }),
+      row(4033, {
+        document_id: uid(4030),
+        kind: "arrow",
+        label: "Cross",
+        color: "#e4be82",
+      }),
+    ],
+    tactic_frame_objects: [
+      row(4034, {
+        frame_id: uid(4031),
+        object_id: uid(4032),
+        x: 0.4,
+        y: 0.4,
+        visible: true,
+      }),
+      row(4035, {
+        frame_id: uid(4031),
+        object_id: uid(4033),
+        x: 0.45,
+        y: 0.5,
+        geometry: { x2: 0.7, y2: 0.6 },
+        visible: true,
+      }),
+    ],
     legacy_shot_reviews: [
       row(3100, {
         event_id: events[1].id,

@@ -8,6 +8,7 @@ import { verifyLineup } from "./lineup-assertions";
 import { verifyEventFeed } from "./event-feed-assertions";
 import { verifyAnnotations } from "./annotation-assertions";
 import { verifyReview } from "./review-assertions";
+import { verifyPresentation } from "./presentation-assertions";
 test("analysis console supports resizing, focus, keyboard tabs and narrow screens", async ({
   page,
   request,
@@ -413,4 +414,5 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     fullPage: true,
   });
   await verifyReview(page);
+  if (process.env.HBI_VISUAL_MATCH) await verifyPresentation(page);
 });

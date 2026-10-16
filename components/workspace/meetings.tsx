@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useWorkspace } from "./provider";
 import { Panel, Notice, SelectRow, rowLabel, useAction } from "./controls";
 import { Entities } from "./entities";
@@ -11,6 +11,22 @@ import { inspectVideo } from "@/lib/video/fingerprint";
 import { s, n, type Row } from "@/types/workspace";
 import { YouTubePlayerView } from "./youtube-player";
 import { BrandLockup } from "@/components/brand/brand-lockup";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Film,
+  LayoutTemplate,
+  Lightbulb,
+  Maximize2,
+  Plus,
+  Trash2,
+  Type,
+  X,
+} from "lucide-react";
+import { meetingItem } from "@/features/presentations/item";
+import { canWrite } from "@/lib/permissions/roles";
+import { formatTime } from "@/lib/video/time";
+import { analysisLabel } from "@/features/analysis/labels";
 export function Meetings() {
   const w = useWorkspace();
   return (
@@ -31,7 +47,14 @@ export function ClipPlayer({
     a = useAction(),
     ref = useRef<HTMLVideoElement>(null);
   const [url, setUrl] = useState("");
-  const source = w.list("videos").find((v) => v.id === clip.video_id);
+  const source = w
+    .list("videos")
+    .find(
+      (v) =>
+        v.id === clip.video_id &&
+        v.organization_id === w.org &&
+        clip.organization_id === w.org,
+    );
   useEffect(() => {
     const update = () => {
       const linked = getLocalSource(`${w.user}:${w.org}`, s(clip.video_id));
@@ -41,8 +64,23 @@ export function ClipPlayer({
     window.addEventListener("hbi-local-source", update);
     return () => window.removeEventListener("hbi-local-source", update);
   }, [w.user, w.org, clip.video_id]);
+  if (!source)
+    return (
+      <Notice>
+        {w.t(
+          "مصدر المقطع غير متاح في المؤسسة الحالية.",
+          "Clip source unavailable in the current organization.",
+        )}
+      </Notice>
+    );
   return (
     <div className="clip-player">
+      <div className="meeting-clip-range">
+        <span>{w.t("نطاق المقطع في المصدر", "Clip range in source")}</span>
+        <b dir="ltr">
+          {formatTime(n(clip.start_ms))} → {formatTime(n(clip.end_ms))}
+        </b>
+      </div>
       {a.error && <Notice>{a.error}</Notice>}
       {source?.storage_mode === "youtube" ? (
         <YouTubePlayerView
@@ -60,6 +98,13 @@ export function ClipPlayer({
           src={url}
           onLoadedMetadata={(e) => {
             e.currentTarget.currentTime = n(clip.start_ms) / 1000;
+          }}
+          onSeeking={(e) => {
+            const video = e.currentTarget;
+            if (video.currentTime < n(clip.start_ms) / 1000)
+              video.currentTime = n(clip.start_ms) / 1000;
+            else if (video.currentTime > n(clip.end_ms) / 1000)
+              video.currentTime = n(clip.end_ms) / 1000;
           }}
           onTimeUpdate={(e) => {
             if (e.currentTarget.currentTime >= n(clip.end_ms) / 1000) {
@@ -94,7 +139,7 @@ export function ClipPlayer({
           {w.t("تشغيل المصدر المشترك", "Play shared source")}
         </button>
       )}
-      {source?.storage_mode !== "youtube" && (
+      {source && source.storage_mode !== "youtube" && (
         <label className="file-button">
           {w.t("ربط المصدر", "Relink source")}
           <input
@@ -137,23 +182,110 @@ export function Presentation({ id }: { id: string }) {
     [presenting, setPresenting] = useState(false),
     [autoplay, setAutoplay] = useState(false);
   const host = useRef<HTMLDivElement>(null);
-  const presentation = w.list("presentations").find((r) => r.id === id),
+  const wasFullscreen = useRef(false);
+  const presentTrigger = useRef<HTMLButtonElement>(null);
+  const [fullscreenNotice, setFullscreenNotice] = useState("");
+  const presentation = w
+      .list("presentations")
+      .find((r) => r.id === id && r.organization_id === w.org),
     items = w
       .list("presentation_items")
-      .filter((r) => r.presentation_id === id)
+      .filter((r) => r.presentation_id === id && r.organization_id === w.org)
       .sort((a, b) => n(a.position) - n(b.position)),
-    current = items[index];
+    selectedIndex = Math.min(index, Math.max(0, items.length - 1)),
+    current = items[selectedIndex];
+  const sources = {
+    clips: w.list("clips"),
+    tactics: w.list("tactic_documents"),
+    insights: w.list("insights"),
+  };
+  const selected = meetingItem(w.org, current, sources);
+  const kinds = {
+    clip: w.t("مقطع فيديو", "Video clip"),
+    tactic: w.t("لوحة تكتيكية", "Tactical board"),
+    insight: w.t("استنتاج وأدلته", "Insight & evidence"),
+    text: w.t("رسالة للفريق", "Team message"),
+    missing: w.t("محتوى غير متاح", "Content unavailable"),
+  };
+  const writable = canWrite(w.role, "presentation_items") && !a.busy;
+  const exit = useCallback(async () => {
+    if (document.fullscreenElement === host.current) {
+      try {
+        await document.exitFullscreen();
+      } catch {
+        setFullscreenNotice(
+          w.t(
+            "تعذر الخروج من ملء الشاشة؛ استخدم Esc في المتصفح.",
+            "Could not leave fullscreen; use the browser's Escape control.",
+          ),
+        );
+        return;
+      }
+    }
+    setPresenting(false);
+    presentTrigger.current?.focus();
+  }, [w]);
+  useEffect(() => {
+    const change = () => {
+      if (document.fullscreenElement === host.current)
+        wasFullscreen.current = true;
+      else if (wasFullscreen.current) {
+        wasFullscreen.current = false;
+        setPresenting(false);
+        presentTrigger.current?.focus();
+      }
+    };
+    document.addEventListener("fullscreenchange", change);
+    return () => document.removeEventListener("fullscreenchange", change);
+  }, []);
   useEffect(() => {
     if (!presenting) return;
     const handle = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight")
-        setIndex((i) => Math.min(items.length - 1, i + 1));
-      if (e.key === "ArrowLeft") setIndex((i) => Math.max(0, i - 1));
-      if (e.key === "Escape") setPresenting(false);
+      if (e.key === "Escape") {
+        void exit();
+        return;
+      }
+      if (e.key === "Tab") {
+        const nodes = Array.from(
+          host.current?.querySelectorAll<HTMLElement>(
+            "button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),video[controls],summary,[tabindex='0']",
+          ) ?? [],
+        ).filter((node) => node.getClientRects().length > 0);
+        const first = nodes[0],
+          last = nodes[nodes.length - 1];
+        if (
+          first &&
+          last &&
+          (e.shiftKey
+            ? document.activeElement === first ||
+              document.activeElement === host.current
+            : document.activeElement === last)
+        ) {
+          e.preventDefault();
+          (e.shiftKey ? last : first).focus();
+        }
+      }
+      const target = e.target instanceof Element ? e.target : null;
+      if (
+        target?.closest(
+          "input,textarea,select,button,a,summary,video,[contenteditable=true],[role=slider],[role=button]",
+        )
+      )
+        return;
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        setIndex((i) => Math.min(Math.max(0, items.length - 1), i + 1));
+      }
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setIndex((i) =>
+          Math.max(0, Math.min(i, Math.max(0, items.length - 1)) - 1),
+        );
+      }
     };
     window.addEventListener("keydown", handle);
     return () => window.removeEventListener("keydown", handle);
-  }, [presenting, items.length]);
+  }, [presenting, items.length, exit]);
   async function add() {
     await w.save("presentation_items", {
       presentation_id: id,
@@ -171,8 +303,25 @@ export function Presentation({ id }: { id: string }) {
     setBody("");
     setNote("");
   }
+  if (!presentation)
+    return (
+      <Notice>
+        {w.t(
+          "الاجتماع غير متاح في المؤسسة الحالية.",
+          "Meeting unavailable in the current organization.",
+        )}
+      </Notice>
+    );
   return (
-    <div ref={host} className={presenting ? "presentation-stage" : ""}>
+    <div
+      ref={host}
+      tabIndex={-1}
+      role={presenting ? "dialog" : undefined}
+      aria-modal={presenting || undefined}
+      aria-label={presenting ? w.t("اجتماع الفريق", "Team meeting") : undefined}
+      data-slot="meeting-workbench"
+      className={`meeting-workbench${presenting ? " presentation-stage" : ""}`}
+    >
       {presenting && (
         <div className="presentation-brand">
           <BrandLockup />
@@ -185,208 +334,332 @@ export function Presentation({ id }: { id: string }) {
         }
         actions={
           <button
-            onClick={() => {
-              setPresenting(!presenting);
-              if (!presenting) void host.current?.requestFullscreen?.();
-              else if (document.fullscreenElement)
-                void document.exitFullscreen();
+            ref={presentTrigger}
+            disabled={!items.length}
+            onClick={async () => {
+              if (presenting) {
+                await exit();
+                return;
+              }
+              setPresenting(true);
+              setFullscreenNotice("");
+              host.current?.focus();
+              try {
+                if (!host.current?.requestFullscreen)
+                  throw new Error("Fullscreen unavailable");
+                await host.current.requestFullscreen();
+              } catch {
+                setFullscreenNotice(
+                  w.t(
+                    "وضع العرض نشط؛ ملء الشاشة غير متاح في هذا المتصفح.",
+                    "Presentation mode is active; fullscreen is unavailable in this browser.",
+                  ),
+                );
+              }
             }}
           >
+            {presenting ? (
+              <X size={16} aria-hidden="true" />
+            ) : (
+              <Maximize2 size={16} aria-hidden="true" />
+            )}
             {presenting ? w.t("إنهاء", "Exit") : w.t("وضع العرض", "Present")}
           </button>
         }
       >
         {a.error && <Notice>{a.error}</Notice>}
-        {!presenting && (
-          <>
-            <form
-              className="editor"
-              onSubmit={(e) => {
-                e.preventDefault();
-                void a.run(add);
-              }}
-            >
-              <div className="form-grid">
-                <select
-                  aria-label={w.t("نوع المحتوى", "Content type")}
-                  value={kind}
-                  onChange={(e) => {
-                    setKind(e.target.value);
-                    setTarget("");
-                  }}
-                >
-                  {["clip", "tactic", "insight", "text"].map((k) => (
-                    <option key={k}>{k}</option>
-                  ))}
-                </select>
-                {kind === "text" ? (
-                  <textarea
-                    required
-                    value={body}
-                    onChange={(e) => setBody(e.target.value)}
-                  />
-                ) : (
-                  <SelectRow
-                    label={w.t("المحتوى", "Content")}
-                    rows={w.list(
-                      kind === "clip"
-                        ? "clips"
-                        : kind === "tactic"
-                          ? "tactic_documents"
-                          : "insights",
-                    )}
-                    value={target}
-                    onChange={setTarget}
-                  />
-                )}
-                <label>
-                  {w.t("ملاحظة المقدم", "Speaker note")}
-                  <textarea
-                    value={note}
-                    onChange={(e) => setNote(e.target.value)}
-                  />
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={autoplay}
-                    onChange={(e) => setAutoplay(e.target.checked)}
-                  />
-                  {w.t("تشغيل المقطع تلقائيًا", "Autoplay clip")}
-                </label>
-              </div>
-              <button disabled={w.role === "viewer"}>
-                {w.t("إضافة للعرض", "Add to meeting")}
-              </button>
-            </form>
-            <div className="entity-list">
-              {items.map((item, i) => (
-                <article key={item.id}>
-                  <button onClick={() => setIndex(i)}>
-                    {i + 1} ·{" "}
-                    {s(item.body) ||
-                      rowLabel(
-                        w
-                          .list(
-                            item.clip_id
-                              ? "clips"
-                              : item.tactic_id
-                                ? "tactic_documents"
-                                : "insights",
-                          )
-                          .find(
-                            (r) =>
-                              r.id ===
-                              (item.clip_id ||
-                                item.tactic_id ||
-                                item.insight_id),
-                          ) ?? item,
-                      )}
-                  </button>
-                  <button
-                    disabled={i === 0}
-                    onClick={() =>
-                      void a.run(async () => {
-                        const ids = items.map((r) => r.id);
-                        [ids[i - 1], ids[i]] = [ids[i]!, ids[i - 1]!];
-                        const { createClient } =
-                          await import("@/lib/supabase/client");
-                        const { error } = await createClient().rpc(
-                          "reorder_items",
-                          {
-                            p_table: "presentation_items",
-                            p_parent: id,
-                            p_ids: ids,
-                          },
-                        );
-                        if (error) throw new Error(error.message);
-                        await w.reload();
-                      })
-                    }
-                  >
-                    ↑
-                  </button>
-                  <button
-                    onClick={() =>
-                      void a.run(() => w.save("presentation_items", item, true))
-                    }
-                  >
-                    ×
-                  </button>
-                </article>
-              ))}
-            </div>
-          </>
-        )}
-        <div className="meeting-content">
-          {current?.clip_id && (
-            <ClipPlayer
-              key={current.id}
-              clip={w.list("clips").find((c) => c.id === current.clip_id)!}
-              autoplay={Boolean(current.autoplay)}
-            />
-          )}{" "}
-          {current?.tactic_id && (
-            <TacticBoard id={s(current.tactic_id)} editable={false} />
-          )}{" "}
-          {current?.insight_id && (
-            <article>
-              <h2>
-                {s(
-                  w.list("insights").find((i) => i.id === current.insight_id)
-                    ?.title,
-                )}
-              </h2>
+        {presenting && fullscreenNotice && <Notice>{fullscreenNotice}</Notice>}
+        <div className="meeting-layout">
+          {!presenting && (
+            <aside className="meeting-agenda">
+              <h3>{w.t("جهّز اجتماع الفريق", "Prepare the team meeting")}</h3>
               <p>
-                {s(
-                  w.list("insights").find((i) => i.id === current.insight_id)
-                    ?.body,
+                {items.length}{" "}
+                {w.t(
+                  "عناصر مرتبة · الفيديو يبقى على جهازك",
+                  "ordered items · video stays on your device",
                 )}
               </p>
-              {w
-                .list("evidence_links")
-                .filter(
-                  (link) =>
-                    link.insight_id === current.insight_id && link.event_id,
-                )
-                .map((link) => {
-                  const event = w
-                    .list("events")
-                    .find((e) => e.id === link.event_id);
-                  return event ? (
-                    <p key={link.id}>
-                      <Link
-                        href={`/matches/${s(event.match_id)}?event=${event.id}`}
-                      >
-                        {w.t("شاهد الدليل", "Watch evidence")} ·{" "}
-                        {s(event.event_type)}
-                      </Link>
-                    </p>
-                  ) : null;
-                })}
-            </article>
+              <form
+                className="editor"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  void a.run(add);
+                }}
+              >
+                <div className="form-grid">
+                  <select
+                    aria-label={w.t("نوع المحتوى", "Content type")}
+                    value={kind}
+                    onChange={(e) => {
+                      setKind(e.target.value);
+                      setTarget("");
+                    }}
+                  >
+                    {(["clip", "tactic", "insight", "text"] as const).map(
+                      (k) => (
+                        <option key={k} value={k}>
+                          {kinds[k]}
+                        </option>
+                      ),
+                    )}
+                  </select>
+                  {kind === "text" ? (
+                    <textarea
+                      aria-label={w.t("رسالة للفريق", "Team message")}
+                      required
+                      value={body}
+                      onChange={(e) => setBody(e.target.value)}
+                    />
+                  ) : (
+                    <SelectRow
+                      label={w.t("المحتوى", "Content")}
+                      rows={w.list(
+                        kind === "clip"
+                          ? "clips"
+                          : kind === "tactic"
+                            ? "tactic_documents"
+                            : "insights",
+                      )}
+                      value={target}
+                      onChange={setTarget}
+                    />
+                  )}
+                  <label>
+                    {w.t("ملاحظة المقدم", "Speaker note")}
+                    <textarea
+                      value={note}
+                      onChange={(e) => setNote(e.target.value)}
+                    />
+                  </label>
+                  <label className="meeting-autoplay">
+                    <input
+                      type="checkbox"
+                      checked={autoplay}
+                      onChange={(e) => setAutoplay(e.target.checked)}
+                    />
+                    {w.t("تشغيل المقطع تلقائيًا", "Autoplay clip")}
+                  </label>
+                </div>
+                <button
+                  disabled={
+                    !writable || (kind === "text" ? !body.trim() : !target)
+                  }
+                >
+                  <Plus size={15} aria-hidden="true" />
+                  {w.t("إضافة للعرض", "Add to meeting")}
+                </button>
+              </form>
+              <div
+                className="meeting-item-list"
+                aria-label={w.t("ترتيب العرض", "Presentation sequence")}
+              >
+                {items.map((item, i) => (
+                  <article key={item.id}>
+                    <button
+                      className="meeting-item-select"
+                      aria-current={selectedIndex === i ? "step" : undefined}
+                      onClick={() => setIndex(i)}
+                    >
+                      {i + 1} ·{" "}
+                      {meetingItem(w.org, item, sources).kind === "missing"
+                        ? kinds.missing
+                        : s(item.body) ||
+                          rowLabel(
+                            w
+                              .list(
+                                item.clip_id
+                                  ? "clips"
+                                  : item.tactic_id
+                                    ? "tactic_documents"
+                                    : "insights",
+                              )
+                              .find(
+                                (r) =>
+                                  r.id ===
+                                  (item.clip_id ||
+                                    item.tactic_id ||
+                                    item.insight_id),
+                              ) ?? item,
+                          )}
+                    </button>
+                    <button
+                      aria-label={`${w.t("تحريك لأعلى", "Move up")} ${i + 1}`}
+                      disabled={i === 0 || !writable}
+                      onClick={() =>
+                        void a.run(async () => {
+                          const ids = items.map((r) => r.id);
+                          [ids[i - 1], ids[i]] = [ids[i]!, ids[i - 1]!];
+                          const { createClient } =
+                            await import("@/lib/supabase/client");
+                          const { error } = await createClient().rpc(
+                            "reorder_items",
+                            {
+                              p_table: "presentation_items",
+                              p_parent: id,
+                              p_ids: ids,
+                            },
+                          );
+                          if (error) throw new Error(error.message);
+                          await w.reload();
+                        })
+                      }
+                    >
+                      ↑
+                    </button>
+                    <button
+                      aria-label={`${w.t("حذف العنصر", "Remove item")} ${i + 1}`}
+                      disabled={!writable}
+                      onClick={() =>
+                        void a.run(() =>
+                          w.save("presentation_items", item, true),
+                        )
+                      }
+                    >
+                      <Trash2 size={15} aria-hidden="true" />
+                    </button>
+                  </article>
+                ))}
+              </div>
+            </aside>
           )}
-          {current?.body && (
-            <article className="meeting-text">{s(current.body)}</article>
-          )}
+          <div className="meeting-preview">
+            <div className="meeting-preview-heading">
+              <span>
+                {selected.kind === "clip" ? (
+                  <Film size={17} aria-hidden="true" />
+                ) : selected.kind === "tactic" ? (
+                  <LayoutTemplate size={17} aria-hidden="true" />
+                ) : selected.kind === "insight" ? (
+                  <Lightbulb size={17} aria-hidden="true" />
+                ) : (
+                  <Type size={17} aria-hidden="true" />
+                )}
+                {kinds[selected.kind]}
+              </span>
+              <small>
+                {presenting
+                  ? w.t(
+                      "أسهم لوحة المفاتيح للتنقل · Esc للخروج",
+                      "Arrow keys to navigate · Esc to exit",
+                    )
+                  : w.t("معاينة العرض", "Presentation preview")}
+              </small>
+            </div>
+            <div className="meeting-content">
+              {selected.kind === "clip" && selected.target && (
+                <ClipPlayer
+                  key={current?.id}
+                  clip={selected.target}
+                  autoplay={Boolean(current?.autoplay)}
+                />
+              )}{" "}
+              {selected.kind === "tactic" && selected.target && (
+                <TacticBoard id={selected.target.id} editable={false} />
+              )}{" "}
+              {selected.kind === "insight" && selected.target && (
+                <article className="meeting-insight">
+                  <span className="meeting-insight-state">
+                    {selected.target.is_reviewed
+                      ? w.t("استنتاج مراجع", "Reviewed insight")
+                      : w.t("الاستنتاج يحتاج المراجعة", "Insight needs review")}
+                  </span>
+                  <h2>{s(selected.target.title)}</h2>
+                  <p>{s(selected.target.body)}</p>
+                  <div
+                    className="meeting-evidence-grid"
+                    aria-label={w.t("أدلة الفيديو", "Video evidence")}
+                  >
+                    {w
+                      .list("evidence_links")
+                      .filter(
+                        (link) =>
+                          link.organization_id === w.org &&
+                          link.insight_id === selected.target?.id &&
+                          link.event_id,
+                      )
+                      .map((link) => {
+                        const event = w
+                          .list("events")
+                          .find(
+                            (e) =>
+                              e.id === link.event_id &&
+                              e.organization_id === w.org,
+                          );
+                        return event ? (
+                          <div key={link.id}>
+                            <Link
+                              href={`/matches/${s(event.match_id)}?event=${event.id}`}
+                            >
+                              <span>
+                                {w.t("شاهد الدليل", "Watch evidence")}
+                              </span>
+                              <b dir="ltr">
+                                {typeof event.timestamp_ms === "number" &&
+                                Number.isFinite(event.timestamp_ms) &&
+                                event.timestamp_ms >= 0
+                                  ? formatTime(event.timestamp_ms)
+                                  : "—"}
+                              </b>
+                              <small>
+                                {analysisLabel(s(event.event_type), w.lang)}
+                              </small>
+                            </Link>
+                          </div>
+                        ) : null;
+                      })}
+                  </div>
+                </article>
+              )}
+              {selected.kind === "text" && current?.body && (
+                <article className="meeting-text">{s(current.body)}</article>
+              )}
+              {selected.kind === "missing" && (
+                <Notice>
+                  {items.length
+                    ? w.t(
+                        "هذا العنصر أو مصدره غير متاح. راجع ترتيب العرض قبل الاجتماع.",
+                        "This item or its content is unavailable. Check the sequence before the meeting.",
+                      )
+                    : w.t(
+                        "أضف مقطعًا أو لوحة أو استنتاجًا أو رسالة لتجهيز العرض.",
+                        "Add a clip, board, insight or message to prepare the presentation.",
+                      )}
+                </Notice>
+              )}
+            </div>
+            <div className="toolbar meeting-navigation">
+              <button
+                disabled={selectedIndex === 0}
+                onClick={() => setIndex(selectedIndex - 1)}
+              >
+                <ArrowLeft size={16} aria-hidden="true" />
+                {w.t("السابق", "Previous")}
+              </button>
+              <b>
+                {items.length ? selectedIndex + 1 : 0}/{items.length}
+              </b>
+              <button
+                disabled={selectedIndex >= items.length - 1}
+                onClick={() => setIndex(selectedIndex + 1)}
+              >
+                {w.t("التالي", "Next")}
+                <ArrowRight size={16} aria-hidden="true" />
+              </button>
+            </div>
+            {!presenting && current?.speaker_note && (
+              <aside className="meeting-speaker-note">
+                <b>
+                  {w.t(
+                    "ملاحظات المقدم · مخفية أثناء العرض",
+                    "Speaker notes · hidden while presenting",
+                  )}
+                </b>
+                <p>{s(current.speaker_note)}</p>
+              </aside>
+            )}
+          </div>
         </div>
-        <div className="toolbar">
-          <button disabled={index === 0} onClick={() => setIndex((i) => i - 1)}>
-            {w.t("السابق", "Previous")}
-          </button>
-          <b>
-            {items.length ? index + 1 : 0}/{items.length}
-          </b>
-          <button
-            disabled={index >= items.length - 1}
-            onClick={() => setIndex((i) => i + 1)}
-          >
-            {w.t("التالي", "Next")}
-          </button>
-        </div>
-        {!presenting && current?.speaker_note && (
-          <Notice>{s(current.speaker_note)}</Notice>
-        )}
       </Panel>
     </div>
   );

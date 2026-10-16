@@ -10,6 +10,7 @@ import "./lineups.css";
 import "./event-feed.css";
 import "./annotations.css";
 import "./review.css";
+import "./meetings.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
