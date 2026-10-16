@@ -421,7 +421,7 @@
     margin-top: 10px;
   }
   .analysis-separator,
-  .layout-controls button:last-child {
+  .layout-controls > button:last-child {
     display: none;
   }
 }

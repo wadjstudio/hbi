@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
 
+The workstation now gives the picture priority: source and workspace setup move into a labelled gear beside playback controls, preserving the full source and mounted media. Its popover includes local selection/relinking, source guidance, YouTube attachment and existing layout/session tools. Empty video has a direct source action; mobile uses a bounded fixed popover and 44px targets. Keyboard focus, dismissal and original data/write guards remain required.
+
 Primary playback and recording controls now follow the reference's stronger gold/cyan timeline treatment and colored action row. Wide desktop provides larger playback targets and nine 36px tagging controls, retaining source aspect ratio and original event semantics. Existing local assets provide the stronger athlete rail; no library, service or data-model change is introduced.
 
 Wide desktop branding now follows the supplied reference footprint: a 286px masthead contains the existing 232px lockup, separate from the navigation rail. Competition context, balanced score/team columns and action controls remain independent. Arabic mirrors placement without mirroring the artwork. Tablet uses the compact mark and mobile retains a 44px home-link target; no additional service, asset or dependency is required.

@@ -43,7 +43,7 @@ export const AnalysisSplit = ({
       className="layout-menu"
       data-slot="layout-menu"
       onKeyDown={(event) => {
-        if (event.key === "Escape") {
+        if (event.key === "Escape" && menu.current?.open) {
           event.preventDefault();
           if (menu.current) {
             menu.current.open = false;

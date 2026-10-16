@@ -7,13 +7,15 @@ export function Panel({
   title,
   children,
   actions,
+  className = "",
 }: {
   title: string;
   children: ReactNode;
   actions?: ReactNode;
+  className?: string;
 }) {
   return (
-    <section className="hbi-panel panel">
+    <section className={`hbi-panel panel ${className}`}>
       <header>
         <h2>{title}</h2>
         {actions}

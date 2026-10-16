@@ -52,6 +52,7 @@ hbi-starter/
   app/sesen.css
   app/typography.css
   app/video-console.css
+  app/video-settings.css
   app/workbench.css
   app/(auth)/login/login-form.tsx
   app/(auth)/login/page.tsx
@@ -131,6 +132,7 @@ hbi-starter/
   components/workspace/tag-template.tsx
   components/workspace/team.tsx
   components/workspace/threat-profile.tsx
+  components/workspace/video-source-settings.tsx
   components/workspace/video-transport.tsx
   components/workspace/video-workspace.tsx
   components/workspace/youtube-player.tsx
@@ -284,6 +286,8 @@ hbi-starter/
   tests/e2e/transport-assertions.ts
   tests/e2e/transport.spec.ts
   tests/e2e/typography-assertions.ts
+  tests/e2e/video-settings-assertions.ts
+  tests/e2e/video-settings.spec.ts
   tests/e2e/video.spec.ts
   tests/e2e/workflow.spec.ts
   tests/fixtures/console-data.mjs
@@ -313,6 +317,7 @@ hbi-starter/
   tests/unit/smoke.test.ts
   tests/unit/spatial-sample.test.ts
   tests/unit/sync-errors.test.ts
+  tests/unit/video-source-settings.test.tsx
   tests/unit/video-source.test.ts
   tests/unit/workbench.test.ts
   tools/local-analysis/NOTICE.md

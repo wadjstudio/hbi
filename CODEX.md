@@ -1,5 +1,7 @@
 # SESEN / HBI Codex Rules
 
+Keep video source/layout/session setup behind the accessible gear without removing file/online or primary-session controls. Preserve mounted native media and time while opening settings or resizing. Inner Escape must close only the layout submenu; a second Escape closes setup and restores gear focus. Verify physical popover bounds, mobile 44px targets, role/offline guards, full source aspect and clean first-screen layout.
+
 Keep native seek range semantics, progress styling and bounded media-time callbacks together. Verify actual video time after pointer and keyboard input; a styled track alone is insufficient. Preserve source aspect, nine distinct phase/event actions, compact/mobile flow and the original first-screen gates when increasing control sizes.
 
 Preserve the reference masthead footprint without changing the video/sidebar grid. Maintain exactly one accessible visible home link at each breakpoint, the lockup aspect ratio, logical RTL offsets and tablet compact mark. Test desktop logo geometry, separation from metadata, keyboard focus, mobile tap height and the original first-screen/overflow gates. Do not fix a failing brand check by hiding the only available home link.

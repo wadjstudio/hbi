@@ -1,4 +1,5 @@
 import { expect, type Page } from "@playwright/test";
+import { openVideoSettings } from "./video-settings-assertions";
 export const verifyHeader = async (page: Page) => {
   const account = page.locator(".account-menu");
   await account.locator("summary").click();
@@ -31,14 +32,13 @@ export const verifyHeader = async (page: Page) => {
   await expect(
     presentation.getByRole("link", { name: "All meetings", exact: false }),
   ).toHaveAttribute("href", "/meetings");
-  await page
-    .getByRole("heading", { name: "Video analysis", exact: true })
-    .click();
+  await page.locator(".video-matte").click({ position: { x: 10, y: 60 } });
   await expect(presentation).not.toHaveAttribute("open");
   // A shared link must retain its explicit session and source position after a fresh load.
   parsed.searchParams.set("at", "12000");
   await page.goto(parsed.toString());
   await expect(page.locator("#match-header-slot")).toContainText("Video 0:12");
+  await openVideoSettings(page);
   await page.getByText("Layout & sessions", { exact: true }).click();
   await page.getByText("Analysis sessions & settings", { exact: true }).click();
   await expect(

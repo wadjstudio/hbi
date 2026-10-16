@@ -12,6 +12,10 @@ import { verifyPresentation } from "./presentation-assertions";
 import { verifyHeaderDetails } from "./header-details-assertions";
 import { verifyBrandHeader } from "./brand-header-assertions";
 import { verifyTransport } from "./transport-assertions";
+import {
+  openVideoSettings,
+  verifyVideoSettings,
+} from "./video-settings-assertions";
 test("analysis console supports resizing, focus, keyboard tabs and narrow screens", async ({
   page,
   request,
@@ -43,6 +47,8 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
   await expect
     .poll(async () => (await video.boundingBox())!.width)
     .toBeLessThan(initial);
+  await verifyVideoSettings(page);
+  await openVideoSettings(page);
   await page.getByText("Layout & sessions", { exact: true }).focus();
   await page.keyboard.press("Space");
   await page.getByRole("button", { name: "Focus video", exact: true }).click();
@@ -398,6 +404,7 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
   await expect(separator).toBeHidden();
   await expect(rail).toBeVisible();
   const layoutTrigger = page.locator(".layout-menu > summary");
+  await openVideoSettings(page);
   await expect
     .poll(async () => (await layoutTrigger.boundingBox())!.height)
     .toBeGreaterThanOrEqual(44);
@@ -411,10 +418,9 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
   await page.keyboard.press("Escape");
   await expect(layoutTrigger).toBeFocused();
   await layoutTrigger.click();
-  await page
-    .getByRole("heading", { name: "الفيديو والتحليل", exact: true })
-    .click();
+  await page.locator(".video-settings > summary").click();
   await expect(page.locator(".layout-menu")).not.toHaveAttribute("open");
+  await expect(page.locator(".video-settings")).not.toHaveAttribute("open");
   await page.screenshot({
     path: testInfo.outputPath("console-mobile.png"),
     fullPage: true,

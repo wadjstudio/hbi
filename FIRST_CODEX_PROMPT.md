@@ -1,5 +1,7 @@
 # SESEN / HBI continuation prompt
 
+Preserve the video-first setup gear and direct empty-state source action. Use the existing attach/relink and AnalysisSplit controls rather than duplicate state or file inputs. Test nested Escape/focus, outside dismissal, mobile bounds/targets and actual media identity/time during layout changes. Continue the complete reference audit, including populated long/missing states; moving setup alone is not full parity.
+
 Retain the gold/cyan native seek track, larger wide-desktop playback/tag controls and stronger existing athlete rail. Preserve source aspect and event semantics; verify actual media time through pointer/keyboard control and responsive geometry. Continue the reference audit rather than equating these controls with the complete target.
 
 Preserve the wide reference masthead and balanced match header, responsive home-link access and tablet mark. Inspect actual Arabic/English desktop/mobile screenshots after shell changes, with unchanged first-screen/overflow gates. Continue the complete reference audit and real-account validation; a matching logo footprint alone does not establish complete visual parity.

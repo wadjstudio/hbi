@@ -1634,7 +1634,7 @@ html[dir="rtl"] .session-rail {
     width: 42px;
     font-size: 9px;
   }
-  .video-transport button:nth-child(3) {
+  .video-transport > button:nth-child(3) {
     display: none;
   }
   .transport-time {

@@ -1,5 +1,5 @@
 "use client";
-import { useState, type CSSProperties } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import {
   Play,
   Pause,
@@ -25,6 +25,7 @@ export function VideoTransport({
   onMute,
   onVolume,
   onRate,
+  settings,
 }: {
   onToggle: () => void | Promise<void>;
   onFullscreen: () => void | Promise<void>;
@@ -37,6 +38,7 @@ export function VideoTransport({
   onMute: (muted: boolean) => void;
   onVolume: (volume: number) => void;
   onRate: (rate: number) => void;
+  settings?: ReactNode;
 }) {
   const w = useWorkspace(),
     a = useAction();
@@ -136,6 +138,7 @@ export function VideoTransport({
             </option>
           ))}
         </select>
+        {settings}
         <button
           disabled={!available}
           aria-label={w.t("ملء شاشة الفيديو", "Video fullscreen")}

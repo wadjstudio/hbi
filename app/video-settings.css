@@ -1,0 +1,141 @@
+.analysis-split .workbench-video-column > .video-player-panel > header {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.video-settings {
+  position: relative;
+  flex-shrink: 0;
+  font-size: 12px;
+}
+.video-settings > summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  min-width: 32px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  list-style: none;
+}
+.video-settings > summary::-webkit-details-marker {
+  display: none;
+}
+.video-settings[open] > summary,
+.video-settings > summary:hover {
+  color: var(--sesen-cyan);
+  border-color: var(--sesen-cyan);
+  background: #00313766;
+}
+.video-settings:not([open]) > .video-settings-popover {
+  display: none;
+}
+.video-settings-popover {
+  position: absolute;
+  z-index: 65;
+  bottom: calc(100% + 8px);
+  inset-inline-end: 0;
+  width: min(360px, calc(100vw - 32px));
+  max-height: min(440px, calc(100dvh - 160px));
+  overflow: auto;
+  padding: 12px;
+  display: grid;
+  gap: 12px;
+  border: 1px solid #1a6672;
+  border-radius: 6px;
+  background: #07171d;
+  box-shadow: 0 12px 36px #000b;
+  text-align: start;
+}
+.video-settings-popover > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.video-settings-popover h3 {
+  font-size: 15px;
+  margin: 0;
+}
+.video-settings-popover small {
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.video-settings-popover .file-button {
+  text-align: center;
+}
+.video-settings .layout-menu > .layout-controls {
+  position: static;
+  width: auto;
+  max-height: none;
+  padding: 10px 0 0;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+.video-settings .source-options {
+  margin: 0;
+}
+.video-settings .online-source-picker form {
+  display: grid;
+  gap: 8px;
+}
+.video-settings .video-settings-popover :is(button, select, input[type="url"]) {
+  width: auto;
+  min-height: 32px;
+  font-size: 12px;
+}
+.video-settings .video-settings-popover input[type="url"] {
+  width: 100%;
+  min-width: 0;
+  direction: ltr;
+}
+.video-settings .video-settings-popover button {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  background: #10232d;
+}
+.video-settings .video-settings-popover .layout-controls > button {
+  width: 100%;
+}
+.video-settings .video-settings-popover > header > button {
+  min-width: 32px;
+  padding: 4px;
+}
+.video-settings .session-settings {
+  min-width: 0;
+  width: 100%;
+}
+.video-settings .session-settings > div {
+  min-width: 0;
+}
+@media (max-width: 1199px) {
+  .video-settings > summary,
+  .video-settings
+    .video-settings-popover
+    :is(button, select, input[type="url"]),
+  .video-settings .file-button,
+  .video-settings .source-options > summary {
+    min-height: 44px;
+  }
+  .video-settings > summary {
+    min-width: 44px;
+  }
+  .video-settings .video-settings-popover > header > button {
+    min-width: 44px;
+  }
+  .video-settings-popover {
+    position: fixed;
+    top: 88px;
+    inset-inline: 16px;
+    bottom: auto;
+    width: auto;
+    max-height: calc(100dvh - 120px);
+  }
+}

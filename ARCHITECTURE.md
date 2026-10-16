@@ -1,5 +1,7 @@
 # SESEN / HBI Architecture
 
+VideoSourceSettings owns the native setup disclosure, local URL draft and dismiss/focus behavior; it reuses the existing file/online attach callbacks and the AnalysisSplit layout/session controls. VideoTransport accepts an optional settings node before fullscreen. The video Panel's heading remains accessible while leaving the visual media row; Panel gains an optional className without changing other panels. Nested Escape is handled once: the inner layout menu closes first, then the outer setup returns focus to its gear.
+
 app/video-console.css refines the existing transport/tagging controls without replacing native range behavior or media nodes. The seek input supplies its current progress as a CSS custom property; keyboard/pointer seeking still calls the original bounded seek function. Wide-desktop control sizes change at 1600px; compact/mobile layouts retain their existing sizing and flow. Existing artwork is styled through the sidebar pseudo-element.
 
 The shell reuses its existing header home link for a wide, absolutely positioned masthead at 1440px and above. Logical inline offsets mirror the placement in RTL while preserving the logo aspect ratio and the workspace/sidebar grid. The sidebar brand keeps its flow reservation but is hidden at that width; tablet keeps the compact mark, with specificity that overrides the older generic span-hiding rule. app/brand-header.css owns this presentation layer; no data contract changes.

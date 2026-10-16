@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence (HBI V1 foundation)
 
+Video source, relinking and layout/session setup now live behind the labelled gear beside playback controls. The video keeps its full source aspect and starts higher in the workstation; the empty state offers a direct Choose source action. Setup supports Escape/focus return, outside dismissal, local file verification and existing guarded YouTube attachment. It does not remount or upload the local media.
+
 The primary video controls now use a gold progress track with a cyan remainder, larger wide-desktop playback targets and a full-width row of nine colored tagging actions. Save uses a hand icon; the recording semantics, source aspect ratio, keyboard shortcuts and local media remain unchanged. The existing athlete artwork has a stronger wide-desktop presence.
 
 The wide workstation header now uses a 286px SESEN masthead with the existing lockup at 232px, matching the reference footprint while retaining the 192px navigation rail. Match metadata, opposing team identities and actions have separate space. Compact/tablet and mobile branding remain responsive; the home link is available once in the accessibility tree.

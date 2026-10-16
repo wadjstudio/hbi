@@ -30,6 +30,7 @@ import { MatchHub } from "./match-hub";
 import { MatchContext } from "./match-context";
 import { ReferenceBroadcast } from "./reference-match";
 import { VideoTransport } from "./video-transport";
+import { VideoSourceSettings } from "./video-source-settings";
 import { AnalysisTimeline } from "./analysis-timeline";
 import { QuickTagDock } from "./quick-tag-dock";
 import { SessionAnalysisRail } from "./session-analysis-rail";
@@ -102,8 +103,7 @@ export function VideoWorkspace({
     surface = useRef<HTMLDivElement>(null);
   const [onlineReady, setOnlineReady] = useState(false),
     [onlineDuration, setOnlineDuration] = useState(0),
-    [onlineRates, setOnlineRates] = useState<number[]>([1]),
-    [sourceUrl, setSourceUrl] = useState("");
+    [onlineRates, setOnlineRates] = useState<number[]>([1]);
   const undo = useRef<History[]>([]),
     redo = useRef<History[]>([]);
   const [historyCounts, setHistoryCounts] = useState({ undo: 0, redo: 0 });
@@ -902,80 +902,9 @@ export function VideoWorkspace({
         video={(layoutControls) => (
           <div className="workbench-video-column">
             <Panel
+              className="video-player-panel"
               title={w.t("الفيديو والتحليل", "Video analysis")}
-              actions={
-                <div className="video-heading-actions">
-                  {layoutControls}
-                  <label className="file-button">
-                    {url
-                      ? w.t("إعادة ربط", "Relink")
-                      : w.t("اختيار فيديو محلي", "Select local video")}
-                    <input
-                      type="file"
-                      accept="video/*"
-                      onChange={(e) => {
-                        const f = e.target.files?.[0];
-                        if (f) void a.run(() => attach(f));
-                      }}
-                    />
-                  </label>
-                </div>
-              }
             >
-              <details className="source-options" open={!video}>
-                <summary>
-                  {w.t(
-                    "مصادر الفيديو · محلي / YouTube",
-                    "Video sources · local / YouTube",
-                  )}
-                </summary>
-                <div className="online-source-picker">
-                  {isReferenceMatch(match) && (
-                    <button
-                      disabled={
-                        !w.online || a.busy || !canWrite(w.role, "videos")
-                      }
-                      onClick={() =>
-                        void a.run(() =>
-                          attachOnline(
-                            "https://www.youtube.com/watch?v=q-_grNLweEE",
-                          ),
-                        )
-                      }
-                    >
-                      {w.t(
-                        "تحليل التسجيل الرسمي · YouTube",
-                        "Analyze official recording · YouTube",
-                      )}
-                    </button>
-                  )}
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      void a.run(() => attachOnline(sourceUrl));
-                    }}
-                  >
-                    <input
-                      type="url"
-                      required
-                      aria-label={w.t(
-                        "رابط فيديو YouTube",
-                        "YouTube video URL",
-                      )}
-                      placeholder="https://www.youtube.com/watch?v=…"
-                      value={sourceUrl}
-                      onChange={(e) => setSourceUrl(e.target.value)}
-                    />
-                    <button
-                      disabled={
-                        !w.online || a.busy || !canWrite(w.role, "videos")
-                      }
-                    >
-                      {w.t("ربط المصدر", "Attach source")}
-                    </button>
-                  </form>
-                </div>
-              </details>
               <div className="video-matte">
                 <div
                   ref={surface}
@@ -1070,6 +999,21 @@ export function VideoWorkspace({
                           "Video stays on your device. Select or relink the source.",
                         )}
                       </p>
+                      <button
+                        onClick={(event) => {
+                          const settings = event.currentTarget
+                            .closest(".panel")
+                            ?.querySelector<HTMLDetailsElement>(
+                              ".video-settings",
+                            );
+                          if (settings) {
+                            settings.open = true;
+                            settings.querySelector("summary")?.focus();
+                          }
+                        }}
+                      >
+                        {w.t("اختيار مصدر الفيديو", "Choose video source")}
+                      </button>
                     </div>
                   )}
                   {!isOnlineSource &&
@@ -1094,6 +1038,18 @@ export function VideoWorkspace({
                 </div>
               </div>
               <VideoTransport
+                settings={
+                  <VideoSourceSettings
+                    layoutControls={layoutControls}
+                    isLinked={Boolean(url)}
+                    isReference={isReferenceMatch(match)}
+                    isBusy={a.busy}
+                    onFile={(file) => void a.run(() => attach(file))}
+                    onOnline={(sourceUrl) =>
+                      void a.run(() => attachOnline(sourceUrl))
+                    }
+                  />
+                }
                 onToggle={togglePlayback}
                 onFullscreen={async () => {
                   if (document.fullscreenElement)

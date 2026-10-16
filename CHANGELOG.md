@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Video-first setup gear — 2026-10-17
+
+- Corrected nested Escape consumption and two broad mobile descendant selectors so the primary-session action stays visible after source/layout controls are nested. Dedicated native-browser checks cover both cases.
+- Moved source selection/relinking, YouTube attachment and existing layout/session tools from the picture header into a labelled gear beside playback controls.
+- Preserved the semantic video heading, source aspect, original attach/verification/write paths and mounted media; empty local footage exposes a direct source action.
+- Added bounded desktop/mobile setup, Escape/focus return and outside dismissal; inner layout Escape is consumed before the outer menu. Mobile close/gear targets are 44px.
+- Added source callback/guard unit tests and native setup browser checks. No dependency, schema, DNS/R2 or production observation change.
+
 ## Video transport and recording hierarchy — 2026-10-16
 
 - Styled the native seek input with live gold progress/cyan remainder and visible focus, retaining bounded seeking.
