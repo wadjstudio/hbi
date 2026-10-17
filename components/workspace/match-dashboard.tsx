@@ -6,11 +6,12 @@ import {
   recentMatchForm,
 } from "@/features/analysis/match-dashboard";
 import { analysisLabel } from "@/features/analysis/labels";
-import { percent } from "@/lib/analytics/metrics";
+import { percent, reviewedShotAttempts } from "@/lib/analytics/metrics";
 import { s, type Row } from "@/types/workspace";
 import { useWorkspace } from "./provider";
 import { rowLabel } from "./controls";
-import { PlayerAvatar } from "@/components/brand/brand-lockup";
+import { PlayerThreatRow } from "./player-threat-row";
+import { ShotProfileCard } from "./shot-profile-card";
 import { brand } from "@/lib/brand";
 import { EvidenceTrend } from "./evidence-trend";
 import { SpatialMap } from "./spatial-map";
@@ -44,53 +45,17 @@ export function MatchDashboard({
       className="match-dashboard"
       aria-label={w.t("ملخص المباراة بالأدلة", "Evidence-backed match summary")}
     >
-      <article className="dashboard-card">
-        <header>
-          <h3>{w.t("ملف التصويب", "Shot profile")}</h3>
-          <small>n={d.summary.sample}</small>
-        </header>
-        <button
-          className="profile-ring-row"
-          onClick={() =>
-            openShots(w.t("عينة التصويب", "Shot sample"), d.attempts)
-          }
-        >
-          <span
-            className="profile-ring"
-            style={{
-              background: `conic-gradient(${brand.colors.goal} ${(d.summary.efficiency ?? 0) * 100}%, #263a47 0)`,
-            }}
-          >
-            <b>{percent(d.summary.efficiency)}</b>
-          </span>
-          <span>
-            <strong>{d.summary.goals}</strong>
-            <small>{w.t("أهداف مراجعة", "Reviewed goals")}</small>
-            <strong>{d.summary.pending}</strong>
-            <small>{w.t("محاولات للمراجعة", "Attempts to review")}</small>
-          </span>
-        </button>
-        <EvidenceTrend
-          data-testid="shot-efficiency-trend"
-          points={d.shotTrend}
-          label={w.t(
-            "كفاءة تراكمية حسب المحاولات المراجعة",
-            "Cumulative efficiency by reviewed attempt",
-          )}
-          onEvidence={(point) =>
-            onEvidence(
-              w.t("عينة اتجاه التصويب", "Shot trend sample"),
-              point.events,
-            )
-          }
-        />
-        <small>
-          {w.t(
-            "تراكمي · كل نقطة تفتح عينتها",
-            "Cumulative · each point opens its sample",
-          )}
-        </small>
-      </article>
+      <ShotProfileCard
+        attempts={d.attempts}
+        trend={d.shotTrend}
+        onShots={openShots}
+        onTrend={(point) =>
+          onEvidence(
+            w.t("عينة اتجاه التصويب", "Shot trend sample"),
+            point.events,
+          )
+        }
+      />
       <article className="dashboard-card">
         <header>
           <h3>{w.t("تهديدات اللاعبين", "Player threats")}</h3>
@@ -100,24 +65,23 @@ export function MatchDashboard({
           d.players.slice(0, 3).map((p) => {
             const player = w.list("players").find((r) => r.id === p.id);
             return (
-              <button
-                className="dashboard-player"
+              <PlayerThreatRow
                 key={p.id}
-                onClick={() =>
-                  openShots(player ? rowLabel(player) : "—", p.rows)
-                }
-              >
-                <PlayerAvatar number={s(player?.shirt_number)} />
-                <span>
-                  {player
+                name={
+                  player
                     ? rowLabel(player)
-                    : w.t("هوية ناقصة", "Missing identity")}
-                  <small>
-                    {p.summary.goals}/{p.summary.sample}
-                  </small>
-                </span>
-                <b>{percent(p.summary.efficiency)}</b>
-              </button>
+                    : w.t("هوية ناقصة", "Missing identity")
+                }
+                number={s(player?.shirt_number)}
+                summary={p.summary}
+                onAll={() => openShots(player ? rowLabel(player) : "—", p.rows)}
+                onReviewed={() =>
+                  openShots(
+                    `${player ? rowLabel(player) : "—"} · ${w.t("كفاءة التصويب", "Shooting efficiency")}`,
+                    reviewedShotAttempts(p.rows),
+                  )
+                }
+              />
             );
           })
         ) : (

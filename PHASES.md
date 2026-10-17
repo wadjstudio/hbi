@@ -1,5 +1,7 @@
 # SESEN / HBI V1 phases and acceptance gates
 
+Efficiency-card follow-up gates: compact player rate rings and larger labelled profile ring; exact reviewed/goal/pending event IDs; separate all-attempt access; unknown versus zero/invalid input; one-decimal labels; retained sample warnings; accessible method disclosure/focus without video seeking; desktop/Arabic/mobile bounds and original first-screen summary gates.
+
 Video-setup follow-up gates: accessible labelled gear and empty-source action; local file/YouTube callbacks; online-write/offline guards; nested Escape/focus return and real outside dismissal; desktop/mobile popover bounds; 44px mobile targets; existing layout/session/primary controls; unchanged media node/time through focus/resizing and original first-screen/source-aspect gates.
 
 Transport/recording refinement gates: wide-desktop playback targets at least 32px, nine 36px tag controls in one row, usable seek width, actual pointer seek and Home/ArrowRight media time, restored source time, existing aspect/focus/relink behavior, mobile/RTL bounds and unchanged first-screen summary acceptance.

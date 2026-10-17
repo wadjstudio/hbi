@@ -81,3 +81,9 @@ html[lang="ar"] .session-rail .intelligence-section small,
 html[lang="ar"] .dashboard-card small {
   line-height: 1.55;
 }
+@media (min-width: 1440px) {
+  /* Balance the taller Arabic line boxes without resizing charts or controls. */
+  html[lang="ar"] .session-rail {
+    row-gap: 6px;
+  }
+}

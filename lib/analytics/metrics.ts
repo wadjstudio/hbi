@@ -2,10 +2,11 @@ import { n, s, type Row } from "@/types/workspace";
 export function ratio(a: number, b: number): number | null {
   return b > 0 ? a / b : null;
 }
+export function reviewedShotAttempts(shots: Row[]) {
+  return shots.filter((r) => !r.review_required && r.result !== "unknown");
+}
 export function shotSummary(shots: Row[]) {
-  const reviewed = shots.filter(
-    (r) => !r.review_required && r.result !== "unknown",
-  );
+  const reviewed = reviewedShotAttempts(shots);
   const goals = reviewed.filter((r) => r.result === "goal").length;
   return {
     sample: reviewed.length,

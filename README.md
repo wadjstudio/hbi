@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence (HBI V1 foundation)
 
+Player threat rows now show compact shooting-efficiency rings beside neutral shirt avatars, with separate all-attempt and reviewed-rate evidence actions. Reviewed/pending counts remain visible and described for screen readers. The shot-profile card has a larger labelled ring, separate reviewed-goal/pending actions and an accessible calculation note; cumulative trend points keep their exact samples.
+
 Video source, relinking and layout/session setup now live behind the labelled gear beside playback controls. The video keeps its full source aspect and starts higher in the workstation; the empty state offers a direct Choose source action. Setup supports Escape/focus return, outside dismissal, local file verification and existing guarded YouTube attachment. It does not remount or upload the local media.
 
 The primary video controls now use a gold progress track with a cyan remainder, larger wide-desktop playback targets and a full-width row of nine colored tagging actions. Save uses a hand icon; the recording semantics, source aspect ratio, keyboard shortcuts and local media remain unchanged. The existing athlete artwork has a stronger wide-desktop presence.

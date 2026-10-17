@@ -47,6 +47,7 @@ hbi-starter/
   app/match-header.css
   app/meetings.css
   app/page.tsx
+  app/player-threats.css
   app/reports.css
   app/review.css
   app/sesen.css
@@ -105,6 +106,7 @@ hbi-starter/
   components/workspace/court.tsx
   components/workspace/data-sources.tsx
   components/workspace/drawing.tsx
+  components/workspace/efficiency-ring.tsx
   components/workspace/entities.tsx
   components/workspace/event-feed.tsx
   components/workspace/event-participants.tsx
@@ -117,6 +119,7 @@ hbi-starter/
   components/workspace/match-header-actions.tsx
   components/workspace/match-hub.tsx
   components/workspace/meetings.tsx
+  components/workspace/player-threat-row.tsx
   components/workspace/provider.tsx
   components/workspace/quick-tag-dock.tsx
   components/workspace/reference-match.tsx
@@ -127,6 +130,7 @@ hbi-starter/
   components/workspace/session-statistics.tsx
   components/workspace/settings.tsx
   components/workspace/shell.tsx
+  components/workspace/shot-profile-card.tsx
   components/workspace/spatial-map.tsx
   components/workspace/tactics.tsx
   components/workspace/tag-template.tsx
@@ -269,6 +273,7 @@ hbi-starter/
   tests/e2e/conflict.spec.ts
   tests/e2e/console.spec.ts
   tests/e2e/data-sources.spec.ts
+  tests/e2e/efficiency-card-assertions.ts
   tests/e2e/event-feed-assertions.ts
   tests/e2e/fixture.ts
   tests/e2e/header-assertions.ts
@@ -297,6 +302,7 @@ hbi-starter/
   tests/unit/data-sources.test.ts
   tests/unit/domain.test.ts
   tests/unit/drawing.test.tsx
+  tests/unit/efficiency-cards.test.tsx
   tests/unit/event-feed.test.tsx
   tests/unit/header-context.test.ts
   tests/unit/header-date.test.ts

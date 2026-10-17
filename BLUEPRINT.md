@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
 
+Player threat cards now pair neutral shirt identities and reviewed/pending sample counts with compact rate rings. The percentage opens only its reviewed denominator, while the identity opens the complete player sample. The enlarged shot-profile ring has a visible efficiency caption, distinct goal/pending evidence actions and calculation details; unknown denominators remain unavailable. No automatic player identification, position inference or invented portraits/benchmarks is introduced.
+
 The workstation now gives the picture priority: source and workspace setup move into a labelled gear beside playback controls, preserving the full source and mounted media. Its popover includes local selection/relinking, source guidance, YouTube attachment and existing layout/session tools. Empty video has a direct source action; mobile uses a bounded fixed popover and 44px targets. Keyboard focus, dismissal and original data/write guards remain required.
 
 Primary playback and recording controls now follow the reference's stronger gold/cyan timeline treatment and colored action row. Wide desktop provides larger playback targets and nine 36px tagging controls, retaining source aspect ratio and original event semantics. Existing local assets provide the stronger athlete rail; no library, service or data-model change is introduced.

@@ -7,6 +7,7 @@ import {
   keeperSummary,
   percent,
   ratio,
+  reviewedShotAttempts,
 } from "@/lib/analytics/metrics";
 import { s, type Row } from "@/types/workspace";
 import { useWorkspace } from "./provider";
@@ -14,6 +15,7 @@ import { ShotMap } from "./charts";
 import { rowLabel } from "./controls";
 import { ThreatProfile } from "./threat-profile";
 import { BrandMark, PlayerAvatar } from "@/components/brand/brand-lockup";
+import { PlayerThreatRow } from "./player-threat-row";
 import { brand } from "@/lib/brand";
 import type { IntelligenceScope } from "@/features/analysis/intelligence-scope";
 
@@ -348,33 +350,34 @@ export function SessionAnalysisRail({
           <Users size={14} />
         </header>
         {shooters.length ? (
-          shooters.slice(0, 4).map((entry) => (
-            <button
-              className="threat-row"
-              key={entry.id}
-              onClick={() =>
-                onEvidence(
+          shooters
+            .slice(0, 4)
+            .map((entry) => (
+              <PlayerThreatRow
+                key={entry.id}
+                name={
                   entry.player
                     ? rowLabel(entry.player)
-                    : w.t("لاعب غير محدد", "Unknown player"),
-                  evidenceFor(entry.shots),
-                )
-              }
-            >
-              <PlayerAvatar number={s(entry.player?.shirt_number)} />
-              <span>
-                <b>{entry.player ? rowLabel(entry.player) : "—"}</b>
-                <small>
-                  {entry.summary.goals}/{entry.summary.sample} ·{" "}
-                  {entry.summary.sample < 10
-                    ? w.t("عينة قليلة", "Small sample")
-                    : w.t("محاولات معروفة", "known attempts")}
-                </small>
-              </span>
-              <strong>{percent(entry.summary.efficiency)}</strong>
-              <Play size={13} />
-            </button>
-          ))
+                    : w.t("لاعب غير محدد", "Unknown player")
+                }
+                number={s(entry.player?.shirt_number)}
+                summary={entry.summary}
+                onAll={() =>
+                  onEvidence(
+                    entry.player
+                      ? rowLabel(entry.player)
+                      : w.t("لاعب غير محدد", "Unknown player"),
+                    evidenceFor(entry.shots),
+                  )
+                }
+                onReviewed={() =>
+                  onEvidence(
+                    `${entry.player ? rowLabel(entry.player) : w.t("لاعب غير محدد", "Unknown player")} · ${w.t("كفاءة التصويب", "Shooting efficiency")}`,
+                    evidenceFor(reviewedShotAttempts(entry.shots)),
+                  )
+                }
+              />
+            ))
         ) : (
           <p className="intelligence-empty">
             {w.t(

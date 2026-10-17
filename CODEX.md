@@ -1,5 +1,7 @@
 # SESEN / HBI Codex Rules
 
+Keep rate evidence distinct from all-attempt player evidence: use the same reviewedShotAttempts predicate as shotSummary, keep pending attempts outside the rate and retain their own access. EfficiencyRing must display unavailable/invalid values as unknown and preserve a known zero. Maintain full one-decimal labels, physical SVG orientation, labelled keyboard-accessible methods and mobile action targets. Never infer player portraits, positions or quality thresholds from sample order or rate.
+
 Keep video source/layout/session setup behind the accessible gear without removing file/online or primary-session controls. Preserve mounted native media and time while opening settings or resizing. Inner Escape must close only the layout submenu; a second Escape closes setup and restores gear focus. Verify physical popover bounds, mobile 44px targets, role/offline guards, full source aspect and clean first-screen layout.
 
 Keep native seek range semantics, progress styling and bounded media-time callbacks together. Verify actual video time after pointer and keyboard input; a styled track alone is insufficient. Preserve source aspect, nine distinct phase/event actions, compact/mobile flow and the original first-screen gates when increasing control sizes.

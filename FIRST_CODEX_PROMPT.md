@@ -1,5 +1,7 @@
 # SESEN / HBI continuation prompt
 
+Preserve the shared player threat rows and shot profile's reviewed/goal/pending evidence separation. Keep original metric denominators, unknown states, neutral identities, full percentage precision and cumulative samples. Verify exact event IDs plus ring layout, keyboard methods and Arabic/mobile bounds after changes; continue the full reference audit rather than declaring completion from a new visual indicator.
+
 Preserve the video-first setup gear and direct empty-state source action. Use the existing attach/relink and AnalysisSplit controls rather than duplicate state or file inputs. Test nested Escape/focus, outside dismissal, mobile bounds/targets and actual media identity/time during layout changes. Continue the complete reference audit, including populated long/missing states; moving setup alone is not full parity.
 
 Retain the gold/cyan native seek track, larger wide-desktop playback/tag controls and stronger existing athlete rail. Preserve source aspect and event semantics; verify actual media time through pointer/keyboard control and responsive geometry. Continue the reference audit rather than equating these controls with the complete target.

@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Player threat and shot-profile rings — 2026-10-17
+
+- Balanced wide Arabic rail row spacing for its taller line boxes, retaining original font/chart/control sizes. Populated English/Arabic summaries both fit the unchanged 1672×941 gates.
+- Added static SVG efficiency rings with explicit unknown/zero handling, compact player rows and a larger labelled shot-profile indicator.
+- Split all-attempt player access from reviewed-denominator evidence; shot-profile goals and pending attempts now open separate exact groups. Counts and small-sample guidance remain available.
+- Moved calculation/trend explanation into a labelled native method disclosure, retaining cumulative event-backed trend actions and full percentage precision.
+- Extracted the existing reviewed predicate without changing the shotSummary formula. No dependency, schema, external data or asset import.
+
 ## Video-first setup gear — 2026-10-17
 
 - Corrected nested Escape consumption and two broad mobile descendant selectors so the primary-session action stays visible after source/layout controls are nested. Dedicated native-browser checks cover both cases.

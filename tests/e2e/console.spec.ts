@@ -12,6 +12,7 @@ import { verifyPresentation } from "./presentation-assertions";
 import { verifyHeaderDetails } from "./header-details-assertions";
 import { verifyBrandHeader } from "./brand-header-assertions";
 import { verifyTransport } from "./transport-assertions";
+import { verifyEfficiencyCards } from "./efficiency-card-assertions";
 import {
   openVideoSettings,
   verifyVideoSettings,
@@ -206,6 +207,7 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     "VISUAL TEST DATA",
   );
   const shotTrend = page.getByTestId("shot-efficiency-trend");
+  await verifyEfficiencyCards(page);
   await verifySessionStatistics(page);
   await verifyLineup(page);
   await verifyEventFeed(page);
@@ -312,6 +314,20 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
   for (const width of [1672, 1440, 1024, 768, 375]) {
     await page.setViewportSize({ width, height: 941 });
     await verifyBrandHeader(page, width);
+    expect(
+      (await page
+        .locator(".shot-profile-card .efficiency-ring-large")
+        .boundingBox())!.width,
+    ).toBeCloseTo(106, 0);
+    if (width < 1200) {
+      for (const button of await page
+        .locator(".player-threat-efficiency")
+        .all()) {
+        const bounds = (await button.boundingBox())!;
+        expect(bounds.width).toBeGreaterThanOrEqual(44);
+        expect(bounds.height).toBeGreaterThanOrEqual(44);
+      }
+    }
     if (width === 1672) await verifyTransport(page);
     if (width === 1672 && process.env.HBI_VISUAL_MATCH) {
       await testInfo.attach("console-geometry", {

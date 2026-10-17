@@ -1,0 +1,217 @@
+.efficiency-ring {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.efficiency-ring svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.efficiency-ring circle {
+  fill: none;
+  stroke-width: 3;
+}
+.efficiency-track {
+  stroke: #25414a;
+}
+.efficiency-progress {
+  stroke: var(--sesen-cyan);
+}
+.efficiency-reading {
+  position: relative;
+  display: grid;
+  place-items: center;
+  line-height: 1.1;
+}
+.efficiency-reading > b {
+  color: #eaf3f5;
+  font-size: 10px;
+  font-weight: 600;
+}
+.efficiency-ring-large {
+  width: 106px;
+  height: 106px;
+}
+.efficiency-ring-large circle {
+  stroke-width: 4.5;
+}
+.efficiency-ring-large .efficiency-progress {
+  stroke: #a6dc7c;
+}
+.efficiency-ring-large .efficiency-reading > b {
+  font-size: 23px;
+}
+.shot-profile-card .efficiency-reading > small {
+  display: block;
+  max-width: 72px;
+  font-size: 10px;
+  text-align: center;
+  color: #d2e5eb;
+  line-height: 1.2;
+  margin-top: 3px;
+}
+.player-threat-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 38px;
+  align-items: center;
+  gap: 5px;
+  min-height: 40px;
+  margin-block: 3px;
+  border: 1px solid #173943;
+  border-radius: 5px;
+  background: linear-gradient(110deg, #09202788, #07131844);
+}
+.player-threat-row > button {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+}
+.player-threat-identity {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 12px;
+  gap: 6px;
+  align-items: center;
+  min-height: 36px;
+  text-align: start;
+}
+.player-threat-identity > span {
+  min-width: 0;
+}
+.player-threat-identity b {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.player-threat-identity small {
+  display: block;
+  font-size: 11px;
+  line-height: 1.3;
+  color: var(--text-secondary);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.player-threat-identity > svg {
+  color: var(--sesen-cyan);
+}
+.player-threat-row .sesen-player-avatar {
+  width: 28px;
+  height: 32px;
+}
+.player-threat-efficiency {
+  display: grid;
+  place-items: center;
+  min-height: 36px;
+  min-width: 36px;
+}
+.player-threat-row > button:not(:disabled):hover {
+  background: #00cbdc12;
+}
+.shot-profile-card .profile-ring-row {
+  display: grid;
+  grid-template-columns: 106px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+.shot-profile-card .profile-efficiency {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.profile-shot-counts {
+  display: grid;
+  gap: 7px;
+}
+.profile-shot-counts > button {
+  display: grid;
+  gap: 2px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: start;
+}
+.profile-shot-counts > button > strong {
+  font-size: 18px;
+  line-height: 1.1;
+}
+.shot-profile-card .profile-shot-counts small {
+  line-height: 1.25;
+  font-size: 11px;
+}
+.shot-profile-card .evidence-trend {
+  margin-top: 3px;
+}
+.shot-profile-method {
+  position: relative;
+  flex-shrink: 0;
+}
+.shot-profile-method > summary {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 24px;
+  padding: 0 2px;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--text-secondary);
+  list-style: none;
+}
+.shot-profile-method > summary::-webkit-details-marker {
+  display: none;
+}
+.shot-profile-method:not([open]) > .shot-profile-method-content {
+  display: none;
+}
+.shot-profile-method-content {
+  position: absolute;
+  inset-inline-end: 0;
+  top: calc(100% + 4px);
+  z-index: 20;
+  width: min(260px, calc(100vw - 32px));
+  max-height: 220px;
+  overflow: auto;
+  padding: 12px;
+  background: #081b22;
+  border: 1px solid #267180;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+  box-shadow: 0 10px 30px #0008;
+}
+@media (min-width: 1200px) {
+  .session-rail .player-threat-row {
+    margin-block: 0;
+  }
+  .dashboard-card .player-threat-row {
+    margin-block: 0;
+  }
+}
+@media (max-width: 1199px) {
+  .player-threat-row {
+    grid-template-columns: minmax(0, 1fr) 44px;
+  }
+  .player-threat-row > button {
+    min-height: 44px;
+  }
+  .player-threat-efficiency {
+    min-width: 44px;
+  }
+  .shot-profile-method > summary,
+  .profile-shot-counts > button {
+    min-height: 44px;
+  }
+}
