@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { ArrowUpRight, Play, Users, Lightbulb } from "lucide-react";
+import { ArrowUpRight, Play, Users } from "lucide-react";
 import { tacticalGroups } from "@/features/analysis/workbench";
 import {
   shotSummary,
@@ -16,6 +16,7 @@ import { rowLabel } from "./controls";
 import { ThreatProfile } from "./threat-profile";
 import { BrandMark, PlayerAvatar } from "@/components/brand/brand-lockup";
 import { PlayerThreatRow } from "./player-threat-row";
+import { IntelligenceListCard } from "./intelligence-list-card";
 import { brand } from "@/lib/brand";
 import type { IntelligenceScope } from "@/features/analysis/intelligence-scope";
 
@@ -387,77 +388,43 @@ export function SessionAnalysisRail({
           </p>
         )}
       </section>
-      <section className="intelligence-section">
-        <header>
-          <h3>{w.t("أنماط الهجوم", "Attack patterns")}</h3>
-          <small>{w.t("قواعد قابلة للمراجعة", "Reviewable rules")}</small>
-        </header>
-        {patterns.length ? (
-          patterns.slice(0, 4).map((g) => (
-            <button
-              className="pattern-row"
-              key={g.term.id}
-              onClick={() =>
-                onEvidence(
-                  s(w.lang === "ar" ? g.term.label_ar : g.term.label_en),
-                  g.events,
-                )
-              }
-            >
-              <span>
-                {s(w.lang === "ar" ? g.term.label_ar : g.term.label_en)}
-                <small>
-                  {g.possessions.length}/{attack.length}{" "}
-                  {w.t("هجمات في العينة", "sample possessions")}
-                </small>
-              </span>
-              <Play size={14} />
-            </button>
-          ))
-        ) : (
-          <p className="intelligence-empty">
-            {w.t(
-              "ابدأ هجمة وسجّل الإجراء التكتيكي؛ بعدها راجع أحداثها قبل اعتماد الاستنتاج.",
-              "Start a possession and tag its procedure, then review its events before accepting an insight.",
-            )}
-          </p>
+      <IntelligenceListCard
+        title={w.t("أنماط الهجوم", "Attack patterns")}
+        entries={patterns.map((group) => {
+          const title = s(
+            w.lang === "ar" ? group.term.label_ar : group.term.label_en,
+          );
+          return {
+            id: group.term.id,
+            title,
+            code: s(group.term.code),
+            detail: `${group.possessions.length}/${attack.length} ${w.t("هجمات في العينة", "sample possessions")}`,
+            isEvidenceAvailable: group.events.length > 0,
+            onEvidence: () => onEvidence(title, group.events),
+          };
+        })}
+        emptyText={w.t(
+          "ابدأ هجمة وسجّل الإجراء التكتيكي؛ بعدها راجع أحداثها قبل اعتماد الاستنتاج.",
+          "Start a possession and tag its procedure, then review its events before accepting an insight.",
         )}
-      </section>
-      <section className="intelligence-section insight-section">
-        <header>
-          <h3>{w.t("استنتاجات بالأدلة", "Evidence-backed insights")}</h3>
-          <Lightbulb size={14} aria-hidden="true" />
-        </header>
-        {insights.length ? (
-          insights.slice(0, 4).map(({ insight, evidence }) => (
-            <button
-              className="insight-evidence-row"
-              key={insight.id}
-              onClick={() => onEvidence(s(insight.title), evidence)}
-            >
-              <span>
-                <b>{s(insight.title)}</b>
-                <small>
-                  {insight.is_reviewed
-                    ? w.t("مراجع", "Reviewed")
-                    : w.t("بانتظار المراجعة", "Needs review")}
-                  {" · "}
-                  {evidence.length}{" "}
-                  {w.t("حدث مرتبط في هذا العرض", "linked events in this view")}
-                </small>
-              </span>
-              <Play size={14} aria-hidden="true" />
-            </button>
-          ))
-        ) : (
-          <p className="intelligence-empty">
-            {w.t(
-              "احفظ استنتاجًا بأدلته من تحليل الخصم ليظهر هنا عند وجود أحداثه في العينة.",
-              "Save an insight with evidence in opponent analysis to see it alongside its events here.",
-            )}
-          </p>
+      />
+      <IntelligenceListCard
+        isInsights
+        title={w.t("استنتاجات بالأدلة", "Evidence-backed insights")}
+        entries={insights.map(({ insight, evidence }) => ({
+          id: insight.id,
+          title: s(insight.title),
+          body: s(insight.body),
+          isReviewed: insight.is_reviewed === true,
+          detail: `${insight.is_reviewed ? w.t("مراجع", "Reviewed") : w.t("بانتظار المراجعة", "Needs review")} · ${evidence.length} ${w.t("حدث", "events")}`,
+          isEvidenceAvailable: evidence.length > 0,
+          onEvidence: () => onEvidence(s(insight.title), evidence),
+        }))}
+        emptyText={w.t(
+          "احفظ استنتاجًا بأدلته من تحليل الخصم ليظهر هنا عند وجود أحداثه في العينة.",
+          "Save an insight with evidence in opponent analysis to see it alongside its events here.",
         )}
-      </section>
+      />
       <div className="intelligence-footer">
         <details className="keeper-details">
           <summary>

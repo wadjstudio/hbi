@@ -1,0 +1,195 @@
+/* Compact reference lists; full labels/content remain in the scoped all-items dialog. */
+.intelligence-list-card {
+  min-width: 0;
+}
+.session-rail .intelligence-list-card > header {
+  gap: 5px;
+  flex-wrap: nowrap;
+}
+.intelligence-list-card > header > svg {
+  flex-shrink: 0;
+  color: var(--sesen-cyan);
+}
+.intelligence-list-card > header h3 {
+  flex: 1;
+  min-width: 0;
+}
+.intelligence-list-card .intelligence-list-more {
+  min-height: 24px;
+  flex-shrink: 0;
+  padding: 3px 0;
+  border: 0;
+  background: transparent;
+  color: var(--sesen-cyan);
+  font-size: 11px;
+  white-space: nowrap;
+}
+.intelligence-list-item {
+  min-width: 0;
+  border-bottom: 1px solid #1c343c;
+}
+.intelligence-list-item:last-child {
+  border-bottom: 0;
+}
+.intelligence-evidence-action {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 44px;
+  padding: 4px 0;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  text-align: start;
+}
+.intelligence-evidence-action:hover:not(:disabled) {
+  background: #0c242a;
+}
+.intelligence-procedure-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 30px;
+  height: 30px;
+  border: 1px solid #28434a;
+  border-radius: 5px;
+  color: #e5eceb;
+  background: linear-gradient(135deg, #10242a, #081317);
+}
+.intelligence-list-copy {
+  flex: 1;
+  min-width: 0;
+}
+.intelligence-list-copy > b {
+  display: block;
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.session-rail .intelligence-list-copy > small,
+.intelligence-list-copy > small {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  line-height: 1.25;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+.intelligence-watch {
+  flex-shrink: 0;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  min-width: 25px;
+  min-height: 25px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  border: 1px solid #008d96;
+  color: var(--sesen-cyan);
+  font-size: 11px;
+  background: linear-gradient(180deg, #06343b66, #031719);
+}
+.insight-section .intelligence-procedure-icon {
+  flex-basis: 15px;
+  height: 24px;
+  border: 0;
+  background: none;
+  color: var(--sesen-gold);
+}
+.insight-section .intelligence-list-item {
+  border-inline-start: 2px solid var(--sesen-gold);
+  padding-inline-start: 4px;
+}
+.insight-section .intelligence-list-item[data-review="reviewed"] {
+  border-inline-start-color: var(--sesen-cyan);
+}
+.insight-section [data-review="reviewed"] .intelligence-procedure-icon {
+  color: var(--sesen-cyan);
+}
+.intelligence-list-dialog {
+  width: min(680px, calc(100vw - 28px));
+  max-height: calc(100dvh - 40px);
+  margin: auto;
+  padding: 18px;
+  color: var(--text-primary);
+  background: #07151b;
+  border: 1px solid #2d646c;
+  border-radius: 10px;
+  box-shadow: 0 20px 80px #000b;
+}
+.intelligence-list-dialog::backdrop {
+  background: #000b;
+}
+.intelligence-list-dialog > header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.intelligence-list-dialog h2 {
+  font-size: 21px;
+  margin: 4px 0;
+  overflow-wrap: anywhere;
+}
+.intelligence-list-dialog > header > button {
+  min-width: 44px;
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.intelligence-list-scope {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.intelligence-list-complete {
+  max-height: 60dvh;
+  overflow: auto;
+}
+.intelligence-list-dialog .intelligence-evidence-action {
+  min-height: 52px;
+  padding: 8px 4px;
+}
+.intelligence-list-dialog .intelligence-list-copy > b {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-size: 15px;
+}
+.intelligence-list-body {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+  padding: 0 8px 14px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+@media (min-width: 1200px) {
+  .intelligence-list-preview .intelligence-evidence-action {
+    min-height: 40px;
+  }
+  .insight-section .intelligence-list-preview .intelligence-evidence-action {
+    min-height: 36px;
+  }
+}
+@media (max-width: 1439px) {
+  .intelligence-list-preview .intelligence-watch > span {
+    display: none;
+  }
+}
+@media (max-width: 1199px) {
+  .intelligence-list-card .intelligence-list-more {
+    min-height: 44px;
+    padding: 4px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .intelligence-evidence-action {
+    transition: background-color 150ms;
+  }
+}

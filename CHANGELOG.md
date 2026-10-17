@@ -1,4 +1,10 @@
 # CHANGELOG
+## Tactical procedures and insight evidence lists — 2026-10-17
+- Replaced flat tactical buttons with compact icon-led procedure rows, source-sample counts and framed evidence actions. Known stable taxonomy codes select icons; custom codes retain a neutral fallback.
+- Insight rows show explicit pending/reviewed states with corresponding markers and visible wide-screen Watch evidence actions; no AI-generated or automatic-analysis claim is introduced.
+- Both cards expose a counted View all dialog with every scoped item, full titles and saved insight bodies. Native modal behavior, a labelled scroll region and isolated key events preserve video controls while reading. Selecting an item closes the list before opening its evidence.
+- Preserved original event sets/formulas; unavailable procedure evidence is disabled. No dependency, service, schema or upload change.
+
 ## Readable timeline and crowded-event access — 2026-10-17
 - Restored 24px event-track height and enlarged marker hit targets while retaining exact source timestamps and canonical result colors.
 - Nearby markers share a counted disclosure based on actual track width; every event remains individually selectable, and zoom/resize recomputes grouping. Groups use their first event as the time anchor, avoiding transitive merging across a dense sequence.

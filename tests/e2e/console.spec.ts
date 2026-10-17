@@ -14,6 +14,7 @@ import { verifyBrandHeader } from "./brand-header-assertions";
 import { verifyTransport } from "./transport-assertions";
 import { verifyEfficiencyCards } from "./efficiency-card-assertions";
 import { verifyTimelineClusters } from "./timeline-assertions";
+import { verifyIntelligenceLists } from "./intelligence-list-assertions";
 import {
   openVideoSettings,
   verifyVideoSettings,
@@ -316,6 +317,11 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     await page.setViewportSize({ width, height: 941 });
     if (width === 375 && process.env.HBI_VISUAL_MATCH) {
       await verifyTimelineClusters(page);
+      await verifyIntelligenceLists(
+        page,
+        false,
+        testInfo.outputPath("intelligence-list-375.png"),
+      );
       await page.evaluate(() => window.scrollTo(0, 0));
     }
     await verifyBrandHeader(page, width);
@@ -333,7 +339,15 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
         expect(bounds.height).toBeGreaterThanOrEqual(44);
       }
     }
-    if (width === 1672) await verifyTransport(page);
+    if (width === 1672) {
+      await verifyTransport(page);
+      if (process.env.HBI_VISUAL_MATCH)
+        await verifyIntelligenceLists(
+          page,
+          false,
+          testInfo.outputPath("intelligence-list-1672.png"),
+        );
+    }
     if (width === 1672 && process.env.HBI_VISUAL_MATCH) {
       await testInfo.attach("console-geometry", {
         body: JSON.stringify(
@@ -402,6 +416,12 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     fullPage: true,
   });
   await page.setViewportSize({ width: 390, height: 844 });
+  if (process.env.HBI_VISUAL_MATCH)
+    await verifyIntelligenceLists(
+      page,
+      true,
+      testInfo.outputPath("intelligence-list-arabic-390.png"),
+    );
   await page.getByRole("button", { name: "فتح القائمة", exact: true }).click();
   const navigation = page.getByRole("dialog", { name: "التنقل الرئيسي" });
   await expect(navigation).toBeVisible();

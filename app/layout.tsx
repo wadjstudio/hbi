@@ -16,6 +16,7 @@ import "./brand-header.css";
 import "./video-console.css";
 import "./video-settings.css";
 import "./player-threats.css";
+import "./intelligence-lists.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(

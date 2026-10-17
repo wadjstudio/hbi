@@ -42,6 +42,7 @@ hbi-starter/
   app/event-feed.css
   app/fonts.css
   app/globals.css
+  app/intelligence-lists.css
   app/layout.tsx
   app/lineups.css
   app/match-header.css
@@ -113,6 +114,7 @@ hbi-starter/
   components/workspace/evidence-drawer.tsx
   components/workspace/evidence-links.tsx
   components/workspace/evidence-trend.tsx
+  components/workspace/intelligence-list-card.tsx
   components/workspace/lineup-overview.tsx
   components/workspace/match-context.tsx
   components/workspace/match-dashboard.tsx
@@ -279,6 +281,7 @@ hbi-starter/
   tests/e2e/header-assertions.ts
   tests/e2e/header-details-assertions.ts
   tests/e2e/history-assertions.ts
+  tests/e2e/intelligence-list-assertions.ts
   tests/e2e/lineup-assertions.ts
   tests/e2e/online-video.spec.ts
   tests/e2e/presentation-assertions.ts
@@ -308,6 +311,7 @@ hbi-starter/
   tests/unit/event-feed.test.tsx
   tests/unit/header-context.test.ts
   tests/unit/header-date.test.ts
+  tests/unit/intelligence-list-card.test.tsx
   tests/unit/intelligence-scope.test.ts
   tests/unit/lineup-snapshot.test.ts
   tests/unit/local.test.ts
