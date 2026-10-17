@@ -657,8 +657,8 @@ html[dir="rtl"] .session-rail {
 }
 .timeline-track .timeline-event {
   position: absolute;
-  width: 14px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border: 0;
   padding: 0;
   background: none;
@@ -668,7 +668,7 @@ html[dir="rtl"] .session-rail {
 .timeline-event:before {
   content: "";
   position: absolute;
-  left: 6px;
+  left: 11px;
   top: 5px;
   width: 1px;
   height: 17px;
@@ -678,7 +678,7 @@ html[dir="rtl"] .session-rail {
   content: "";
   position: absolute;
   top: 2px;
-  left: 3.5px;
+  left: 8.5px;
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -686,6 +686,72 @@ html[dir="rtl"] .session-rail {
 }
 .timeline-event.selected:after {
   outline: 2px solid white;
+}
+.timeline-cluster {
+  position: absolute;
+  top: 0;
+  width: 0;
+  z-index: 2;
+}
+.timeline-cluster[open] {
+  z-index: 12;
+}
+.timeline-cluster > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.timeline-cluster > summary::-webkit-details-marker {
+  display: none;
+}
+.timeline-cluster > summary > span {
+  position: absolute;
+  inset: 0 0 auto;
+  margin: auto;
+  width: 19px;
+  height: 15px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  background: #07151b;
+  color: #e6f5fe;
+  font-size: 10px;
+  line-height: 13px;
+  z-index: 1;
+}
+.timeline-cluster-list {
+  position: absolute;
+  top: 27px;
+  left: -12px;
+  width: min(280px, 70vw);
+  max-height: 240px;
+  overflow: auto;
+  border: 1px solid #30717b;
+  border-radius: 6px;
+  background: #07151b;
+  padding: 5px;
+  box-shadow: 0 8px 24px #0009;
+}
+.timeline-cluster[data-side="end"] .timeline-cluster-list {
+  left: auto;
+  right: -12px;
+}
+.timeline-cluster-list > button {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  text-align: start;
+}
+.timeline-cluster-list i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.timeline-cluster-list time {
+  font-variant-numeric: tabular-nums;
+}
+.timeline-track .timeline-event:hover:after {
+  box-shadow: 0 0 0 3px #e6f5fe44;
 }
 .timeline-track .timeline-band {
   position: absolute;

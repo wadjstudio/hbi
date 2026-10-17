@@ -1,4 +1,10 @@
 # CHANGELOG
+## Readable timeline and crowded-event access — 2026-10-17
+- Restored 24px event-track height and enlarged marker hit targets while retaining exact source timestamps and canonical result colors.
+- Nearby markers share a counted disclosure based on actual track width; every event remains individually selectable, and zoom/resize recomputes grouping. Groups use their first event as the time anchor, avoiding transitive merging across a dense sequence.
+- Added keyboard/outside dismissal and a named scrollable event region that does not trigger video-seek shortcuts. Missing/nonfinite/out-of-recording timestamps are not placed at zero.
+- No dependency, database migration, upload or automatic analysis.
+
 
 ## Player threat and shot-profile rings — 2026-10-17
 

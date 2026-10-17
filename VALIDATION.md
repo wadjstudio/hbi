@@ -1,5 +1,14 @@
 # SESEN / HBI validation — 2026-10-16
 
+## Readable timeline and crowded-event access — 2026-10-17
+
+- Real-environment Pages build, target scan and final isolated typecheck passed. Hosted project/domain and public configuration remain correct, AI disabled, no test target/key in the Pages client/Worker. Worker input SHA256: 19235f07f7b7f029e2374dccdc8e4b8f3c4771a4e4130201eb928dd2cacd04be. Native declarations returned to baseline. Desktop/mobile captures inspected and archived with hashes in outputs/deployment/SESEN_TIMELINE_ARTIFACTS_2026-10-17.json.
+- Full 89-unit suite, lint, final native Next build, isolated typecheck and all four Chrome journeys passed with retries disabled. New coverage checks nontransitive grouping, zoom/resize, identical source times, invalid timing, exact selected event, outside/focus/Escape dismissal and focus restoration.
+- The 375px browser journey opened a grouped marker, confirmed popup horizontal bounds and 44px event rows, retained actual media time during ArrowRight in the named scroll region, and opened exactly the selected event ID in evidence. Wider layouts preserve individual markers where their 24px targets fit.
+- Populated first-screen gates remain unchanged: English summaries 735.47–928.47px and Arabic 737.89–936.42px at 1672×941. Desktop capture inspected; synthetic observations are unrelated to the displayed footage.
+- Initial tests found a missing numeric-helper import; the initial native build caught unchecked observer/array entries and incorrectly named organization fields in the new fixture. Corrected imports, explicit nonempty group types, observer guard and fixture fields; subsequent checks above passed. The first lint process hit its 120s limit; the subsequent 600s invocation completed successfully.
+- No new dependency, migration, service, production fixture or video upload. Real-environment Pages packaging and publication are recorded after completion below; complete reference parity remains open.
+
 ## Player threat and shot-profile rings — 2026-10-17
 
 - Published source 99de79d as production/main dae338e6-1528-4d83-b94e-7ef43133f92c, 30 new/48 reused files. All 43 deployed JS/CSS assets, six WOFF2 fonts and two OFL notices match local hashes/content types; static font routes passed. Custom-domain login returns 200 with unchanged Spaceship nameservers/CNAME. No authenticated hosted coach journey, schema/DNS/R2 mutation or production fixture/media upload. Final clean ZIP verification is recorded in the release receipt; complete reference parity remains open.

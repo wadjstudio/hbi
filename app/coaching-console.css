@@ -566,10 +566,10 @@
     margin-bottom: 2px;
   }
   .analysis-timeline .timeline-lane {
-    min-height: 18px;
+    min-height: 24px;
   }
   .analysis-timeline .timeline-track {
-    height: 18px;
+    height: 24px;
   }
   .session-rail .threat-profile svg {
     height: 100px;

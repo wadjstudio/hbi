@@ -1,4 +1,4 @@
-import { s, type Row } from "@/types/workspace";
+import { n, s, type Row } from "@/types/workspace";
 import { brand } from "@/lib/brand";
 
 export const eventColors: Record<string, string> = {
@@ -137,6 +137,31 @@ export function timelineWindow(
     duration - width,
   );
   return { start, end: start + width, width, duration };
+}
+/** Group hit targets, preserving source times and every event in each group. */
+export function timelineGroups(
+  events: Row[],
+  window: ReturnType<typeof timelineWindow>,
+  trackWidth: number,
+) {
+  const groups: [Row, ...Row[]][] = [];
+  const gap = (window.width * 24) / Math.max(1, trackWidth);
+  if (!window.duration) return groups;
+  for (const event of events
+    .filter(
+      (event) =>
+        typeof event.timestamp_ms === "number" &&
+        Number.isFinite(event.timestamp_ms) &&
+        event.timestamp_ms >= window.start &&
+        event.timestamp_ms <= window.end,
+    )
+    .sort((a, b) => n(a.timestamp_ms) - n(b.timestamp_ms))) {
+    const group = groups.at(-1);
+    if (group && n(event.timestamp_ms) - n(group[0].timestamp_ms) < gap)
+      group.push(event);
+    else groups.push([event]);
+  }
+  return groups;
 }
 export type TacticalGroup = { term: Row; possessions: Row[]; events: Row[] };
 export function tacticalGroups(

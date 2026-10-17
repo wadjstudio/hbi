@@ -1,12 +1,16 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LocateFixed, Minus, Plus } from "lucide-react";
-import { eventColor, timelineWindow } from "@/features/analysis/workbench";
+import {
+  eventColor,
+  timelineGroups,
+  timelineWindow,
+} from "@/features/analysis/workbench";
 import { n, s, type Row } from "@/types/workspace";
 import { formatTime } from "@/lib/video/time";
 import { useWorkspace } from "./provider";
 
-export function AnalysisTimeline({
+export const AnalysisTimeline = ({
   events,
   shots,
   possessions,
@@ -26,12 +30,38 @@ export function AnalysisTimeline({
   selectedId: string;
   onEvent: (event: Row) => void;
   onSeek: (ms: number) => void;
-}) {
+}) => {
   const w = useWorkspace();
   const [zoom, setZoom] = useState(1),
     [start, setStart] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [trackWidth, setTrackWidth] = useState(0);
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const observer = new ResizeObserver(
+      ([entry]) => entry && setTrackWidth(entry.contentRect.width),
+    );
+    observer.observe(track);
+    const closeOutside = (event: Event) => {
+      for (const disclosure of track.querySelectorAll<HTMLDetailsElement>(
+        "details[open]",
+      )) {
+        if (event.target instanceof Node && !disclosure.contains(event.target))
+          disclosure.open = false;
+      }
+    };
+    document.addEventListener("pointerdown", closeOutside);
+    document.addEventListener("focusin", closeOutside);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("pointerdown", closeOutside);
+      document.removeEventListener("focusin", closeOutside);
+    };
+  }, []);
   const window = timelineWindow(durationMs, start, zoom);
+  const groups = timelineGroups(events, window, trackWidth);
   const left = (ms: number) =>
     `${(100 * (ms - window.start)) / Math.max(1, window.width)}%`;
   const visible = (ms: number) =>
@@ -64,6 +94,7 @@ export function AnalysisTimeline({
   return (
     <section
       className="analysis-timeline"
+      data-slot="analysis-timeline"
       aria-label={w.t("تايملاين التحليل", "Analysis timeline")}
     >
       <header>
@@ -115,22 +146,85 @@ export function AnalysisTimeline({
         </div>
         <div className="timeline-lane">
           <span>{w.t("أحداث", "Events")}</span>
-          <div className="timeline-track">
-            {events
-              .filter((e) => visible(n(e.timestamp_ms)))
-              .map((e) => (
-                <button
+          <div className="timeline-track" ref={trackRef}>
+            {groups.map((group) => {
+              const e = group[0];
+              const position = left(n(e.timestamp_ms));
+              if (group.length === 1)
+                return (
+                  <button
+                    key={e.id}
+                    className={`timeline-event ${selectedId === e.id ? "selected" : ""}`}
+                    style={{
+                      left: left(n(e.timestamp_ms)),
+                      color: eventColor(e, shots),
+                    }}
+                    aria-label={`${formatTime(n(e.timestamp_ms))} · ${s(e.event_type)}`}
+                    title={`${formatTime(n(e.timestamp_ms))} · ${s(e.event_type)}`}
+                    onClick={() => onEvent(e)}
+                  />
+                );
+              return (
+                <details
                   key={e.id}
-                  className={`timeline-event ${selectedId === e.id ? "selected" : ""}`}
-                  style={{
-                    left: left(n(e.timestamp_ms)),
-                    color: eventColor(e, shots),
+                  className="timeline-cluster"
+                  style={{ left: position }}
+                  data-side={
+                    n(e.timestamp_ms) > window.start + window.width / 2
+                      ? "end"
+                      : "start"
+                  }
+                  onKeyDown={(event) => {
+                    if (event.key === "Escape" && event.currentTarget.open) {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      event.currentTarget.open = false;
+                      event.currentTarget.querySelector("summary")?.focus();
+                    }
                   }}
-                  aria-label={`${formatTime(n(e.timestamp_ms))} · ${s(e.event_type)}`}
-                  title={`${formatTime(n(e.timestamp_ms))} · ${s(e.event_type)}`}
-                  onClick={() => onEvent(e)}
-                />
-              ))}
+                >
+                  <summary
+                    className={`timeline-event ${group.some((event) => event.id === selectedId) ? "selected" : ""}`}
+                    style={{ color: eventColor(e, shots) }}
+                    aria-label={`${w.t("أحداث متقاربة", "Nearby events")} · ${group.length} · ${formatTime(n(e.timestamp_ms))}`}
+                  >
+                    <span>{group.length}</span>
+                  </summary>
+                  <div
+                    className="timeline-cluster-list"
+                    role="region"
+                    tabIndex={0}
+                    aria-label={w.t(
+                      "اختيار حدث من التايملاين",
+                      "Choose timeline event",
+                    )}
+                  >
+                    {group.map((event) => (
+                      <button
+                        key={event.id}
+                        data-event-id={event.id}
+                        onClick={(click) => {
+                          const disclosure =
+                            click.currentTarget.closest("details");
+                          if (disclosure) {
+                            disclosure.open = false;
+                            disclosure.querySelector("summary")?.focus();
+                          }
+                          onEvent(event);
+                        }}
+                      >
+                        <i
+                          style={{ background: eventColor(event, shots) }}
+                          aria-hidden="true"
+                        />
+                        <time>{formatTime(n(event.timestamp_ms))}</time>
+                        <span>{s(event.event_type)}</span>
+                      </button>
+                    ))}
+                  </div>
+                </details>
+              );
+            })}
             {visible(timeMs) && (
               <i className="timeline-playhead" style={{ left: left(timeMs) }} />
             )}
@@ -173,4 +267,4 @@ export function AnalysisTimeline({
       )}
     </section>
   );
-}
+};

@@ -288,6 +288,7 @@ hbi-starter/
   tests/e2e/smoke.spec.ts
   tests/e2e/spatial-map-assertions.ts
   tests/e2e/statistics-view-captures.ts
+  tests/e2e/timeline-assertions.ts
   tests/e2e/transport-assertions.ts
   tests/e2e/transport.spec.ts
   tests/e2e/typography-assertions.ts
@@ -298,6 +299,7 @@ hbi-starter/
   tests/fixtures/console-data.mjs
   tests/fixtures/wikidata-known-player.json
   tests/integration/.gitkeep
+  tests/unit/analysis-timeline.test.tsx
   tests/unit/backup.test.ts
   tests/unit/data-sources.test.ts
   tests/unit/domain.test.ts
