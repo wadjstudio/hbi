@@ -53,7 +53,8 @@ test("online source API contract: timing, shots, offline guard and evidence clip
     .click();
   await expect(page.locator(".transport-time")).toHaveText("0:05 / 1:00");
   await page.getByRole("button", { name: "Goal", exact: true }).click();
-  // Tagged events render in the canonical event feed (0dadd90).
+  // Tagged events render in the canonical event feed (0dadd90), on its tab.
+  await page.getByRole("tab", { name: "Events", exact: true }).click();
   const goal = page.locator('.event-feed-row[data-result="goal"]');
   await expect(goal).toHaveCount(1);
   await expect(goal.locator(".event-feed-time b")).toHaveText("0:05");
