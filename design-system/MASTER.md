@@ -28,6 +28,7 @@ Do not substitute invented players, team crests, league averages or match scores
 - Five evidence-linked summary cards follow the analysis tabs. Setup should not
   dominate the first screen; expand sources, calibration, recording context and
   detailed evidence on demand. Never crop controls or overlay essential content.
+- Player cards use three rail/four lower highlights and a complete scoped native-modal list. Preserve full wrapped names, pending-only identity access and separate reviewed-rate evidence; keep original row/chart/control dimensions and mobile44px targets.
 - Small screens stack the workspace, retain labelled controls and use the modal
   navigation drawer. Arabic RTL and English LTR remain supported. Video coordinates
   and the chronological timeline retain their physical direction.
