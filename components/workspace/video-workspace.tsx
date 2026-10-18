@@ -19,7 +19,7 @@ import {
   percent,
   positionAt,
 } from "@/lib/analytics/metrics";
-import { s, n, positions, type Row, type Drawing } from "@/types/workspace";
+import { s, n, type Row, type Drawing } from "@/types/workspace";
 import { canWrite } from "@/lib/permissions/roles";
 import {
   filterWorkbenchEvents,
@@ -44,6 +44,8 @@ import { AnalysisSplit } from "./analysis-split";
 import { MatchDashboard } from "./match-dashboard";
 import { SessionStatistics } from "./session-statistics";
 import { LineupOverview } from "./lineup-overview";
+import { LineupEditors } from "./lineup-editors";
+import { ClockCalibration } from "./clock-calibration";
 import { EventFeed } from "./event-feed";
 import { lineupSnapshot } from "@/features/players/lineup-snapshot";
 import { BrandLockup } from "@/components/brand/brand-lockup";
@@ -137,16 +139,10 @@ export function VideoWorkspace({
     [outcome, setOutcome] = useState("unknown");
   const [court, setCourt] = useState<{ x: number; y: number } | null>(null),
     [period, setPeriod] = useState(1),
-    [clockStart, setClockStart] = useState(0),
-    [segStart, setSegStart] = useState(0),
-    [segEnd, setSegEnd] = useState(0),
-    [running, setRunning] = useState(true);
+    [segEnd, setSegEnd] = useState(0);
   const [eventX, setEventX] = useState(""),
     [eventY, setEventY] = useState("");
-  const [starting, setStarting] = useState(true),
-    [outPlayer, setOut] = useState(""),
-    [inPlayer, setIn] = useState(""),
-    [position, setPosition] = useState("CB"),
+  const [position, setPosition] = useState("CB"),
     [numericalFor, setNumericalFor] = useState(6),
     [numericalAgainst, setNumericalAgainst] = useState(6),
     [annotation, setAnnotation] = useState<Drawing[]>([]),
@@ -250,33 +246,6 @@ export function VideoWorkspace({
       (row) =>
         row.organization_id === w.org &&
         lineupState.roster.some((entry) => entry.player_id === row.id),
-    );
-  const canEnterLineup = (id: string) =>
-    Boolean(
-      clock &&
-      lineupState.hasClock &&
-      lineupPlayers.some((row) => row.id === id) &&
-      !lineupState.invalid.some((row) => row.player_id === id) &&
-      !lineupState.intervals.some(
-        (row) =>
-          row.player_id === id &&
-          row.period === clock.period &&
-          (row.end_clock_ms == null || n(row.end_clock_ms) > clock.clockMs),
-      ),
-    );
-  const canLeaveLineup = (id: string) =>
-    Boolean(
-      clock &&
-      lineupState.hasClock &&
-      !lineupState.invalid.some((row) => row.player_id === id) &&
-      !lineupState.ambiguous.some((row) => row.player_id === id) &&
-      lineupState.intervals.some(
-        (row) =>
-          row.player_id === id &&
-          row.period === clock.period &&
-          row.end_clock_ms == null &&
-          n(row.start_clock_ms) < clock.clockMs,
-      ),
     );
   const lineupWritable = Boolean(
     available && sid && !a.busy && canWrite(w.role, "on_court_intervals"),
@@ -1305,132 +1274,17 @@ export function VideoWorkspace({
                 ))}
                 <small>n={filtered.length}</small>
               </div>
-              <details className="clock-tools">
-                <summary>
-                  {w.t("معايرة ساعة المباراة", "Calibrate match clock")}
-                </summary>
-                <form
-                  className="editor form-grid"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    void a.run(() =>
-                      w.save("video_clock_segments", {
-                        analysis_session_id: sid,
-                        period,
-                        video_start_ms: Math.round(segStart * 1000),
-                        video_end_ms: Math.round(segEnd * 1000),
-                        clock_start_ms: Math.round(clockStart * 1000),
-                        running,
-                      }),
-                    );
-                  }}
-                >
-                  <label>
-                    {w.t("الشوط", "Period")}
-                    <input
-                      type="number"
-                      min="1"
-                      max="4"
-                      value={period}
-                      onChange={(e) => setPeriod(Number(e.target.value))}
-                    />
-                  </label>
-                  <label>
-                    {w.t("بداية الفيديو / ثانية", "Video start / sec")}
-                    <input
-                      type="number"
-                      min="0"
-                      value={segStart}
-                      step={0.001}
-                      onChange={(e) => setSegStart(Number(e.target.value))}
-                    />
-                  </label>
-                  <label>
-                    {w.t("نهاية الفيديو / ثانية", "Video end / sec")}
-                    <input
-                      type="number"
-                      min="0"
-                      value={segEnd}
-                      step={0.001}
-                      onChange={(e) => setSegEnd(Number(e.target.value))}
-                    />
-                  </label>
-                  <label>
-                    {w.t("ساعة الشوط / ثانية", "Period clock / sec")}
-                    <input
-                      type="number"
-                      min="0"
-                      value={clockStart}
-                      step={0.001}
-                      onChange={(e) => setClockStart(Number(e.target.value))}
-                    />
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={running}
-                      onChange={(e) => setRunning(e.target.checked)}
-                    />
-                    {w.t("الساعة تعمل", "Clock running")}
-                  </label>
-                  <div className="toolbar">
-                    <button
-                      type="button"
-                      disabled={!available}
-                      onClick={() =>
-                        void a.run(async () => {
-                          setSegStart(captureTime() / 1000);
-                        })
-                      }
-                    >
-                      {w.t(
-                        "البداية عند اللقطة الحالية",
-                        "Start at current frame",
-                      )}
-                    </button>
-                    <button
-                      type="button"
-                      disabled={!available}
-                      onClick={() =>
-                        void a.run(async () => {
-                          setSegEnd(captureTime() / 1000);
-                        })
-                      }
-                    >
-                      {w.t(
-                        "النهاية عند اللقطة الحالية",
-                        "End at current frame",
-                      )}
-                    </button>
-                    <button>
-                      {w.t("إضافة مقطع معايرة", "Add clock segment")}
-                    </button>
-                  </div>
-                </form>
-                {segments.map((r) => (
-                  <div key={r.id}>
-                    {formatTime(n(r.video_start_ms))} →{" "}
-                    {formatTime(n(r.video_end_ms))} · {n(r.period)}{" "}
-                    <button
-                      type="button"
-                      aria-label={w.t(
-                        "حذف مقطع المعايرة",
-                        "Delete clock segment",
-                      )}
-                      disabled={
-                        !canWrite(w.role, "video_clock_segments") || a.busy
-                      }
-                      onClick={() =>
-                        void a.run(() =>
-                          w.save("video_clock_segments", r, true),
-                        )
-                      }
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </details>
+              <ClockCalibration
+                sessionId={sid}
+                segments={segments}
+                period={period}
+                onPeriod={setPeriod}
+                segEnd={segEnd}
+                onSegEnd={setSegEnd}
+                isAvailable={available}
+                captureTime={captureTime}
+                action={a}
+              />
             </Panel>
             <QuickTagDock
               context={
@@ -2213,176 +2067,26 @@ export function VideoWorkspace({
               clock={clock}
               onTeamChange={(id) => {
                 setTeam(id);
-                setIn("");
-                setOut("");
                 setActor("");
                 setKeeper("");
               }}
             />
-            <details className="lineup-editors">
-              <summary>
-                {w.t(
-                  "إدارة القائمة وفترات اللعب والتبديلات",
-                  "Roster, interval and substitution tools",
-                )}
-              </summary>
-              <fieldset
-                disabled={!canWrite(w.role, "on_court_intervals") || a.busy}
-              >
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={starting}
-                    onChange={(e) => setStarting(e.target.checked)}
-                  />
-                  {w.t("الإضافة كأساسي معلن", "Add as declared starter")}
-                </label>
-                <div className="form-grid">
-                  <SelectRow
-                    label={w.t("لاعب", "Player")}
-                    rows={w.list("players")}
-                    value={inPlayer}
-                    onChange={setIn}
-                  />
-                  <SelectRow
-                    label={w.t("خروج", "Out")}
-                    rows={lineupPlayers}
-                    value={outPlayer}
-                    onChange={setOut}
-                  />
-                  <label>
-                    {w.t("المركز", "Position")}
-                    <select
-                      value={position}
-                      onChange={(e) => setPosition(e.target.value)}
-                    >
-                      {positions.map((p) => (
-                        <option key={p}>{p}</option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-                <div className="toolbar">
-                  <button
-                    disabled={
-                      !w.online ||
-                      !inPlayer ||
-                      !lineupTeamId ||
-                      roster.some((row) => row.player_id === inPlayer)
-                    }
-                    onClick={() =>
-                      void a.run(() =>
-                        w.direct("match_roster", {
-                          match_id: matchId,
-                          player_id: inPlayer,
-                          team_id: lineupTeamId,
-                          side:
-                            lineupTeamId === match?.home_team_id
-                              ? "home"
-                              : "away",
-                          starting,
-                        }),
-                      )
-                    }
-                  >
-                    {w.t("إضافة للقائمة", "Add to roster")}
-                  </button>
-                  <button
-                    disabled={!lineupWritable || !canEnterLineup(inPlayer)}
-                    onClick={() =>
-                      void a.run(() =>
-                        w.save("on_court_intervals", {
-                          ...base(),
-                          team_id: lineupTeamId,
-                          player_id: inPlayer,
-                          position,
-                          start_clock_ms: clock?.clockMs ?? 0,
-                          verified: true,
-                        }),
-                      )
-                    }
-                  >
-                    {w.t("فتح فترة لعب", "Open interval")}
-                  </button>
-                  <button
-                    disabled={
-                      !lineupWritable ||
-                      !clock ||
-                      inPlayer === outPlayer ||
-                      !(inPlayer || outPlayer) ||
-                      Boolean(inPlayer && !canEnterLineup(inPlayer)) ||
-                      Boolean(outPlayer && !canLeaveLineup(outPlayer))
-                    }
-                    onClick={() =>
-                      void a.run(() =>
-                        w.substitute({
-                          id: crypto.randomUUID(),
-                          organization_id: w.org,
-                          ...base(),
-                          team_id: lineupTeamId,
-                          out_player_id: outPlayer || null,
-                          in_player_id: inPlayer || null,
-                          position,
-                          period: clock!.period,
-                          clock_ms: clock!.clockMs,
-                          video_ms: time,
-                        } as Row),
-                      )
-                    }
-                  >
-                    {w.t("تبديل", "Substitute")}
-                  </button>
-                </div>
-                {!w.online && (
-                  <p className="notice">
-                    {w.t(
-                      "إدارة القائمة تحتاج اتصالًا. فترات اللعب والتبديلات تستخدم الحفظ المحلي في مساحة المباراة المجهزة.",
-                      "Roster setup needs a connection. Intervals and substitutions use local saves in the prepared match workspace.",
-                    )}
-                  </p>
-                )}
-                <p className="lineup-method">
-                  {w.t(
-                    "لفتح فترة أو تسجيل تبديل: اختر لاعبًا من قائمة الفريق، واربط الفيديو وعاير الساعة. إغلاق الفترة يحتاج الشوط نفسه وزمنًا لاحقًا للبداية؛ الفترات المنتهية تبقى للقراءة.",
-                    "To open an interval or substitute, choose a roster player, link the source and calibrate its clock. Closing requires the same period and a later clock; closed intervals remain read-only.",
-                  )}
-                </p>
-                {lineupState.intervals.map((r) => (
-                  <div className="interval" key={r.id}>
-                    {rowLabel(
-                      w.list("players").find((p) => p.id === r.player_id) ?? r,
-                    )}{" "}
-                    · {s(r.position)} · {n(r.period)} ·{" "}
-                    {formatTime(n(r.start_clock_ms))} →{" "}
-                    {r.end_clock_ms == null
-                      ? "…"
-                      : formatTime(n(r.end_clock_ms))}
-                    <button
-                      disabled={
-                        !lineupWritable ||
-                        !clock ||
-                        r.end_clock_ms != null ||
-                        lineupState.invalid.some((row) => row.id === r.id) ||
-                        lineupState.ambiguous.some((row) => row.id === r.id) ||
-                        r.period !== clock.period ||
-                        clock.clockMs <= n(r.start_clock_ms)
-                      }
-                      onClick={() =>
-                        void a.run(() =>
-                          w.save("on_court_intervals", {
-                            ...r,
-                            end_clock_ms: clock!.clockMs,
-                            verified: true,
-                          }),
-                        )
-                      }
-                    >
-                      {w.t("إغلاق", "Close")}
-                    </button>
-                  </div>
-                ))}
-              </fieldset>
-            </details>
+            <LineupEditors
+              key={lineupTeamId}
+              matchId={matchId}
+              homeTeamId={s(match?.home_team_id)}
+              teamId={lineupTeamId}
+              roster={roster}
+              lineup={lineupState}
+              players={lineupPlayers}
+              clock={clock}
+              timeMs={time}
+              position={position}
+              onPosition={setPosition}
+              isWritable={lineupWritable}
+              base={base}
+              action={a}
+            />
           </Panel>
         )}
         {tab === "annotations" && (
