@@ -7,18 +7,13 @@ import { DrawingEditor } from "./drawing";
 import { AnnotationLibrary } from "./annotation-library";
 import { ReviewQueue } from "./review-queue";
 import { EventParticipants } from "./event-participants";
-import { ShotMap, Court } from "./charts";
+import { Court } from "./charts";
 import { parseEventCourtPosition } from "@/features/analysis/contracts";
 import { matchLabel } from "./entities";
 import { getLocalSource, registerLocalSource } from "@/lib/video/local-sources";
 import { inspectVideo } from "@/lib/video/fingerprint";
 import { matchClock, formatTime } from "@/lib/video/time";
-import {
-  shotSummary,
-  keeperSummary,
-  percent,
-  positionAt,
-} from "@/lib/analytics/metrics";
+import { positionAt } from "@/lib/analytics/metrics";
 import { s, n, type Row, type Drawing } from "@/types/workspace";
 import { canWrite } from "@/lib/permissions/roles";
 import {
@@ -46,6 +41,8 @@ import { SessionStatistics } from "./session-statistics";
 import { LineupOverview } from "./lineup-overview";
 import { LineupEditors } from "./lineup-editors";
 import { ClockCalibration } from "./clock-calibration";
+import { SessionSettings } from "./session-settings";
+import { ShotDetailPanel } from "./shot-detail-panel";
 import { EventFeed } from "./event-feed";
 import { lineupSnapshot } from "@/features/players/lineup-snapshot";
 import { BrandLockup } from "@/components/brand/brand-lockup";
@@ -685,7 +682,6 @@ export function VideoWorkspace({
     // Enter an explicit source event once; background refreshes preserve editing snapshots.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sid, requestedEvent]);
-  const summary = shotSummary(shots);
   const missingAttempts = events.filter(
     (e) =>
       [
@@ -814,61 +810,25 @@ export function VideoWorkspace({
       )}
       <AnalysisSplit
         controls={
-          <details className="session-settings">
-            <summary>
-              {w.t("جلسات التحليل وإعداداتها", "Analysis sessions & settings")}
-            </summary>
-            <div className="toolbar">
-              <SelectRow
-                label={w.t("جلسة التحليل", "Analysis session")}
-                rows={sessions}
-                value={sid}
-                onChange={(id) => {
-                  clearEditing();
-                  setRequestedEvent("");
-                  setSession(id);
-                  setVideo("");
-                  setUrl("");
-                  setSourceFile(null);
-                }}
-              />
-              <button
-                disabled={!video}
-                onClick={() =>
-                  void a.run(async () => {
-                    const session = await w.save("analysis_sessions", {
-                      match_id: matchId,
-                      video_id: video?.id,
-                      title: `Analysis ${sessions.length + 1}`,
-                      is_primary: false,
-                    });
-                    clearEditing();
-                    setSession(session.id);
-                  })
-                }
-              >
-                {w.t("جلسة إضافية", "Additional session")}
-              </button>
-              <button
-                disabled={!sid || !w.online}
-                onClick={() =>
-                  void a.run(async () => {
-                    await w.flush();
-                    const { createClient } =
-                      await import("@/lib/supabase/client");
-                    const { error } = await createClient().rpc(
-                      "set_primary_analysis",
-                      { p_session: sid },
-                    );
-                    if (error) throw new Error(error.message);
-                    await w.reload();
-                  })
-                }
-              >
-                {w.t("اعتماد للتحليلات المجمعة", "Use for aggregate analytics")}
-              </button>
-            </div>
-          </details>
+          <SessionSettings
+            matchId={matchId}
+            sessions={sessions}
+            sessionId={sid}
+            videoId={video?.id}
+            onSelect={(id) => {
+              clearEditing();
+              setRequestedEvent("");
+              setSession(id);
+              setVideo("");
+              setUrl("");
+              setSourceFile(null);
+            }}
+            onCreated={(id) => {
+              clearEditing();
+              setSession(id);
+            }}
+            action={a}
+          />
         }
         video={(layoutControls) => (
           <div className="workbench-video-column">
@@ -1976,85 +1936,23 @@ export function VideoWorkspace({
           </Panel>
         )}
         {tab === "analytics" && (
-          <details className="shot-detail-panel">
-            <summary>
-              {w.t(
-                "كفاءة التصويب · التفاصيل وتحديد الموقع",
-                "Shot efficiency · breakdown & location editor",
-              )}{" "}
-              · {percent(summary.efficiency)} · n={summary.sample}
-            </summary>
-            <Panel
-              title={`${w.t("كفاءة التصويب", "Shot efficiency")} ${percent(summary.efficiency)} · n=${summary.sample}`}
-            >
-              <ShotMap
-                onGroup={(rows) =>
-                  showEvidence(
-                    w.t("عينة قطاع التصويب", "Shot location group"),
-                    events.filter((e) =>
-                      rows.some((sh) => sh.event_id === e.id),
-                    ),
-                  )
-                }
-                shots={shots.filter((shot) =>
-                  filtered.some((event) => event.id === shot.event_id),
-                )}
-                onSelect={(sh) => {
-                  const e = events.find((e) => e.id === sh.event_id);
-                  if (e) edit(e);
-                }}
-              />
-              <label>{w.t("موضع التصويب التالي", "Next shot location")}</label>
-              <div
-                className="goal-picker"
-                onClick={(e) => {
-                  const r = e.currentTarget.getBoundingClientRect();
-                  setGoalPoint({
-                    x: (e.clientX - r.left) / r.width,
-                    y: 1 - (e.clientY - r.top) / r.height,
-                  });
-                }}
-              >
-                {w.t(
-                  "اضغط موضع الكرة في المرمى",
-                  "Click shot placement in goal",
-                )}{" "}
-                {goalPoint
-                  ? `${goalPoint.x.toFixed(2)}, ${goalPoint.y.toFixed(2)}`
-                  : ""}
-              </div>
-              <div
-                className="location-picker"
-                onClick={(e) => {
-                  const r = e.currentTarget.getBoundingClientRect();
-                  setCourt({
-                    x: (e.clientX - r.left) / r.width,
-                    y: (e.clientY - r.top) / r.height,
-                  });
-                }}
-              >
-                {court
-                  ? `${court.x.toFixed(2)}, ${court.y.toFixed(2)}`
-                  : w.t("اضغط لتحديد الإحداثيات", "Click to place coordinates")}
-              </div>
-              {keepers.map((k) => {
-                const stats = keeperSummary(shots, k.id);
-                return (
-                  <button
-                    key={k.id}
-                    onClick={() => {
-                      setParticipantFilter("");
-                      setFilter("shot");
-                      setTab("events");
-                    }}
-                  >
-                    {rowLabel(k)} · {percent(stats.percentage)} · n=
-                    {stats.sample}
-                  </button>
-                );
-              })}
-            </Panel>
-          </details>
+          <ShotDetailPanel
+            events={events}
+            filtered={filtered}
+            shots={shots}
+            keepers={keepers}
+            goalPoint={goalPoint}
+            onGoalPoint={setGoalPoint}
+            court={court}
+            onCourt={setCourt}
+            onEvidence={showEvidence}
+            onEdit={edit}
+            onKeeper={() => {
+              setParticipantFilter("");
+              setFilter("shot");
+              setTab("events");
+            }}
+          />
         )}
         {tab === "lineups" && (
           <Panel title={w.t("القائمة والتبديلات", "Roster & substitutions")}>
