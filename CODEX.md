@@ -1,5 +1,7 @@
 # SESEN / HBI Codex Rules
 
+Preserve four insight previews and complete scoped lists under density; do not reduce sample size, shrink text or relax original summary gates to pass. Keep the visible n-counter, full sample scope/denominators, native analyzed-team choice and exact shot/event evidence actions. Sample disclosures need viewport-safe placement, outside/focus/Escape dismissal and media-safe scrolling. Pending-only attempts remain viewable when the reviewed denominator is zero. Synthetic dense fixtures belong to the loopback mock only.
+
 Keep rate evidence distinct from all-attempt player evidence: use the same reviewedShotAttempts predicate as shotSummary, keep pending attempts outside the rate and retain their own access. EfficiencyRing must display unavailable/invalid values as unknown and preserve a known zero. Maintain full one-decimal labels, physical SVG orientation, labelled keyboard-accessible methods and mobile action targets. Never infer player portraits, positions or quality thresholds from sample order or rate.
 
 Keep video source/layout/session setup behind the accessible gear without removing file/online or primary-session controls. Preserve mounted native media and time while opening settings or resizing. Inner Escape must close only the layout submenu; a second Escape closes setup and restores gear focus. Verify physical popover bounds, mobile 44px targets, role/offline guards, full source aspect and clean first-screen layout.

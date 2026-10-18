@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence (HBI V1 foundation)
 
+The intelligence rail uses compact procedure/insight rows with complete scoped View all lists. Choose the analyzed team in the heading; open the visible n-counter for current/historical sample details and separate shot/event evidence. Pending-only attempts stay accessible even when a reviewed denominator is unavailable. Dense and long-content acceptance remains part of the reference audit.
+
 Player threat rows now show compact shooting-efficiency rings beside neutral shirt avatars, with separate all-attempt and reviewed-rate evidence actions. Reviewed/pending counts remain visible and described for screen readers. The shot-profile card has a larger labelled ring, separate reviewed-goal/pending actions and an accessible calculation note; cumulative trend points keep their exact samples.
 
 Video source, relinking and layout/session setup now live behind the labelled gear beside playback controls. The video keeps its full source aspect and starts higher in the workstation; the empty state offers a direct Choose source action. Setup supports Escape/focus return, outside dismissal, local file verification and existing guarded YouTube attachment. It does not remount or upload the local media.

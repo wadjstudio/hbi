@@ -170,11 +170,18 @@
   overflow-wrap: anywhere;
 }
 @media (min-width: 1200px) {
+  .session-rail .intelligence-list-card > header {
+    margin-bottom: 3px;
+  }
   .intelligence-list-preview .intelligence-evidence-action {
     min-height: 40px;
   }
   .insight-section .intelligence-list-preview .intelligence-evidence-action {
-    min-height: 36px;
+    min-height: 30px;
+    padding-block: 0;
+  }
+  .insight-section .intelligence-list-preview .intelligence-list-copy > small {
+    margin-top: 0;
   }
 }
 @media (max-width: 1439px) {

@@ -17,6 +17,7 @@ import { ThreatProfile } from "./threat-profile";
 import { BrandMark, PlayerAvatar } from "@/components/brand/brand-lockup";
 import { PlayerThreatRow } from "./player-threat-row";
 import { IntelligenceListCard } from "./intelligence-list-card";
+import { IntelligenceSample } from "./intelligence-sample";
 import { brand } from "@/lib/brand";
 import type { IntelligenceScope } from "@/features/analysis/intelligence-scope";
 
@@ -154,22 +155,37 @@ export function SessionAnalysisRail({
       <header className="intelligence-heading">
         <BrandMark size={30} />
         <h2
+          aria-label={`${w.t("التحليل", "Intelligence")} — ${team ? rowLabel(team) : w.t("اختر فريقًا", "Choose team")}`}
           title={`${w.t("التحليل", "Intelligence")} — ${team ? rowLabel(team) : w.t("اختر فريقًا", "Choose team")}`}
         >
           {w.t("التحليل", "Intelligence")} —{" "}
-          {team ? rowLabel(team) : w.t("اختر فريقًا", "Choose team")}
+          <select
+            aria-label={w.t("الفريق محل التحليل", "Intelligence team")}
+            value={tid}
+            onChange={(e) => onTeam(e.target.value)}
+          >
+            {teams.map((team) => (
+              <option key={team.id} value={team.id}>
+                {rowLabel(team)}
+              </option>
+            ))}
+          </select>
         </h2>
-        <select
-          aria-label={w.t("الفريق محل التحليل", "Intelligence team")}
-          value={tid}
-          onChange={(e) => onTeam(e.target.value)}
-        >
-          {teams.map((team) => (
-            <option key={team.id} value={team.id}>
-              {rowLabel(team)}
-            </option>
-          ))}
-        </select>
+        <IntelligenceSample
+          summary={summary}
+          sampleSize={sample.length}
+          isHistorical={scope !== "session"}
+          isShotEvidenceAvailable={attempts.length > 0}
+          onShots={() =>
+            onEvidence(
+              w.t("عينة التصويب", "Shot sample"),
+              evidenceFor(attempts),
+            )
+          }
+          onEvents={() =>
+            onEvidence(w.t("الأحداث المصنفة", "Tagged events"), sample)
+          }
+        />
         <div
           className="intelligence-scope"
           role="group"
@@ -217,36 +233,6 @@ export function SessionAnalysisRail({
           )}
         </small>
       )}
-      <div className="rail-summary">
-        <button
-          onClick={() =>
-            onEvidence(
-              w.t("عينة التصويب", "Shot sample"),
-              evidenceFor(attempts),
-            )
-          }
-        >
-          <small>{w.t("كفاءة التصويب", "Shot efficiency")}</small>
-          <b>{percent(summary.efficiency)}</b>
-          <small>
-            {summary.goals}/{summary.sample} · {summary.pending}{" "}
-            {w.t("للمراجعة", "to review")}
-          </small>
-        </button>
-        <button
-          onClick={() =>
-            onEvidence(w.t("الأحداث المصنفة", "Tagged events"), sample)
-          }
-        >
-          <small>{w.t("حجم العينة", "Sample size")}</small>
-          <b>{sample.length}</b>
-          <small>
-            {scope === "session"
-              ? w.t("حدث · جلسة واحدة", "events · one session")
-              : w.t("حدث · العينة التاريخية", "events · historical sample")}
-          </small>
-        </button>
-      </div>
       <section className="intelligence-section defense-section">
         <header>
           <h3>{w.t("أنظمة الدفاع", "Defensive systems")}</h3>

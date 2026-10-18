@@ -2,6 +2,7 @@
 import http from "node:http";
 import { createHmac, randomUUID } from "node:crypto";
 import { consoleData } from "../tests/fixtures/console-data.mjs";
+import { denseIntelligence } from "../tests/fixtures/dense-intelligence.mjs";
 const id = "10000000-0000-4000-8000-000000000001",
   org = "20000000-0000-4000-8000-000000000001",
   home = "30000000-0000-4000-8000-000000000001",
@@ -175,17 +176,20 @@ const server = http.createServer(async (req, res) => {
       id: null,
       duration_ms: 60000,
     };
+    const fixture = consoleData({
+      organization: org,
+      home,
+      away,
+      match: db.matches.find((entry) => entry.id === match),
+      user: id,
+      session,
+      video,
+    });
     Object.assign(
       db,
-      consoleData({
-        organization: org,
-        home,
-        away,
-        match: db.matches.find((entry) => entry.id === match),
-        user: id,
-        session,
-        video,
-      }),
+      input.dense === true
+        ? denseIntelligence(fixture, away, session.id)
+        : fixture,
     );
     return send({ fixture: "synthetic-console", events: db.events.length });
   }

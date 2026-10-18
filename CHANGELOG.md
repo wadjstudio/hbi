@@ -1,4 +1,10 @@
 # CHANGELOG
+## Dense intelligence composition and sample disclosure — 2026-10-18
+- Added a loopback-only stress fixture with six procedures/six evidence-backed insights, including long mixed-language titles/bodies and exact event links. The initial populated test exposed summary cards starting at 810.86px, outside the unchanged 1672×941 gates.
+- Moved the duplicate intelligence sample band into a labelled n-counter disclosure beside the rail heading. Full reviewed/pending denominators, current/historical scope and separate shot/event evidence actions remain available; pending-only evidence is not disabled by its zero reviewed denominator.
+- Compacted desktop insight row padding and header spacing while retaining existing text sizes, four visible insight entries and mobile controls. All-items lists retain full labels/content.
+- Added exact sample-event routing, disclosure keyboard/focus/media isolation and dense English/Arabic layout coverage. No dependency, migration, automatic analysis or production test-data upload.
+
 ## Tactical procedures and insight evidence lists — 2026-10-17
 - Replaced flat tactical buttons with compact icon-led procedure rows, source-sample counts and framed evidence actions. Known stable taxonomy codes select icons; custom codes retain a neutral fallback.
 - Insight rows show explicit pending/reviewed states with corresponding markers and visible wide-screen Watch evidence actions; no AI-generated or automatic-analysis claim is introduced.

@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
 
+The video-side rail now has a chosen-team heading, visible sample counter/disclosure and procedure/insight evidence lists. Complete lists retain saved explanations and every scoped item beyond their previews. Review status and actual counts remain explicit; a zero reviewed denominator must not hide pending-attempt evidence. Dense four-insight composition and long English/Arabic content are verified against the same original viewport gates, with isolated synthetic data rather than invented match observations.
+
 Player threat cards now pair neutral shirt identities and reviewed/pending sample counts with compact rate rings. The percentage opens only its reviewed denominator, while the identity opens the complete player sample. The enlarged shot-profile ring has a visible efficiency caption, distinct goal/pending evidence actions and calculation details; unknown denominators remain unavailable. No automatic player identification, position inference or invented portraits/benchmarks is introduced.
 
 The workstation now gives the picture priority: source and workspace setup move into a labelled gear beside playback controls, preserving the full source and mounted media. Its popover includes local selection/relinking, source guidance, YouTube attachment and existing layout/session tools. Empty video has a direct source action; mobile uses a bounded fixed popover and 44px targets. Keyboard focus, dismissal and original data/write guards remain required.

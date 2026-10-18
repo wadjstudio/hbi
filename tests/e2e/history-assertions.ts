@@ -13,6 +13,7 @@ export async function verifyHistoricalEvidence(
   });
   await scope.getByRole("button", { name: "Last 3", exact: true }).click();
   await expect(page.locator(".intelligence-coverage")).toContainText("2/3");
+  await page.locator(".intelligence-sample > summary").click();
   await expect(
     page.getByRole("button", { name: /Sample size 13/ }),
   ).toBeVisible();

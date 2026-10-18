@@ -1,5 +1,7 @@
 # SESEN / HBI V1 phases and acceptance gates
 
+Dense intelligence gates: four visible insight previews, all six synthetic procedures/insights available with full long titles/bodies, exact event IDs when opened from the end of either list, English/Arabic bounds at 1672/1440/1024/768/375px and original 1672×941 summary-top/bottom limits. Verify the n-counter disclosure's actual sample, pending-only/empty actions, historical scope, Escape/focus, viewport bounds and isolation from video shortcuts. These gates extend the full reference audit; they do not replace it.
+
 Efficiency-card follow-up gates: compact player rate rings and larger labelled profile ring; exact reviewed/goal/pending event IDs; separate all-attempt access; unknown versus zero/invalid input; one-decimal labels; retained sample warnings; accessible method disclosure/focus without video seeking; desktop/Arabic/mobile bounds and original first-screen summary gates.
 
 Video-setup follow-up gates: accessible labelled gear and empty-source action; local file/YouTube callbacks; online-write/offline guards; nested Escape/focus return and real outside dismissal; desktop/mobile popover bounds; 44px mobile targets; existing layout/session/primary controls; unchanged media node/time through focus/resizing and original first-screen/source-aspect gates.

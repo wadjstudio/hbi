@@ -15,6 +15,7 @@ import { verifyTransport } from "./transport-assertions";
 import { verifyEfficiencyCards } from "./efficiency-card-assertions";
 import { verifyTimelineClusters } from "./timeline-assertions";
 import { verifyIntelligenceLists } from "./intelligence-list-assertions";
+import { verifyIntelligenceSample } from "./intelligence-sample-assertions";
 import {
   openVideoSettings,
   verifyVideoSettings,
@@ -317,6 +318,11 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     await page.setViewportSize({ width, height: 941 });
     if (width === 375 && process.env.HBI_VISUAL_MATCH) {
       await verifyTimelineClusters(page);
+      await verifyIntelligenceSample(
+        page,
+        false,
+        testInfo.outputPath("intelligence-sample-375.png"),
+      );
       await verifyIntelligenceLists(
         page,
         false,
@@ -341,6 +347,12 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     }
     if (width === 1672) {
       await verifyTransport(page);
+      if (process.env.HBI_VISUAL_MATCH)
+        await verifyIntelligenceSample(
+          page,
+          false,
+          testInfo.outputPath("intelligence-sample-1672.png"),
+        );
       if (process.env.HBI_VISUAL_MATCH)
         await verifyIntelligenceLists(
           page,
@@ -416,6 +428,12 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     fullPage: true,
   });
   await page.setViewportSize({ width: 390, height: 844 });
+  if (process.env.HBI_VISUAL_MATCH)
+    await verifyIntelligenceSample(
+      page,
+      true,
+      testInfo.outputPath("intelligence-sample-arabic-390.png"),
+    );
   if (process.env.HBI_VISUAL_MATCH)
     await verifyIntelligenceLists(
       page,

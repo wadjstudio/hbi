@@ -43,6 +43,7 @@ hbi-starter/
   app/fonts.css
   app/globals.css
   app/intelligence-lists.css
+  app/intelligence-sample.css
   app/layout.tsx
   app/lineups.css
   app/match-header.css
@@ -115,6 +116,7 @@ hbi-starter/
   components/workspace/evidence-links.tsx
   components/workspace/evidence-trend.tsx
   components/workspace/intelligence-list-card.tsx
+  components/workspace/intelligence-sample.tsx
   components/workspace/lineup-overview.tsx
   components/workspace/match-context.tsx
   components/workspace/match-dashboard.tsx
@@ -275,6 +277,7 @@ hbi-starter/
   tests/e2e/conflict.spec.ts
   tests/e2e/console.spec.ts
   tests/e2e/data-sources.spec.ts
+  tests/e2e/dense-intelligence.spec.ts
   tests/e2e/efficiency-card-assertions.ts
   tests/e2e/event-feed-assertions.ts
   tests/e2e/fixture.ts
@@ -282,6 +285,7 @@ hbi-starter/
   tests/e2e/header-details-assertions.ts
   tests/e2e/history-assertions.ts
   tests/e2e/intelligence-list-assertions.ts
+  tests/e2e/intelligence-sample-assertions.ts
   tests/e2e/lineup-assertions.ts
   tests/e2e/online-video.spec.ts
   tests/e2e/presentation-assertions.ts
@@ -300,6 +304,7 @@ hbi-starter/
   tests/e2e/video.spec.ts
   tests/e2e/workflow.spec.ts
   tests/fixtures/console-data.mjs
+  tests/fixtures/dense-intelligence.mjs
   tests/fixtures/wikidata-known-player.json
   tests/integration/.gitkeep
   tests/unit/analysis-timeline.test.tsx
@@ -312,6 +317,7 @@ hbi-starter/
   tests/unit/header-context.test.ts
   tests/unit/header-date.test.ts
   tests/unit/intelligence-list-card.test.tsx
+  tests/unit/intelligence-sample.test.tsx
   tests/unit/intelligence-scope.test.ts
   tests/unit/lineup-snapshot.test.ts
   tests/unit/local.test.ts

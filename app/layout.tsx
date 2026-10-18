@@ -17,6 +17,7 @@ import "./video-console.css";
 import "./video-settings.css";
 import "./player-threats.css";
 import "./intelligence-lists.css";
+import "./intelligence-sample.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(

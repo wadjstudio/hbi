@@ -1,0 +1,108 @@
+.session-rail .intelligence-heading h2 {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.session-rail .intelligence-heading h2 select {
+  width: auto;
+  min-width: 0;
+  max-width: 160px;
+  padding: 0 2px;
+  font: inherit;
+  color: inherit;
+  border: 0;
+  border-bottom: 1px solid #24444d;
+  border-radius: 0;
+  background: transparent;
+}
+.intelligence-sample {
+  position: static;
+  flex-shrink: 0;
+}
+.intelligence-sample > summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 44px;
+  min-height: 28px;
+  padding: 3px;
+  border: 1px solid #24444d;
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--sesen-cyan);
+  list-style: none;
+  cursor: pointer;
+}
+.intelligence-sample > summary::-webkit-details-marker {
+  display: none;
+}
+.intelligence-sample[open] > summary {
+  border-color: var(--sesen-cyan);
+}
+.intelligence-sample-content {
+  position: absolute;
+  z-index: 25;
+  top: calc(100% + 7px);
+  inset-inline-end: 0;
+  width: min(310px, 100%, calc(100vw - 32px));
+  max-height: min(360px, 65dvh);
+  overflow: auto;
+  padding: 12px;
+  border: 1px solid #30717b;
+  border-radius: 6px;
+  background: #07151b;
+  box-shadow: 0 8px 24px #0009;
+}
+.intelligence-sample-content > p {
+  margin: 0 0 8px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.session-rail .intelligence-sample-content .rail-summary {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+}
+.session-rail .intelligence-sample-content .rail-summary > button {
+  min-height: 44px;
+  padding: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  border: 1px solid #24444d;
+  border-radius: 4px;
+}
+.session-rail .intelligence-sample-content .rail-summary > button > b {
+  font-size: 17px;
+}
+.session-rail .intelligence-sample-content .rail-summary > button > small {
+  font-size: 12px;
+  line-height: 1.4;
+}
+@media (max-width: 1199px) {
+  .intelligence-sample > summary {
+    min-height: 44px;
+  }
+  .intelligence-sample-content {
+    position: fixed;
+    top: 90px;
+    inset-inline: 16px;
+    width: auto;
+    max-height: calc(100dvh - 130px);
+  }
+}
+.session-rail .intelligence-heading {
+  position: relative;
+}
+@media (min-width: 1440px) {
+  .session-rail .intelligence-heading {
+    padding-block: 2px;
+  }
+  .session-rail .intelligence-heading h2 {
+    flex: 1 1 0;
+  }
+}
