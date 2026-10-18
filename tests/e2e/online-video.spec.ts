@@ -1,4 +1,5 @@
 import { test, expect } from "./fixture";
+import { openVideoSettings } from "./video-settings-assertions";
 test("online source API contract: timing, shots, offline guard and evidence clip", async ({
   page,
   context,
@@ -29,6 +30,9 @@ test("online source API contract: timing, shots, offline guard and evidence clip
   await page
     .getByLabel("Match", { exact: true })
     .selectOption("50000000-0000-4000-8000-000000000001");
+  // Source attachment lives in Video settings → Video sources.
+  await openVideoSettings(page);
+  await page.locator(".video-settings .source-options > summary").click();
   await page
     .getByLabel("YouTube video URL")
     .fill("https://youtu.be/q-_grNLweEE");
@@ -49,12 +53,11 @@ test("online source API contract: timing, shots, offline guard and evidence clip
     .click();
   await expect(page.locator(".transport-time")).toHaveText("0:05 / 1:00");
   await page.getByRole("button", { name: "Goal", exact: true }).click();
-  await expect(
-    page.locator(".entity-list article").filter({ hasText: "shot" }),
-  ).toHaveCount(1);
-  await expect(
-    page.locator(".entity-list article").filter({ hasText: "shot" }),
-  ).toContainText("0:05");
+  // Tagged events render in the canonical event feed (0dadd90), on its tab.
+  await page.getByRole("tab", { name: "Events", exact: true }).click();
+  const goal = page.locator('.event-feed-row[data-result="goal"]');
+  await expect(goal).toHaveCount(1);
+  await expect(goal.locator(".event-feed-time b")).toHaveText("0:05");
   await context.setOffline(true);
   await expect(
     page.getByRole("button", { name: "Goal", exact: true }),

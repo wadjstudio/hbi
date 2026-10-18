@@ -45,7 +45,9 @@ test("coach can create a player, work offline, sync and draw a tactic", async ({
   await context.setOffline(false);
   await page.getByRole("button", { name: "Sync", exact: true }).click();
   await expect(svg.getByText("10")).toBeVisible();
-  const circle = svg.locator("circle").first();
+  // Dashed circles are selection rings, not drawn objects.
+  const objectCircles = svg.locator("circle:not([stroke-dasharray])");
+  const circle = objectCircles.first();
   const originalX = await circle.getAttribute("cx"),
     originalY = await circle.getAttribute("cy");
   await page.setViewportSize({ width: 1000, height: 800 });
@@ -81,5 +83,5 @@ test("coach can create a player, work offline, sync and draw a tactic", async ({
     page.getByRole("button", { name: "Frame 2", exact: true }),
   ).toHaveClass("active");
   await expect(circle).toHaveAttribute("cx", destinationX!);
-  await expect(svg.locator("circle")).toHaveCount(1);
+  await expect(objectCircles).toHaveCount(1);
 });
