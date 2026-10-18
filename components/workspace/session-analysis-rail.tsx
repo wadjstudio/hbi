@@ -1,24 +1,18 @@
 "use client";
-import Link from "next/link";
-import { ArrowUpRight, Play, Users } from "lucide-react";
+import { Users } from "lucide-react";
 import { tacticalGroups } from "@/features/analysis/workbench";
-import {
-  shotSummary,
-  keeperSummary,
-  percent,
-  ratio,
-  reviewedShotAttempts,
-} from "@/lib/analytics/metrics";
+import { shotSummary, reviewedShotAttempts } from "@/lib/analytics/metrics";
 import { s, type Row } from "@/types/workspace";
 import { useWorkspace } from "./provider";
-import { ShotMap } from "./charts";
 import { rowLabel } from "./controls";
 import { ThreatProfile } from "./threat-profile";
-import { BrandMark, PlayerAvatar } from "@/components/brand/brand-lockup";
+import { BrandMark } from "@/components/brand/brand-lockup";
 import { PlayerThreatRow } from "./player-threat-row";
 import { IntelligenceListCard } from "./intelligence-list-card";
 import { IntelligenceSample } from "./intelligence-sample";
-import { brand } from "@/lib/brand";
+import { DefenseSystemCard } from "./defense-system-card";
+import { ShotZoneCard } from "./shot-zone-card";
+import { IntelligenceKeepers } from "./intelligence-keepers";
 import type { IntelligenceScope } from "@/features/analysis/intelligence-scope";
 
 export function SessionAnalysisRail({
@@ -83,30 +77,6 @@ export function SessionAnalysisRail({
     events,
     "attack_action",
   );
-  const descriptorCount = systems.reduce(
-    (sum, g) => sum + g.possessions.length,
-    0,
-  );
-  const colors = [
-    brand.colors.cyan,
-    brand.colors.gold,
-    brand.colors.save,
-    brand.colors.goal,
-    "#95A8B6",
-  ];
-  const gradient = systems
-    .map((group, i) => {
-      const start =
-        (100 *
-          systems
-            .slice(0, i)
-            .reduce((sum, g) => sum + g.possessions.length, 0)) /
-        Math.max(1, descriptorCount);
-      const stop =
-        start + (100 * group.possessions.length) / Math.max(1, descriptorCount);
-      return `${colors[i % colors.length]} ${start}% ${stop}%`;
-    })
-    .join(",");
   const shooters = [
     ...new Set(attempts.map((shot) => s(shot.shooter_id)).filter(Boolean)),
   ]
@@ -128,9 +98,6 @@ export function SessionAnalysisRail({
     events.filter((event) => event.team_id !== tid).map((event) => event.id),
   );
   const defended = shots.filter((shot) => defendedIds.has(s(shot.event_id)));
-  const goalkeeperIds = [
-    ...new Set(defended.map((shot) => s(shot.goalkeeper_id)).filter(Boolean)),
-  ];
   const links = w.list("evidence_links");
   const insights = w
     .list("insights")
@@ -185,7 +152,13 @@ export function SessionAnalysisRail({
           onEvents={() =>
             onEvidence(w.t("الأحداث المصنفة", "Tagged events"), sample)
           }
-        />
+        >
+          <IntelligenceKeepers
+            shots={defended}
+            events={events}
+            onEvidence={onEvidence}
+          />
+        </IntelligenceSample>
         <div
           className="intelligence-scope"
           role="group"
@@ -233,104 +206,23 @@ export function SessionAnalysisRail({
           )}
         </small>
       )}
-      <section className="intelligence-section defense-section">
-        <header>
-          <h3>{w.t("أنظمة الدفاع", "Defensive systems")}</h3>
-          <small>{w.t("الهجمات المقابلة", "Opposing possessions")}</small>
-        </header>
-        {systems.length ? (
-          <>
-            <div className="defense-distribution">
-              <div
-                className="defense-ring"
-                style={{ background: `conic-gradient(${gradient})` }}
-              >
-                <div>
-                  <strong>{descriptorCount}</strong>
-                  <small>{w.t("توصيف", "descriptors")}</small>
-                </div>
-              </div>
-              <div className="defense-legend">
-                {systems.map((g, i) => (
-                  <button
-                    key={g.term.id}
-                    onClick={() =>
-                      onEvidence(
-                        s(w.lang === "ar" ? g.term.label_ar : g.term.label_en),
-                        g.events,
-                      )
-                    }
-                  >
-                    <i style={{ background: colors[i % colors.length] }} />
-                    <span>
-                      {s(w.lang === "ar" ? g.term.label_ar : g.term.label_en)}
-                    </span>
-                    <b>
-                      {percent(ratio(g.possessions.length, descriptorCount))}
-                    </b>
-                  </button>
-                ))}
-              </div>
-            </div>
-            <details className="chart-method">
-              <summary>
-                {defense.length}{" "}
-                {w.t("هجمة · طريقة الحساب", "possessions · method")}
-              </summary>
-              <small>
-                {w.t(
-                  "التوزيع من التوصيفات، وقد يتغير النظام داخل الهجمة",
-                  "Distribution counts descriptors; systems can change within a possession",
-                )}
-              </small>
-            </details>
-          </>
-        ) : (
-          <p className="intelligence-empty">
-            {w.t(
-              "صنّف النظام الدفاعي أثناء الهجمة ليظهر توزيعه وأدلته هنا.",
-              "Tag defensive systems during possessions to reveal their distribution and evidence.",
-            )}
-          </p>
-        )}
-      </section>
+      <DefenseSystemCard
+        groups={systems}
+        possessionCount={defense.length}
+        onEvidence={onEvidence}
+      />
       <ThreatProfile
         shots={attempts}
         onEvidence={(title, selected) =>
           onEvidence(title, evidenceFor(selected))
         }
       />
-      <section className="intelligence-section shot-section">
-        <header>
-          <h3>{w.t("خريطة التصويب", "Shot map")}</h3>
-          <button
-            className="evidence-text"
-            onClick={() =>
-              onEvidence(
-                w.t("تصويبات الفريق", "Team shots"),
-                evidenceFor(attempts),
-              )
-            }
-          >
-            {w.t("الأدلة", "Evidence")} <ArrowUpRight size={12} />
-          </button>
-        </header>
-        <ShotMap
-          shots={attempts}
-          onGroup={(rows) =>
-            onEvidence(
-              w.t("عينة قطاع التصويب", "Shot location group"),
-              evidenceFor(rows),
-            )
-          }
-          onSelect={(shot) =>
-            onEvidence(
-              w.t("دليل التصويبة", "Shot evidence"),
-              evidenceFor([shot]),
-            )
-          }
-        />
-      </section>
+      <ShotZoneCard
+        shots={attempts}
+        onEvidence={(title, selected) =>
+          onEvidence(title, evidenceFor(selected))
+        }
+      />
       <section className="intelligence-section">
         <header>
           <h3>{w.t("اللاعبون في العينة", "Players in sample")}</h3>
@@ -411,73 +303,6 @@ export function SessionAnalysisRail({
           "Save an insight with evidence in opponent analysis to see it alongside its events here.",
         )}
       />
-      <div className="intelligence-footer">
-        <details className="keeper-details">
-          <summary>
-            {w.t("تحليل حراس الفريق", "Team goalkeeper analysis")} ·{" "}
-            {goalkeeperIds.length}
-          </summary>
-          <section className="intelligence-section keeper-section">
-            <header>
-              <h3>{w.t("حراس الفريق", "Team goalkeepers")}</h3>
-              <small>
-                {w.t("تصديات / تصديات + أهداف", "saves / saves + goals")}
-              </small>
-            </header>
-            {goalkeeperIds.length ? (
-              goalkeeperIds.map((id) => {
-                const keeper = w
-                    .list("players")
-                    .find((player) => player.id === id),
-                  summary = keeperSummary(defended, id);
-                const selected = defended.filter(
-                  (shot) =>
-                    shot.goalkeeper_id === id &&
-                    !shot.empty_goal &&
-                    !shot.review_required &&
-                    ["goal", "save"].includes(s(shot.result)),
-                );
-                return (
-                  <button
-                    className="threat-row"
-                    key={id}
-                    onClick={() =>
-                      onEvidence(
-                        keeper ? rowLabel(keeper) : w.t("الحارس", "Goalkeeper"),
-                        events.filter((event) =>
-                          selected.some((shot) => shot.event_id === event.id),
-                        ),
-                      )
-                    }
-                  >
-                    <PlayerAvatar number="GK" />
-                    <span>
-                      <b>{keeper ? rowLabel(keeper) : "—"}</b>
-                      <small>
-                        {summary.saves}/{summary.sample} ·{" "}
-                        {w.t("إهدار وحجب مستبعدان", "misses & blocks excluded")}
-                      </small>
-                    </span>
-                    <strong>{percent(summary.percentage)}</strong>
-                    <Play size={13} />
-                  </button>
-                );
-              })
-            ) : (
-              <p className="intelligence-empty">
-                {w.t(
-                  "حدّد الحارس أمام محاولات الخصم لعرض التصديات وأدلتها.",
-                  "Identify the keeper facing opponent attempts to show saves and evidence.",
-                )}
-              </p>
-            )}
-          </section>
-        </details>
-        <Link className="intelligence-more" href="/opponents">
-          {w.t("مساحة تحليل الخصم", "Opponent workspace")}
-          <ArrowUpRight size={13} />
-        </Link>
-      </div>
     </aside>
   );
 }

@@ -1,5 +1,14 @@
 # SESEN / HBI validation — 2026-10-16
 
+## Defense and recorded shot zones — 2026-10-18
+
+- Real-environment Pages build, target scan and final isolated typecheck passed: intended hosted project/domain, public-only configuration, AI disabled and no mock target/key in client or Worker. Native declarations returned to baseline. Worker input SHA256: e37aaf14610ef3783ab95a5c890b2d3e58edb0622cccbd1b2f7f70de767ec399. Publication/package receipts follow after completion.
+- Read-only linked migration inspection confirmed project tsgecvtldcypsrinthwx has matching 0001–0020; no migration was executed. Fast-forwarded five upstream commits through 61b56cf before final verification, retaining their security/RBAC/sync corrections.
+- Final 100-unit suite (32 files), lint and native Next build passed. An earlier run hit two 5-second timeouts and checked goalkeeper visibility after dismissal; the visibility assertion now runs before the action, with a callback asserting dismissal before evidence. A focused nine-test run and the subsequent full 100-test run passed without increasing timeouts.
+- All seven Chrome journeys passed with retries disabled: console, dense intelligence, local video, transport, source settings, online-source contract and offline/tactics workflow. Exact defense leader, zone, pending pivot, 7m and keeper event IDs passed at desktop/mobile/Arabic sizes. Method-region arrow keys preserve actual video time. The online player is an isolated API-contract fixture, not proof of unrestricted external playback.
+- The first browser run passed six journeys but dense Arabic ended at 942.33px, outside the unchanged 941px gate. Reduced only new card spacing, then rebuilt and reran all seven successfully. Final dense summary bounds: English 738.19–931.19px, Arabic 738.80–937.33px. Fonts, chart/control dimensions and original gates are unchanged.
+- Inspected final desktop and Arabic-mobile sample disclosure captures. Seven unchanged SAMPLE captures and SHA256 entries are archived in outputs/deployment/SESEN_INTELLIGENCE_CHARTS_ARTIFACTS_2026-10-18.json. Synthetic observations are unrelated to the displayed footage; no fixtures or video were uploaded to production. Full reference parity and automatic tactical analysis remain unfinished.
+
 ## Dense intelligence composition and sample disclosure — 2026-10-18
 
 - Published source 8dae718 as production/main edc16c4e-05bd-4096-9614-f44090ad3ccf, 30 new/48 reused files. All 43 deployed JS/CSS assets, six WOFF2 fonts and two OFL notices match tested local bytes/MIME; font static routes pass. Custom-domain login HTTP 200 and Spaceship nameservers/CNAME unchanged. No authenticated hosted coach journey or schema/DNS/R2/production fixture/media mutation. Final package verification is recorded in the release receipt.

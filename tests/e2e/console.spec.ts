@@ -16,6 +16,7 @@ import { verifyEfficiencyCards } from "./efficiency-card-assertions";
 import { verifyTimelineClusters } from "./timeline-assertions";
 import { verifyIntelligenceLists } from "./intelligence-list-assertions";
 import { verifyIntelligenceSample } from "./intelligence-sample-assertions";
+import { verifyIntelligenceCharts } from "./intelligence-chart-assertions";
 import {
   openVideoSettings,
   verifyVideoSettings,
@@ -318,6 +319,7 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     await page.setViewportSize({ width, height: 941 });
     if (width === 375 && process.env.HBI_VISUAL_MATCH) {
       await verifyTimelineClusters(page);
+      await verifyIntelligenceCharts(page);
       await verifyIntelligenceSample(
         page,
         false,
@@ -347,6 +349,7 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     }
     if (width === 1672) {
       await verifyTransport(page);
+      if (process.env.HBI_VISUAL_MATCH) await verifyIntelligenceCharts(page);
       if (process.env.HBI_VISUAL_MATCH)
         await verifyIntelligenceSample(
           page,
@@ -428,6 +431,7 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     fullPage: true,
   });
   await page.setViewportSize({ width: 390, height: 844 });
+  if (process.env.HBI_VISUAL_MATCH) await verifyIntelligenceCharts(page, true);
   if (process.env.HBI_VISUAL_MATCH)
     await verifyIntelligenceSample(
       page,

@@ -42,6 +42,7 @@ hbi-starter/
   app/event-feed.css
   app/fonts.css
   app/globals.css
+  app/intelligence-charts.css
   app/intelligence-lists.css
   app/intelligence-sample.css
   app/layout.tsx
@@ -107,6 +108,7 @@ hbi-starter/
   components/workspace/controls.tsx
   components/workspace/court.tsx
   components/workspace/data-sources.tsx
+  components/workspace/defense-system-card.tsx
   components/workspace/drawing.tsx
   components/workspace/efficiency-ring.tsx
   components/workspace/entities.tsx
@@ -115,6 +117,7 @@ hbi-starter/
   components/workspace/evidence-drawer.tsx
   components/workspace/evidence-links.tsx
   components/workspace/evidence-trend.tsx
+  components/workspace/intelligence-keepers.tsx
   components/workspace/intelligence-list-card.tsx
   components/workspace/intelligence-sample.tsx
   components/workspace/lineup-overview.tsx
@@ -135,6 +138,7 @@ hbi-starter/
   components/workspace/settings.tsx
   components/workspace/shell.tsx
   components/workspace/shot-profile-card.tsx
+  components/workspace/shot-zone-card.tsx
   components/workspace/spatial-map.tsx
   components/workspace/tactics.tsx
   components/workspace/tag-template.tsx
@@ -157,6 +161,7 @@ hbi-starter/
   features/analysis/review-queue.ts
   features/analysis/session-statistics.ts
   features/analysis/shot-profile.ts
+  features/analysis/shot-zone-sample.ts
   features/analysis/spatial-sample.ts
   features/analysis/workbench.ts
   features/analytics/.gitkeep
@@ -284,6 +289,7 @@ hbi-starter/
   tests/e2e/header-assertions.ts
   tests/e2e/header-details-assertions.ts
   tests/e2e/history-assertions.ts
+  tests/e2e/intelligence-chart-assertions.ts
   tests/e2e/intelligence-list-assertions.ts
   tests/e2e/intelligence-sample-assertions.ts
   tests/e2e/lineup-assertions.ts
@@ -316,6 +322,7 @@ hbi-starter/
   tests/unit/event-feed.test.tsx
   tests/unit/header-context.test.ts
   tests/unit/header-date.test.ts
+  tests/unit/intelligence-charts.test.tsx
   tests/unit/intelligence-list-card.test.tsx
   tests/unit/intelligence-sample.test.tsx
   tests/unit/intelligence-scope.test.ts

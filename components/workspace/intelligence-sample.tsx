@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { Info } from "lucide-react";
 import { percent, type shotSummary } from "@/lib/analytics/metrics";
 import { useWorkspace } from "./provider";
@@ -11,6 +11,7 @@ export const IntelligenceSample = ({
   isShotEvidenceAvailable,
   onShots,
   onEvents,
+  children,
 }: {
   summary: ReturnType<typeof shotSummary>;
   sampleSize: number;
@@ -18,6 +19,7 @@ export const IntelligenceSample = ({
   isShotEvidenceAvailable: boolean;
   onShots: () => void;
   onEvents: () => void;
+  children?: ReactNode;
 }) => {
   const w = useWorkspace();
   const ref = useRef<HTMLDetailsElement>(null);
@@ -106,6 +108,17 @@ export const IntelligenceSample = ({
                 : w.t("حدث · جلسة واحدة", "events · one session")}
             </small>
           </button>
+        </div>
+        <div
+          onClickCapture={(event) => {
+            if (
+              event.target instanceof Element &&
+              event.target.closest("button,a")
+            )
+              close();
+          }}
+        >
+          {children}
         </div>
       </div>
     </details>

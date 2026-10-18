@@ -1,5 +1,7 @@
 # SESEN / HBI V1 phases and acceptance gates
 
+Defense/shot-zone gates: exact leader and tied-system samples, explicit descriptor denominator, 106px defense ring, seven coded groups with separate broad/unknown samples, six visible zone controls plus 7m, pending attempts retained, mobile targets, keeper exact faced-attempt evidence and sample dismissal. Original density/viewport gates still apply.
+
 Dense intelligence gates: four visible insight previews, all six synthetic procedures/insights available with full long titles/bodies, exact event IDs when opened from the end of either list, English/Arabic bounds at 1672/1440/1024/768/375px and original 1672×941 summary-top/bottom limits. Verify the n-counter disclosure's actual sample, pending-only/empty actions, historical scope, Escape/focus, viewport bounds and isolation from video shortcuts. These gates extend the full reference audit; they do not replace it.
 
 Efficiency-card follow-up gates: compact player rate rings and larger labelled profile ring; exact reviewed/goal/pending event IDs; separate all-attempt access; unknown versus zero/invalid input; one-decimal labels; retained sample warnings; accessible method disclosure/focus without video seeking; desktop/Arabic/mobile bounds and original first-screen summary gates.

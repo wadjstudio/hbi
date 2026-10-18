@@ -1,5 +1,7 @@
 # SESEN / HBI continuation prompt
 
+Preserve the defense leader's descriptor-based sample and explicit ties, shot-zone all-attempt shares and independent coordinates, and goalkeeper evidence within the sample disclosure. Continue remaining reference work; these refinements do not establish full visual parity or automatic match analysis.
+
 Retain the combined intelligence heading/team selector, visible n-counter and complete procedure/insight lists. Verify dense four-insight and long translated-content states against the unchanged first-screen gates; exact event samples and source timing must survive layout changes. Keep pending-only evidence accessible despite an unavailable reviewed rate. Never ship loopback stress records as real match data, and continue remaining reference requirements after these checks.
 
 Preserve the shared player threat rows and shot profile's reviewed/goal/pending evidence separation. Keep original metric denominators, unknown states, neutral identities, full percentage precision and cumulative samples. Verify exact event IDs plus ring layout, keyboard methods and Arabic/mobile bounds after changes; continue the full reference audit rather than declaring completion from a new visual indicator.

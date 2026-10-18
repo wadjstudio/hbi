@@ -1,4 +1,10 @@
 # CHANGELOG
+## Defense and recorded shot zones — 2026-10-18
+- Added a 106px defense distribution ring with leader/tie labels and exact descriptor evidence.
+- Added explicit recorded-zone shares, separate 7m access and unknown/broad-zone explanations without inferring distance or coordinates. Pending attempts remain included.
+- Moved goalkeeper evidence and the opponent workspace link into the sample disclosure; preserved reviewed saves/goals denominators and dismissal before navigation.
+- No dependency, schema, DNS or production fixture/media changes.
+
 ## Dense intelligence composition and sample disclosure — 2026-10-18
 - Added a loopback-only stress fixture with six procedures/six evidence-backed insights, including long mixed-language titles/bodies and exact event links. The initial populated test exposed summary cards starting at 810.86px, outside the unchanged 1672×941 gates.
 - Moved the duplicate intelligence sample band into a labelled n-counter disclosure beside the rail heading. Full reviewed/pending denominators, current/historical scope and separate shot/event evidence actions remain available; pending-only evidence is not disabled by its zero reviewed denominator.

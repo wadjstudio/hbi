@@ -1,5 +1,7 @@
 # SESEN / HBI Architecture
 
+DefenseSystemCard receives existing tactical groups and preserves their descriptor denominator. shotZoneSample groups explicit stable zone codes without inferring distance from coordinates; ShotZoneCard passes exact attempt subsets to the existing evidence resolver. IntelligenceKeepers reuses keeperSummary inside IntelligenceSample; capture-phase dismissal precedes evidence navigation.
+
 IntelligenceListCard renders scoped procedure/insight previews and complete native-modal lists; it receives exact evidence callbacks and never derives AI conclusions. IntelligenceSample holds only native disclosure state, exposes the current/historical sample and preserves separate all-attempt versus event actions. Its scope/counters come from the rail's existing selection, not a parallel store. Native team selection is embedded in the heading to avoid duplicate labels and wrapping the scope controls.
 
 EfficiencyRing is a static SVG display that distinguishes known zero from unavailable/invalid rates and preserves physical orientation in RTL. PlayerThreatRow separates all-attempt identity access from reviewed-denominator evidence. ShotProfileCard computes the existing summary from scoped attempts and exposes reviewed/goal/pending groups separately; its method disclosure and trend reuse native controls. reviewedShotAttempts extracts the original shotSummary predicate without changing its formula or return shape.

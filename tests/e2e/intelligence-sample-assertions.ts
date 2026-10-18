@@ -63,6 +63,29 @@ export const verifyIntelligenceSample = async (
   }
   await trigger.focus();
   await trigger.press("Space");
+  await expect(
+    content.getByRole("link", {
+      name: choose("مساحة تحليل الخصم", "Opponent workspace"),
+    }),
+  ).toHaveAttribute("href", "/opponents");
+  await content.locator("[data-goalkeeper-id]").first().click();
+  const keeperEvidence = page.locator(".workbench-evidence");
+  await expect(keeperEvidence.locator("[data-event-id]")).toHaveCount(5);
+  for (const number of [202, 206, 212, 216, 222])
+    await expect(
+      keeperEvidence.locator(
+        `[data-event-id="a0000000-0000-4000-8000-${String(number).padStart(12, "0")}"]`,
+      ),
+    ).toHaveCount(1);
+  await page
+    .getByRole("button", {
+      name: choose("إغلاق الأدلة", "Close evidence"),
+      exact: true,
+    })
+    .click();
+  await expect(content).not.toBeVisible();
+  await trigger.focus();
+  await trigger.press("Space");
   await page
     .getByRole("tab", { name: choose("الإحصاءات", "Analytics"), exact: true })
     .focus();
