@@ -13,9 +13,10 @@ export const verifyHeader = async (page: Page) => {
   await expect(account.locator("summary")).toBeFocused();
   const share = page.locator(".match-share-menu");
   await share.locator("summary").click();
-  const url = await share
-    .getByLabel("Match and session link", { exact: true })
-    .inputValue();
+  // The link is filled by the details toggle event, which fires after open.
+  const link = share.getByLabel("Match and session link", { exact: true });
+  await expect(link).toHaveValue(/^https?:\/\//);
+  const url = await link.inputValue();
   const parsed = new URL(url);
   expect(parsed.pathname).toBe("/matches/50000000-0000-4000-8000-000000000001");
   expect(parsed.searchParams.get("session")).toBeTruthy();

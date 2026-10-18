@@ -1,4 +1,5 @@
 import { test, expect } from "./fixture";
+import { openVideoSettings } from "./video-settings-assertions";
 test("online source API contract: timing, shots, offline guard and evidence clip", async ({
   page,
   context,
@@ -29,6 +30,9 @@ test("online source API contract: timing, shots, offline guard and evidence clip
   await page
     .getByLabel("Match", { exact: true })
     .selectOption("50000000-0000-4000-8000-000000000001");
+  // Source attachment lives in Video settings → Video sources.
+  await openVideoSettings(page);
+  await page.locator(".video-settings .source-options > summary").click();
   await page
     .getByLabel("YouTube video URL")
     .fill("https://youtu.be/q-_grNLweEE");
