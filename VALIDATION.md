@@ -2,6 +2,7 @@
 
 ## Defense and recorded shot zones — 2026-10-18
 
+- Published source 9e46eac as production/main 8073c418-c830-435d-9ea2-c206358b31f9 (30 new/48 reused files). All 43 deployed JS/CSS assets, six fonts and two OFL notices match local bytes/MIME; custom-domain login returns 200 and Spaceship NS/CNAME are unchanged. No authenticated hosted coach journey, schema mutation, DNS/R2 change or production fixture/media upload. Final source-package checksum and extraction verification are in the external release receipt.
 - Real-environment Pages build, target scan and final isolated typecheck passed: intended hosted project/domain, public-only configuration, AI disabled and no mock target/key in client or Worker. Native declarations returned to baseline. Worker input SHA256: e37aaf14610ef3783ab95a5c890b2d3e58edb0622cccbd1b2f7f70de767ec399. Publication/package receipts follow after completion.
 - Read-only linked migration inspection confirmed project tsgecvtldcypsrinthwx has matching 0001–0020; no migration was executed. Fast-forwarded five upstream commits through 61b56cf before final verification, retaining their security/RBAC/sync corrections.
 - Final 100-unit suite (32 files), lint and native Next build passed. An earlier run hit two 5-second timeouts and checked goalkeeper visibility after dismissal; the visibility assertion now runs before the action, with a callback asserting dismissal before evidence. A focused nine-test run and the subsequent full 100-test run passed without increasing timeouts.
