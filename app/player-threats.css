@@ -193,6 +193,12 @@
   box-shadow: 0 10px 30px #0008;
 }
 @media (min-width: 1200px) {
+  .dashboard-card.player-threat-card {
+    padding-block: 6px;
+  }
+  .dashboard-card.player-threat-card > header {
+    margin-bottom: 0;
+  }
   .session-rail .player-threat-row {
     margin-block: 0;
   }
@@ -200,7 +206,33 @@
     margin-block: 0;
   }
 }
+.player-threat-more {
+  padding: 2px 0;
+  min-height: 24px;
+  color: var(--sesen-cyan);
+  font-size: 12px;
+  background: transparent;
+  border: 0;
+}
+.player-threat-dialog .player-threat-identity b,
+.player-threat-dialog .player-threat-identity small {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.player-threat-dialog .player-threat-row > button,
+.player-threat-dialog > header > button {
+  min-height: 44px;
+}
+.player-threat-dialog .player-threat-efficiency {
+  min-width: 44px;
+}
+.player-threat-dialog .player-threat-row {
+  grid-template-columns: minmax(0, 1fr) 44px;
+}
 @media (max-width: 1199px) {
+  .player-threat-more {
+    min-height: 44px;
+  }
   .player-threat-row {
     grid-template-columns: minmax(0, 1fr) 44px;
   }

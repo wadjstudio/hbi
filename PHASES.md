@@ -1,5 +1,7 @@
 # SESEN / HBI V1 phases and acceptance gates
 
+Player-list gates: four summary/three rail previews plus all five synthetic players; full long names, unavailable pending-only rates and exact pending/reviewed evidence. Verify both list entry points at all five widths in English/Arabic, modal bounds, Tab containment, Escape/focus return, source-time isolation and unchanged original summary gates. Expanded whole-journey timeout does not relax individual assertions.
+
 Reference composition gates: wide-pane defense/pattern/player cards are narrower than their row partners; all three pairs share row tops and stay inside the pane. Narrow-pane legends sit below the map in two columns, with existing mobile 44px controls. Verify keyboard resizing, English/Arabic dense content and original first-screen summary bounds.
 
 Defense/shot-zone gates: exact leader and tied-system samples, explicit descriptor denominator, 106px defense ring, seven coded groups with separate broad/unknown samples, six visible zone controls plus 7m, pending attempts retained, mobile targets, keeper exact faced-attempt evidence and sample dismissal. Original density/viewport gates still apply.

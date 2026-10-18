@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { Play } from "lucide-react";
 import {
   matchDashboard,
   recentMatchForm,
@@ -10,7 +9,7 @@ import { percent, reviewedShotAttempts } from "@/lib/analytics/metrics";
 import { s, type Row } from "@/types/workspace";
 import { useWorkspace } from "./provider";
 import { rowLabel } from "./controls";
-import { PlayerThreatRow } from "./player-threat-row";
+import { PlayerThreatCard } from "./player-threat-card";
 import { ShotProfileCard } from "./shot-profile-card";
 import { brand } from "@/lib/brand";
 import { EvidenceTrend } from "./evidence-trend";
@@ -56,43 +55,28 @@ export function MatchDashboard({
           )
         }
       />
-      <article className="dashboard-card">
-        <header>
-          <h3>{w.t("تهديدات اللاعبين", "Player threats")}</h3>
-          <Play size={12} />
-        </header>
-        {d.players.length ? (
-          d.players.slice(0, 3).map((p) => {
-            const player = w.list("players").find((r) => r.id === p.id);
-            return (
-              <PlayerThreatRow
-                key={p.id}
-                name={
-                  player
-                    ? rowLabel(player)
-                    : w.t("هوية ناقصة", "Missing identity")
-                }
-                number={s(player?.shirt_number)}
-                summary={p.summary}
-                onAll={() => openShots(player ? rowLabel(player) : "—", p.rows)}
-                onReviewed={() =>
-                  openShots(
-                    `${player ? rowLabel(player) : "—"} · ${w.t("كفاءة التصويب", "Shooting efficiency")}`,
-                    reviewedShotAttempts(p.rows),
-                  )
-                }
-              />
-            );
-          })
-        ) : (
-          <p>
-            {w.t(
-              "اربط اللاعب بمحاولته لإظهار ملفه وأدلته.",
-              "Assign shooters to see their profiles and evidence.",
-            )}
-          </p>
-        )}
-      </article>
+      <PlayerThreatCard
+        isSummary
+        title={w.t("تهديدات اللاعبين", "Player threats")}
+        entries={d.players.map((p) => {
+          const player = w.list("players").find((r) => r.id === p.id);
+          const name = player
+            ? rowLabel(player)
+            : w.t("هوية ناقصة", "Missing identity");
+          return {
+            id: p.id,
+            name,
+            number: s(player?.shirt_number),
+            summary: p.summary,
+            onAll: () => openShots(name, p.rows),
+            onReviewed: () =>
+              openShots(
+                `${name} · ${w.t("كفاءة التصويب", "Shooting efficiency")}`,
+                reviewedShotAttempts(p.rows),
+              ),
+          };
+        })}
+      />
       <article className="dashboard-card">
         <header>
           <h3>{w.t("الهجمات المكتملة", "Completed possessions")}</h3>

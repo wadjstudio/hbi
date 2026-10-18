@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
 
+The reference's player summaries now use four lower highlights and three beside the video, with complete lists of the current scoped sample. Each name and rate has separate evidence semantics; unknown identity/position and pending outcomes remain explicit. Lists reuse native dialogs and existing metrics, without automatic identification or invented athlete images.
+
 The evidence rail follows the reference's alternating card widths when space permits. Resizing the pane triggers native CSS reflow; narrower panes show the shot map above a two-column zone legend. This presentation uses recorded samples and changes no metric, source timing or court coordinate.
 
 Defense distribution and shot-zone shares link to their actual evidence. Defense percentages represent recorded descriptors; zone percentages use all attempts, including pending outcomes, without guessing unknown zones. Goalkeeper details remain accessible through the sample counter. No migration, cloud analysis or new dependency is required for these interface components.

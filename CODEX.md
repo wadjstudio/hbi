@@ -1,5 +1,7 @@
 # SESEN / HBI Codex Rules
 
+Keep complete player access beyond the four summary and three rail highlights. Pending-only player identities must open their attempts while rate buttons remain disabled without a reviewed denominator. Full names wrap in the modal; Tab/Escape/focus and actual video-time isolation must work in both languages. Geometry checks should target visible controls or explicit previews so hidden modal copies are not mistaken for displayed rows.
+
 Preserve pane-based alternating card widths and the narrow-pane full-width shot map. Check actual card bounds and legend placement after keyboard panel resizing, in both writing directions and at all five viewport widths. Do not infer any metric or alter map coordinates to achieve reference composition.
 
 Keep defense percentages based on recorded descriptors and label ties. Shot-zone shares include pending attempts; broad backcourt codes must not become 9m zones, and missing codes remain unknown even with coordinates. Keep exact evidence subsets and goalkeeper saves/goals denominators. Verify popup dismissal before evidence and actual video-time isolation.

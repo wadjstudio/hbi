@@ -126,6 +126,7 @@ hbi-starter/
   components/workspace/match-header-actions.tsx
   components/workspace/match-hub.tsx
   components/workspace/meetings.tsx
+  components/workspace/player-threat-card.tsx
   components/workspace/player-threat-row.tsx
   components/workspace/provider.tsx
   components/workspace/quick-tag-dock.tsx
@@ -294,6 +295,7 @@ hbi-starter/
   tests/e2e/intelligence-sample-assertions.ts
   tests/e2e/lineup-assertions.ts
   tests/e2e/online-video.spec.ts
+  tests/e2e/player-list-assertions.ts
   tests/e2e/presentation-assertions.ts
   tests/e2e/reports.spec.ts
   tests/e2e/review-assertions.ts
@@ -331,6 +333,7 @@ hbi-starter/
   tests/unit/match-dashboard.test.ts
   tests/unit/meeting-item.test.ts
   tests/unit/online-source.test.ts
+  tests/unit/player-threat-card.test.tsx
   tests/unit/positions.test.ts
   tests/unit/quick-tag-dock.test.tsx
   tests/unit/reports.test.ts

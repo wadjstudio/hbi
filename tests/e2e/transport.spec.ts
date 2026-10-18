@@ -66,9 +66,9 @@ test("wide transport retains physical seeking in English and Arabic", async ({
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   await verifyTransport(page);
   await page.getByRole("slider", { name: "وقت الفيديو", exact: true }).blur();
-  await expect(page.locator(".match-dashboard .player-threat-row")).toHaveCount(
-    3,
-  );
+  await expect(
+    page.locator(".match-dashboard .player-threat-preview .player-threat-row"),
+  ).toHaveCount(3);
   const summary = (await page.locator(".match-dashboard").boundingBox())!;
   await testInfo.attach("arabic-layout", {
     body: JSON.stringify(

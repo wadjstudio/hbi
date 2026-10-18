@@ -1,5 +1,7 @@
 # SESEN / HBI Architecture
 
+PlayerThreatCard composes existing PlayerThreatRow entries for both rail and summary. Parents retain their original sorting and exact evidence resolvers; entries contain callbacks rather than a separate query/store. The native modal shares the existing intelligence-list styling, closes before evidence navigation and contains focus/scroll keyboard input. Summary/rail preview counts are four/three; complete lists preserve every scoped entry.
+
 The existing intelligence size container controls card proportions: at 570px it uses 20 grid tracks with 9/11 spans, while narrower panes retain the existing one/two-column rail. Below 570px ShotZoneCard stacks its map and a two-column legend. This is native CSS with a semantic player-card class; no parallel layout state or resize observer is introduced.
 
 DefenseSystemCard receives existing tactical groups and preserves their descriptor denominator. shotZoneSample groups explicit stable zone codes without inferring distance from coordinates; ShotZoneCard passes exact attempt subsets to the existing evidence resolver. IntelligenceKeepers reuses keeperSummary inside IntelligenceSample; capture-phase dismissal precedes evidence navigation.

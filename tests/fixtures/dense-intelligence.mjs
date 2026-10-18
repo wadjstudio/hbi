@@ -38,14 +38,12 @@ export function denseIntelligence(data, team, sessionId) {
     }),
   );
   const assignments = terms.flatMap((term, i) =>
-    events
-      .slice(0, 2)
-      .map((event, j) =>
-        row(5100 + i * 2 + j, {
-          possession_id: event.possession_id,
-          term_id: term.id,
-        }),
-      ),
+    events.slice(0, 2).map((event, j) =>
+      row(5100 + i * 2 + j, {
+        possession_id: event.possession_id,
+        term_id: term.id,
+      }),
+    ),
   );
   const specs = [
     ["Fixture wing procedure", [203, 209, 215, 221], false],
@@ -85,8 +83,57 @@ export function denseIntelligence(data, team, sessionId) {
       });
     }),
   );
+  const players = [
+    row(7100, {
+      first_name: "Fixture extra shooter",
+      last_name: "Test",
+      shirt_number: 31,
+      primary_position: "CB",
+    }),
+    row(7101, {
+      first_name:
+        "Fixture pending shooter with a deliberately long full name اسم لاعب تجريبي طويل",
+      last_name: "Test",
+      shirt_number: 32,
+      primary_position: "LW",
+    }),
+  ];
+  const reassigned = new Map(
+    [
+      [209, players[0].id],
+      [219, players[0].id],
+      [223, players[1].id],
+    ].map(([number, id]) => [
+      events.find((event) =>
+        event.id.endsWith(String(number).padStart(12, "0")),
+      ).id,
+      id,
+    ]),
+  );
   return {
     ...data,
+    players: [...data.players, ...players],
+    match_roster: [
+      ...data.match_roster,
+      ...players.map((player, i) =>
+        row(7200 + i, {
+          match_id: events[0].match_id,
+          player_id: player.id,
+          team_id: team,
+          side: "away",
+        }),
+      ),
+    ],
+    events: data.events.map((event) =>
+      reassigned.has(event.id)
+        ? { ...event, actor_player_id: reassigned.get(event.id) }
+        : event,
+    ),
+    shot_attempts: data.shot_attempts.map((shot) =>
+      reassigned.has(shot.event_id)
+        ? { ...shot, shooter_id: reassigned.get(shot.event_id) }
+        : shot,
+    ),
     tactical_terms: [...data.tactical_terms, ...terms],
     possession_tactics: [...data.possession_tactics, ...assignments],
     insights: [...data.insights, ...insights],

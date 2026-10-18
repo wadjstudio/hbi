@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence (HBI V1 foundation)
 
+Player highlights now have complete scoped lists: three beside the video and four in the lower summary, with View all retaining every player. Names open all attempts; rate rings open only reviewed attempts, and pending-only players remain accessible through their names.
+
 The intelligence cards now follow the reference's alternating widths when the resized pane has room. Narrow panes keep the shot map full width and place recorded-zone controls below it in two columns; evidence samples and physical court coordinates remain unchanged.
 
 The defense ring opens the leading recorded system's exact evidence; its denominator counts descriptors, not playing time. Shot zones show recorded-zone shares with separate unknown/broad-zone handling and a 7m action. Goalkeeper samples are available inside the n-counter disclosure.

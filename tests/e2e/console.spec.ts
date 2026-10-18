@@ -28,7 +28,9 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
   page,
   request,
 }, testInfo) => {
-  test.setTimeout(300000);
+  // Full workstation journey includes media relinking and all populated tools on slower hosts.
+  // Individual action/assertion timeouts and geometry/evidence gates remain unchanged.
+  test.setTimeout(600000);
   await page.setViewportSize({ width: 1560, height: 900 });
   await page.goto("/login");
   await verifyTypography(page);
@@ -348,7 +350,7 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     ).toBeCloseTo(106, 0);
     if (width < 1200) {
       for (const button of await page
-        .locator(".player-threat-efficiency")
+        .locator(".player-threat-efficiency:visible")
         .all()) {
         const bounds = (await button.boundingBox())!;
         expect(bounds.width).toBeGreaterThanOrEqual(44);

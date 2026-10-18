@@ -1,5 +1,7 @@
 # SESEN / HBI continuation prompt
 
+Preserve shared player highlight cards, complete scoped lists and exact all-attempt versus reviewed-rate actions. Retain four lower previews, three rail highlights, wrapped full names, pending-only access and keyboard/media isolation. The dense fixture's extra shooters are test-only and must never enter production as match observations.
+
 Keep the alternating pane-based card proportions and full-width narrow-pane shot map. Verify actual rendered layout after resizing rather than assuming viewport width equals available card width. Preserve exact event evidence, independent coordinates, translated labels and existing first-screen gates while continuing the full reference audit.
 
 Preserve the defense leader's descriptor-based sample and explicit ties, shot-zone all-attempt shares and independent coordinates, and goalkeeper evidence within the sample disclosure. Continue remaining reference work; these refinements do not establish full visual parity or automatic match analysis.

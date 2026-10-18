@@ -1,11 +1,13 @@
 import { test, expect } from "./fixture";
 import { verifyIntelligenceLayout } from "./intelligence-chart-assertions";
+import { verifyPlayerLists } from "./player-list-assertions";
 
 test("dense tactical intelligence retains the reference composition and all scoped evidence", async ({
   page,
   request,
 }, testInfo) => {
-  test.setTimeout(240000);
+  // Includes two complete player lists at each width/language; individual assertions stay bounded.
+  test.setTimeout(420000);
   test.skip(
     !process.env.HBI_VISUAL_MATCH,
     "Requires explicitly supplied local footage",
@@ -55,6 +57,26 @@ test("dense tactical intelligence retains the reference composition and all scop
       page.locator("video").evaluate((v: HTMLVideoElement) => v.readyState),
     )
     .toBeGreaterThanOrEqual(2);
+  // A decoded paused video may not have painted its initial frame. Capture a known
+  // source moment only after Chrome reports that the seeked frame reached the compositor.
+  await page.locator("video").evaluate(
+    (video: HTMLVideoElement) =>
+      new Promise<void>((resolve, reject) => {
+      const target = Math.min(12, video.duration / 2);
+        const timer = window.setTimeout(
+          () => reject(new Error("Preview frame was not painted")),
+          15000,
+        );
+      const painted = (_: number, frame: VideoFrameCallbackMetadata) => {
+        if (Math.abs(frame.mediaTime - target) < 0.1) {
+          window.clearTimeout(timer);
+          resolve();
+        } else video.requestVideoFrameCallback(painted);
+      };
+      video.requestVideoFrameCallback(painted);
+      video.currentTime = target;
+      }),
+  );
   for (const language of ["en", "ar"] as const) {
     if (language === "ar")
       await page.getByRole("button", { name: "العربية", exact: true }).click();
@@ -95,6 +117,14 @@ test("dense tactical intelligence retains the reference composition and all scop
     for (const width of [1672, 1440, 1024, 768, 375]) {
       await page.setViewportSize({ width, height: 941 });
       await verifyIntelligenceLayout(page);
+      await verifyPlayerLists(
+        page,
+        language === "ar",
+        (width === 1672 && language === "en") ||
+          (width === 375 && language === "ar")
+          ? testInfo.outputPath(`players-${language}-${width}.png`)
+          : undefined,
+      );
       await insightCard
         .getByRole("button", {
           name: new RegExp(choose("عرض الكل", "View all")),

@@ -1,5 +1,4 @@
 "use client";
-import { Users } from "lucide-react";
 import { tacticalGroups } from "@/features/analysis/workbench";
 import { shotSummary, reviewedShotAttempts } from "@/lib/analytics/metrics";
 import { s, type Row } from "@/types/workspace";
@@ -7,7 +6,7 @@ import { useWorkspace } from "./provider";
 import { rowLabel } from "./controls";
 import { ThreatProfile } from "./threat-profile";
 import { BrandMark } from "@/components/brand/brand-lockup";
-import { PlayerThreatRow } from "./player-threat-row";
+import { PlayerThreatCard } from "./player-threat-card";
 import { IntelligenceListCard } from "./intelligence-list-card";
 import { IntelligenceSample } from "./intelligence-sample";
 import { DefenseSystemCard } from "./defense-system-card";
@@ -223,49 +222,29 @@ export function SessionAnalysisRail({
           onEvidence(title, evidenceFor(selected))
         }
       />
-      <section className="intelligence-section player-threat-section">
-        <header>
-          <h3>{w.t("اللاعبون في العينة", "Players in sample")}</h3>
-          <Users size={14} />
-        </header>
-        {shooters.length ? (
-          shooters
-            .slice(0, 4)
-            .map((entry) => (
-              <PlayerThreatRow
-                key={entry.id}
-                name={
-                  entry.player
-                    ? rowLabel(entry.player)
-                    : w.t("لاعب غير محدد", "Unknown player")
-                }
-                number={s(entry.player?.shirt_number)}
-                summary={entry.summary}
-                onAll={() =>
-                  onEvidence(
-                    entry.player
-                      ? rowLabel(entry.player)
-                      : w.t("لاعب غير محدد", "Unknown player"),
-                    evidenceFor(entry.shots),
-                  )
-                }
-                onReviewed={() =>
-                  onEvidence(
-                    `${entry.player ? rowLabel(entry.player) : w.t("لاعب غير محدد", "Unknown player")} · ${w.t("كفاءة التصويب", "Shooting efficiency")}`,
-                    evidenceFor(reviewedShotAttempts(entry.shots)),
-                  )
-                }
-              />
-            ))
-        ) : (
-          <p className="intelligence-empty">
-            {w.t(
-              "اربط المصوّب بالمحاولة. لا نستنتج هوية لاعب من ترتيب القائمة.",
-              "Link shooters to attempts. Roster order does not identify a shooter.",
-            )}
-          </p>
-        )}
-      </section>
+      <PlayerThreatCard
+        title={w.t("اللاعبون في العينة", "Players in sample")}
+        entries={shooters.map((entry) => ({
+          id: entry.id,
+          name: entry.player
+            ? rowLabel(entry.player)
+            : w.t("لاعب غير محدد", "Unknown player"),
+          number: s(entry.player?.shirt_number),
+          summary: entry.summary,
+          onAll: () =>
+            onEvidence(
+              entry.player
+                ? rowLabel(entry.player)
+                : w.t("لاعب غير محدد", "Unknown player"),
+              evidenceFor(entry.shots),
+            ),
+          onReviewed: () =>
+            onEvidence(
+              `${entry.player ? rowLabel(entry.player) : w.t("لاعب غير محدد", "Unknown player")} · ${w.t("كفاءة التصويب", "Shooting efficiency")}`,
+              evidenceFor(reviewedShotAttempts(entry.shots)),
+            ),
+        }))}
+      />
       <IntelligenceListCard
         title={w.t("أنماط الهجوم", "Attack patterns")}
         entries={patterns.map((group) => {

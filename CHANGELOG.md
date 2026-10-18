@@ -1,4 +1,9 @@
 # CHANGELOG
+## Player highlights and complete scoped lists — 2026-10-18
+- Shared PlayerThreatCard adds four lower-summary/three rail highlights and complete native-modal player lists.
+- Retains separate all-attempt/reviewed evidence, pending-only access, full wrapped names and keyboard/focus/media isolation.
+- Dense loopback fixture now has five shooters without adding attempts or changing outcomes. No production fixture, metric, migration or dependency change.
+
 ## Reference card proportions and narrow-pane maps — 2026-10-18
 - Added alternating 9/11 card spans within the existing intelligence size container, with semantic player-card styling.
 - Full-width shot maps and two-column zone controls on narrower panes improve readability without changing coordinates, samples or metrics.
