@@ -9,6 +9,7 @@ import { ShotMap } from "./charts";
 import {
   percent,
   shotSummary,
+  reviewedShotAttempts,
   keeperSummary,
   intervalMinutes,
 } from "@/lib/analytics/metrics";
@@ -55,7 +56,9 @@ export function Analytics({
       (playerId
         ? s(
             w.list("match_roster").find((r) => r.player_id === playerId)
-              ?.team_id,
+              ?.team_id ??
+              w.list("team_players").find((r) => r.player_id === playerId)
+                ?.team_id,
           )
         : "") ||
       teams[0]?.id ||
@@ -64,7 +67,13 @@ export function Analytics({
   const selectedMatches = w
       .list("matches")
       .filter((m) => m.home_team_id === tid || m.away_team_id === tid)
-      .sort((a, b) => s(b.starts_at).localeCompare(s(a.starts_at)))
+      .sort((a, b) => {
+        const ta = Date.parse(s(a.starts_at)),
+          tb = Date.parse(s(b.starts_at));
+        if (Number.isFinite(ta) && Number.isFinite(tb) && ta !== tb)
+          return tb - ta;
+        return s(b.starts_at).localeCompare(s(a.starts_at));
+      })
       .slice(0, last),
     matchIds = new Set(selectedMatches.map((m) => m.id)),
     sessions = new Set(
@@ -89,6 +98,7 @@ export function Analytics({
         (zone === "all" || sh.zone === zone) &&
         (position === "all" || sh.shooter_position === position),
     ),
+    reviewedShots = reviewedShotAttempts(shots),
     summary = shotSummary(shots);
   const possessions = w
       .list("possessions")
@@ -201,7 +211,9 @@ export function Analytics({
           className="hbi-panel metric"
           onClick={() =>
             setEvidence(
-              events.filter((e) => shots.some((sh) => sh.event_id === e.id)),
+              events.filter((e) =>
+                reviewedShots.some((sh) => sh.event_id === e.id),
+              ),
             )
           }
         >
@@ -217,7 +229,7 @@ export function Analytics({
           onClick={() =>
             setEvidence(
               events.filter((e) =>
-                shots.some(
+                reviewedShots.some(
                   (sh) => sh.event_id === e.id && sh.result === "goal",
                 ),
               ),
@@ -242,7 +254,11 @@ export function Analytics({
                 allEvents.filter((e) =>
                   allShots.some(
                     (sh) =>
-                      sh.event_id === e.id && sh.goalkeeper_id === playerId,
+                      sh.event_id === e.id &&
+                      sh.goalkeeper_id === playerId &&
+                      !sh.empty_goal &&
+                      !sh.review_required &&
+                      (sh.result === "goal" || sh.result === "save"),
                   ),
                 ),
               )

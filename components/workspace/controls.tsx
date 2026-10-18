@@ -110,19 +110,23 @@ export function EntityEditor({
     a = useAction();
   const [values, setValues] = useState<Record<string, string | boolean>>(() =>
     Object.fromEntries(
-      fields.map((f) => [
-        f.key,
-        f.type === "checkbox"
-          ? Boolean(row?.[f.key])
-          : s(
-              row?.[f.key] ??
-                (f.key === "status"
-                  ? "ready"
-                  : f.key === "dominant_hand"
-                    ? "unknown"
-                    : ""),
-            ),
-      ]),
+      fields.map((f) => {
+        if (f.type === "checkbox") return [f.key, Boolean(row?.[f.key])];
+        const raw = s(
+          row?.[f.key] ??
+            (f.key === "status"
+              ? "ready"
+              : f.key === "dominant_hand"
+                ? "unknown"
+                : ""),
+        );
+        if (f.type === "datetime-local" && raw) {
+          const parsed = new Date(raw);
+          if (!Number.isNaN(parsed.getTime()))
+            return [f.key, parsed.toISOString().slice(0, 16)];
+        }
+        return [f.key, raw];
+      }),
     ),
   );
   return (
@@ -134,14 +138,27 @@ export function EntityEditor({
           const input: Partial<Row> = { ...row };
           for (const f of fields) {
             const value = values[f.key];
-            input[f.key] =
-              f.type === "number"
-                ? value === ""
-                  ? null
-                  : Number(value)
-                : f.type === "checkbox"
-                  ? Boolean(value)
-                  : value || null;
+            if (f.type === "number") {
+              input[f.key] = value === "" ? null : Number(value);
+            } else if (f.type === "checkbox") {
+              input[f.key] = Boolean(value);
+            } else if (f.type === "datetime-local") {
+              const str = s(value).trim();
+              if (!str) {
+                input[f.key] = null;
+              } else {
+                const candidate =
+                  /[zZ]|[+-]\d{2}:\d{2}$/.test(str)
+                    ? str
+                    : `${str.length === 16 ? `${str}:00` : str}Z`;
+                const parsed = new Date(candidate);
+                input[f.key] = Number.isNaN(parsed.getTime())
+                  ? str
+                  : parsed.toISOString();
+              }
+            } else {
+              input[f.key] = value || null;
+            }
           }
           await w.save(table, input);
           onDone?.();

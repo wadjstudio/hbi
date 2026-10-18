@@ -488,6 +488,7 @@ export function Presentation({ id }: { id: string }) {
                       disabled={i === 0 || !writable}
                       onClick={() =>
                         void a.run(async () => {
+                          await w.flush();
                           const ids = items.map((r) => r.id);
                           [ids[i - 1], ids[i]] = [ids[i]!, ids[i - 1]!];
                           const { createClient } =
@@ -702,6 +703,9 @@ export function Playlists({ id }: { id?: string }) {
           </label>
         </div>
         <button
+          disabled={
+            !pid || !clipId || !canWrite(w.role, "playlist_items") || a.busy
+          }
           onClick={() =>
             void a.run(() =>
               w.save("playlist_items", {
@@ -732,9 +736,13 @@ export function Playlists({ id }: { id?: string }) {
               </button>
               <span>{s(item.coach_note)}</span>
               <button
-                disabled={i === 0}
+                aria-label={`${w.t("تحريك لأعلى", "Move up")} ${i + 1}`}
+                disabled={
+                  i === 0 || !canWrite(w.role, "playlist_items") || a.busy
+                }
                 onClick={() =>
                   void a.run(async () => {
+                    await w.flush();
                     const ids = items.map((r) => r.id);
                     [ids[i - 1], ids[i]] = [ids[i]!, ids[i - 1]!];
                     const { createClient } =
@@ -751,6 +759,8 @@ export function Playlists({ id }: { id?: string }) {
                 ↑
               </button>
               <button
+                aria-label={`${w.t("حذف العنصر", "Remove item")} ${i + 1}`}
+                disabled={!canWrite(w.role, "playlist_items") || a.busy}
                 onClick={() =>
                   void a.run(() => w.save("playlist_items", item, true))
                 }
@@ -770,7 +780,7 @@ export function Playlists({ id }: { id?: string }) {
           ))}
         </details>
         <button
-          disabled={!items.length}
+          disabled={!items.length || !canWrite(w.role, "presentations") || a.busy}
           onClick={() =>
             void a.run(async () => {
               const meeting = await w.save("presentations", {

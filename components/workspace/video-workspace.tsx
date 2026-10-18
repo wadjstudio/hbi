@@ -563,8 +563,9 @@ export function VideoWorkspace({
     }
     setHistoryCounts({ undo: undo.current.length, redo: redo.current.length });
   }
+  const keydownRef = useRef<(e: KeyboardEvent) => void>(null);
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
+    keydownRef.current = (e: KeyboardEvent) => {
       if (e.defaultPrevented) return;
       if (
         e.target instanceof Element &&
@@ -578,8 +579,7 @@ export function VideoWorkspace({
         void a.run(togglePlayback);
       }
       if (e.key === "ArrowLeft") seek(Math.max(0, time - 5000));
-      if (e.key === "ArrowRight")
-        seek(Math.min(n(video?.duration_ms), time + 5000));
+      if (e.key === "ArrowRight") seek(Math.min(duration, time + 5000));
       const quick = (
         (w.list("tagging_templates").find((r) => r.id === templateId)
           ?.buttons ?? []) as {
@@ -603,9 +603,12 @@ export function VideoWorkspace({
         void a.run(() => history("redo"));
       }
     };
+  });
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => keydownRef.current?.(e);
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  });
+  }, []);
   async function clip(e?: Row) {
     const resolved = e
       ? evidenceSource(
@@ -622,10 +625,9 @@ export function VideoWorkspace({
       throw new Error("Evidence video missing or incompatible");
     const ms = e ? n(e.timestamp_ms) : captureTime();
     const start = Math.max(0, Math.round(ms - pre * 1000));
-    const end = Math.min(
-      n(clipVideo.duration_ms),
-      Math.round(ms + post * 1000),
-    );
+    const clipDuration =
+      n(clipVideo.duration_ms) || (clipVideo.id === video?.id ? duration : 0);
+    const end = Math.min(clipDuration, Math.round(ms + post * 1000));
     if (end <= start)
       throw new Error(
         w.t(
@@ -1140,7 +1142,7 @@ export function VideoWorkspace({
                     {w.t("مشاركة الفيديو عبر R2", "Share video through R2")}
                   </button>
                   <b>
-                    {formatTime(time)} / {formatTime(n(video?.duration_ms))}
+                    {formatTime(time)} / {formatTime(duration)}
                   </b>
                   <span>
                     {clock
@@ -1163,9 +1165,7 @@ export function VideoWorkspace({
                       setAnnotationSnapshot(null);
                       setAnnotationId("");
                       setAnnotationStart(time / 1000);
-                      setAnnotationEnd(
-                        Math.min(n(video?.duration_ms), time + 5000) / 1000,
-                      );
+                      setAnnotationEnd(Math.min(duration, time + 5000) / 1000);
                     }}
                   >
                     {w.t("رسم على الفيديو", "Telestration")}
@@ -1190,7 +1190,7 @@ export function VideoWorkspace({
                           type="number"
                           min="0"
                           step=".1"
-                          max={n(video?.duration_ms) / 1000}
+                          max={duration / 1000}
                           value={annotationEnd}
                           onChange={(e) =>
                             setAnnotationEnd(Number(e.target.value))
@@ -1206,7 +1206,7 @@ export function VideoWorkspace({
                           !Number.isFinite(annotationEnd) ||
                           annotationStart < 0 ||
                           annotationEnd <= annotationStart ||
-                          annotationEnd * 1000 > n(video?.duration_ms)
+                          annotationEnd * 1000 > duration
                         }
                         onClick={() =>
                           void a.run(async () => {
@@ -1412,6 +1412,14 @@ export function VideoWorkspace({
                     {formatTime(n(r.video_start_ms))} →{" "}
                     {formatTime(n(r.video_end_ms))} · {n(r.period)}{" "}
                     <button
+                      type="button"
+                      aria-label={w.t(
+                        "حذف مقطع المعايرة",
+                        "Delete clock segment",
+                      )}
+                      disabled={
+                        !canWrite(w.role, "video_clock_segments") || a.busy
+                      }
                       onClick={() =>
                         void a.run(() =>
                           w.save("video_clock_segments", r, true),
@@ -1638,13 +1646,20 @@ export function VideoWorkspace({
                 (w.list("tagging_templates").find((r) => r.id === templateId)
                   ?.buttons ?? []) as {
                   label: string;
+                  key?: string;
                   event_type: string;
                   pre_seconds: number;
                   post_seconds: number;
                 }[]
               ).map((button, i) => (
                 <button
+                  type="button"
                   key={i}
+                  title={
+                    button.key
+                      ? `${button.label} (${button.key.toUpperCase()})`
+                      : button.label
+                  }
                   onClick={() => {
                     setEventType(button.event_type);
                     setPre(button.pre_seconds);

@@ -27,22 +27,32 @@ export async function inspectVideo(file: File): Promise<{
       const v = document.createElement("video");
       v.preload = "metadata";
       v.src = url;
-      const timer = setTimeout(() => {
+      const cleanup = () => {
+        clearTimeout(timer);
+        v.onloadedmetadata = null;
+        v.onerror = null;
         v.removeAttribute("src");
+        v.load();
+      };
+      const timer = setTimeout(() => {
+        cleanup();
         reject(new Error("Video metadata timed out"));
       }, 15000);
       v.onloadedmetadata = () => {
-        clearTimeout(timer);
-        if (!Number.isFinite(v.duration) || v.duration <= 0)
-          return reject(new Error("Invalid video duration"));
+        const duration = Math.round(v.duration * 1000),
+          width = v.videoWidth,
+          height = v.videoHeight,
+          valid = Number.isFinite(v.duration) && v.duration > 0;
+        cleanup();
+        if (!valid) return reject(new Error("Invalid video duration"));
         resolve({
-          duration: Math.round(v.duration * 1000),
-          width: v.videoWidth,
-          height: v.videoHeight,
+          duration,
+          width,
+          height,
         });
       };
       v.onerror = () => {
-        clearTimeout(timer);
+        cleanup();
         reject(new Error("Unsupported video; use local MP4 H.264/AAC"));
       };
     });

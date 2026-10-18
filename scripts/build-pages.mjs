@@ -39,6 +39,18 @@ await build({
 await writeFile(resolve(output, '_routes.json'), JSON.stringify({
   version: 1, include: ['/*'], exclude: ['/_next/static/*', '/favicon.ico', '/icons/*', '/brand/*', '/fonts/*', '/manifest.webmanifest'],
 }, null, 2));
+await writeFile(
+  resolve(output, '_headers'),
+  [
+    '/*',
+    '  X-Content-Type-Options: nosniff',
+    '  X-Frame-Options: DENY',
+    '  Referrer-Policy: strict-origin-when-cross-origin',
+    '  Permissions-Policy: camera=(), microphone=(), geolocation=()',
+    '  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload',
+    '',
+  ].join('\n'),
+);
 await writeFile(resolve(output, 'wrangler.json'), JSON.stringify({
   name: 'hbi-handball-intelligence', pages_build_output_dir: '.',
   compatibility_date: '2026-10-01', compatibility_flags: ['nodejs_compat'], vars,

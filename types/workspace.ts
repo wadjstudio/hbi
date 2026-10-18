@@ -86,6 +86,10 @@ export function validateRow(table: Table, input: Row): Row {
   if (table === "videos") videoInput.parse(row);
   if (table === "video_clock_segments") clockInput.parse(row);
   if (table === "on_court_intervals") intervalInput.parse(row);
+  if (table === "playlist_items")
+    z.object({ playlist_id: z.uuid(), clip_id: z.uuid() }).parse(row);
+  if (table === "presentation_items")
+    z.object({ presentation_id: z.uuid() }).parse(row);
   return row;
 }
 export const backupSchema = z.object({

@@ -86,7 +86,9 @@ export function Reports({ id }: { id?: string }) {
         >
           <p>
             {w.t("تاريخ استخراج البيانات", "Extracted")}{" "}
-            {new Date().toLocaleDateString(w.lang === "ar" ? "ar-EG" : "en-GB")}
+            {new Date().toLocaleDateString(w.lang === "ar" ? "ar-EG" : "en-GB", {
+              timeZone: "UTC",
+            })}
           </p>
           <div className="metric-grid">
             <div className="metric">

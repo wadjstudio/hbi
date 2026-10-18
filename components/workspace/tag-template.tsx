@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useWorkspace } from "./provider";
 import { Panel, Notice, useAction } from "./controls";
 import { s, type Value } from "@/types/workspace";
+import { canWrite } from "@/lib/permissions/roles";
 type Button = {
   label: string;
   event_type: string;
@@ -20,6 +21,7 @@ export function TagTemplates() {
     [key, setKey] = useState(""),
     [pre, setPre] = useState(8),
     [post, setPost] = useState(4);
+  const writable = canWrite(w.role, "tagging_templates") && !a.busy;
   return (
     <Panel title={w.t("قوالب التسجيل", "Tagging templates")}>
       <form
@@ -135,7 +137,7 @@ export function TagTemplates() {
             </button>
           ))}
         </div>
-        <button disabled={w.role === "viewer"}>
+        <button disabled={!writable}>
           {w.t("حفظ القالب", "Save template")}
         </button>
       </form>
@@ -144,6 +146,7 @@ export function TagTemplates() {
         <div className="toolbar" key={r.id}>
           <b>{s(r.title)}</b>
           <button
+            disabled={!writable}
             onClick={() => {
               setTitle(s(r.title));
               setButtons(r.buttons as unknown as Button[]);
@@ -152,6 +155,8 @@ export function TagTemplates() {
             {w.t("نسخ للتحرير", "Copy to edit")}
           </button>
           <button
+            aria-label={w.t("حذف القالب", "Delete template")}
+            disabled={!writable}
             onClick={() =>
               void a.run(() => w.save("tagging_templates", r, true))
             }

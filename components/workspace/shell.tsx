@@ -217,7 +217,11 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
                     value={w.org}
                     onChange={(e) => w.selectOrg(e.target.value)}
                   >
-                    <option value="">{w.t("المؤسسة", "Organization")}</option>
+                    {!w.org && (
+                      <option value="">
+                        {w.t("المؤسسة", "Organization")}
+                      </option>
+                    )}
                     {w.orgs.map((o) => (
                       <option key={o.id} value={o.id}>
                         {rowLabel(o)}

@@ -40,6 +40,7 @@ export function TacticBoard({
     identities: [],
     states: [],
   });
+  const pendingFrame = useRef<{ id: string; objects: Drawing[] } | null>(null);
   const frame = frames.find((r) => r.id === frameId) ?? frames[0],
     actual = frame?.id ?? "";
   function frameObjects(fid: string): Drawing[] {
@@ -61,6 +62,12 @@ export function TacticBoard({
   }
   useEffect(() => {
     if (autosave.current) clearTimeout(autosave.current);
+    if (pendingFrame.current?.id === actual) {
+      const staged = pendingFrame.current.objects;
+      queueMicrotask(() => setObjects(staged));
+      return;
+    }
+    if (snapshot.current.fid === actual) return;
     snapshot.current = {
       fid: actual,
       identities: w.list("tactic_objects").filter((r) => r.document_id === id),
@@ -124,13 +131,19 @@ export function TacticBoard({
     };
   }
   async function addFrame() {
+    const nextId = crypto.randomUUID();
+    const currentObjects = objects;
+    pendingFrame.current = { id: nextId, objects: currentObjects };
     const created = await w.save("tactic_frames", {
+      id: nextId,
       document_id: id,
       position: Math.max(-1, ...frames.map((r) => n(r.position))) + 1,
       title: `Frame ${frames.length + 1}`,
     });
-    await persist(created.id, objects);
+    await persist(created.id, currentObjects);
+    pendingFrame.current = null;
     setFrame(created.id);
+    setObjects(currentObjects);
   }
   function play() {
     if (!frame) return;

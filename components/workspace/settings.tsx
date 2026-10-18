@@ -1,11 +1,13 @@
 "use client";
 import type { Database } from "@/lib/supabase/database.types";
 import { useState } from "react";
+import { z } from "zod";
 import { useWorkspace } from "./provider";
 import { TagTemplates } from "./tag-template";
 import { Entities } from "./entities";
 import { Panel, Notice, useAction } from "./controls";
 import { s } from "@/types/workspace";
+import { canWrite } from "@/lib/permissions/roles";
 export function Settings() {
   const w = useWorkspace(),
     a = useAction();
@@ -18,6 +20,7 @@ export function Settings() {
       useState<
         Database["public"]["Tables"]["organization_members"]["Row"]["role"]
       >("analyst");
+  const canEditTaxonomy = canWrite(w.role, "tactical_terms") && !a.busy;
   return (
     <>
       <Entities table="teams" title={w.t("الفرق", "Teams")} />
@@ -74,7 +77,9 @@ export function Settings() {
             value={en}
             onChange={(e) => setEn(e.target.value)}
           />
-          <button>{w.t("إضافة مصطلح", "Add term")}</button>
+          <button disabled={!canEditTaxonomy}>
+            {w.t("إضافة مصطلح", "Add term")}
+          </button>
         </form>
         <div className="term-list">
           {w.list("tactical_terms").map((r) => (
@@ -82,6 +87,7 @@ export function Settings() {
               {s(w.lang === "ar" ? r.label_ar : r.label_en)}{" "}
               {r.organization_id && (
                 <button
+                  disabled={!canEditTaxonomy}
                   onClick={() =>
                     void a.run(() =>
                       w.direct("tactical_terms", {
@@ -114,11 +120,17 @@ export function Settings() {
             onSubmit={(e) => {
               e.preventDefault();
               void a.run(async () => {
+                const validUserId = z.uuid().parse(userId.trim());
                 const { createClient } = await import("@/lib/supabase/client");
                 const { error } = await createClient()
                   .from("organization_members")
-                  .upsert({ organization_id: w.org, user_id: userId, role });
+                  .upsert({
+                    organization_id: w.org,
+                    user_id: validUserId,
+                    role,
+                  });
                 if (error) throw new Error(error.message);
+                await w.reload();
               });
             }}
           >
@@ -147,7 +159,9 @@ export function Settings() {
                 <option key={r}>{r}</option>
               ))}
             </select>
-            <button>{w.t("تعيين الدور", "Assign role")}</button>
+            <button disabled={a.busy}>
+              {w.t("تعيين الدور", "Assign role")}
+            </button>
           </form>
         </Panel>
       )}

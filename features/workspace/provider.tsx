@@ -408,6 +408,8 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     return row;
   }
   async function direct(table: Table, row: Record<string, unknown>) {
+    if (!org || !canWrite(role, table))
+      throw new Error("This role cannot edit this collection");
     const c = client.current;
     if (!c) throw new Error("Not initialized");
     if (!navigator.onLine) throw new Error("Setup needs a connection");
@@ -622,6 +624,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     direct,
     substitute,
     selectOrg: (id) => {
+      if (!id || id === org) return;
       identity.current = "";
       rowsRef.current = {};
       setRows({});

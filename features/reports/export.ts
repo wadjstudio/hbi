@@ -21,7 +21,7 @@ const fields = [
 
 function cell(value: unknown) {
   const text = s(value);
-  const safe = /^[\s]*[=+@-]/u.test(text) ? `'${text}` : text;
+  const safe = /^[\s\t\r]*[=+@\-\t\r|]/u.test(text) ? `'${text}` : text;
   return `"${safe.replaceAll('"', '""')}"`;
 }
 

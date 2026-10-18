@@ -23,3 +23,21 @@ export function r2(c: ReturnType<typeof settings>) {
     credentials: { accessKeyId: c.access, secretAccessKey: c.secret },
   });
 }
+export function assertR2Request(request: Request) {
+  const origin = request.headers.get("origin");
+  if (origin) {
+    const allowed = new Set<string>([new URL(request.url).origin]);
+    if (process.env.NEXT_PUBLIC_APP_URL) {
+      try {
+        allowed.add(new URL(process.env.NEXT_PUBLIC_APP_URL).origin);
+      } catch {
+        /* ignore invalid env URL */
+      }
+    }
+    if (!allowed.has(origin))
+      throw new Error("Cross-origin request rejected");
+  }
+  const contentType = request.headers.get("content-type") ?? "";
+  if (contentType && !contentType.toLowerCase().includes("application/json"))
+    throw new Error("Content-Type must be application/json");
+}

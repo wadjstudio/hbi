@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
-import { r2, settings } from "@/lib/r2/server";
+import { r2, settings, assertR2Request } from "@/lib/r2/server";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 export async function POST(request: Request) {
   try {
+    assertR2Request(request);
     const { video_id } = z
       .object({ video_id: z.uuid() })
       .parse(await request.json());
@@ -22,6 +23,11 @@ export async function POST(request: Request) {
       .single();
     if (!video)
       return NextResponse.json({ error: "Not found" }, { status: 404 });
+    if (video.status === "ready" && video.storage_mode === "r2")
+      return NextResponse.json(
+        { error: "Video upload is already finalized in R2" },
+        { status: 409 },
+      );
     const { data: member } = await c
       .from("organization_members")
       .select("role")
@@ -47,7 +53,10 @@ export async function POST(request: Request) {
           ContentType: video.mime_type ?? "video/mp4",
           ContentLength: video.file_size_bytes,
         }),
-        { expiresIn: 120 },
+        {
+          expiresIn: 120,
+          signableHeaders: new Set(["content-length", "content-type"]),
+        },
       ),
       key,
     });

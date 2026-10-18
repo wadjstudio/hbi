@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useWorkspace } from "./provider";
 import { Panel, SelectRow, Notice, useAction } from "./controls";
 import { s, type Row } from "@/types/workspace";
+import { canWrite } from "@/lib/permissions/roles";
 export function EvidenceLinks() {
   const w = useWorkspace(),
     a = useAction();
@@ -12,6 +13,7 @@ export function EvidenceLinks() {
     [clip, setClip] = useState(""),
     [tactic, setTactic] = useState(""),
     [note, setNote] = useState("");
+  const writable = canWrite(w.role, "evidence_links") && !a.busy;
   return (
     <Panel title={w.t("ربط الأدلة", "Link evidence")}>
       <form
@@ -65,7 +67,7 @@ export function EvidenceLinks() {
         <button
           disabled={
             [insight, event, clip, tactic].filter(Boolean).length < 2 ||
-            w.role === "viewer"
+            !writable
           }
         >
           {w.t("ربط", "Link")}
@@ -88,6 +90,8 @@ export function EvidenceLinks() {
             )}
             <span>{s(r.note)}</span>
             <button
+              aria-label={w.t("حذف الرابط", "Remove evidence link")}
+              disabled={!writable}
               onClick={() =>
                 void a.run(() => w.save("evidence_links", r, true))
               }

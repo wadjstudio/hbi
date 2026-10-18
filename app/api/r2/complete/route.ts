@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
-import { r2, settings } from "@/lib/r2/server";
+import { r2, settings, assertR2Request } from "@/lib/r2/server";
 import { HeadObjectCommand } from "@aws-sdk/client-s3";
 export async function POST(request: Request) {
   try {
+    assertR2Request(request);
     const { video_id } = z
       .object({ video_id: z.uuid() })
       .parse(await request.json());
