@@ -2,6 +2,7 @@
 
 ## Reference proportions and narrow-pane maps — 2026-10-18
 
+- Published source 2b321e0 as production/main 99802c33-fa84-4c71-b8b7-e803d0037077 (30 new/48 reused files). All43 deployed JS/CSS assets, six WOFF2 fonts and two OFL notices match local bytes/MIME; custom-domain login200 and Spaceship NS/CNAME unchanged. No schema/R2/DNS change or production fixture/video upload. No authenticated hosted coach journey; previously reported R2/time-input review findings are not fixed by this presentation-only phase.
 - Real-environment Pages build, target scan and final isolated typecheck passed; intended hosted project/domain and public-only configuration retained, AI disabled, no mock target/key in client or Worker. Native declarations are unchanged. Worker input SHA256:75bf666c14d4723facbb6671a66f2c13f1e8c3bf2e8d258a7aff3539effebc54. Deployment/package evidence follows after completion.
 - Native Next build and lint passed. All five focused Chrome journeys passed with retries disabled: analysis console, dense intelligence, local video, transport and source settings. New geometry checks cover keyboard pane resizing and five viewport widths in English/Arabic: alternating wide-card proportions, aligned row tops, contained cards and full-width narrow maps with two-column legends.
 - Exact source/event evidence, method-region video-time isolation, mobile 44px actions and existing source-aspect gates remain covered. Dense summaries retain English 738.19–931.19px and Arabic 738.80–937.33px at 1672×941; no original gate or text/chart/control dimension was reduced.
