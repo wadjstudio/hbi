@@ -1,4 +1,5 @@
 import { test, expect } from "./fixture";
+import { verifyIntelligenceLayout } from "./intelligence-chart-assertions";
 
 test("dense tactical intelligence retains the reference composition and all scoped evidence", async ({
   page,
@@ -93,6 +94,7 @@ test("dense tactical intelligence retains the reference composition and all scop
     expect(summary.y + summary.height).toBeLessThanOrEqual(941);
     for (const width of [1672, 1440, 1024, 768, 375]) {
       await page.setViewportSize({ width, height: 941 });
+      await verifyIntelligenceLayout(page);
       await insightCard
         .getByRole("button", {
           name: new RegExp(choose("عرض الكل", "View all")),

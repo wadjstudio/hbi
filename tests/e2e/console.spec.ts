@@ -16,7 +16,10 @@ import { verifyEfficiencyCards } from "./efficiency-card-assertions";
 import { verifyTimelineClusters } from "./timeline-assertions";
 import { verifyIntelligenceLists } from "./intelligence-list-assertions";
 import { verifyIntelligenceSample } from "./intelligence-sample-assertions";
-import { verifyIntelligenceCharts } from "./intelligence-chart-assertions";
+import {
+  verifyIntelligenceCharts,
+  verifyIntelligenceLayout,
+} from "./intelligence-chart-assertions";
 import {
   openVideoSettings,
   verifyVideoSettings,
@@ -121,6 +124,7 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     await page.keyboard.press("Escape");
     await separator.focus();
     await separator.press("ArrowRight");
+    await verifyIntelligenceLayout(page);
     await expect
       .poll(() =>
         page.locator("video").evaluate((v: HTMLVideoElement) => v.currentTime),
@@ -317,7 +321,11 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
   });
   for (const width of [1672, 1440, 1024, 768, 375]) {
     await page.setViewportSize({ width, height: 941 });
+    await verifyIntelligenceLayout(page);
     if (width === 375 && process.env.HBI_VISUAL_MATCH) {
+      await page
+        .locator(".shot-section")
+        .screenshot({ path: testInfo.outputPath("shot-zones-375.png") });
       await verifyTimelineClusters(page);
       await verifyIntelligenceCharts(page);
       await verifyIntelligenceSample(
@@ -431,6 +439,10 @@ test("analysis console supports resizing, focus, keyboard tabs and narrow screen
     fullPage: true,
   });
   await page.setViewportSize({ width: 390, height: 844 });
+  await verifyIntelligenceLayout(page);
+  await page
+    .locator(".shot-section")
+    .screenshot({ path: testInfo.outputPath("shot-zones-arabic-390.png") });
   if (process.env.HBI_VISUAL_MATCH) await verifyIntelligenceCharts(page, true);
   if (process.env.HBI_VISUAL_MATCH)
     await verifyIntelligenceSample(

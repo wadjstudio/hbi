@@ -1,5 +1,7 @@
 # SESEN / HBI continuation prompt
 
+Keep the alternating pane-based card proportions and full-width narrow-pane shot map. Verify actual rendered layout after resizing rather than assuming viewport width equals available card width. Preserve exact event evidence, independent coordinates, translated labels and existing first-screen gates while continuing the full reference audit.
+
 Preserve the defense leader's descriptor-based sample and explicit ties, shot-zone all-attempt shares and independent coordinates, and goalkeeper evidence within the sample disclosure. Continue remaining reference work; these refinements do not establish full visual parity or automatic match analysis.
 
 Retain the combined intelligence heading/team selector, visible n-counter and complete procedure/insight lists. Verify dense four-insight and long translated-content states against the unchanged first-screen gates; exact event samples and source timing must survive layout changes. Keep pending-only evidence accessible despite an unavailable reviewed rate. Never ship loopback stress records as real match data, and continue remaining reference requirements after these checks.

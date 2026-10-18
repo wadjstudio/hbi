@@ -1,5 +1,7 @@
 # SESEN / HBI Architecture
 
+The existing intelligence size container controls card proportions: at 570px it uses 20 grid tracks with 9/11 spans, while narrower panes retain the existing one/two-column rail. Below 570px ShotZoneCard stacks its map and a two-column legend. This is native CSS with a semantic player-card class; no parallel layout state or resize observer is introduced.
+
 DefenseSystemCard receives existing tactical groups and preserves their descriptor denominator. shotZoneSample groups explicit stable zone codes without inferring distance from coordinates; ShotZoneCard passes exact attempt subsets to the existing evidence resolver. IntelligenceKeepers reuses keeperSummary inside IntelligenceSample; capture-phase dismissal precedes evidence navigation.
 
 IntelligenceListCard renders scoped procedure/insight previews and complete native-modal lists; it receives exact evidence callbacks and never derives AI conclusions. IntelligenceSample holds only native disclosure state, exposes the current/historical sample and preserves separate all-attempt versus event actions. Its scope/counters come from the rail's existing selection, not a parallel store. Native team selection is embedded in the heading to avoid duplicate labels and wrapping the scope controls.

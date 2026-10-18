@@ -24,6 +24,7 @@ Do not substitute invented players, team crests, league averages or match scores
 - Intelligence: two columns of defensive systems/threat profile, shot map/players,
   tactical patterns/evidence-backed insights. Goalkeeper detail remains available
   through a labelled disclosure. Narrow panels reflow to one column.
+  At pane widths of at least 570px, use alternating 45/55 proportions matching the reference: defense/patterns/players narrower, threat/map/insights wider. Below 570px retain equal or single-column cards and place the shot-zone legend below its full-width map in two columns; pane width, not viewport alone, controls this behavior.
 - Five evidence-linked summary cards follow the analysis tabs. Setup should not
   dominate the first screen; expand sources, calibration, recording context and
   detailed evidence on demand. Never crop controls or overlay essential content.

@@ -223,7 +223,7 @@ export function SessionAnalysisRail({
           onEvidence(title, evidenceFor(selected))
         }
       />
-      <section className="intelligence-section">
+      <section className="intelligence-section player-threat-section">
         <header>
           <h3>{w.t("اللاعبون في العينة", "Players in sample")}</h3>
           <Users size={14} />

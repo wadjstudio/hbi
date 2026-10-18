@@ -181,6 +181,32 @@
   min-height: 44px;
   padding: 7px 0;
 }
+/* Follow the reference's alternating card widths only when the resized pane fits. */
+@container intelligence (min-width: 570px) {
+  .session-rail {
+    grid-template-columns: repeat(20, minmax(0, 1fr));
+  }
+  .session-rail > .defense-section,
+  .session-rail > .player-threat-section,
+  .session-rail > .tactical-pattern-section {
+    grid-column: span 9;
+  }
+  .session-rail > .threat-profile,
+  .session-rail > .shot-section,
+  .session-rail > .insight-section {
+    grid-column: span 11;
+  }
+}
+@container intelligence (max-width: 569px) {
+  .shot-zone-map {
+    flex-basis: 100%;
+  }
+  .shot-zone-legend {
+    flex-basis: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 12px;
+  }
+}
 @media (max-width: 1199px) {
   .shot-zone-legend > button,
   .shot-penalty-share,

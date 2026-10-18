@@ -1,5 +1,51 @@
 import { expect, type Page } from "@playwright/test";
 
+export const verifyIntelligenceLayout = async (page: Page) => {
+  const pane = (await page
+    .locator(".analysis-intelligence-panel")
+    .boundingBox())!;
+  const boxes = await Promise.all(
+    [
+      ".defense-section",
+      ".threat-profile",
+      ".shot-section",
+      ".player-threat-section",
+      ".tactical-pattern-section",
+      ".insight-section",
+    ].map(
+      async (selector) =>
+        (await page.locator(`.session-rail > ${selector}`).boundingBox())!,
+    ),
+  );
+  if (pane.width >= 580) {
+    for (const [smaller, larger] of [
+      [0, 1],
+      [3, 2],
+      [4, 5],
+    ]) {
+      expect(boxes[larger!]!.width / boxes[smaller!]!.width).toBeGreaterThan(
+        1.15,
+      );
+      expect(Math.abs(boxes[larger!]!.y - boxes[smaller!]!.y)).toBeLessThan(1);
+    }
+  } else if (pane.width < 560) {
+    const map = (await page.locator(".shot-zone-map").boundingBox())!;
+    const legend = page.locator(".shot-zone-legend");
+    expect((await legend.boundingBox())!.y).toBeGreaterThanOrEqual(
+      map.y + map.height - 1,
+    );
+    const buttons = await legend.getByRole("button").all();
+    const first = (await buttons[0]!.boundingBox())!;
+    const second = (await buttons[1]!.boundingBox())!;
+    expect(Math.abs(first.y - second.y)).toBeLessThan(1);
+    expect(first.width).toBeGreaterThan(65);
+  }
+  for (const box of boxes) {
+    expect(box.x).toBeGreaterThanOrEqual(pane.x - 1);
+    expect(box.x + box.width).toBeLessThanOrEqual(pane.x + pane.width + 1);
+  }
+};
+
 export const verifyIntelligenceCharts = async (
   page: Page,
   isArabic = false,

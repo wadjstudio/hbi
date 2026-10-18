@@ -1,4 +1,9 @@
 # CHANGELOG
+## Reference card proportions and narrow-pane maps — 2026-10-18
+- Added alternating 9/11 card spans within the existing intelligence size container, with semantic player-card styling.
+- Full-width shot maps and two-column zone controls on narrower panes improve readability without changing coordinates, samples or metrics.
+- Added actual geometry checks across pane resizing, five viewport widths and both languages, plus mobile map captures. No dependency or migration change.
+
 ## Defense and recorded shot zones — 2026-10-18
 - Added a 106px defense distribution ring with leader/tie labels and exact descriptor evidence.
 - Added explicit recorded-zone shares, separate 7m access and unknown/broad-zone explanations without inferring distance or coordinates. Pending attempts remain included.

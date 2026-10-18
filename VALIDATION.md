@@ -1,5 +1,13 @@
 # SESEN / HBI validation — 2026-10-16
 
+## Reference proportions and narrow-pane maps — 2026-10-18
+
+- Real-environment Pages build, target scan and final isolated typecheck passed; intended hosted project/domain and public-only configuration retained, AI disabled, no mock target/key in client or Worker. Native declarations are unchanged. Worker input SHA256:75bf666c14d4723facbb6671a66f2c13f1e8c3bf2e8d258a7aff3539effebc54. Deployment/package evidence follows after completion.
+- Native Next build and lint passed. All five focused Chrome journeys passed with retries disabled: analysis console, dense intelligence, local video, transport and source settings. New geometry checks cover keyboard pane resizing and five viewport widths in English/Arabic: alternating wide-card proportions, aligned row tops, contained cards and full-width narrow maps with two-column legends.
+- Exact source/event evidence, method-region video-time isolation, mobile 44px actions and existing source-aspect gates remain covered. Dense summaries retain English 738.19–931.19px and Arabic 738.80–937.33px at 1672×941; no original gate or text/chart/control dimension was reduced.
+- Inspected final desktop console and English375/Arabic390 shot-map captures. Nine unchanged SAMPLE captures/hashes are archived in outputs/deployment/SESEN_PANE_LAYOUT_ARTIFACTS_2026-10-18.json. Synthetic observations remain unrelated to actual displayed footage.
+- Runtime changes are presentation CSS and one semantic class only; no metric, data, SQL, sync, source or permission logic changed. The preceding 100-unit run is historical evidence, not a new run for this phase. Full reference parity, real-account/device validation and the automatic engine remain open.
+
 ## Defense and recorded shot zones — 2026-10-18
 
 - Published source 9e46eac as production/main 8073c418-c830-435d-9ea2-c206358b31f9 (30 new/48 reused files). All 43 deployed JS/CSS assets, six fonts and two OFL notices match local bytes/MIME; custom-domain login returns 200 and Spaceship NS/CNAME are unchanged. No authenticated hosted coach journey, schema mutation, DNS/R2 change or production fixture/media upload. Final source-package checksum and extraction verification are in the external release receipt.
