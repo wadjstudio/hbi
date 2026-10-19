@@ -61,7 +61,7 @@ export const IntelligenceKeepers = ({
                 );
               }}
             >
-              <PlayerAvatar number="GK" />
+              <PlayerAvatar number="GK" photoUrl={s(keeper?.photo_url)} />
               <span>
                 <b>{keeper ? rowLabel(keeper) : "—"}</b>
                 <small>

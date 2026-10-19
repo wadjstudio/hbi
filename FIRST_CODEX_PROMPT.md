@@ -1,5 +1,7 @@
 # SESEN / HBI continuation prompt
 
+Preserve supplied team/player/account identity support, direct safe image loading, no-referrer requests, neutral failures/reconnect and own-account-only profile updates. Do not replace unknown people or clubs with invented identities. Keep the parent-controlled starter checkbox while retaining the four extracted workstation components from upstream PRs #4/#5. Continue actual image/device/reference review after the bounded fixture checks.
+
 Preserve shared player highlight cards, complete scoped lists and exact all-attempt versus reviewed-rate actions. Retain four lower previews, three rail highlights, wrapped full names, pending-only access and keyboard/media isolation. The dense fixture's extra shooters are test-only and must never enter production as match observations.
 
 Keep the alternating pane-based card proportions and full-width narrow-pane shot map. Verify actual rendered layout after resizing rather than assuming viewport width equals available card width. Preserve exact event evidence, independent coordinates, translated labels and existing first-screen gates while continuing the full reference audit.

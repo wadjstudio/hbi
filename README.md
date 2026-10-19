@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence (HBI V1 foundation)
 
+Saved team logos and player photos now appear in the workstation; edit their optional image URLs in team/player management. Settings also provides your own display name and account photo. HTTPS and application-relative paths are supported, with neutral identities when absent or unavailable. Images load directly with no referrer, without uploading video or adding a paid service. The declared-starter choice stays unchanged while navigating teams or tabs.
+
 Player highlights now have complete scoped lists: three beside the video and four in the lower summary, with View all retaining every player. Names open all attempts; rate rings open only reviewed attempts, and pending-only players remain accessible through their names.
 
 The intelligence cards now follow the reference's alternating widths when the resized pane has room. Narrow panes keep the shot map full width and place recorded-zone controls below it in two columns; evidence samples and physical court coordinates remain unchanged.
@@ -8,7 +10,7 @@ The defense ring opens the leading recorded system's exact evidence; its denomin
 
 The intelligence rail uses compact procedure/insight rows with complete scoped View all lists. Choose the analyzed team in the heading; open the visible n-counter for current/historical sample details and separate shot/event evidence. Pending-only attempts stay accessible even when a reviewed denominator is unavailable. Dense and long-content acceptance remains part of the reference audit.
 
-Player threat rows now show compact shooting-efficiency rings beside neutral shirt avatars, with separate all-attempt and reviewed-rate evidence actions. Reviewed/pending counts remain visible and described for screen readers. The shot-profile card has a larger labelled ring, separate reviewed-goal/pending actions and an accessible calculation note; cumulative trend points keep their exact samples.
+Player threat rows now show compact shooting-efficiency rings beside supplied photos or neutral shirt avatars, with separate all-attempt and reviewed-rate evidence actions. Reviewed/pending counts remain visible and described for screen readers. The shot-profile card has a larger labelled ring, separate reviewed-goal/pending actions and an accessible calculation note; cumulative trend points keep their exact samples.
 
 Video source, relinking and layout/session setup now live behind the labelled gear beside playback controls. The video keeps its full source aspect and starts higher in the workstation; the empty state offers a direct Choose source action. Setup supports Escape/focus return, outside dismissal, local file verification and existing guarded YouTube attachment. It does not remount or upload the local media.
 

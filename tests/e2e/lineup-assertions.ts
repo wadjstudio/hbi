@@ -70,6 +70,27 @@ export const verifyLineup = async (page: Page) => {
   await page
     .getByText("Roster, interval and substitution tools", { exact: true })
     .click();
+  await page.getByLabel("Add as declared starter", { exact: true }).uncheck();
+  await lineup
+    .getByRole("combobox", { name: "Lineup and recording team", exact: true })
+    .selectOption("30000000-0000-4000-8000-000000000001");
+  await page
+    .getByText("Roster, interval and substitution tools", { exact: true })
+    .click();
+  await expect(
+    page.getByLabel("Add as declared starter", { exact: true }),
+  ).not.toBeChecked();
+  await lineup
+    .getByRole("combobox", { name: "Lineup and recording team", exact: true })
+    .selectOption("30000000-0000-4000-8000-000000000002");
+  await page.getByRole("tab", { name: "Events", exact: true }).click();
+  await page.getByRole("tab", { name: "Lineups", exact: true }).click();
+  await page
+    .getByText("Roster, interval and substitution tools", { exact: true })
+    .click();
+  await expect(
+    page.getByLabel("Add as declared starter", { exact: true }),
+  ).not.toBeChecked();
   await expect(
     page.getByRole("button", { name: "Open interval", exact: true }),
   ).toBeDisabled();

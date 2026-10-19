@@ -139,7 +139,8 @@ export function VideoWorkspace({
     [segEnd, setSegEnd] = useState(0);
   const [eventX, setEventX] = useState(""),
     [eventY, setEventY] = useState("");
-  const [position, setPosition] = useState("CB"),
+  const [starting, setStarting] = useState(true),
+    [position, setPosition] = useState("CB"),
     [numericalFor, setNumericalFor] = useState(6),
     [numericalAgainst, setNumericalAgainst] = useState(6),
     [annotation, setAnnotation] = useState<Drawing[]>([]),
@@ -1971,6 +1972,8 @@ export function VideoWorkspace({
             />
             <LineupEditors
               key={lineupTeamId}
+              isStarting={starting}
+              onStartingChange={setStarting}
               matchId={matchId}
               homeTeamId={s(match?.home_team_id)}
               teamId={lineupTeamId}

@@ -41,6 +41,12 @@ export const entityFields: Partial<Record<Table, Field[]>> = {
   teams: [
     { key: "name", ar: "اسم الفريق", en: "Team name", required: true },
     { key: "short_name", ar: "اختصار", en: "Short name" },
+    {
+      key: "logo_url",
+      ar: "رابط شعار الفريق",
+      en: "Team logo URL",
+      type: "image-url",
+    },
     { key: "is_own_team", ar: "فريقنا", en: "Our team", type: "checkbox" },
   ],
   seasons: [
@@ -62,6 +68,12 @@ export const entityFields: Partial<Record<Table, Field[]>> = {
       options: [...positions],
     },
     { key: "shirt_number", ar: "الرقم", en: "Number", type: "number" },
+    {
+      key: "photo_url",
+      ar: "رابط صورة اللاعب",
+      en: "Player photo URL",
+      type: "image-url",
+    },
     {
       key: "dominant_hand",
       ar: "اليد",

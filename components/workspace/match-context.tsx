@@ -1,5 +1,6 @@
 "use client";
 import { MatchHeaderActions } from "./match-header-actions";
+import { TeamCrest } from "@/components/brand/team-crest";
 import { useEffect, useRef, useSyncExternalStore } from "react";
 import { Info, Trophy } from "lucide-react";
 import { headerDate } from "@/features/workspace/header-date";
@@ -133,9 +134,12 @@ export function MatchContext({
       </div>
       <div className="match-context-score" dir="ltr">
         <div className="match-context-team">
-          <i className="team-monogram home">
-            {s(home?.short_name || home?.name).slice(0, 2) || "H"}
-          </i>
+          <TeamCrest
+            name={homeName}
+            shortName={s(home?.short_name)}
+            logoUrl={s(home?.logo_url)}
+            isHome
+          />
           <b title={homeName}>{s(home?.short_name) || homeName}</b>
         </div>
         <div className="context-score">
@@ -161,9 +165,11 @@ export function MatchContext({
           </small>
         </div>
         <div className="match-context-team">
-          <i className="team-monogram away">
-            {s(away?.short_name || away?.name).slice(0, 2) || "A"}
-          </i>
+          <TeamCrest
+            name={awayName}
+            shortName={s(away?.short_name)}
+            logoUrl={s(away?.logo_url)}
+          />
           <b title={awayName}>{s(away?.short_name) || awayName}</b>
         </div>
       </div>

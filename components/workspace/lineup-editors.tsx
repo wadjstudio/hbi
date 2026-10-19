@@ -12,6 +12,8 @@ export function LineupEditors({
   matchId,
   homeTeamId,
   teamId,
+  isStarting,
+  onStartingChange,
   roster,
   lineup,
   players,
@@ -26,6 +28,8 @@ export function LineupEditors({
   matchId: string;
   homeTeamId: string;
   teamId: string;
+  isStarting: boolean;
+  onStartingChange: (value: boolean) => void;
   roster: Row[];
   lineup: ReturnType<typeof lineupSnapshot>;
   players: Row[];
@@ -38,8 +42,7 @@ export function LineupEditors({
   action: ReturnType<typeof useAction>;
 }) {
   const w = useWorkspace();
-  const [starting, setStarting] = useState(true),
-    [outPlayer, setOut] = useState(""),
+  const [outPlayer, setOut] = useState(""),
     [inPlayer, setIn] = useState("");
   const canEnter = (id: string) =>
     Boolean(
@@ -82,8 +85,8 @@ export function LineupEditors({
         <label>
           <input
             type="checkbox"
-            checked={starting}
-            onChange={(e) => setStarting(e.target.checked)}
+            checked={isStarting}
+            onChange={(e) => onStartingChange(e.target.checked)}
           />
           {w.t("الإضافة كأساسي معلن", "Add as declared starter")}
         </label>
@@ -127,7 +130,7 @@ export function LineupEditors({
                   player_id: inPlayer,
                   team_id: teamId,
                   side: teamId === homeTeamId ? "home" : "away",
-                  starting,
+                  starting: isStarting,
                 }),
               )
             }
@@ -196,9 +199,7 @@ export function LineupEditors({
         </p>
         {lineup.intervals.map((r) => (
           <div className="interval" key={r.id}>
-            {rowLabel(
-              w.list("players").find((p) => p.id === r.player_id) ?? r,
-            )}{" "}
+            {rowLabel(w.list("players").find((p) => p.id === r.player_id) ?? r)}{" "}
             · {s(r.position)} · {n(r.period)} ·{" "}
             {formatTime(n(r.start_clock_ms))} →{" "}
             {r.end_clock_ms == null ? "…" : formatTime(n(r.end_clock_ms))}

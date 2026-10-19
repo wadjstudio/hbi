@@ -194,7 +194,10 @@ export const LineupOverview = ({
           {chosen ? (
             <>
               <div className="lineup-selected-player">
-                <PlayerAvatar number={number(chosen)} />
+                <PlayerAvatar
+                  number={number(chosen)}
+                  photoUrl={s(player(chosen)?.photo_url)}
+                />
                 <b>{name(chosen)}</b>
               </div>
               <dl>
@@ -240,7 +243,10 @@ export const LineupOverview = ({
         <div>
           {snapshot.roster.map((row) => (
             <article key={row.id}>
-              <PlayerAvatar number={number(row)} />
+              <PlayerAvatar
+                number={number(row)}
+                photoUrl={s(player(row)?.photo_url)}
+              />
               <span>
                 <b>{name(row)}</b>
                 <small>

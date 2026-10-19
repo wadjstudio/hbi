@@ -42,6 +42,7 @@ hbi-starter/
   app/event-feed.css
   app/fonts.css
   app/globals.css
+  app/identity-images.css
   app/intelligence-charts.css
   app/intelligence-lists.css
   app/intelligence-sample.css
@@ -92,6 +93,8 @@ hbi-starter/
   brand/masters/mark.png
   components/analysis/.gitkeep
   components/brand/brand-lockup.tsx
+  components/brand/identity-image.tsx
+  components/brand/team-crest.tsx
   components/charts/.gitkeep
   components/opponent/.gitkeep
   components/playlists/.gitkeep
@@ -100,11 +103,13 @@ hbi-starter/
   components/shell/app-sidebar.tsx
   components/ui/.gitkeep
   components/video/.gitkeep
+  components/workspace/account-profile.tsx
   components/workspace/analysis-split.tsx
   components/workspace/analysis-timeline.tsx
   components/workspace/analytics.tsx
   components/workspace/annotation-library.tsx
   components/workspace/charts.tsx
+  components/workspace/clock-calibration.tsx
   components/workspace/controls.tsx
   components/workspace/court.tsx
   components/workspace/data-sources.tsx
@@ -117,9 +122,11 @@ hbi-starter/
   components/workspace/evidence-drawer.tsx
   components/workspace/evidence-links.tsx
   components/workspace/evidence-trend.tsx
+  components/workspace/identity-url-field.tsx
   components/workspace/intelligence-keepers.tsx
   components/workspace/intelligence-list-card.tsx
   components/workspace/intelligence-sample.tsx
+  components/workspace/lineup-editors.tsx
   components/workspace/lineup-overview.tsx
   components/workspace/match-context.tsx
   components/workspace/match-dashboard.tsx
@@ -135,9 +142,11 @@ hbi-starter/
   components/workspace/review-queue.tsx
   components/workspace/session-analysis-rail.tsx
   components/workspace/session-report.tsx
+  components/workspace/session-settings.tsx
   components/workspace/session-statistics.tsx
   components/workspace/settings.tsx
   components/workspace/shell.tsx
+  components/workspace/shot-detail-panel.tsx
   components/workspace/shot-profile-card.tsx
   components/workspace/shot-zone-card.tsx
   components/workspace/spatial-map.tsx
@@ -150,6 +159,7 @@ hbi-starter/
   components/workspace/video-workspace.tsx
   components/workspace/youtube-player.tsx
   design-system/MASTER.md
+  docs/ui-redesign/IDENTITY_SOURCES.md
   docs/ui-redesign/REFERENCE_AUDIT.md
   docs/ui-redesign/RESEARCH.md
   docs/ui-redesign/match-template.csv
@@ -191,12 +201,14 @@ hbi-starter/
   features/workspace/backup.ts
   features/workspace/header-context.ts
   features/workspace/header-date.ts
+  features/workspace/profile-input.ts
   features/workspace/provider.tsx
   features/workspace/sync-errors.ts
   hooks/.gitkeep
   lib/brand.ts
   lib/analytics/.gitkeep
   lib/analytics/metrics.ts
+  lib/brand/identity-image.ts
   lib/env/schema.ts
   lib/local/database.ts
   lib/permissions/.gitkeep
@@ -290,6 +302,7 @@ hbi-starter/
   tests/e2e/header-assertions.ts
   tests/e2e/header-details-assertions.ts
   tests/e2e/history-assertions.ts
+  tests/e2e/identity-images.spec.ts
   tests/e2e/intelligence-chart-assertions.ts
   tests/e2e/intelligence-list-assertions.ts
   tests/e2e/intelligence-sample-assertions.ts
@@ -324,10 +337,12 @@ hbi-starter/
   tests/unit/event-feed.test.tsx
   tests/unit/header-context.test.ts
   tests/unit/header-date.test.ts
+  tests/unit/identity-image.test.tsx
   tests/unit/intelligence-charts.test.tsx
   tests/unit/intelligence-list-card.test.tsx
   tests/unit/intelligence-sample.test.tsx
   tests/unit/intelligence-scope.test.ts
+  tests/unit/lineup-editors.test.tsx
   tests/unit/lineup-snapshot.test.ts
   tests/unit/local.test.ts
   tests/unit/match-dashboard.test.ts

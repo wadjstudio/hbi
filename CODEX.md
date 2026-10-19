@@ -1,5 +1,7 @@
 # SESEN / HBI Codex Rules
 
+Use only supplied validated identity URLs; never derive athlete portraits or official crests from names. Preserve neutral fallbacks, cover/contain geometry, no-referrer direct loads and reconnect handling. Clearing an Auth avatar must override provider picture metadata. Profile updates may change own display name/avatar only, after checking current session identity; never infer membership permissions from user metadata. Keep the starter checkbox parent-controlled across team/tab remounts, and retain the browser regression.
+
 Keep complete player access beyond the four summary and three rail highlights. Pending-only player identities must open their attempts while rate buttons remain disabled without a reviewed denominator. Full names wrap in the modal; Tab/Escape/focus and actual video-time isolation must work in both languages. Geometry checks should target visible controls or explicit previews so hidden modal copies are not mistaken for displayed rows.
 
 Preserve pane-based alternating card widths and the narrow-pane full-width shot map. Check actual card bounds and legend placement after keyboard panel resizing, in both writing directions and at all five viewport widths. Do not infer any metric or alter map coordinates to achieve reference composition.

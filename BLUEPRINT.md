@@ -1,5 +1,7 @@
 # SESEN — Handball Intelligence / HBI Zero-Cost V1 Blueprint
 
+The workstation can display saved team crests, player photos and the current account's avatar. Team/player editors accept optional safe HTTPS/application-relative URLs; own-account settings update Auth display name and avatar without changing membership roles. Images load directly with no referrer and fall back to neutral identities when absent or broken. There is no identity inference, mandatory storage upload, new service or schema change. Lineup starter selection survives navigation between teams and tabs.
+
 The reference's player summaries now use four lower highlights and three beside the video, with complete lists of the current scoped sample. Each name and rate has separate evidence semantics; unknown identity/position and pending outcomes remain explicit. Lists reuse native dialogs and existing metrics, without automatic identification or invented athlete images.
 
 The evidence rail follows the reference's alternating card widths when space permits. Resizing the pane triggers native CSS reflow; narrower panes show the shot map above a two-column zone legend. This presentation uses recorded samples and changes no metric, source timing or court coordinate.

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { brand } from "@/lib/brand";
+import { IdentityImage } from "./identity-image";
 
 export function BrandLockup({ className = "" }: { className?: string }) {
   return (
@@ -29,15 +30,29 @@ export function BrandMark({ size = 32 }: { size?: number }) {
   );
 }
 
-export function PlayerAvatar({ number }: { number: string }) {
+export function PlayerAvatar({
+  number,
+  photoUrl,
+}: {
+  number: string;
+  photoUrl?: string | null;
+}) {
   return (
     <span className="sesen-player-avatar" aria-hidden="true">
-      <Image
-        src={brand.playerPlaceholder}
+      <IdentityImage
+        src={photoUrl}
+        alt=""
         width={40}
         height={40}
-        alt=""
-        unoptimized
+        fallback={
+          <Image
+            src={brand.playerPlaceholder}
+            width={40}
+            height={40}
+            alt=""
+            unoptimized
+          />
+        }
       />
       <b>{number || "?"}</b>
     </span>

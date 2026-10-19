@@ -230,6 +230,7 @@ export function SessionAnalysisRail({
             ? rowLabel(entry.player)
             : w.t("لاعب غير محدد", "Unknown player"),
           number: s(entry.player?.shirt_number),
+          photoUrl: s(entry.player?.photo_url),
           summary: entry.summary,
           onAll: () =>
             onEvidence(

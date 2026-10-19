@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { BrandLockup, BrandMark } from "@/components/brand/brand-lockup";
+import { IdentityImage } from "@/components/brand/identity-image";
 import { useWorkspace } from "./provider";
 import { Panel, Notice, useAction, rowLabel } from "./controls";
 import {
@@ -192,7 +193,16 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
                 title={w.t("الحساب والحفظ", "Account & sync")}
               >
                 <i className="account-avatar" aria-hidden="true">
-                  {w.account.initials || <CircleUser size={22} />}
+                  <IdentityImage
+                    src={w.account.avatarUrl}
+                    alt=""
+                    width={32}
+                    height={32}
+                    loading="eager"
+                    fallback={
+                      <>{w.account.initials || <CircleUser size={22} />}</>
+                    }
+                  />
                 </i>
                 <span className="account-identity">
                   <b dir="auto">{w.account.name || w.t("الحساب", "Account")}</b>
@@ -218,9 +228,7 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
                     onChange={(e) => w.selectOrg(e.target.value)}
                   >
                     {!w.org && (
-                      <option value="">
-                        {w.t("المؤسسة", "Organization")}
-                      </option>
+                      <option value="">{w.t("المؤسسة", "Organization")}</option>
                     )}
                     {w.orgs.map((o) => (
                       <option key={o.id} value={o.id}>

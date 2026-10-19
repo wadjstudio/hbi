@@ -10,8 +10,10 @@ the authenticated Next application; a standalone mock-up is not completion.
 
 Use the existing cyan/gold SESEN tokens and assets under `public/brand` (provenance
 in `brand/BRAND.md`). Keep the graphite surface, thin teal borders, restrained
-gold active navigation, consistent Lucide icons and neutral identity placeholders.
+gold active navigation, consistent Lucide icons and supplied team/player/account images with neutral fallbacks.
 Do not substitute invented players, team crests, league averages or match scores.
+
+Identity images use existing scoped data, fixed cover/contain frames and direct no-referrer browser requests. Broken URLs must retain the same frame and neutral identity; reconnect may retry. Account settings change the current user's name/avatar only. Actual authorized images still need review; abstract SAMPLE fixtures prove rendering behavior, not a roster or full reference parity. Source candidates and provenance are documented in docs/ui-redesign/IDENTITY_SOURCES.md.
 
 ## Composition
 

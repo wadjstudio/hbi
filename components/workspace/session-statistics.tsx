@@ -284,7 +284,10 @@ export const SessionStatistics = ({
                     <tr key={id}>
                       <th scope="row">
                         <div className="session-player-name">
-                          <PlayerAvatar number={s(player?.shirt_number)} />
+                          <PlayerAvatar
+                            number={s(player?.shirt_number)}
+                            photoUrl={s(player?.photo_url)}
+                          />
                           <span>
                             {player ? rowLabel(player) : id.slice(0, 8)}
                             <button

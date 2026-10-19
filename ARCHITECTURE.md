@@ -1,5 +1,7 @@
 # SESEN / HBI Architecture
 
+IdentityImage validates HTTPS/application-relative sources and renders unoptimized browser images with no-referrer, preserving neutral fallback on failure and retrying on reconnect. TeamCrest and PlayerAvatar receive existing organization-scoped team/player fields; no image proxy or schema change is introduced. AccountProfile updates only the current Auth user's display_name/avatar_url after revalidating session identity; membership permissions remain independent. PRs #4/#5 split four workstation tools; declared-starter state stays in VideoWorkspace while team-specific player selections stay in LineupEditors.
+
 PlayerThreatCard composes existing PlayerThreatRow entries for both rail and summary. Parents retain their original sorting and exact evidence resolvers; entries contain callbacks rather than a separate query/store. The native modal shares the existing intelligence-list styling, closes before evidence navigation and contains focus/scroll keyboard input. Summary/rail preview counts are four/three; complete lists preserve every scoped entry.
 
 The existing intelligence size container controls card proportions: at 570px it uses 20 grid tracks with 9/11 spans, while narrower panes retain the existing one/two-column rail. Below 570px ShotZoneCard stacks its map and a two-column legend. This is native CSS with a semantic player-card class; no parallel layout state or resize observer is introduced.

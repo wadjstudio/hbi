@@ -9,6 +9,7 @@ export type PlayerThreatEntry = {
   id: string;
   name: string;
   number: string;
+  photoUrl?: string | null;
   summary: ReturnType<typeof shotSummary>;
   onAll: () => void;
   onReviewed: () => void;

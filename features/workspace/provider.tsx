@@ -12,6 +12,8 @@ import { substitutionInput, syncResponse } from "@/features/analysis/contracts";
 import { parseWorkspaceBackup } from "./backup";
 import { shouldRetrySync } from "./sync-errors";
 import { accountIdentity, type AccountIdentity } from "./header-context";
+import { accountProfileInput } from "./profile-input";
+import { identityImageSource } from "@/lib/brand/identity-image";
 import { releaseLocalSources } from "@/lib/video/local-sources";
 import { canWrite } from "@/lib/permissions/roles";
 import { createClient } from "@/lib/supabase/client";
@@ -30,6 +32,7 @@ type Context = {
   org: string;
   user: string;
   account: AccountIdentity;
+  updateProfile: (name: string, avatarUrl: string) => Promise<void>;
   role: string;
   orgs: Row[];
   lang: "ar" | "en";
@@ -610,6 +613,42 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     org,
     user,
     account,
+    updateProfile: async (name, avatarUrl) => {
+      const parsed = accountProfileInput.safeParse({ name, avatarUrl });
+      if (!parsed.success)
+        throw new Error(
+          lang === "ar"
+            ? "أدخل اسمًا من 1 إلى 80 حرفًا ورابط صورة HTTPS صالحًا أو اترك الصورة فارغة."
+            : "Enter a name of 1–80 characters and a valid HTTPS image URL, or leave the image empty.",
+        );
+      const c = client.current;
+      if (!c || !user || !navigator.onLine)
+        throw new Error(
+          lang === "ar"
+            ? "تعديل الحساب يحتاج اتصالًا."
+            : "Account changes need a connection.",
+        );
+      const current = await c.auth.getUser();
+      if (
+        current.error ||
+        current.data.user?.id !== user ||
+        identity.current !== scope
+      )
+        throw new Error(
+          lang === "ar"
+            ? "جلسة الحساب تغيرت؛ أعد فتح الإعدادات."
+            : "Account session changed; reopen settings.",
+        );
+      const { data, error } = await c.auth.updateUser({
+        data: {
+          display_name: parsed.data.name,
+          avatar_url: identityImageSource(parsed.data.avatarUrl),
+        },
+      });
+      if (error) throw new Error(error.message);
+      if (data.user?.id !== user) throw new Error("Account identity mismatch");
+      if (identity.current === scope) setAccount(accountIdentity(data.user));
+    },
     role,
     orgs,
     lang,

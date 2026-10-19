@@ -67,6 +67,7 @@ export function MatchDashboard({
             id: p.id,
             name,
             number: s(player?.shirt_number),
+            photoUrl: s(player?.photo_url),
             summary: p.summary,
             onAll: () => openShots(name, p.rows),
             onReviewed: () =>

@@ -117,7 +117,10 @@ export const EventFeed = ({
                 <span dir="ltr">{time(event.match_clock_ms)}</span>
               </span>
             </div>
-            <PlayerAvatar number={s(player?.shirt_number)} />
+            <PlayerAvatar
+              number={s(player?.shirt_number)}
+              photoUrl={s(player?.photo_url)}
+            />
             <div className="event-feed-description">
               <h3>{label}</h3>
               <p>

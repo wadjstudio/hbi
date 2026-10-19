@@ -1,5 +1,7 @@
 # SESEN workstation reference audit — 16 October 2026
 
+19 October identity follow-up: existing team/player URL fields now feed crests/photos throughout the workstation; own-account settings update Auth name/avatar without changing membership. The full unit suite (112 tests in 35 files), native build and lint passed. Chrome verifies image containment, failure and reconnect, five widths in both languages, team-logo persistence/removal and own-profile reload/removal/offline behavior with unchanged memberships. The complete console rerun passed, including starter choice across team/tab navigation. Final English/Arabic workstation and hydrated Arabic 375px profile captures were inspected; the profile's inputs/buttons measure at least 44 × 44px. Image hashes and acceptance records are in outputs/deployment/SESEN_IDENTITIES_ARTIFACTS_2026-10-19.json and separate console/initial reports. These are explicit SAMPLE identities; authorized actual images, real-account/device use, final release verification and the remaining reference requirements remain open.
+
 Target: the user's final SESEN workstation image, 1672×941. The screenshot is a visual/interaction target, not an authoritative source of match observations. Never seed its percentages, player portraits, score clock or tactical conclusions as analyzed data.
 
 | Reference region | Current implementation and inspected evidence | Remaining gate |

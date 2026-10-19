@@ -8,6 +8,7 @@ import { Entities } from "./entities";
 import { Panel, Notice, useAction } from "./controls";
 import { s } from "@/types/workspace";
 import { canWrite } from "@/lib/permissions/roles";
+import { AccountProfile } from "./account-profile";
 export function Settings() {
   const w = useWorkspace(),
     a = useAction();
@@ -23,6 +24,7 @@ export function Settings() {
   const canEditTaxonomy = canWrite(w.role, "tactical_terms") && !a.busy;
   return (
     <>
+      <AccountProfile />
       <Entities table="teams" title={w.t("الفرق", "Teams")} />
       <Entities table="seasons" title={w.t("المواسم", "Seasons")} />
       <Entities table="competitions" title={w.t("البطولات", "Competitions")} />

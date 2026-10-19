@@ -10,7 +10,7 @@ const row = (id: string, props: Partial<Row> = {}): Row => ({
   organization_id: "org",
   ...props,
 });
-it("uses actual account text without inferring a coach role or loading a remote portrait", () => {
+it("uses actual account text and a supplied safe portrait without inferring a coach role", () => {
   expect(
     accountIdentity({
       email: "coach@example.test",
@@ -19,7 +19,12 @@ it("uses actual account text without inferring a coach role or loading a remote 
         avatar_url: "https://example.test/avatar",
       },
     }),
-  ).toEqual({ name: "أحمد علي", email: "coach@example.test", initials: "أع" });
+  ).toEqual({
+    name: "أحمد علي",
+    email: "coach@example.test",
+    initials: "أع",
+    avatarUrl: "https://example.test/avatar",
+  });
   expect(
     accountIdentity({
       email: "coach@example.test",
@@ -27,6 +32,22 @@ it("uses actual account text without inferring a coach role or loading a remote 
     }),
   ).toEqual({ name: "coach", email: "coach@example.test", initials: "C" });
   expect(accountIdentity(null)).toEqual({ name: "", email: "", initials: "" });
+});
+it("honors explicit photo removal and rejects unsafe images without reviving provider pictures", () => {
+  const picture = "https://example.test/provider.png";
+  expect(accountIdentity({ user_metadata: { picture } }).avatarUrl).toBe(
+    picture,
+  );
+  for (const avatar_url of [
+    null,
+    "",
+    "javascript:alert(1)",
+    "http://example.test/photo.png",
+  ]) {
+    expect(
+      accountIdentity({ user_metadata: { avatar_url, picture } }).avatarUrl,
+    ).toBeUndefined();
+  }
 });
 it("builds encoded session/time links and excludes unsafe time values", () => {
   expect(analysisPath("match", "session", 12000)).toBe(

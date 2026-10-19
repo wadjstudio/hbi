@@ -1,6 +1,12 @@
 import { s, type Row } from "@/types/workspace";
+import { identityImageSource } from "@/lib/brand/identity-image";
 
-export type AccountIdentity = { name: string; email: string; initials: string };
+export type AccountIdentity = {
+  name: string;
+  email: string;
+  initials: string;
+  avatarUrl?: string;
+};
 export const accountIdentity = (
   user: { email?: string; user_metadata?: Record<string, unknown> } | null,
 ): AccountIdentity => {
@@ -21,7 +27,12 @@ export const accountIdentity = (
     .map((part) => Array.from(part)[0])
     .join("")
     .toUpperCase();
-  return { name, email, initials };
+  const avatarUrl = identityImageSource(
+    Object.hasOwn(metadata ?? {}, "avatar_url")
+      ? metadata?.avatar_url
+      : metadata?.picture,
+  );
+  return { name, email, initials, ...(avatarUrl ? { avatarUrl } : {}) };
 };
 
 export const analysisPath = (

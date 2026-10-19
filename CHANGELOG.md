@@ -1,4 +1,10 @@
 # CHANGELOG
+## Supplied identities and lineup-state preservation — 2026-10-19
+- Existing team logo/player photo fields now appear throughout the workstation, with optional URL fields in the entity editors.
+- Own-account settings update Auth display name/avatar only. Safe direct images use no-referrer, neutral failure fallback and reconnect retry; no image proxy, mandatory upload, new dependency or migration.
+- Integrated upstream PRs #4/#5 component extraction and preserved the declared-starter checkbox across team/tab remounts. Explicit synthetic browser image fixtures never enter production.
+- Verification is recorded in VALIDATION.md; complete reference parity remains open.
+
 ## Player highlights and complete scoped lists — 2026-10-18
 - Shared PlayerThreatCard adds four lower-summary/three rail highlights and complete native-modal player lists.
 - Retains separate all-attempt/reviewed evidence, pending-only access, full wrapped names and keyboard/focus/media isolation.

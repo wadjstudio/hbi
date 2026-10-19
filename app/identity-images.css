@@ -1,0 +1,66 @@
+.team-monogram,
+.account-avatar {
+  position: relative;
+  overflow: hidden;
+}
+.sesen-player-avatar img.identity-photo {
+  opacity: 1;
+  object-fit: cover;
+}
+.team-monogram img.identity-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: contain;
+}
+.team-monogram:has(img.identity-photo) {
+  clip-path: none;
+  border: 0;
+  background: transparent;
+}
+.account-avatar img.identity-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  border-radius: inherit;
+  object-fit: cover;
+}
+.identity-field,
+.identity-url-field {
+  display: grid;
+  gap: 6px;
+}
+.identity-url-field > small {
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.identity-url-field > input,
+.identity-url-field > button,
+[data-slot="account-profile"] input,
+[data-slot="account-profile"] > button {
+  min-height: 44px;
+}
+.identity-url-field > button {
+  justify-self: start;
+}
+.identity-url-preview {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border: 1px solid var(--sesen-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.identity-url-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

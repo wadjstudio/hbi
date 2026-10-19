@@ -139,7 +139,7 @@ const server = http.createServer(async (req, res) => {
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET,POST,PATCH,DELETE,OPTIONS",
+    "GET,POST,PUT,PATCH,DELETE,OPTIONS",
   );
   res.setHeader("Content-Type", "application/json");
   if (req.method === "OPTIONS") {
@@ -155,6 +155,7 @@ const server = http.createServer(async (req, res) => {
   if (url.pathname === "/test/reset" && req.method === "POST") {
     for (const key of Object.keys(db)) delete db[key];
     Object.assign(db, structuredClone(baseline));
+    user.user_metadata = {};
     receipts.clear();
     return send({ reset: true });
   }
@@ -191,6 +192,13 @@ const server = http.createServer(async (req, res) => {
         ? denseIntelligence(fixture, away, session.id)
         : fixture,
     );
+    if (input.identity === true) {
+      // Explicitly synthetic image samples, intercepted by the browser test.
+      for (const team of db.teams)
+        team.logo_url = `https://identity.sesen.test/team-${team.id}.svg`;
+      for (const player of db.players)
+        player.photo_url = `https://identity.sesen.test/player-${player.id}.svg`;
+    }
     return send({ fixture: "synthetic-console", events: db.events.length });
   }
   if (url.pathname === "/auth/v1/token") {
@@ -202,7 +210,12 @@ const server = http.createServer(async (req, res) => {
       user,
     });
   }
-  if (url.pathname === "/auth/v1/user") return send(user);
+  if (url.pathname === "/auth/v1/user") {
+    if (req.method === "PUT") {
+      user.user_metadata = { ...user.user_metadata, ...input.data };
+    }
+    return send(user);
+  }
   if (url.pathname === "/auth/v1/logout") {
     res.writeHead(204);
     res.end();

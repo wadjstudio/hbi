@@ -19,6 +19,7 @@ import "./player-threats.css";
 import "./intelligence-lists.css";
 import "./intelligence-sample.css";
 import "./intelligence-charts.css";
+import "./identity-images.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(

@@ -9,12 +9,14 @@ import { EfficiencyRing } from "./efficiency-ring";
 export const PlayerThreatRow = ({
   name,
   number,
+  photoUrl,
   summary,
   onAll,
   onReviewed,
 }: {
   name: string;
   number: string;
+  photoUrl?: string | null;
   summary: ReturnType<typeof shotSummary>;
   onAll: () => void;
   onReviewed: () => void;
@@ -29,7 +31,7 @@ export const PlayerThreatRow = ({
         aria-label={`${name} · ${w.t("كل المحاولات", "All attempts")}`}
         aria-describedby={descriptionId}
       >
-        <PlayerAvatar number={number} />
+        <PlayerAvatar number={number} photoUrl={photoUrl} />
         <span>
           <b title={name}>{name}</b>
           <small

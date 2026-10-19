@@ -3,6 +3,8 @@ import { useState, type ReactNode } from "react";
 import { canWrite } from "@/lib/permissions/roles";
 import { useWorkspace } from "./provider";
 import { s, type Row, type Table } from "@/types/workspace";
+import { IdentityUrlField } from "./identity-url-field";
+import { identityImageSource } from "@/lib/brand/identity-image";
 export function Panel({
   title,
   children,
@@ -88,7 +90,13 @@ export type Field = {
   key: string;
   ar: string;
   en: string;
-  type?: "number" | "date" | "datetime-local" | "textarea" | "checkbox";
+  type?:
+    | "number"
+    | "date"
+    | "datetime-local"
+    | "textarea"
+    | "checkbox"
+    | "image-url";
   required?: boolean;
   table?: Table;
   options?: string[];
@@ -142,15 +150,25 @@ export function EntityEditor({
               input[f.key] = value === "" ? null : Number(value);
             } else if (f.type === "checkbox") {
               input[f.key] = Boolean(value);
+            } else if (f.type === "image-url") {
+              const text = s(value).trim();
+              const source = identityImageSource(text);
+              if (text && !source)
+                throw new Error(
+                  w.t(
+                    "استخدم رابط صورة HTTPS أو مسارًا داخل التطبيق.",
+                    "Use an HTTPS image URL or app-relative path.",
+                  ),
+                );
+              input[f.key] = source;
             } else if (f.type === "datetime-local") {
               const str = s(value).trim();
               if (!str) {
                 input[f.key] = null;
               } else {
-                const candidate =
-                  /[zZ]|[+-]\d{2}:\d{2}$/.test(str)
-                    ? str
-                    : `${str.length === 16 ? `${str}:00` : str}Z`;
+                const candidate = /[zZ]|[+-]\d{2}:\d{2}$/.test(str)
+                  ? str
+                  : `${str.length === 16 ? `${str}:00` : str}Z`;
                 const parsed = new Date(candidate);
                 input[f.key] = Number.isNaN(parsed.getTime())
                   ? str
@@ -167,66 +185,86 @@ export function EntityEditor({
     >
       {title && <h3>{title}</h3>}
       <div className="form-grid">
-        {fields.map((f) => (
-          <label key={f.key}>
-            {w.t(f.ar, f.en)}
-            {f.table ? (
-              <select
-                aria-label={w.t(f.ar, f.en)}
-                required={f.required}
-                value={s(values[f.key])}
-                onChange={(e) =>
-                  setValues((v) => ({ ...v, [f.key]: e.target.value }))
-                }
-              >
-                <option value="">—</option>
-                {w.list(f.table).map((r) => (
-                  <option key={r.id} value={r.id}>
-                    {rowLabel(r)}
-                  </option>
-                ))}
-              </select>
-            ) : f.options ? (
-              <select
-                aria-label={w.t(f.ar, f.en)}
-                required={f.required}
-                value={s(values[f.key])}
-                onChange={(e) =>
-                  setValues((v) => ({ ...v, [f.key]: e.target.value }))
-                }
-              >
-                <option value="">—</option>
-                {f.options.map((o) => (
-                  <option key={o}>{o}</option>
-                ))}
-              </select>
-            ) : f.type === "textarea" ? (
-              <textarea
-                value={s(values[f.key])}
-                onChange={(e) =>
-                  setValues((v) => ({ ...v, [f.key]: e.target.value }))
-                }
-              />
-            ) : (
-              <input
-                type={f.type ?? "text"}
-                required={f.required}
-                min={f.type === "number" ? 0 : undefined}
-                checked={
-                  f.type === "checkbox" ? Boolean(values[f.key]) : undefined
-                }
-                value={f.type === "checkbox" ? undefined : s(values[f.key])}
-                onChange={(e) =>
-                  setValues((v) => ({
-                    ...v,
-                    [f.key]:
-                      f.type === "checkbox" ? e.target.checked : e.target.value,
-                  }))
-                }
-              />
-            )}
-          </label>
-        ))}
+        {fields.map((f) => {
+          const FieldElement = f.type === "image-url" ? "div" : "label";
+          return (
+            <FieldElement
+              key={f.key}
+              className={f.type === "image-url" ? "identity-field" : undefined}
+            >
+              {f.type === "image-url" ? (
+                <span>{w.t(f.ar, f.en)}</span>
+              ) : (
+                w.t(f.ar, f.en)
+              )}
+              {f.table ? (
+                <select
+                  aria-label={w.t(f.ar, f.en)}
+                  required={f.required}
+                  value={s(values[f.key])}
+                  onChange={(e) =>
+                    setValues((v) => ({ ...v, [f.key]: e.target.value }))
+                  }
+                >
+                  <option value="">—</option>
+                  {w.list(f.table).map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {rowLabel(r)}
+                    </option>
+                  ))}
+                </select>
+              ) : f.options ? (
+                <select
+                  aria-label={w.t(f.ar, f.en)}
+                  required={f.required}
+                  value={s(values[f.key])}
+                  onChange={(e) =>
+                    setValues((v) => ({ ...v, [f.key]: e.target.value }))
+                  }
+                >
+                  <option value="">—</option>
+                  {f.options.map((o) => (
+                    <option key={o}>{o}</option>
+                  ))}
+                </select>
+              ) : f.type === "image-url" ? (
+                <IdentityUrlField
+                  label={w.t(f.ar, f.en)}
+                  value={s(values[f.key])}
+                  onChange={(value) =>
+                    setValues((previous) => ({ ...previous, [f.key]: value }))
+                  }
+                />
+              ) : f.type === "textarea" ? (
+                <textarea
+                  value={s(values[f.key])}
+                  onChange={(e) =>
+                    setValues((v) => ({ ...v, [f.key]: e.target.value }))
+                  }
+                />
+              ) : (
+                <input
+                  type={f.type ?? "text"}
+                  required={f.required}
+                  min={f.type === "number" ? 0 : undefined}
+                  checked={
+                    f.type === "checkbox" ? Boolean(values[f.key]) : undefined
+                  }
+                  value={f.type === "checkbox" ? undefined : s(values[f.key])}
+                  onChange={(e) =>
+                    setValues((v) => ({
+                      ...v,
+                      [f.key]:
+                        f.type === "checkbox"
+                          ? e.target.checked
+                          : e.target.value,
+                    }))
+                  }
+                />
+              )}
+            </FieldElement>
+          );
+        })}
       </div>
       {a.error && <Notice>{a.error}</Notice>}
       <button disabled={a.busy || !canWrite(w.role, table)} className="primary">
