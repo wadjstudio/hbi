@@ -1,4 +1,42 @@
 # CHANGELOG
+## Unreviewed team/court preparation and broader real-source evaluation — 2026-10-25
+
+- Added strict spatial-preparation contracts, current-frame kit/court preview, scoped persistence and backup integration. Existing tracking backups remain readable; new preparation is optional. No SQL/Dexie migration or browser dependency change.
+- Added local source-verified frame decoding, frame-local kit heuristics with visible-torso masking, frame-hash-bound landmark seeds and quality-gated camera flow. Unknown/occluded/outside points remain missing; no athlete identity or ball event is inferred.
+- Added provisional near-goal spatial group cues, isolated from explicitly reviewed defensive-shape rules. Box corrections clear stale preparation/decisions.
+- Passed the 150-test full suite and the subsequent 3-test tactical-review run including the new persistence/invalidation case; typecheck, lint and actual-video Chrome acceptance passed. Python preparation checks and build results are recorded separately in VALIDATION.md.
+- Evaluated a fresh 70:10–71:10 source-video sample: 600 frames, 11261 person observations. Both real samples still return zero eligible tactical proposals. No tactical accuracy, complete automatic match analysis or full-match processing is claimed.
+
+## Initial automatic tactical-rule proposals — 2026-10-22
+
+- Added a shared local rule engine: possible path crossings and conditional 6:0/5:1 defensive shapes from explicitly reviewed per-frame court/team/phase evidence.
+- Added evidence seek, review/rejection notes, scoped local persistence, separate proposal export and optional tactical data in tracking backups. Old backups remain readable; no SQL or IndexedDB version migration.
+- Added a bounded, no-overwrite batch command using the same rules. No new dependency, model, paid inference or hosted deployment.
+- Added nine domain tests and two DOM tests; full regression passed 141 tests, full lint passed, and actual-video Chrome acceptance passed. Initial real sample returned zero eligible proposals with court/team preparation missing; no tactical accuracy is claimed.
+- Final Next and Cloudflare Pages builds passed using placeholder public configuration. The final regression used a 15-second CLI test lifetime on this environment after two different existing DOM cases exceeded the default; all behavioral assertions remain intact. See VALIDATION.md for complete evidence and limitations.
+
+## Tracking review acceptance and source delivery — 2026-10-22
+
+- Strengthened real-video Chrome coverage to verify all four box coordinates across desktop, tablet and Arabic mobile layouts; exact-frame edits, backups and reload persistence remain covered.
+- Completed the 130-test regression, two exporter tests, typecheck, full lint and font verification. See VALIDATION.md for build and delivery results.
+- Fixed a package-name variable collision in the source archive script. Source delivery retains Blueprint parity, safe extraction and original-migration checks.
+- No detector/tracker accuracy improvement, new inference engine, database migration or hosted deployment is claimed by this acceptance pass.
+
+## Source-bound person tracking and frame corrections — 2026-10-20
+
+- Connected the existing local YOLOX-S/ByteTrack comparison to the actual Automatic analysis tab, without new dependencies or inference services.
+- Added full-source-verified exporter, strict bounded frame/scene/geometry contracts, source-aspect overlay and sample navigation. Missing observations and outside-sample playback show no boxes.
+- Added per-frame correction/hide/restore, scoped persistence, immediate prior-account result isolation and separate corrections backup. Additive IndexedDB v2 retains OCR reviews; no SQL migration or canonical statistics mutation.
+- Exported the supplied 35:00–36:00 sample: 600 nominal frames, 8563 proposed boxes. Counts and detector scores do not measure accuracy; scene-local IDs do not identify athletes.
+- Current verification and environment limits are recorded in VALIDATION.md. One-click engine execution, reliable ball/team/court models, tactical events and rendered-video export remain open. No hosted deployment is included.
+
+## Local engine results in the workstation — 2026-10-20
+
+- Added a source-bound import contract and compact exporter for the existing local scoreboard OCR engine; no new model or dependency was added.
+- Added the Automatic analysis tab: source-time evidence, local per-account/session decisions and notes, review backup import/export, and scoped deterministic review-clip identities.
+- Proposal intervals remain separate from confirmed events and statistics. The exporter checks full source SHA256; browser binding uses the existing sampled fingerprint, size and duration.
+- No SQL migration, production data mutation or deployment is included. One-click engine launch, automatic tactical events, track overlays and rendered-video export remain open.
+
 ## Supplied identities and lineup-state preservation — 2026-10-19
 - Existing team logo/player photo fields now appear throughout the workstation, with optional URL fields in the entity editors.
 - Own-account settings update Auth display name/avatar only. Safe direct images use no-referrer, neutral failure fallback and reconnect retry; no image proxy, mandatory upload, new dependency or migration.

@@ -6,6 +6,11 @@ import { Panel, Notice, SelectRow, useAction, rowLabel } from "./controls";
 import { DrawingEditor } from "./drawing";
 import { AnnotationLibrary } from "./annotation-library";
 import { ReviewQueue } from "./review-queue";
+import { LocalAnalysisReview } from "./local-analysis-review";
+import { proposalClipId, reviewKey } from "@/features/analysis/local-results";
+import { useTrackingReview } from "@/features/analysis/use-tracking-review";
+import { TrackingOverlay } from "./tracking-overlay";
+import { TrackingReview, type TrackingSelection } from "./tracking-review";
 import { EventParticipants } from "./event-participants";
 import { Court } from "./charts";
 import { parseEventCourtPosition } from "@/features/analysis/contracts";
@@ -78,6 +83,8 @@ export function VideoWorkspace({
     [time, setTime] = useState(initialTimeMs),
     [tab, setTab] = useState("analytics");
   const [sourceFile, setSourceFile] = useState<File | null>(null);
+  const [showTracking, setShowTracking] = useState(false);
+  const [trackingSelection, setTrackingSelection] = useState<TrackingSelection>(null);
   const [intelligenceScope, setIntelligenceScope] =
     useState<IntelligenceScope>("session");
   const [requestedEvent, setRequestedEvent] = useState("");
@@ -172,6 +179,15 @@ export function VideoWorkspace({
     video = w
       .list("videos")
       .find((r) => r.id === (videoId || session?.video_id));
+  const trackingScope = reviewKey(w.user, w.org, sid, video?.id ?? "");
+  const tracking = useTrackingReview(trackingScope, video);
+  function selectTrack(frame: number, track: number) {
+    const sample = tracking.draft?.report.frames[frame];
+    if (!sample || !sample.persons.some((p) => p.track_id === track)) return;
+    pause(); seek(sample.video_ms);
+    setTrackingSelection({ scope: trackingScope, frame, track });
+    setTab("automatic");
+  }
   const isOnlineSource = video?.storage_mode === "youtube";
   const duration =
     n(video?.duration_ms) || (isOnlineSource ? onlineDuration : 0);
@@ -948,6 +964,11 @@ export function VideoWorkspace({
                       </button>
                     </div>
                   )}
+                  {!isOnlineSource && available && !annotate && showTracking && tracking.draft && (
+                    <TrackingOverlay key={`${trackingScope}:${url}`}
+                      report={tracking.draft.report} corrections={tracking.draft.corrections}
+                      videoRef={player} timeMs={time} onSelect={selectTrack} />
+                  )}
                   {!isOnlineSource &&
                     annotations
                       .filter((layer) => !annotate || layer.id !== annotationId)
@@ -1381,6 +1402,7 @@ export function VideoWorkspace({
           "comparison",
           "reports",
           "annotations",
+          "automatic",
           "review",
         ].map((v) => (
           <Tabs.Trigger className={tab === v ? "active" : ""} key={v} value={v}>
@@ -1395,6 +1417,7 @@ export function VideoWorkspace({
                 reports: "التقارير",
                 annotations: "الرسومات",
                 review: "المراجعة",
+                automatic: "التحليل التلقائي",
               }[v] ?? v,
               {
                 analytics: "Analytics",
@@ -1406,6 +1429,7 @@ export function VideoWorkspace({
                 reports: "Reports",
                 annotations: "Annotations",
                 review: "Review",
+                automatic: "Automatic analysis",
               }[v] ?? v,
             )}
           </Tabs.Trigger>
@@ -2017,6 +2041,35 @@ export function VideoWorkspace({
                 void a.run(() => w.save("video_annotations", r, true))
               }
             />
+          </Panel>
+        )}
+        {tab === "automatic" && (
+          <Panel title={w.t("مراجعة نتائج التحليل التلقائي", "Review automatic analysis results")}>
+            {video && sid ? <><LocalAnalysisReview
+              key={`${w.user}:${w.org}:${sid}:${video.id}`}
+              sessionId={sid} video={video}
+              isAvailable={available && !isOnlineSource}
+              isCanClip={canWrite(w.role, "clips") && !a.busy && !isOnlineSource}
+              onOpen={(candidate) => { pause(); seek(candidate.video_start_ms); }}
+              onClip={async (candidate) => {
+                if (!canWrite(w.role, "clips") || !session || !match || video.organization_id !== w.org || session.video_id !== video.id)
+                  throw new Error("Clip scope or permission unavailable");
+                const id = await proposalClipId(w.org, sid, video.id, candidate.id);
+                const existing = w.list("clips").find((row) => row.id === id);
+                if (existing) return existing;
+                const end = Math.min(n(video.duration_ms), candidate.video_end_ms);
+                if (end <= candidate.video_start_ms) throw new Error("Proposal falls outside video");
+                return w.save("clips", { id, video_id: video.id, match_id: matchId,
+                  title: `${w.t("اقتراح للمراجعة", "Review proposal")} ${formatTime(candidate.video_start_ms)}`,
+                  start_ms: candidate.video_start_ms, end_ms: end });
+              }}
+            />
+              <TrackingReview key={trackingScope} scope={trackingScope} video={video}
+                draft={tracking.draft} loading={tracking.loading} error={tracking.error}
+                timeMs={time} selection={trackingSelection} isAvailable={available && !isOnlineSource}
+                isVisible={showTracking} onVisibility={setShowTracking} onSeek={(ms) => { pause(); seek(ms); }}
+                onSelect={selectTrack} />
+            </> : <Notice>{w.t("اختر جلسة وفيديو محلي أولًا", "Select a session and local video first")}</Notice>}
           </Panel>
         )}
         {tab === "review" && (

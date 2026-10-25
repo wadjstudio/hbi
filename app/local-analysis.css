@@ -1,0 +1,20 @@
+.local-analysis-review { display: grid; gap: 1rem; min-width: 0; }
+.local-analysis-review header p, .local-analysis-review small { color: var(--text-secondary); }
+.local-analysis-review .toolbar { flex-wrap: wrap; }
+.local-analysis-review label { display: grid; gap: .4rem; min-width: 0; }
+.local-analysis-review input, .local-analysis-review button, .local-analysis-review select { min-height: 44px; max-width: 100%; }
+.local-analysis-review input { width: 100%; }
+.local-analysis-review code { display: block; overflow-wrap: anywhere; white-space: normal; text-align: start; }
+.local-analysis-summary { display: flex; flex-wrap: wrap; gap: 1rem; color: var(--intel-cyan); }
+.local-analysis-items { display: grid; gap: .8rem; }
+.local-analysis-items article { padding: 1rem; border: 1px solid var(--border); border-radius: .6rem; display: grid; gap: .7rem; background: var(--surface-1); }
+.local-analysis-items h4, .local-analysis-items p { margin: 0; }
+.local-analysis-items small, .local-analysis-review li { overflow-wrap: anywhere; }
+.tracking-overlay { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.tracking-review { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+.tracking-review input[type="checkbox"] { width: auto; min-height: 20px; }
+.tracking-review label:has(input[type="checkbox"]) { display: flex; align-items: center; min-height: 44px; }
+.tracking-coordinates { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; }
+.tracking-correction { display: grid; gap: .7rem; padding: 1rem; border: 1px solid var(--border); border-radius: .6rem; }
+.tracking-correction fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: .7rem; min-width: 0; }
+@media (max-width: 500px) { .tracking-coordinates { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

@@ -1,0 +1,4 @@
+# These upstream notices are verified byte-for-byte by the font manifest.
+public/fonts/licenses/*.txt -text
+# Preserve migration bytes across Windows checkouts and source archives.
+supabase/migrations/*.sql -text

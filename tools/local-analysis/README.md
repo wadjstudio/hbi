@@ -1,5 +1,40 @@
 # SESEN local analysis pilot
 
+## Initial tactical-rule proposals
+
+Imported tracking now runs shared local rules for possible path crossings. Explicitly reviewed, frame-specific court/team/phase evidence enables provisional 6:0/5:1 shapes. Evidence seeking, scoped coach decisions and separate exports are implemented; canonical match events remain unchanged. The supplied real sample produced zero eligible proposals, with defensive preparation absent. See [TACTICAL_RULES.md](TACTICAL_RULES.md) for preparation contracts, exact-correction calibration, the no-overwrite batch command and remaining recognition gates.
+
+## Review local engine output inside SESEN
+
+The workstation's **Automatic analysis** tab now accepts the compact `sesen.workbench-analysis.v1` report produced by:
+
+```powershell
+python tools/local-analysis/scan_scoreboard.py --video 'C:/path/match.mp4' --ocr-model 'C:/path/crnn_en.onnx' --output 'C:/path/new-analysis' --interval 5
+python tools/local-analysis/export_workbench.py --report 'C:/path/new-analysis/scoreboard-analysis.json' --video 'C:/path/match.mp4' --output 'C:/path/workbench.json'
+python -m unittest discover -s tools/local-analysis -p test_workbench_export.py
+```
+
+The engine profile is still limited to the manually calibrated ON Sport 1280×720 source layout. Existing completed reports can be exported without rerunning inference. Export reads the original video to validate its full SHA256, then computes the existing browser head/tail/size fingerprint. No media is copied or uploaded. Browser binding uses that sampled fingerprint plus exact size and duration tolerance of 1000 ms; it is not a browser full-file integrity check. Model digest and limitations remain in the compact result.
+
+Select the matching saved local video/session in SESEN, open **Automatic analysis**, and import `workbench.json`. Source mismatches, invalid/reversed/out-of-range intervals, duplicate proposal IDs and inconsistent score changes are rejected. Open evidence to seek to the start of an interval, or create a review clip. Clip IDs are deterministic within organization/session/video/proposal scope, so retries do not create extra clip identities. These are review clips without fabricated event evidence links.
+
+Reviewed/dismissed status and coach notes are saved in a separate local Dexie database, keyed by account, organization, session and video. This is application scope separation, not encryption from someone who controls the browser profile. Importing an analysis again preserves existing decisions; importing a different analysis or restoring over existing decisions is rejected. Export the review backup before clearing browser data. This backup is separate from the existing workspace backup and does not include video. These proposals never mutate canonical event/shot statistics; confirmed events still use the existing editor. Python is not invoked automatically by selecting a browser video. Person tracks can now be imported separately as described below; ball tracks remain unsupported.
+
+## Person-track review inside the workstation
+
+Convert an existing bounded `sesen.tracking-comparison.v1` report without rerunning inference:
+
+```powershell
+python tools/local-analysis/export_tracking_workbench.py --report 'C:/path/new-comparison/comparison.json' --video 'E:/path/match.mp4' --output 'C:/path/tracking-workbench.json'
+python -m unittest discover -s tools/local-analysis -p test_tracking_workbench.py
+```
+
+FFprobe must be available. The exporter verifies the actual full source hash, size, duration and aspect ratio, and refuses existing output. Import the resulting `sesen.workbench-tracking.v1` JSON in Automatic analysis after selecting the matching saved local video/session. Browser binding checks the existing sampled fingerprint, size, duration and dimensions. The supplied sample is video 35:00–36:00 at 10 fps, 600 nominal frames and 8563 proposed boxes; these are not accuracy measurements or confirmed athletes.
+
+Show boxes, seek to Sample start, step frames and select a scene:track button or box. Pause on an observed frame to change normalized x1/y1/x2/y2, add a note, hide a proposal or restore the model box. Edits affect that frame only; they do not fill missed people, follow identities across cuts or propagate through the video. Missing observations and playback outside the bounded interval show no boxes. Video aspect/letterboxing is retained at different screen sizes. Sampling times are nominal source times, not verified decoded PTS or the game clock. Camera cuts and identities remain heuristic; full occlusion/re-identification evaluation is pending.
+
+Corrections persist locally by user/organization/session/video. IndexedDB v2 adds a tracking table while preserving OCR reviews. Export `sesen.tracking-review.v1` before clearing browser data; restore it using the same tracking import control with its matching source. Different samples and backups that would replace existing corrections are rejected. Backup files contain no video or credentials and are separate from workspace/OCR backups. Corrections are review notes, not independently validated training labels. Selecting a video still does not launch the engine automatically.
+
 ## Dense human annotation and evaluation
 
 `build_annotation_sequence.py` prepares up to 150 consecutive frames from the verified unannotated 10fps comparison derivative. It checks the derivative's SHA256, size, geometry and frame count, preserves inherited source/report hashes, records individual JPEG hashes and verifies the dense source-time grid. It refuses existing output directories. The original full match is neither copied nor rehashed here; the recorded source hash comes from the preceding verified comparison.
@@ -148,3 +183,6 @@ node tools/local-analysis/verify_review.mjs --review 'C:/path/pilot-output/revie
 The Python behavior checks cover duplicate suppression, one-to-one track assignment, cut reset, CTC repeated digits, repeated score observations, missing clock fields, replay-like score regressions and large gaps. Real-video behavior/results are recorded in `VALIDATION.md`; fixture tests alone establish no handball accuracy.
 
 Next gates are a reviewed handball evaluation set, event-time refinement around candidates, player/ball specialist models, stronger tracking, reviewed camera/replay segmentation, resumable jobs and an authenticated production review/import boundary. No model prediction should bypass that boundary into published statistics.
+# Optional unreviewed team/court preparation
+
+See [SPATIAL_PREPARATION.md](SPATIAL_PREPARATION.md) for the source-bound producer, kit grouping, seed-based camera estimates, browser import and explicit limits. This local workflow does not automatically launch when a video is selected and does not create confirmed tactical events.

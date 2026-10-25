@@ -1,402 +1,437 @@
 # Source tree
 
-This is the packaged source inventory; dependencies, credentials and generated output are excluded.
+Packaged source inventory; credentials, dependencies, media and generated output are excluded.
 
 ```text
-hbi-starter/
-  .env.example
-  .gitignore
-  .nvmrc
-  AGENTS.md
-  ARCHITECTURE.md
-  BLUEPRINT.md
-  CHANGELOG.md
-  CLAUDE.md
-  CODEX.md
-  DATA_SOURCES.md
-  DEPLOYMENT.md
-  FIRST_CODEX_PROMPT.md
-  PHASES.md
-  README.md
-  TREE.md
-  VALIDATION.md
-  ZERO_COST_LIMITS.md
-  eslint.config.mjs
-  next-env.d.ts
-  next.config.ts
-  package.json
-  playwright.config.ts
-  pnpm-lock.yaml
-  postcss.config.mjs
-  proxy.ts
-  tsconfig.json
-  tsconfig.next-isolated.json
-  vite.config.ts
-  vitest.config.ts
-  wrangler.jsonc
-  .github/workflows/ci.yml
-  app/analyst-console.css
-  app/annotations.css
-  app/brand-header.css
-  app/coaching-console.css
-  app/event-feed.css
-  app/fonts.css
-  app/globals.css
-  app/identity-images.css
-  app/intelligence-charts.css
-  app/intelligence-lists.css
-  app/intelligence-sample.css
-  app/layout.tsx
-  app/lineups.css
-  app/match-header.css
-  app/meetings.css
-  app/page.tsx
-  app/player-threats.css
-  app/reports.css
-  app/review.css
-  app/sesen.css
-  app/typography.css
-  app/video-console.css
-  app/video-settings.css
-  app/workbench.css
-  app/(auth)/login/login-form.tsx
-  app/(auth)/login/page.tsx
-  app/(platform)/layout.tsx
-  app/(platform)/data-sources/page.tsx
-  app/(platform)/matches/page.tsx
-  app/(platform)/matches/[id]/page.tsx
-  app/(platform)/meetings/page.tsx
-  app/(platform)/meetings/[id]/page.tsx
-  app/(platform)/opponents/page.tsx
-  app/(platform)/overview/page.tsx
-  app/(platform)/players/page.tsx
-  app/(platform)/players/[id]/page.tsx
-  app/(platform)/playlists/page.tsx
-  app/(platform)/playlists/[id]/page.tsx
-  app/(platform)/reports/page.tsx
-  app/(platform)/reports/[id]/page.tsx
-  app/(platform)/settings/page.tsx
-  app/(platform)/tactics/page.tsx
-  app/(platform)/tactics/[id]/page.tsx
-  app/(platform)/team/page.tsx
-  app/(platform)/video-lab/page.tsx
-  app/api/r2/complete/route.ts
-  app/api/r2/sign-read/route.ts
-  app/api/r2/sign-upload/route.ts
-  app/privacy/page.tsx
-  brand/BRAND.md
-  brand/GENERATION.md
-  brand/kit-assets.json
-  brand/preview.html
-  brand/masters/athlete-rail.png
-  brand/masters/lockup.png
-  brand/masters/mark.png
-  components/analysis/.gitkeep
-  components/brand/brand-lockup.tsx
-  components/brand/identity-image.tsx
-  components/brand/team-crest.tsx
-  components/charts/.gitkeep
-  components/opponent/.gitkeep
-  components/playlists/.gitkeep
-  components/reports/.gitkeep
-  components/shell/app-shell.tsx
-  components/shell/app-sidebar.tsx
-  components/ui/.gitkeep
-  components/video/.gitkeep
-  components/workspace/account-profile.tsx
-  components/workspace/analysis-split.tsx
-  components/workspace/analysis-timeline.tsx
-  components/workspace/analytics.tsx
-  components/workspace/annotation-library.tsx
-  components/workspace/charts.tsx
-  components/workspace/clock-calibration.tsx
-  components/workspace/controls.tsx
-  components/workspace/court.tsx
-  components/workspace/data-sources.tsx
-  components/workspace/defense-system-card.tsx
-  components/workspace/drawing.tsx
-  components/workspace/efficiency-ring.tsx
-  components/workspace/entities.tsx
-  components/workspace/event-feed.tsx
-  components/workspace/event-participants.tsx
-  components/workspace/evidence-drawer.tsx
-  components/workspace/evidence-links.tsx
-  components/workspace/evidence-trend.tsx
-  components/workspace/identity-url-field.tsx
-  components/workspace/intelligence-keepers.tsx
-  components/workspace/intelligence-list-card.tsx
-  components/workspace/intelligence-sample.tsx
-  components/workspace/lineup-editors.tsx
-  components/workspace/lineup-overview.tsx
-  components/workspace/match-context.tsx
-  components/workspace/match-dashboard.tsx
-  components/workspace/match-header-actions.tsx
-  components/workspace/match-hub.tsx
-  components/workspace/meetings.tsx
-  components/workspace/player-threat-card.tsx
-  components/workspace/player-threat-row.tsx
-  components/workspace/provider.tsx
-  components/workspace/quick-tag-dock.tsx
-  components/workspace/reference-match.tsx
-  components/workspace/reports.tsx
-  components/workspace/review-queue.tsx
-  components/workspace/session-analysis-rail.tsx
-  components/workspace/session-report.tsx
-  components/workspace/session-settings.tsx
-  components/workspace/session-statistics.tsx
-  components/workspace/settings.tsx
-  components/workspace/shell.tsx
-  components/workspace/shot-detail-panel.tsx
-  components/workspace/shot-profile-card.tsx
-  components/workspace/shot-zone-card.tsx
-  components/workspace/spatial-map.tsx
-  components/workspace/tactics.tsx
-  components/workspace/tag-template.tsx
-  components/workspace/team.tsx
-  components/workspace/threat-profile.tsx
-  components/workspace/video-source-settings.tsx
-  components/workspace/video-transport.tsx
-  components/workspace/video-workspace.tsx
-  components/workspace/youtube-player.tsx
-  design-system/MASTER.md
-  docs/ui-redesign/IDENTITY_SOURCES.md
-  docs/ui-redesign/REFERENCE_AUDIT.md
-  docs/ui-redesign/RESEARCH.md
-  docs/ui-redesign/match-template.csv
-  docs/ui-redesign/roster-template.csv
-  features/analysis/.gitkeep
-  features/analysis/contracts.ts
-  features/analysis/intelligence-scope.ts
-  features/analysis/labels.ts
-  features/analysis/match-dashboard.ts
-  features/analysis/review-queue.ts
-  features/analysis/session-statistics.ts
-  features/analysis/shot-profile.ts
-  features/analysis/shot-zone-sample.ts
-  features/analysis/spatial-sample.ts
-  features/analysis/workbench.ts
-  features/analytics/.gitkeep
-  features/auth/.gitkeep
-  features/data-sources/audit.json
-  features/data-sources/catalog.ts
-  features/data-sources/wikidata.ts
-  features/insights/.gitkeep
-  features/matches/.gitkeep
-  features/matches/reference-match.ts
-  features/opponents/.gitkeep
-  features/organizations/.gitkeep
-  features/players/.gitkeep
-  features/players/lineup-snapshot.ts
-  features/players/position-metrics.ts
-  features/playlists/.gitkeep
-  features/presentations/item.ts
-  features/reports/.gitkeep
-  features/reports/export.ts
-  features/reports/session-brief.ts
-  features/seasons/.gitkeep
-  features/tactics/drawing-motion.ts
-  features/teams/.gitkeep
-  features/video/source.ts
-  features/videos/.gitkeep
-  features/workspace/backup.ts
-  features/workspace/header-context.ts
-  features/workspace/header-date.ts
-  features/workspace/profile-input.ts
-  features/workspace/provider.tsx
-  features/workspace/sync-errors.ts
-  hooks/.gitkeep
-  lib/brand.ts
-  lib/analytics/.gitkeep
-  lib/analytics/metrics.ts
-  lib/brand/identity-image.ts
-  lib/env/schema.ts
-  lib/local/database.ts
-  lib/permissions/.gitkeep
-  lib/permissions/roles.ts
-  lib/r2/.gitkeep
-  lib/r2/server.ts
-  lib/supabase/client.ts
-  lib/supabase/database.types.ts
-  lib/supabase/proxy.ts
-  lib/supabase/server.ts
-  lib/video/.gitkeep
-  lib/video/fingerprint.ts
-  lib/video/local-sources.ts
-  lib/video/time.ts
-  lib/video/youtube.ts
-  public/favicon.ico
-  public/manifest.webmanifest
-  public/third-party-ui-notices.txt
-  public/brand/apple-touch-icon.png
-  public/brand/athlete-rail.webp
-  public/brand/favicon.ico
-  public/brand/icon-16.png
-  public/brand/icon-192.png
-  public/brand/icon-32.png
-  public/brand/icon-48.png
-  public/brand/icon-512.png
-  public/brand/maskable-192.png
-  public/brand/maskable-512.png
-  public/brand/sesen-lockup.png
-  public/brand/sesen-lockup.webp
-  public/brand/sesen-mark.png
-  public/brand/social-card.png
-  public/brand/courts/handball-court-full.svg
-  public/brand/courts/handball-court-half.svg
-  public/brand/placeholders/coach-neutral.svg
-  public/brand/placeholders/player-neutral.svg
-  public/brand/placeholders/team-neutral.svg
-  public/fonts/ibm-plex-sans-arabic-arabic-400.woff2
-  public/fonts/ibm-plex-sans-arabic-arabic-500.woff2
-  public/fonts/ibm-plex-sans-arabic-arabic-600.woff2
-  public/fonts/ibm-plex-sans-arabic-arabic-700.woff2
-  public/fonts/manifest.json
-  public/fonts/roboto-condensed-latin-400-700.woff2
-  public/fonts/roboto-condensed-latin-ext-400-700.woff2
-  public/fonts/licenses/ibmplexsansarabic-OFL.txt
-  public/fonts/licenses/robotocondensed-OFL.txt
-  scripts/.gitkeep
-  scripts/build-brand-assets.mjs
-  scripts/build-pages.mjs
-  scripts/catalog-types.mjs
-  scripts/mock-supabase.mjs
-  scripts/verify-db.mjs
-  scripts/verify-fonts.mjs
-  scripts/verify-package.py
-  scripts/verify-wikidata-live.mjs
-  stores/.gitkeep
-  stores/media-consent.ts
-  supabase/config.toml
-  supabase/seed.sql
-  supabase/migrations/0001_extensions.sql
-  supabase/migrations/0002_core.sql
-  supabase/migrations/0003_matches.sql
-  supabase/migrations/0004_analysis.sql
-  supabase/migrations/0005_playlists_reports.sql
-  supabase/migrations/0006_indexes.sql
-  supabase/migrations/0007_rls.sql
-  supabase/migrations/0008_analytics_views.sql
-  supabase/migrations/0009_rpc.sql
-  supabase/migrations/0010_domain_integrity.sql
-  supabase/migrations/0011_coaching_domain.sql
-  supabase/migrations/0012_integrity_and_permissions.sql
-  supabase/migrations/0013_sync_and_analytics.sql
-  supabase/migrations/0014_workspace_operations.sql
-  supabase/migrations/0015_optional_sharing.sql
-  supabase/migrations/0016_tactical_analytics.sql
-  supabase/migrations/0017_online_video_mode.sql
-  supabase/migrations/0018_online_video_identity.sql
-  supabase/migrations/0019_video_time_and_evidence.sql
-  supabase/migrations/0020_r2_storage_hardening.sql
-  supabase/tests/security.test.sql
-  tests/setup.ts
-  tests/e2e/annotation-assertions.ts
-  tests/e2e/brand-header-assertions.ts
-  tests/e2e/conflict.spec.ts
-  tests/e2e/console.spec.ts
-  tests/e2e/data-sources.spec.ts
-  tests/e2e/dense-intelligence.spec.ts
-  tests/e2e/efficiency-card-assertions.ts
-  tests/e2e/event-feed-assertions.ts
-  tests/e2e/fixture.ts
-  tests/e2e/header-assertions.ts
-  tests/e2e/header-details-assertions.ts
-  tests/e2e/history-assertions.ts
-  tests/e2e/identity-images.spec.ts
-  tests/e2e/intelligence-chart-assertions.ts
-  tests/e2e/intelligence-list-assertions.ts
-  tests/e2e/intelligence-sample-assertions.ts
-  tests/e2e/lineup-assertions.ts
-  tests/e2e/online-video.spec.ts
-  tests/e2e/player-list-assertions.ts
-  tests/e2e/presentation-assertions.ts
-  tests/e2e/reports.spec.ts
-  tests/e2e/review-assertions.ts
-  tests/e2e/session-statistics-assertions.ts
-  tests/e2e/smoke.spec.ts
-  tests/e2e/spatial-map-assertions.ts
-  tests/e2e/statistics-view-captures.ts
-  tests/e2e/timeline-assertions.ts
-  tests/e2e/transport-assertions.ts
-  tests/e2e/transport.spec.ts
-  tests/e2e/typography-assertions.ts
-  tests/e2e/video-settings-assertions.ts
-  tests/e2e/video-settings.spec.ts
-  tests/e2e/video.spec.ts
-  tests/e2e/workflow.spec.ts
-  tests/fixtures/console-data.mjs
-  tests/fixtures/dense-intelligence.mjs
-  tests/fixtures/wikidata-known-player.json
-  tests/integration/.gitkeep
-  tests/unit/analysis-timeline.test.tsx
-  tests/unit/backup.test.ts
-  tests/unit/data-sources.test.ts
-  tests/unit/domain.test.ts
-  tests/unit/drawing.test.tsx
-  tests/unit/efficiency-cards.test.tsx
-  tests/unit/event-feed.test.tsx
-  tests/unit/header-context.test.ts
-  tests/unit/header-date.test.ts
-  tests/unit/identity-image.test.tsx
-  tests/unit/intelligence-charts.test.tsx
-  tests/unit/intelligence-list-card.test.tsx
-  tests/unit/intelligence-sample.test.tsx
-  tests/unit/intelligence-scope.test.ts
-  tests/unit/lineup-editors.test.tsx
-  tests/unit/lineup-snapshot.test.ts
-  tests/unit/local.test.ts
-  tests/unit/match-dashboard.test.ts
-  tests/unit/meeting-item.test.ts
-  tests/unit/online-source.test.ts
-  tests/unit/player-threat-card.test.tsx
-  tests/unit/positions.test.ts
-  tests/unit/quick-tag-dock.test.tsx
-  tests/unit/reports.test.ts
-  tests/unit/review-queue.test.tsx
-  tests/unit/session-brief.test.ts
-  tests/unit/session-statistics-ui.test.tsx
-  tests/unit/session-statistics.test.ts
-  tests/unit/shot-profile.test.ts
-  tests/unit/smoke.test.ts
-  tests/unit/spatial-sample.test.ts
-  tests/unit/sync-errors.test.ts
-  tests/unit/video-source-settings.test.tsx
-  tests/unit/video-source.test.ts
-  tests/unit/workbench.test.ts
-  tools/local-analysis/NOTICE.md
-  tools/local-analysis/README.md
-  tools/local-analysis/annotation_contract.mjs
-  tools/local-analysis/annotation_dataset.py
-  tools/local-analysis/annotation_review.css
-  tools/local-analysis/annotation_review.html
-  tools/local-analysis/annotation_review.mjs
-  tools/local-analysis/build_annotation_sequence.py
-  tools/local-analysis/build_review.py
-  tools/local-analysis/byte_tracker.py
-  tools/local-analysis/compare_tracking.py
-  tools/local-analysis/detector.py
-  tools/local-analysis/export_mot.py
-  tools/local-analysis/probe_spatial.py
-  tools/local-analysis/render_comparison.py
-  tools/local-analysis/render_preview.py
-  tools/local-analysis/requirements-tracking.txt
-  tools/local-analysis/requirements.txt
-  tools/local-analysis/review-template.html
-  tools/local-analysis/scan_scoreboard.py
-  tools/local-analysis/scoreboard.py
-  tools/local-analysis/spatial_proposals.py
-  tools/local-analysis/spatial_review.html
-  tools/local-analysis/test_analysis.py
-  tools/local-analysis/test_annotations.py
-  tools/local-analysis/test_mot.py
-  tools/local-analysis/test_spatial.py
-  tools/local-analysis/test_tracking.py
-  tools/local-analysis/tracking_review.html
-  tools/local-analysis/validate_calibration.py
-  tools/local-analysis/verify_annotation_review.mjs
-  tools/local-analysis/verify_review.mjs
-  tools/local-analysis/verify_spatial_review.mjs
-  tools/local-analysis/verify_tracking_review.mjs
-  types/.gitkeep
-  types/workspace.ts
+.env.example
+.gitattributes
+.github/workflows/ci.yml
+.gitignore
+.nvmrc
+AGENTS.md
+ARCHITECTURE.md
+BLUEPRINT.md
+CHANGELOG.md
+CLAUDE.md
+CODEX.md
+DATA_SOURCES.md
+DEPLOYMENT.md
+FIRST_CODEX_PROMPT.md
+PHASES.md
+README.md
+TREE.md
+VALIDATION.md
+ZERO_COST_LIMITS.md
+app/(auth)/login/login-form.tsx
+app/(auth)/login/page.tsx
+app/(platform)/data-sources/page.tsx
+app/(platform)/layout.tsx
+app/(platform)/matches/[id]/page.tsx
+app/(platform)/matches/page.tsx
+app/(platform)/meetings/[id]/page.tsx
+app/(platform)/meetings/page.tsx
+app/(platform)/opponents/page.tsx
+app/(platform)/overview/page.tsx
+app/(platform)/players/[id]/page.tsx
+app/(platform)/players/page.tsx
+app/(platform)/playlists/[id]/page.tsx
+app/(platform)/playlists/page.tsx
+app/(platform)/reports/[id]/page.tsx
+app/(platform)/reports/page.tsx
+app/(platform)/settings/page.tsx
+app/(platform)/tactics/[id]/page.tsx
+app/(platform)/tactics/page.tsx
+app/(platform)/team/page.tsx
+app/(platform)/video-lab/page.tsx
+app/analyst-console.css
+app/annotations.css
+app/api/r2/complete/route.ts
+app/api/r2/sign-read/route.ts
+app/api/r2/sign-upload/route.ts
+app/brand-header.css
+app/coaching-console.css
+app/event-feed.css
+app/fonts.css
+app/globals.css
+app/identity-images.css
+app/intelligence-charts.css
+app/intelligence-lists.css
+app/intelligence-sample.css
+app/layout.tsx
+app/lineups.css
+app/local-analysis.css
+app/match-header.css
+app/meetings.css
+app/page.tsx
+app/player-threats.css
+app/privacy/page.tsx
+app/reports.css
+app/review.css
+app/sesen.css
+app/typography.css
+app/video-console.css
+app/video-settings.css
+app/workbench.css
+brand/BRAND.md
+brand/GENERATION.md
+brand/kit-assets.json
+brand/masters/athlete-rail.png
+brand/masters/lockup.png
+brand/masters/mark.png
+brand/preview.html
+components/analysis/.gitkeep
+components/brand/brand-lockup.tsx
+components/brand/identity-image.tsx
+components/brand/team-crest.tsx
+components/charts/.gitkeep
+components/opponent/.gitkeep
+components/playlists/.gitkeep
+components/reports/.gitkeep
+components/shell/app-shell.tsx
+components/shell/app-sidebar.tsx
+components/ui/.gitkeep
+components/video/.gitkeep
+components/workspace/account-profile.tsx
+components/workspace/analysis-split.tsx
+components/workspace/analysis-timeline.tsx
+components/workspace/analytics.tsx
+components/workspace/annotation-library.tsx
+components/workspace/charts.tsx
+components/workspace/clock-calibration.tsx
+components/workspace/controls.tsx
+components/workspace/court.tsx
+components/workspace/data-sources.tsx
+components/workspace/defense-system-card.tsx
+components/workspace/drawing.tsx
+components/workspace/efficiency-ring.tsx
+components/workspace/entities.tsx
+components/workspace/event-feed.tsx
+components/workspace/event-participants.tsx
+components/workspace/evidence-drawer.tsx
+components/workspace/evidence-links.tsx
+components/workspace/evidence-trend.tsx
+components/workspace/identity-url-field.tsx
+components/workspace/intelligence-keepers.tsx
+components/workspace/intelligence-list-card.tsx
+components/workspace/intelligence-sample.tsx
+components/workspace/lineup-editors.tsx
+components/workspace/lineup-overview.tsx
+components/workspace/local-analysis-review.tsx
+components/workspace/match-context.tsx
+components/workspace/match-dashboard.tsx
+components/workspace/match-header-actions.tsx
+components/workspace/match-hub.tsx
+components/workspace/meetings.tsx
+components/workspace/player-threat-card.tsx
+components/workspace/player-threat-row.tsx
+components/workspace/provider.tsx
+components/workspace/quick-tag-dock.tsx
+components/workspace/reference-match.tsx
+components/workspace/reports.tsx
+components/workspace/review-queue.tsx
+components/workspace/session-analysis-rail.tsx
+components/workspace/session-report.tsx
+components/workspace/session-settings.tsx
+components/workspace/session-statistics.tsx
+components/workspace/settings.tsx
+components/workspace/shell.tsx
+components/workspace/shot-detail-panel.tsx
+components/workspace/shot-profile-card.tsx
+components/workspace/shot-zone-card.tsx
+components/workspace/spatial-map.tsx
+components/workspace/spatial-preparation.tsx
+components/workspace/tactical-proposals.tsx
+components/workspace/tactics.tsx
+components/workspace/tag-template.tsx
+components/workspace/team.tsx
+components/workspace/threat-profile.tsx
+components/workspace/tracking-overlay.tsx
+components/workspace/tracking-review.tsx
+components/workspace/video-source-settings.tsx
+components/workspace/video-transport.tsx
+components/workspace/video-workspace.tsx
+components/workspace/youtube-player.tsx
+design-system/MASTER.md
+docs/ui-redesign/IDENTITY_SOURCES.md
+docs/ui-redesign/REFERENCE_AUDIT.md
+docs/ui-redesign/RESEARCH.md
+docs/ui-redesign/match-template.csv
+docs/ui-redesign/roster-template.csv
+eslint.config.mjs
+features/analysis/.gitkeep
+features/analysis/contracts.ts
+features/analysis/intelligence-scope.ts
+features/analysis/labels.ts
+features/analysis/local-results.ts
+features/analysis/match-dashboard.ts
+features/analysis/review-queue.ts
+features/analysis/session-statistics.ts
+features/analysis/shot-profile.ts
+features/analysis/shot-zone-sample.ts
+features/analysis/spatial-preparation.ts
+features/analysis/spatial-sample.ts
+features/analysis/tactical-proposals.ts
+features/analysis/tracking-results.ts
+features/analysis/use-tracking-review.ts
+features/analysis/workbench.ts
+features/analytics/.gitkeep
+features/auth/.gitkeep
+features/data-sources/audit.json
+features/data-sources/catalog.ts
+features/data-sources/wikidata.ts
+features/insights/.gitkeep
+features/matches/.gitkeep
+features/matches/reference-match.ts
+features/opponents/.gitkeep
+features/organizations/.gitkeep
+features/players/.gitkeep
+features/players/lineup-snapshot.ts
+features/players/position-metrics.ts
+features/playlists/.gitkeep
+features/presentations/item.ts
+features/reports/.gitkeep
+features/reports/export.ts
+features/reports/session-brief.ts
+features/seasons/.gitkeep
+features/tactics/drawing-motion.ts
+features/teams/.gitkeep
+features/video/source.ts
+features/videos/.gitkeep
+features/workspace/backup.ts
+features/workspace/header-context.ts
+features/workspace/header-date.ts
+features/workspace/profile-input.ts
+features/workspace/provider.tsx
+features/workspace/sync-errors.ts
+hooks/.gitkeep
+lib/analytics/.gitkeep
+lib/analytics/metrics.ts
+lib/brand.ts
+lib/brand/identity-image.ts
+lib/env/schema.ts
+lib/local/analysis-reviews.ts
+lib/local/database.ts
+lib/permissions/.gitkeep
+lib/permissions/roles.ts
+lib/r2/.gitkeep
+lib/r2/server.ts
+lib/supabase/client.ts
+lib/supabase/database.types.ts
+lib/supabase/proxy.ts
+lib/supabase/server.ts
+lib/video/.gitkeep
+lib/video/fingerprint.ts
+lib/video/local-sources.ts
+lib/video/time.ts
+lib/video/youtube.ts
+next-env.d.ts
+next.config.ts
+package.json
+playwright.config.ts
+pnpm-lock.yaml
+postcss.config.mjs
+proxy.ts
+public/brand/apple-touch-icon.png
+public/brand/athlete-rail.webp
+public/brand/courts/handball-court-full.svg
+public/brand/courts/handball-court-half.svg
+public/brand/favicon.ico
+public/brand/icon-16.png
+public/brand/icon-192.png
+public/brand/icon-32.png
+public/brand/icon-48.png
+public/brand/icon-512.png
+public/brand/maskable-192.png
+public/brand/maskable-512.png
+public/brand/placeholders/coach-neutral.svg
+public/brand/placeholders/player-neutral.svg
+public/brand/placeholders/team-neutral.svg
+public/brand/sesen-lockup.png
+public/brand/sesen-lockup.webp
+public/brand/sesen-mark.png
+public/brand/social-card.png
+public/favicon.ico
+public/fonts/ibm-plex-sans-arabic-arabic-400.woff2
+public/fonts/ibm-plex-sans-arabic-arabic-500.woff2
+public/fonts/ibm-plex-sans-arabic-arabic-600.woff2
+public/fonts/ibm-plex-sans-arabic-arabic-700.woff2
+public/fonts/licenses/ibmplexsansarabic-OFL.txt
+public/fonts/licenses/robotocondensed-OFL.txt
+public/fonts/manifest.json
+public/fonts/roboto-condensed-latin-400-700.woff2
+public/fonts/roboto-condensed-latin-ext-400-700.woff2
+public/manifest.webmanifest
+public/third-party-ui-notices.txt
+scripts/.gitkeep
+scripts/build-brand-assets.mjs
+scripts/build-pages.mjs
+scripts/catalog-types.mjs
+scripts/extract-tactics.mjs
+scripts/mock-supabase.mjs
+scripts/package-local-review.py
+scripts/verify-db.mjs
+scripts/verify-fonts.mjs
+scripts/verify-package.py
+scripts/verify-wikidata-live.mjs
+stores/.gitkeep
+stores/media-consent.ts
+supabase/config.toml
+supabase/migrations/0001_extensions.sql
+supabase/migrations/0002_core.sql
+supabase/migrations/0003_matches.sql
+supabase/migrations/0004_analysis.sql
+supabase/migrations/0005_playlists_reports.sql
+supabase/migrations/0006_indexes.sql
+supabase/migrations/0007_rls.sql
+supabase/migrations/0008_analytics_views.sql
+supabase/migrations/0009_rpc.sql
+supabase/migrations/0010_domain_integrity.sql
+supabase/migrations/0011_coaching_domain.sql
+supabase/migrations/0012_integrity_and_permissions.sql
+supabase/migrations/0013_sync_and_analytics.sql
+supabase/migrations/0014_workspace_operations.sql
+supabase/migrations/0015_optional_sharing.sql
+supabase/migrations/0016_tactical_analytics.sql
+supabase/migrations/0017_online_video_mode.sql
+supabase/migrations/0018_online_video_identity.sql
+supabase/migrations/0019_video_time_and_evidence.sql
+supabase/migrations/0020_r2_storage_hardening.sql
+supabase/seed.sql
+supabase/tests/security.test.sql
+tests/e2e/annotation-assertions.ts
+tests/e2e/brand-header-assertions.ts
+tests/e2e/conflict.spec.ts
+tests/e2e/console.spec.ts
+tests/e2e/data-sources.spec.ts
+tests/e2e/dense-intelligence.spec.ts
+tests/e2e/efficiency-card-assertions.ts
+tests/e2e/event-feed-assertions.ts
+tests/e2e/fixture.ts
+tests/e2e/header-assertions.ts
+tests/e2e/header-details-assertions.ts
+tests/e2e/history-assertions.ts
+tests/e2e/identity-images.spec.ts
+tests/e2e/intelligence-chart-assertions.ts
+tests/e2e/intelligence-list-assertions.ts
+tests/e2e/intelligence-sample-assertions.ts
+tests/e2e/lineup-assertions.ts
+tests/e2e/local-analysis.spec.ts
+tests/e2e/online-video.spec.ts
+tests/e2e/player-list-assertions.ts
+tests/e2e/presentation-assertions.ts
+tests/e2e/reports.spec.ts
+tests/e2e/review-assertions.ts
+tests/e2e/session-statistics-assertions.ts
+tests/e2e/smoke.spec.ts
+tests/e2e/spatial-map-assertions.ts
+tests/e2e/statistics-view-captures.ts
+tests/e2e/timeline-assertions.ts
+tests/e2e/tracking.spec.ts
+tests/e2e/transport-assertions.ts
+tests/e2e/transport.spec.ts
+tests/e2e/typography-assertions.ts
+tests/e2e/video-settings-assertions.ts
+tests/e2e/video-settings.spec.ts
+tests/e2e/video.spec.ts
+tests/e2e/workflow.spec.ts
+tests/fixtures/console-data.mjs
+tests/fixtures/dense-intelligence.mjs
+tests/fixtures/spatial-preparation.ts
+tests/fixtures/tactical-results.ts
+tests/fixtures/tracking-results.ts
+tests/fixtures/wikidata-known-player.json
+tests/integration/.gitkeep
+tests/setup.ts
+tests/unit/analysis-timeline.test.tsx
+tests/unit/backup.test.ts
+tests/unit/data-sources.test.ts
+tests/unit/domain.test.ts
+tests/unit/drawing.test.tsx
+tests/unit/efficiency-cards.test.tsx
+tests/unit/event-feed.test.tsx
+tests/unit/header-context.test.ts
+tests/unit/header-date.test.ts
+tests/unit/identity-image.test.tsx
+tests/unit/intelligence-charts.test.tsx
+tests/unit/intelligence-list-card.test.tsx
+tests/unit/intelligence-sample.test.tsx
+tests/unit/intelligence-scope.test.ts
+tests/unit/lineup-editors.test.tsx
+tests/unit/lineup-snapshot.test.ts
+tests/unit/local-analysis-review.test.tsx
+tests/unit/local-results.test.ts
+tests/unit/local.test.ts
+tests/unit/match-dashboard.test.ts
+tests/unit/meeting-item.test.ts
+tests/unit/online-source.test.ts
+tests/unit/player-threat-card.test.tsx
+tests/unit/positions.test.ts
+tests/unit/quick-tag-dock.test.tsx
+tests/unit/reports.test.ts
+tests/unit/review-queue.test.tsx
+tests/unit/session-brief.test.ts
+tests/unit/session-statistics-ui.test.tsx
+tests/unit/session-statistics.test.ts
+tests/unit/shot-profile.test.ts
+tests/unit/smoke.test.ts
+tests/unit/spatial-preparation-view.test.tsx
+tests/unit/spatial-preparation.test.ts
+tests/unit/spatial-sample.test.ts
+tests/unit/sync-errors.test.ts
+tests/unit/tactical-proposals.test.ts
+tests/unit/tactical-review.test.tsx
+tests/unit/tracking-results.test.ts
+tests/unit/tracking-review.test.tsx
+tests/unit/video-source-settings.test.tsx
+tests/unit/video-source.test.ts
+tests/unit/workbench.test.ts
+tools/local-analysis/NOTICE.md
+tools/local-analysis/README.md
+tools/local-analysis/SPATIAL_PREPARATION.md
+tools/local-analysis/TACTICAL_RULES.md
+tools/local-analysis/annotation_contract.mjs
+tools/local-analysis/annotation_dataset.py
+tools/local-analysis/annotation_review.css
+tools/local-analysis/annotation_review.html
+tools/local-analysis/annotation_review.mjs
+tools/local-analysis/build_annotation_sequence.py
+tools/local-analysis/build_review.py
+tools/local-analysis/byte_tracker.py
+tools/local-analysis/compare_tracking.py
+tools/local-analysis/detector.py
+tools/local-analysis/export_mot.py
+tools/local-analysis/export_tracking_workbench.py
+tools/local-analysis/export_workbench.py
+tools/local-analysis/prepare_tactical_sequence.py
+tools/local-analysis/probe_spatial.py
+tools/local-analysis/render_comparison.py
+tools/local-analysis/render_preview.py
+tools/local-analysis/requirements-tracking.txt
+tools/local-analysis/requirements.txt
+tools/local-analysis/review-template.html
+tools/local-analysis/scan_scoreboard.py
+tools/local-analysis/scoreboard.py
+tools/local-analysis/spatial_proposals.py
+tools/local-analysis/spatial_review.html
+tools/local-analysis/test_analysis.py
+tools/local-analysis/test_annotations.py
+tools/local-analysis/test_mot.py
+tools/local-analysis/test_spatial.py
+tools/local-analysis/test_tactical_preparation.py
+tools/local-analysis/test_tracking.py
+tools/local-analysis/test_tracking_workbench.py
+tools/local-analysis/test_workbench_export.py
+tools/local-analysis/tracking_review.html
+tools/local-analysis/validate_calibration.py
+tools/local-analysis/verify_annotation_review.mjs
+tools/local-analysis/verify_review.mjs
+tools/local-analysis/verify_spatial_review.mjs
+tools/local-analysis/verify_tracking_review.mjs
+tsconfig.json
+tsconfig.next-isolated.json
+types/.gitkeep
+types/workspace.ts
+vite.config.ts
+vitest.config.ts
+wrangler.jsonc
 ```
