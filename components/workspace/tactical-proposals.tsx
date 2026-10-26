@@ -53,6 +53,7 @@ export function TacticalProposals({ scope, draft, isAvailable, onSeek, timeMs }:
         tracking_model_sha256: draft.report.engine.model_sha256 },
       evidence_basis: { corrections: draft.corrections, ground: draft.tactics?.ground, preparation: draft.tactics?.preparation },
       time_basis: draft.report.time_basis, proposals: result.data.proposals,
+      diagnostics: result.data.diagnostics,
       decisions: draft.tactics?.decisions ?? {}, truncated: result.data.truncated,
       limitations: ["Review-only visual/rule proposals; no canonical events or statistics", "Path crossings do not establish attacking tactics or ball possession"] })], { type: "application/json" });
     const url = URL.createObjectURL(blob), link = document.createElement("a");
@@ -65,6 +66,26 @@ export function TacticalProposals({ scope, draft, isAvailable, onSeek, timeMs }:
         "Reviewable rule proposals, not confirmed tactical analysis. Visual crossings may involve opponents or officials. Detection support is not the probability of a correct tactic.")}</p></header>
     {(result.error || action.error) && <p role="alert">{result.error || action.error}</p>}
     <p aria-live="polite">{result.data?.proposals.length ?? 0} {w.t("اقتراحات من العينة الحالية", "proposals from the current sample")}</p>
+    {result.data && <details data-slot="tactical-evidence-coverage">
+      <summary>{w.t("جودة واستمرارية أدلة الاستخراج", "Extraction evidence coverage and continuity")}</summary>
+      <p>{w.t("هذه أعداد من العينة الحالية، وليست قياسًا لدقة النموذج أو لهوية اللاعبين. الانقطاع قد يكون بسبب فقدان المسار أو حجب القدم أو اختلاف العمق والحجم في الصورة.",
+        "These are current-sample counts, not model accuracy or athlete identities. A run may break because a track is missing, a foot is unusable, or image depth/scale changes.")}</p>
+      <dl>
+        <dt>{w.t("رصدات صالحة لقاعدة الحركة / كل المربعات", "Usable motion observations / all boxes")}</dt>
+        <dd>{result.data.diagnostics.usable_observations} / {result.data.diagnostics.observed_boxes}</dd>
+        <dt>{w.t("إطارات بأزواج قابلة للمقارنة / العينة", "Frames with comparable pairs / sample")}</dt>
+        <dd>{result.data.diagnostics.frames_with_comparable_pairs} / {result.data.diagnostics.sample_frames}</dd>
+        <dt>{w.t("تغييرات لقطة الكاميرا", "Camera cuts")}</dt><dd>{result.data.diagnostics.camera_cuts}</dd>
+        <dt>{w.t("انقطاعات أزواج المسارات بسبب الرصد أو الهندسة", "Pair runs interrupted by observations or geometry")}</dt>
+        <dd>{result.data.diagnostics.pair_runs_ended_by_missing_or_geometry}</dd>
+        <dt>{w.t("انعكاسات ترتيب مرئية داخل نوافذ القاعدة", "Observed order reversals within rule windows")}</dt>
+        <dd>{result.data.diagnostics.observed_order_reversals}</dd>
+        <dt>{w.t("إطارات ملعب مُراجعة / معايرة تقديرية", "Reviewed court frames / estimated calibration")}</dt>
+        <dd>{result.data.diagnostics.reviewed_ground_frames} / {result.data.diagnostics.estimated_calibrated_frames}</dd>
+      </dl>
+      {!result.data.proposals.length && <p>{w.t("لم تتحقق شروط القواعد في الأدلة المتاحة. هذا لا يعني غياب التكتيك من المباراة؛ راجع استمرارية التتبّع ومعايرة الملعب وتأكيد الفريق والمرحلة.",
+        "Available evidence did not satisfy the rules. This does not mean the match has no tactics; review track continuity, court calibration, teams and phase.")}</p>}
+    </details>}
     {!result.data?.defense_ready && <p className="notice">{w.t("استخراج الدفاع متوقف: نحتاج مواقع أرضية مُعايرة لكل إطار، وتأكيد الفريق والمرحلة. لا نستنتج 6:0 أو 5:1 من مربعات الصورة.",
       "Defensive extraction is gated: frame-specific reviewed court positions, teams and phase are required. Image boxes alone cannot establish 6:0 or 5:1.")}</p>}
     <div className="toolbar"><label>{w.t("استيراد أدلة الملعب المُراجعة", "Import reviewed court evidence")}

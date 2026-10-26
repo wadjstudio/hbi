@@ -7,6 +7,7 @@ import { DrawingEditor } from "./drawing";
 import { AnnotationLibrary } from "./annotation-library";
 import { ReviewQueue } from "./review-queue";
 import { LocalAnalysisReview } from "./local-analysis-review";
+import { CoachClips } from "./coach-clips";
 import { proposalClipId, reviewKey } from "@/features/analysis/local-results";
 import { useTrackingReview } from "@/features/analysis/use-tracking-review";
 import { TrackingOverlay } from "./tracking-overlay";
@@ -1402,6 +1403,7 @@ export function VideoWorkspace({
           "comparison",
           "reports",
           "annotations",
+          "clips",
           "automatic",
           "review",
         ].map((v) => (
@@ -1416,6 +1418,7 @@ export function VideoWorkspace({
                 comparison: "المقارنة",
                 reports: "التقارير",
                 annotations: "الرسومات",
+                clips: "المقاطع والاجتماع",
                 review: "المراجعة",
                 automatic: "التحليل التلقائي",
               }[v] ?? v,
@@ -1428,6 +1431,7 @@ export function VideoWorkspace({
                 comparison: "Comparison",
                 reports: "Reports",
                 annotations: "Annotations",
+                clips: "Clips & meeting",
                 review: "Review",
                 automatic: "Automatic analysis",
               }[v] ?? v,
@@ -1887,7 +1891,14 @@ export function VideoWorkspace({
           )}
         </fieldset>
       </details>
-      <Tabs.Content value={tab} key={tab}>
+      <Tabs.Content value="clips" forceMount hidden={tab !== "clips"}>
+        {video && sid ? <CoachClips key={trackingScope}
+          scope={{ organizationId: w.org, matchId, sessionId: sid, videoId: video.id }}
+          timeMs={time} isAvailable={available} captureTime={captureTime}
+          onSeek={(ms) => { pause(); seek(ms); }} /> :
+          <Notice>{w.t("اختر جلسة وفيديو أولًا لحفظ اللقطات.", "Select a session and video before saving clips.")}</Notice>}
+      </Tabs.Content>
+      {tab !== "clips" && <Tabs.Content value={tab} key={tab}>
         {(["players", "teams", "comparison", "reports"] as const).map(
           (view) =>
             tab === view && (
@@ -2102,7 +2113,7 @@ export function VideoWorkspace({
             />
           </Panel>
         )}
-      </Tabs.Content>
+      </Tabs.Content>}
       <Link href="/playlists">
         {w.t("قوائم المقاطع والاجتماعات", "Clips, playlists & meetings")} →
       </Link>

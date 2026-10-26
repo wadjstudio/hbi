@@ -20,6 +20,33 @@ function estimatedDefenseFixture() {
 }
 
 describe("review-only tactical rules", () => {
+  it("exports evidence coverage without turning diagnostics into events or probabilities", () => {
+    const report = crossingFixture();
+    const result = extractTacticalProposals(report, {}, undefined, preparationFixture());
+    expect(result.diagnostics).toMatchObject({ sample_frames: 21, observed_boxes: 42,
+      usable_observations: 42, frames_with_comparable_pairs: 21, camera_cuts: 0,
+      observed_order_reversals: 1, reviewed_ground_frames: 0, estimated_calibrated_frames: 21,
+      estimated_kit_observations: 42 });
+    expect(result.proposals[0]!.kind).toBe("crossing_motion");
+    expect(result).not.toHaveProperty("events"); expect(result.diagnostics).not.toHaveProperty("accuracy");
+  });
+  it("distinguishes missing usable observations, cut boundaries and reviewed versus estimated ground", () => {
+    const hidden = crossingFixture();
+    const corrections = { "10:0:1": { frame_index: 10, scene: 0, track_id: 1, box: null, note: "Occluded" } };
+    const corrected = extractTacticalProposals(hidden, corrections);
+    expect(corrected.diagnostics.usable_observations).toBe(41);
+    expect(corrected.diagnostics.pair_runs_ended_by_missing_or_geometry).toBe(1);
+    expect(corrected.proposals).toEqual([]);
+    const cut = crossingFixture(); cut.frames.slice(10).forEach((f) => { f.scene = 1; });
+    expect(extractTacticalProposals(cut).diagnostics).toMatchObject({ camera_cuts: 1,
+      pair_runs_ended_at_cut: 1, observed_order_reversals: 0 });
+    const low = crossingFixture(); low.frames.forEach((f) => f.persons.forEach((p) => { p.score = .3; }));
+    expect(extractTacticalProposals(low).diagnostics).toMatchObject({ usable_observations: 0,
+      frames_without_usable_people: 21, frames_with_comparable_pairs: 0 });
+    const { report, ground } = defenseFixture();
+    expect(extractTacticalProposals(report, {}, ground).diagnostics).toMatchObject({
+      reviewed_ground_frames: 31, estimated_calibrated_frames: 0 });
+  });
   it("keeps sustained estimated blocks provisional without promoting them to a defensive formation", () => {
     const { report, preparation } = estimatedDefenseFixture();
     const result = extractTacticalProposals(report, {}, undefined, preparation);

@@ -93,9 +93,19 @@ function motionProposals(report: TrackingReport, corrections: TrackingCorrection
   type Run = { start: number; last: number; sign: number; initialGap: number; minGap: number; scores: number[]; flipped: boolean };
   const runs = new Map<string, Run>(), results: TacticalProposal[] = [];
   const cooldown = new Map<string, number>();
+  const diagnostics = { sample_frames: report.frames.length,
+    observed_boxes: report.frames.reduce((n, frame) => n + frame.persons.length, 0),
+    usable_observations: 0, frames_without_usable_people: 0, frames_with_comparable_pairs: 0,
+    camera_cuts: 0, pair_runs_ended_at_cut: 0, pair_runs_ended_by_missing_or_geometry: 0,
+    pair_window_resets: 0, observed_order_reversals: 0, maximum_pair_window_ms: 0 };
   for (let i = 0; i < report.frames.length; i++) {
-    if (i && report.frames[i]!.scene !== report.frames[i - 1]!.scene) { runs.clear(); cooldown.clear(); }
+    if (i && report.frames[i]!.scene !== report.frames[i - 1]!.scene) {
+      diagnostics.camera_cuts++; diagnostics.pair_runs_ended_at_cut += runs.size;
+      runs.clear(); cooldown.clear();
+    }
     const people = observations(report, corrections, i).sort((a, b) => a.id - b.id);
+    diagnostics.usable_observations += people.length;
+    if (!people.length) diagnostics.frames_without_usable_people++;
     const seen = new Set<string>();
     for (let a = 0; a < people.length; a++) for (let b = a + 1; b < people.length; b++) {
       const left = people[a]!, right = people[b]!, key = `${left.id}:${right.id}`;
@@ -106,13 +116,18 @@ function motionProposals(report: TrackingReport, corrections: TrackingCorrection
       const gap = left.x - right.x, abs = Math.abs(gap), sign = Math.sign(gap);
       const run = runs.get(key);
       if (!run || i - run.last !== 1 || i - run.start > report.sample_fps * 4) {
+        if (run) diagnostics.pair_window_resets++;
         if (abs >= .04) runs.set(key, { start: i, last: i, sign, initialGap: abs, minGap: abs,
           scores: [Math.min(left.score, right.score)], flipped: false });
         continue;
       }
       run.last = i; run.minGap = Math.min(run.minGap, abs); run.scores.push(Math.min(left.score, right.score));
-      if (sign && sign !== run.sign) run.flipped = true;
+      if (sign && sign !== run.sign) {
+        if (!run.flipped) diagnostics.observed_order_reversals++;
+        run.flipped = true;
+      }
       const elapsed = report.frames[i]!.video_ms - report.frames[run.start]!.video_ms;
+      diagnostics.maximum_pair_window_ms = Math.max(diagnostics.maximum_pair_window_ms, elapsed);
       if (run.flipped && sign === -run.sign && abs >= .04 && run.minGap <= .025 && elapsed >= 600 &&
           elapsed <= 4000 && i - (cooldown.get(key) ?? -10000) > report.sample_fps * 2) {
         results.push(proposal("crossing_motion", report,
@@ -121,9 +136,12 @@ function motionProposals(report: TrackingReport, corrections: TrackingCorrection
         cooldown.set(key, i); runs.delete(key);
       }
     }
-    for (const key of runs.keys()) if (!seen.has(key)) runs.delete(key);
+    if (seen.size) diagnostics.frames_with_comparable_pairs++;
+    for (const key of runs.keys()) if (!seen.has(key)) {
+      diagnostics.pair_runs_ended_by_missing_or_geometry++; runs.delete(key);
+    }
   }
-  return results;
+  return { proposals: results, diagnostics };
 }
 
 function defenseProposals(report: TrackingReport, ground: TacticalGround) {
@@ -190,10 +208,14 @@ export function extractTacticalProposals(input: TrackingReport, corrections: Tra
   validateCorrections(report, corrections);
   const verified = ground ? parseTacticalGround(ground, report, corrections) : undefined;
   const prepared = preparation ? parseSpatialPreparation(preparation, report, corrections) : undefined;
-  const all = [...motionProposals(report, corrections), ...(verified ? defenseProposals(report, verified) : []),
+  const motion = motionProposals(report, corrections);
+  const all = [...motion.proposals, ...(verified ? defenseProposals(report, verified) : []),
     ...(prepared ? estimatedBlocks(report, prepared) : [])]
     .sort((a, b) => a.start_ms - b.start_ms || a.id.localeCompare(b.id));
   return { proposals: all.slice(0, 200), truncated: all.length > 200,
+    diagnostics: { ...motion.diagnostics, reviewed_ground_frames: verified?.frames.length ?? 0,
+      estimated_calibrated_frames: prepared?.frames.filter((f) => f.calibration.state !== "unavailable").length ?? 0,
+      estimated_kit_observations: prepared?.frames.reduce((n, f) => n + f.persons.filter((p) => p.colour.team !== null).length, 0) ?? 0 },
     defense_ready: Boolean(verified), rule_version: TACTICAL_RULE_VERSION };
 }
 

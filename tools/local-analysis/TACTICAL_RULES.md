@@ -1,5 +1,7 @@
 # Local tactical proposals
 
+Continuity diagnostics (2026-10-26): proposal results and exports now retain current-sample observed/usable box counts, comparable-pair frame coverage, scene cuts, interrupted pair runs, fixed-window resets, observed order reversals and reviewed versus estimated court-frame counts. The workstation exposes them in a disclosure. Counts come from the same motion-rule pass; they are not model accuracy, athlete identities or confirmed match events. A missing/geometry interruption combines missing tracks, hidden/clipped feet and depth/scale gates; it does not prove a specific occlusion cause. No rule thresholds or proposal IDs changed.
+
 Update 2026-10-25: optional unreviewed kit/camera preparation and estimated near-goal grouping are described in [SPATIAL_PREPARATION.md](SPATIAL_PREPARATION.md). These estimates never satisfy the reviewed-ground prerequisites below. A second real 70:10–71:10 source sample also returned zero eligible proposals; no action accuracy is claimed.
 
 The Automatic analysis tab runs `features/analysis/tactical-proposals.ts` on imported tracking. The browser and optional batch script share the exact rule implementation. No cloud inference, API key, new model download or SQL migration is required. Selecting the video alone still does not run the detector.

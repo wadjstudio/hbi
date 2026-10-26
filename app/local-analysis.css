@@ -18,3 +18,7 @@
 .tracking-correction { display: grid; gap: .7rem; padding: 1rem; border: 1px solid var(--border); border-radius: .6rem; }
 .tracking-correction fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: .7rem; min-width: 0; }
 @media (max-width: 500px) { .tracking-coordinates { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+[data-slot="coach-clips"] form { margin-block: 1rem; }
+[data-slot="coach-clips"] :is(input, textarea, select) { min-inline-size: 0; max-inline-size: 100%; }
+[data-slot="coach-clips"] .entity-list article { flex-direction: column; align-items: flex-start; }
+[data-slot="coach-clips"] :is(strong, button) { overflow-wrap: anywhere; max-inline-size: 100%; white-space: normal; }

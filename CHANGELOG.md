@@ -1,4 +1,17 @@
 # CHANGELOG
+## Practical source clips and meeting preparation — 2026-10-27
+
+- Added Clips & meeting in Video Lab: exact source-time mark-in/out, named clip save, search and scoped library, source start/end controls, meeting creation/selection and presenter-note handoff.
+- Reused existing clip/presentation models, role checks, local-first queue and RLS. Stable IDs prevent ordinary retry duplicates; changed saved records/notes are preserved. No SQL migration, dependency, media upload or paid inference.
+- Keeps the single workspace player mounted and retains unsaved form values across tab switches; context changes clear the form. Invalid/foreign clips cannot become meeting content. Unsaved values are not a browser-reload backup.
+- Includes the preceding evidence-continuity diagnostics. These expose missing evidence without claiming tactical accuracy or creating canonical events. Current verification/build/publication details belong to VALIDATION.md and the release receipt.
+
+## Evidence continuity diagnostics — 2026-10-26 (local work)
+
+- Added rule-pass diagnostics and a bilingual evidence-coverage disclosure to explain missing proposals. Browser/batch exports retain the same diagnostics without creating canonical events or altering thresholds/proposal IDs.
+- Actual two-sample audit found 967 and 982 pair runs interrupted by observations/geometry, and zero observed order reversals inside the existing rule windows. This is a diagnostic result, not player-ID accuracy or proof that the footage lacks tactics.
+- Heavy inference/builds are deferred while the host has critical disk/memory pressure. Verification/publication status for this local increment must be read from its own subsequent receipt; the 2026-10-25 deployment remains the last published release.
+
 ## Unreviewed team/court preparation and broader real-source evaluation — 2026-10-25
 
 - Added strict spatial-preparation contracts, current-frame kit/court preview, scoped persistence and backup integration. Existing tracking backups remain readable; new preparation is optional. No SQL/Dexie migration or browser dependency change.

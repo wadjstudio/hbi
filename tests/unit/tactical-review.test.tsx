@@ -43,6 +43,7 @@ it("extracts on import, opens evidence and retains reviewed/rejected notes after
   await analysisReviews.tracking.put({ key: scope, report, corrections: {} });
   render(<Harness />);
   await screen.findByText(/Possible path crossing/);
+  expect(screen.getByText("Extraction evidence coverage and continuity")).toBeDefined();
   fireEvent.click(screen.getByRole("button", { name: "Watch evidence" }));
   expect(seek).toHaveBeenCalledWith(1000);
   fireEvent.change(screen.getByLabelText("Tactical note"), { target: { value: "Not an attacking cross" } });

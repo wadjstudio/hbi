@@ -1,5 +1,12 @@
 # SESEN / HBI validation — 2026-10-22
 
+## Evidence continuity diagnostics — 2026-10-26, local increment
+
+- Targeted domain suite passed 13 tests in a Node environment with one worker. A separate targeted UI run passed all 3 tactical-review cases. Targeted ESLint passed; TypeScript passed after regenerating Next route types left incompatible by the preceding vinext build. The original shared next-env imports were preserved and the final tsc-only check passed again. No test assertion or production route was weakened.
+- Both existing source-bound samples were reprocessed through the shared TypeScript rule exporter, with no new video inference: first sample 6412/8563 usable motion observations, 551/600 comparable-pair frames, 10 cuts and 967 pair-run interruptions by missing observations/geometry; second sample 8560/11261, 579/600, 5 cuts and 982 interruptions. Both had zero observed order reversals inside existing rule windows and zero eligible proposals. The raw-report runs intentionally supplied no ground/preparation, so their calibration counters are zero; this does not erase the separately saved preparation.
+- Diagnostic counts are not independent tracking/tactical accuracy, roster identities, possession labels or proof of absent tactics. Existing thresholds, proposal IDs and canonical data behavior remain unchanged.
+- This increment has no production build, publication or new source ZIP yet. Last published version remains d6b03c4 / Pages 770c460f. The host's C drive has only about 0.5 GiB free after safe download-cache cleanup. Heavy checks/inference were avoided; the Windows paging-file redistribution proposal is awaiting separate user approval. No sessions, relocation backup or OS setting was modified.
+
 ## Preparation and second real sequence — 2026-10-25
 
 - Full Vitest regression: 43 files / 150 tests passed, using the documented 15-second CLI test lifetime. The additional preparation import/persistence/correction invalidation case passed in the subsequent tactical-review run (3/3). No behavior assertion was weakened.
