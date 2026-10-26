@@ -10,6 +10,7 @@ import { LocalAnalysisReview } from "./local-analysis-review";
 import { CoachClips } from "./coach-clips";
 import { proposalClipId, reviewKey } from "@/features/analysis/local-results";
 import { useTrackingReview } from "@/features/analysis/use-tracking-review";
+import { useEventHistory } from "@/features/analysis/use-event-history";
 import { TrackingOverlay } from "./tracking-overlay";
 import { TrackingReview, type TrackingSelection } from "./tracking-review";
 import { EventParticipants } from "./event-participants";
@@ -58,14 +59,6 @@ import {
   evidenceSource,
   type IntelligenceScope,
 } from "@/features/analysis/intelligence-scope";
-type History = {
-  event: Row;
-  shot?: Row;
-  previousEvent?: Row;
-  previousShot?: Row;
-  restoredEvent?: Row;
-  restoredShot?: Row;
-};
 export function VideoWorkspace({
   matchId: initialMatch,
   initialSession = "",
@@ -111,9 +104,7 @@ export function VideoWorkspace({
   const [onlineReady, setOnlineReady] = useState(false),
     [onlineDuration, setOnlineDuration] = useState(0),
     [onlineRates, setOnlineRates] = useState<number[]>([1]);
-  const undo = useRef<History[]>([]),
-    redo = useRef<History[]>([]);
-  const [historyCounts, setHistoryCounts] = useState({ undo: 0, redo: 0 });
+  const eventHistory = useEventHistory(w.save);
   const [annotationId, setAnnotationId] = useState(""),
     [annotationSnapshot, setAnnotationSnapshot] = useState<Row | null>(null),
     [annotationStart, setAnnotationStart] = useState(0),
@@ -307,9 +298,7 @@ export function VideoWorkspace({
     setAnnotationSnapshot(null);
     setAnnotationId("");
     setAnnotation([]);
-    undo.current = [];
-    redo.current = [];
-    setHistoryCounts({ undo: 0, redo: 0 });
+    eventHistory.reset();
   }
   function seek(ms: number) {
     const target = Math.max(0, Math.min(duration || ms, ms));
@@ -496,56 +485,16 @@ export function VideoWorkspace({
         review_required: selectedResult === "unknown",
       });
     else if (oldShot) await w.save("shot_attempts", oldShot, true);
-    undo.current.push({
+    eventHistory.push({
       event: e,
       shot: sh,
       previousEvent: existing,
       previousShot: oldShot,
     });
-    redo.current = [];
-    setHistoryCounts({ undo: undo.current.length, redo: 0 });
     setEdit("");
     setNote("");
     setEventX("");
     setEventY("");
-  }
-  async function history(direction: "undo" | "redo") {
-    const item = (direction === "undo" ? undo : redo).current.pop();
-    if (!item) return;
-    if (direction === "undo") {
-      if (item.previousEvent) {
-        item.restoredEvent = await w.save("events", {
-          ...item.previousEvent,
-          revision: item.event.revision,
-        });
-        if (item.previousShot)
-          item.restoredShot = await w.save("shot_attempts", {
-            ...item.previousShot,
-            revision: item.shot?.revision ?? 0,
-          });
-        else if (item.shot) await w.save("shot_attempts", item.shot, true);
-      } else {
-        if (item.shot) await w.save("shot_attempts", item.shot, true);
-        await w.save("events", item.event, true);
-        item.restoredEvent = undefined;
-        item.restoredShot = undefined;
-      }
-      redo.current.push(item);
-    } else {
-      item.event = await w.save("events", {
-        ...item.event,
-        revision: item.restoredEvent?.revision ?? 0,
-      });
-      if (item.shot)
-        item.shot = await w.save("shot_attempts", {
-          ...item.shot,
-          revision: item.restoredShot?.revision ?? 0,
-        });
-      else if (item.restoredShot)
-        await w.save("shot_attempts", item.restoredShot, true);
-      undo.current.push(item);
-    }
-    setHistoryCounts({ undo: undo.current.length, redo: redo.current.length });
   }
   const keydownRef = useRef<(e: KeyboardEvent) => void>(null);
   useEffect(() => {
@@ -580,11 +529,11 @@ export function VideoWorkspace({
       } else if (e.key.toLowerCase() === "t" && !e.ctrlKey) void a.run(record);
       if (e.ctrlKey && e.key === "z") {
         e.preventDefault();
-        void a.run(() => history("undo"));
+        void a.run(() => eventHistory.step("undo"));
       }
       if (e.ctrlKey && e.key === "y") {
         e.preventDefault();
-        void a.run(() => history("redo"));
+        void a.run(() => eventHistory.step("redo"));
       }
     };
   });
@@ -1188,10 +1137,10 @@ export function VideoWorkspace({
                   )}
                 </div>
                 <div className="toolbar">
-                  <button onClick={() => void a.run(() => history("undo"))}>
+                  <button onClick={() => void a.run(() => eventHistory.step("undo"))}>
                     {w.t("تراجع", "Undo")}
                   </button>
-                  <button onClick={() => void a.run(() => history("redo"))}>
+                  <button onClick={() => void a.run(() => eventHistory.step("redo"))}>
                     {w.t("إعادة", "Redo")}
                   </button>
                   <button onClick={() => void a.run(() => clip())}>
@@ -1340,8 +1289,8 @@ export function VideoWorkspace({
               )}
               busy={a.busy}
               openPossession={Boolean(open)}
-              undoAvailable={historyCounts.undo > 0}
-              redoAvailable={historyCounts.redo > 0}
+              undoAvailable={eventHistory.counts.undo > 0}
+              redoAvailable={eventHistory.counts.redo > 0}
               onPossession={() =>
                 void a.run(open ? endPossession : startPossession)
               }
@@ -1356,8 +1305,8 @@ export function VideoWorkspace({
                 void a.run(() => record(type, result, "unknown"));
               }}
               onEditor={() => setEditorOpen(!editorOpen)}
-              onUndo={() => void a.run(() => history("undo"))}
-              onRedo={() => void a.run(() => history("redo"))}
+              onUndo={() => void a.run(() => eventHistory.step("undo"))}
+              onRedo={() => void a.run(() => eventHistory.step("redo"))}
             />
           </div>
         )}
