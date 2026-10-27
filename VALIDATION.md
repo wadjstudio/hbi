@@ -1,5 +1,13 @@
 # SESEN / HBI validation — 2026-10-22
 
+## Practical clips and meeting path — 2026-10-27
+
+- Seven domain and three UI cases passed locally, covering exact source limits, compatible org/match/session/video, retry-stable identities, readonly behavior, failed-save retention, meeting presenter notes, invalid content exclusion and duplicate prevention. Local typecheck and full lint passed before upstream integration; the final merged revision must also pass CI.
+- Preserved upstream PR #6's useEventHistory refactor through a clean merge, instead of replacing its event undo/redo behavior with the older workspace version.
+- Existing GitHub CI now supplies separate, short-lived production/public-config and loopback/mock Pages artifacts. The former requires explicit public repository variables and is not automatically deployed; neither artifact includes a source match video or local reviews. The local Pages acceptance path refuses a production-config bundle.
+- The real-match offline-to-meeting Chrome test is implemented but its final result must be read from the accompanying release receipt; an initial native Next acceptance attempt was stopped before server startup by its free-space guard. The host remains on the user's unchanged Windows settings. No inference accuracy improvement is claimed by this coach workflow.
+- Full tests, DB verification, Next/Pages build, actual-source browser acceptance, package parity/checksum and hosted smoke results are separate release checks. Do not infer their success from these initial ten tests or from an earlier deployment.
+
 ## Evidence continuity diagnostics — 2026-10-26, local increment
 
 - Targeted domain suite passed 13 tests in a Node environment with one worker. A separate targeted UI run passed all 3 tactical-review cases. Targeted ESLint passed; TypeScript passed after regenerating Next route types left incompatible by the preceding vinext build. The original shared next-env imports were preserved and the final tsc-only check passed again. No test assertion or production route was weakened.

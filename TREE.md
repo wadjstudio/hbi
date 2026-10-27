@@ -98,6 +98,7 @@ components/workspace/analytics.tsx
 components/workspace/annotation-library.tsx
 components/workspace/charts.tsx
 components/workspace/clock-calibration.tsx
+components/workspace/coach-clips.tsx
 components/workspace/controls.tsx
 components/workspace/court.tsx
 components/workspace/data-sources.tsx
@@ -159,6 +160,7 @@ docs/ui-redesign/match-template.csv
 docs/ui-redesign/roster-template.csv
 eslint.config.mjs
 features/analysis/.gitkeep
+features/analysis/coach-clips.ts
 features/analysis/contracts.ts
 features/analysis/intelligence-scope.ts
 features/analysis/labels.ts
@@ -172,6 +174,7 @@ features/analysis/spatial-preparation.ts
 features/analysis/spatial-sample.ts
 features/analysis/tactical-proposals.ts
 features/analysis/tracking-results.ts
+features/analysis/use-event-history.ts
 features/analysis/use-tracking-review.ts
 features/analysis/workbench.ts
 features/analytics/.gitkeep
@@ -300,6 +303,7 @@ supabase/seed.sql
 supabase/tests/security.test.sql
 tests/e2e/annotation-assertions.ts
 tests/e2e/brand-header-assertions.ts
+tests/e2e/coach-clips.spec.ts
 tests/e2e/conflict.spec.ts
 tests/e2e/console.spec.ts
 tests/e2e/data-sources.spec.ts
@@ -344,11 +348,14 @@ tests/integration/.gitkeep
 tests/setup.ts
 tests/unit/analysis-timeline.test.tsx
 tests/unit/backup.test.ts
+tests/unit/coach-clips-ui.test.tsx
+tests/unit/coach-clips.test.ts
 tests/unit/data-sources.test.ts
 tests/unit/domain.test.ts
 tests/unit/drawing.test.tsx
 tests/unit/efficiency-cards.test.tsx
 tests/unit/event-feed.test.tsx
+tests/unit/event-history.test.tsx
 tests/unit/header-context.test.ts
 tests/unit/header-date.test.ts
 tests/unit/identity-image.test.tsx

@@ -26,7 +26,9 @@ export default defineConfig({
     },
     {
       command:
-        process.env.HBI_E2E_SERVER_MODE === "production"
+        process.env.HBI_E2E_SERVER_MODE === "pages"
+          ? `pnpm exec wrangler pages dev --cwd ../outputs/pages-e2e --port ${port}`
+          : process.env.HBI_E2E_SERVER_MODE === "production"
           ? `pnpm exec next start --port ${port}`
           : process.env.HBI_E2E_BUNDLER === "webpack"
             ? `pnpm dev --webpack --port ${port}`

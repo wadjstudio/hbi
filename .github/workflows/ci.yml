@@ -11,6 +11,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -38,9 +39,37 @@ jobs:
           retention-days: 3
       - run: pnpm build
         env:
-          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
-          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ci-placeholder-key
+          NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL || 'https://example.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'ci-placeholder-key' }}
+          NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL || 'http://localhost:3000' }}
+          NEXT_PUBLIC_APP_NAME: SESEN
       - run: pnpm build:pages
         env:
-          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
-          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ci-placeholder-key
+          NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL || 'https://example.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'ci-placeholder-key' }}
+          NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL || 'http://localhost:3000' }}
+          NEXT_PUBLIC_APP_NAME: SESEN
+      - uses: actions/upload-artifact@v4
+        if: github.ref == 'refs/heads/main' && vars.NEXT_PUBLIC_SUPABASE_URL != '' && vars.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY != ''
+        with:
+          name: pages-production-${{ github.sha }}
+          path: dist/pages/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
+      - name: Build isolated local acceptance bundle
+        if: github.ref == 'refs/heads/main'
+        run: pnpm build:pages
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54351
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: test-publishable-key
+          NEXT_PUBLIC_APP_URL: http://127.0.0.1:3011
+          NEXT_PUBLIC_APP_NAME: SESEN
+      - uses: actions/upload-artifact@v4
+        if: github.ref == 'refs/heads/main'
+        with:
+          name: pages-e2e-${{ github.sha }}
+          path: dist/pages/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
